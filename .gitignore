@@ -1,0 +1,43 @@
+# Системные файлы
+.DS_Store
+Thumbs.db
+
+# Лог-файлы и базы данных
+*.log
+*.sql
+*.sqlite
+
+# Директории и файлы, создаваемые IDE и текстовыми редакторами
+.idea/
+.vscode/
+*.sublime-workspace
+*.sublime-project
+
+# Сборочные директории и файлы
+node_modules/
+dist/
+build/
+tmp/
+temp/
+
+# Конфигурационные файлы
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# PHP файлы
+vendor/
+composer.lock
+
+# Другие временные файлы
+*.tmp
+*.cache
+
+# MacOS
+.DS_Store
+
+# Windows
+Thumbs.db
+ehthumbs.db
