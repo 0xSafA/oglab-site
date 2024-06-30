@@ -61,6 +61,11 @@ p {
     font-weight: bold;
 }
 
+.about {
+    margin-top: 20px;
+    font-weight: normal;
+}
+
 .location {
     margin-top: 10px;
 }
