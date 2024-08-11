@@ -1,0 +1,17 @@
+RewriteEngine On
+
+# Перенаправление HTTP на HTTPS
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# Перенаправление с www на версию без www
+RewriteCond %{HTTP_HOST} ^www\.oglab\.com [NC]
+RewriteRule ^(.*)$ https://oglab.com/$1 [L,R=301]
+
+# Отключение индексации директорий
+Options -Indexes
+
+# Включение сжатия GZIP
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript application/json
+</IfModule>
