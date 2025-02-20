@@ -16,6 +16,7 @@ const nextConfig = {
   i18n,
   images: {
     domains: [
+      'oglab.com',
       'http://localhost:8000',
       'via.placeholder.com',
       'res.cloudinary.com',

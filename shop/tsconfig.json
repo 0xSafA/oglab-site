@@ -17,11 +17,11 @@
     "jsx": "preserve",
     "paths": {
       "@/*": ["src/*"],
-      "@/framework/*": ["src/framework/rest/*"],
+      "@/framework/*": ["src/framework/graphql/*"],
       "@/framework/static/*": ["src/framework/static/*"]
     },
     "incremental": true
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
-  "exclude": ["__generated__", "node_modules", "src/framework/graphql"]
+  "exclude": ["node_modules", "src/framework/rest"]
 }
