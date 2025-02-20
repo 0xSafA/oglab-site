@@ -1,0 +1,158 @@
+# import EventSettingsParts from '../fragments/settings.fragment.graphql'
+query Settings($language: String) {
+  settings(language: $language) {
+    id
+    options {
+      siteTitle
+      siteLink
+      copyrightText
+      externalText
+      siteSubtitle
+      externalLink
+      currency
+      useOtp
+      useGoogleMap
+      useCashOnDelivery
+      useEnableGateway
+      StripeCardOnly
+      enableTerms
+      enableCoupons
+      paymentGateway {
+        title
+        name
+      }
+      defaultPaymentGateway
+      freeShipping
+      freeShippingAmount
+      deliveryTime {
+        title
+        description
+      }
+      logo {
+        id
+        thumbnail
+        original
+      }
+      taxClass
+      shippingClass
+      contactDetails {
+        contact
+        website
+        emailAddress
+        socials {
+          icon
+          url
+        }
+        location {
+          lat
+          lng
+          city
+          state
+          country
+          zip
+          formattedAddress
+        }
+      }
+      seo {
+        metaTitle
+        metaDescription
+        ogTitle
+        ogDescription
+        ogImage {
+          id
+          thumbnail
+          original
+        }
+        twitterHandle
+        twitterCardType
+        metaTags
+        canonicalUrl
+      }
+      google {
+        isEnable
+        tagManagerId
+      }
+      facebook {
+        isEnable
+        appId
+        pageId
+      }
+      currencyOptions {
+        formation
+        fractions
+      }
+      guestCheckout
+      smsEvent {
+        ...EventSettingsParts
+      }
+      emailEvent {
+        ...EventSettingsParts
+      }
+      server_info {
+        max_execution_time
+        max_input_time
+        memory_limit
+        post_max_size
+        upload_max_filesize
+      }
+      isUnderMaintenance
+      maintenance {
+        title
+        image {
+          id
+          thumbnail
+          original
+        }
+        aboutUsTitle
+        aboutUsDescription
+        contactUsTitle
+        buttonTitleOne
+        buttonTitleTwo
+        isOverlayColor
+        overlayColor
+        overlayColorRange
+        newsLetterTitle
+        newsLetterDescription
+        description
+        start
+        until
+      }
+      isPromoPopUp
+      promoPopup {
+        image {
+          id
+          thumbnail
+          original
+        }
+        title
+        description
+        popUpDelay
+        popUpExpiredIn
+        isPopUpNotShow
+        popUpNotShow {
+          title
+          popUpExpiredIn
+        }
+      }
+      enableReviewPopup
+      reviewSystem {
+        name
+        value
+      }
+      isMultiCommissionRate
+      enableEmailForDigitalProduct
+    }
+    language
+  }
+}
+
+mutation SubscribeToNewsletter($email: String!) {
+  subscribeToNewsletter(email: $email)
+}
+
+mutation ContactUs($input: ContactInput!) {
+  contactUs(input: $input) {
+    message
+    success
+  }
+}

@@ -1,0 +1,20 @@
+fragment EventSettingsParts on EventSettings {
+  customer {
+    statusChangeOrder
+    refundOrder
+    paymentOrder
+    answerQuestion
+  }
+  vendor {
+    statusChangeOrder
+    refundOrder
+    paymentOrder
+    createReview
+    createQuestion
+  }
+  admin {
+    statusChangeOrder
+    refundOrder
+    paymentOrder
+  }
+}

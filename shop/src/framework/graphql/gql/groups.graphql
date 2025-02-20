@@ -1,0 +1,98 @@
+fragment TypeParts on Type {
+  id
+  name
+  slug
+  language
+  translated_languages
+  icon
+  banners {
+    title
+    description
+    image {
+      id
+      thumbnail
+      original
+    }
+  }
+  settings {
+    isHome
+    layoutType
+    productCard
+    bestSelling {
+      enable
+      title
+    }
+    popularProducts {
+      enable
+      title
+    }
+    category {
+      enable
+      title
+    }
+    handpickedProducts {
+      enable
+      title
+      enableSlider
+      products {
+        id
+        name
+        slug
+        image {
+          id
+          thumbnail
+          original
+        }
+        regular_price
+        sale_price
+        min_price
+        max_price
+        product_type
+        quantity
+        is_external
+        unit
+        price
+        external_product_url
+        status
+        type {
+          settings {
+            productCard
+          }
+        }
+      }
+    }
+    newArrival {
+      enable
+      title
+    }
+    authors {
+      enable
+      title
+    }
+    manufactures {
+      enable
+      title
+    }
+  }
+  promotional_sliders {
+    id
+    thumbnail
+    original
+  }
+}
+
+query Groups(
+  $text: String
+  $orderBy: [QueryTypesOrderByOrderByClause!]
+  $language: String
+) {
+  types(text: $text, orderBy: $orderBy, language: $language) {
+    ...TypeParts
+  }
+}
+
+query Group($slug: String, $language: String) {
+  type(slug: $slug, language: $language) {
+    ...TypeParts
+  }
+}

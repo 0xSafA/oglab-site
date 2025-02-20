@@ -1,0 +1,59 @@
+# import PaginatorParts from './paginator.fragment.graphql'
+# import ShopParts from './shops.graphql'
+# import MeParts from './me.graphql'
+# import MessageParts from './conversion.graphql'
+
+mutation CreateMessage($input: CreateMessageInput!) {
+  createMessage(input: $input) {
+    conversation_id
+  }
+}
+
+query Messages(
+  $orderBy: String
+  $sortedBy: String
+  $conversation_id: ID!
+  $first: Int
+  $page: Int
+) {
+  messages(
+    orderBy: $orderBy
+    sortedBy: $sortedBy
+    conversation_id: $conversation_id
+    first: $first
+    page: $page
+  ) {
+    data {
+      body
+      conversation_id
+      created_at
+      updated_at
+      user_id
+      id
+      conversation {
+        shop {
+          ...ShopParts
+        }
+        user {
+          ...MeParts
+        }
+        user_id
+        id
+        shop_id
+        unseen
+        created_at
+        updated_at
+        latest_message {
+          ...MessageParts
+        }
+      }
+    }
+    paginatorInfo {
+      ...PaginatorParts
+    }
+  }
+}
+
+mutation SeenMessage($input: SeenMessageInput!) {
+  seenMessage(input: $input)
+}

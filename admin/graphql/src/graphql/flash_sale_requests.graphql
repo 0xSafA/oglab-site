@@ -1,0 +1,96 @@
+# import PaginatorParts from './paginator.fragment.graphql'
+# import ProductParts from './products.graphql'
+# import FlashSalePart from './flash_sale.graphql'
+fragment FlashSaleRequestPart on FlashSaleRequests {
+  id
+  title
+  note
+  language
+  flash_sale {
+    ...FlashSalePart
+  }
+  request_status
+  created_at
+  updated_at
+  deleted_at
+}
+
+query FlashSaleRequests(
+  $search: String
+  $orderBy: String
+  $sortedBy: String
+  $language: String
+  $first: Int!
+  $page: Int
+) {
+  flashSaleRequests(
+    language: $language
+    orderBy: $orderBy
+    search: $search
+    sortedBy: $sortedBy
+    first: $first
+    page: $page
+  ) {
+    data {
+      ...FlashSaleRequestPart
+    }
+    paginatorInfo {
+      ...PaginatorParts
+    }
+  }
+}
+
+query FlashSaleRequest($id: ID, $language: String) {
+  flashSaleRequest(id: $id, language: $language) {
+    ...FlashSaleRequestPart
+  }
+}
+
+query FetchFlashSaleRequestedProducts(
+  $vendor_request_id: ID!
+  $first: Int!
+  $page: Int
+) {
+  fetchRequestedProducts(
+    vendor_request_id: $vendor_request_id
+    first: $first
+    page: $page
+  ) {
+    data {
+      ...ProductParts
+    }
+    paginatorInfo {
+      ...PaginatorParts
+    }
+  }
+}
+
+mutation createFlashSaleRequest($input: CreateFlashSaleRequestInput!) {
+  createFlashSaleRequest(input: $input) {
+    ...FlashSaleRequestPart
+  }
+}
+
+mutation updateFlashSaleRequest($input: UpdateFlashSaleRequestInput!) {
+  updateFlashSaleRequest(input: $input) {
+    ...FlashSaleRequestPart
+  }
+}
+
+mutation deleteFlashSaleRequest($id: ID!) {
+  deleteFlashSaleRequest(id: $id) {
+    ...FlashSaleRequestPart
+  }
+}
+
+mutation DisApproveFlashSaleRequest($id: ID!) {
+  disApproveFlashSaleRequest(id: $id) {
+    ...FlashSaleRequestPart
+  }
+}
+
+mutation ApproveFlashSaleRequest($id: ID!) {
+  approveFlashSaleRequest(id: $id) {
+    ...FlashSaleRequestPart
+  }
+}

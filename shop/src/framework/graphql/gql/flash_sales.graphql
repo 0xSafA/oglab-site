@@ -1,0 +1,53 @@
+# import PaginatorParts from '../fragments/paginator.fragment.graphql'
+# import FlashSaleParts from '../fragments/flash_sale.fragment.graphql'
+# import ProductParts from '../fragments/product.fragment.graphql'
+
+query FlashSales(
+  $search: String
+  $orderBy: String
+  $sortedBy: String
+  $language: String
+  $searchJoin: String
+  $first: Int = 15
+  $page: Int
+) {
+  flashSales(
+    search: $search
+    orderBy: $orderBy
+    sortedBy: $sortedBy
+    language: $language
+    searchJoin: $searchJoin
+    first: $first
+    page: $page
+  ) {
+    data {
+      ...FlashSaleParts
+      products {
+        ...ProductParts
+      }
+    }
+    paginatorInfo {
+      ...PaginatorParts
+    }
+  }
+}
+
+query FlashSale($id: ID, $slug: String, $language: String) {
+  flashSale(id: $id, slug: $slug, language: $language) {
+    ...FlashSaleParts
+    products {
+      ...ProductParts
+    }
+  }
+}
+
+query FlashSaleProductBySlug($slug: String!, $first: Int = 15, $page: Int) {
+  productsByFlashSale(slug: $slug, first: $first, page: $page) {
+    data {
+      ...ProductParts
+    }
+    paginatorInfo {
+      ...PaginatorParts
+    }
+  }
+}

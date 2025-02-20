@@ -1,0 +1,123 @@
+# import PaginatorParts from './paginator.fragment.graphql'
+
+fragment StoreNoticeParts on StoreNotice {
+  id
+  priority
+  notice
+  description
+  effective_from
+  expired_at
+  type
+  created_by
+  updated_by
+  created_at
+  updated_at
+  is_read
+  creator_role
+  creator {
+    id
+    name
+    permissions {
+      id
+      name
+    }
+  }
+  users {
+    id
+    name
+    email
+  }
+  shops {
+    id
+    owner_id
+    name
+    slug
+  }
+  read_status {
+    id
+    name
+    email
+    pivot {
+      store_notice_id
+      user_id
+      is_read
+    }
+  }
+}
+
+query StoreNotices(
+  $text: String
+  $shop_id: ID
+  $id: ID
+  $language: String
+  $orderBy: String
+  $sortedBy: String
+  $search: String
+  $first: Int!
+  $page: Int
+) {
+  storeNotices(
+    text: $text
+    shop_id: $shop_id
+    id: $id
+    sortedBy: $sortedBy
+    language: $language
+    orderBy: $orderBy
+    first: $first
+    page: $page
+    search: $search
+  ) {
+    data {
+      ...StoreNoticeParts
+    }
+    paginatorInfo {
+      ...PaginatorParts
+    }
+  }
+}
+
+query StoreNotice($id: ID!, $notice: String, $language: String) {
+  storeNotice(id: $id, notice: $notice, language: $language) {
+    ...StoreNoticeParts
+  }
+}
+query StoreNoticeReceiver($type: String) {
+  storeNoticeReceiver(type: $type) {
+    id
+    name
+    slug
+  }
+}
+
+mutation CreateStoreNotice($input: CreateStoreNoticeInput!) {
+  createStoreNotice(input: $input) {
+    ...StoreNoticeParts
+  }
+}
+
+mutation UpdateStoreNotice($input: UpdateStoreNoticeInput!) {
+  updateStoreNotice(input: $input) {
+    ...StoreNoticeParts
+  }
+}
+mutation DeleteStoreNotice($id: ID!) {
+  deleteStoreNotice(id: $id) {
+    ...StoreNoticeParts
+  }
+}
+
+mutation StoreNoticeRead($input: ReadSingleNoticeInput!) {
+  readNotice(input: $input) {
+    store_notice_id
+    user_id
+    is_read
+  }
+}
+
+mutation ReadAllNotice($input: ReadAllNoticeInput!) {
+  readAllNotice(input: $input) {
+    store_notice_id
+    user_id
+    is_read
+  }
+}

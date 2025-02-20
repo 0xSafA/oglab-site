@@ -1,0 +1,26 @@
+fragment FlashSaleParts on FlashSale {
+  id
+  title
+  slug
+  description
+  start_date
+  end_date
+  sale_status
+  type
+  rate
+  language
+  sale_builder {
+    data_type
+    product_ids
+  }
+  image {
+    id
+    original
+    thumbnail
+  }
+  cover_image {
+    id
+    original
+    thumbnail
+  }
+}

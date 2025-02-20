@@ -1,0 +1,6 @@
+mutation GenerateDescription($input: AiInput!) {
+  generateDescriptions(input: $input) {
+    status
+    result
+  }
+}
