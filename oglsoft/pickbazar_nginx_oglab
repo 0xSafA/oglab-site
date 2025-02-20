@@ -1,16 +1,16 @@
 server {
     listen 80;
-    server_name salesagram.com;
+    server_name oglab.com;
     # Redirect all HTTP requests to HTTPS
     return 301 https://$host$request_uri;
 }
 
 server {
     listen 443 ssl;
-    server_name salesagram.com;
+    server_name oglab.com;
 
-    ssl_certificate /etc/letsencrypt/live/salesagram.com/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/salesagram.com/privkey.pem;
+    ssl_certificate /etc/letsencrypt/live/oglab.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/oglab.com/privkey.pem;
     ssl_protocols TLSv1.2 TLSv1.3; # Recommended TLS protocols
     ssl_ciphers 'EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH'; # Recommended cipher suite
     ssl_prefer_server_ciphers on;
@@ -24,7 +24,7 @@ server {
 
     # For API
     location /backend {
-        alias /var/www/salesagram/api/public;
+        alias /var/www/oglab_site/api/public;
         try_files $uri $uri/ @backend;
         location ~ \.php$ {
             include fastcgi_params;
