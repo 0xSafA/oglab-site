@@ -1,0 +1,290 @@
+# import PaginatorParts from './paginator.fragment.graphql'
+fragment ProductParts on Product {
+  id
+  sku
+  slug
+  name
+  language
+  shop_id
+  translated_languages
+  description
+  in_flash_sale
+  image {
+    id
+    thumbnail
+    original
+  }
+  type {
+    id
+    name
+    slug
+  }
+  shop {
+    name
+    logo {
+      id
+      thumbnail
+      original
+    }
+  }
+  price
+  sale_price
+  min_price
+  max_price
+  quantity
+  author {
+    id
+    name
+  }
+  author_id
+  manufacturer_id
+  manufacturer {
+    id
+    name
+  }
+  product_type
+  is_digital
+  is_external
+  external_product_url
+  external_product_button_text
+  sold_quantity
+  digital_file {
+    id
+    attachment_id
+    url
+  }
+  unit
+  gallery {
+    id
+    thumbnail
+    original
+  }
+  video {
+    url
+  }
+  status
+  language
+}
+query Products(
+  $search: String
+  $date_range: String
+  $orderBy: String
+  $sortedBy: String
+  $language: String
+  $searchJoin: String = "AND"
+  $first: Int
+  $page: Int
+  $product_type: String
+  $flash_sale_builder: Boolean
+  $status: String
+  $shop_id: String
+  $searchedByUser: String
+  $author: String
+) {
+  products(
+    search: $search
+    date_range: $date_range
+    orderBy: $orderBy
+    sortedBy: $sortedBy
+    language: $language
+    searchJoin: $searchJoin
+    first: $first
+    page: $page
+    product_type: $product_type
+    flash_sale_builder: $flash_sale_builder
+    status: $status
+    shop_id: $shop_id
+    searchedByUser: $searchedByUser
+    author: $author
+  ) {
+    data {
+      ...ProductParts
+    }
+    paginatorInfo {
+      ...PaginatorParts
+    }
+  }
+}
+
+query ProductStock(
+  $search: String
+  $orderBy: String
+  $sortedBy: String
+  $language: String!
+  $searchJoin: String = "AND"
+  $first: Int
+  $page: Int
+  $shop_id: ID
+) {
+  productsStock(
+    search: $search
+    orderBy: $orderBy
+    sortedBy: $sortedBy
+    language: $language
+    searchJoin: $searchJoin
+    first: $first
+    page: $page
+    shop_id: $shop_id
+  ) {
+    data {
+      ...ProductParts
+    }
+    paginatorInfo {
+      ...PaginatorParts
+    }
+  }
+}
+
+query ProductsDraft(
+  $search: String
+  $orderBy: String
+  $sortedBy: String
+  $language: String!
+  $searchJoin: String = "AND"
+  $shop_id: ID
+  $first: Int
+  $page: Int
+) {
+  productsDraft(
+    search: $search
+    orderBy: $orderBy
+    sortedBy: $sortedBy
+    language: $language
+    searchJoin: $searchJoin
+    first: $first
+    shop_id: $shop_id
+    page: $page
+  ) {
+    data {
+      ...ProductParts
+    }
+    paginatorInfo {
+      ...PaginatorParts
+    }
+  }
+}
+
+query Product($id: ID, $slug: String, $language: String) {
+  product(id: $id, slug: $slug, language: $language) {
+    ...ProductParts
+    shop_id
+    in_stock
+    height
+    width
+    length
+    categories {
+      id
+      icon
+      name
+      slug
+    }
+    tags {
+      id
+      name
+      slug
+    }
+    variations {
+      id
+      value
+      attribute {
+        name
+        slug
+        values {
+          id
+          value
+        }
+      }
+    }
+    variation_options {
+      id
+      sku
+      title
+      price
+      quantity
+      is_digital
+      is_disable
+      sale_price
+      image {
+        id
+        thumbnail
+        original
+      }
+      digital_file {
+        id
+        attachment_id
+        url
+      }
+      options {
+        name
+        value
+      }
+    }
+  }
+}
+
+mutation CreateProduct($input: CreateProductInput!) {
+  createProduct(input: $input) {
+    ...ProductParts
+  }
+}
+mutation UpdateProduct($input: UpdateProductInput!) {
+  updateProduct(input: $input) {
+    ...ProductParts
+    shop_id
+    in_stock
+    height
+    width
+    length
+    categories {
+      id
+      icon
+      name
+      slug
+    }
+    tags {
+      id
+      name
+      slug
+    }
+    variations {
+      id
+      value
+      attribute {
+        name
+        slug
+        values {
+          id
+          value
+        }
+      }
+    }
+    variation_options {
+      id
+      sku
+      title
+      price
+      is_digital
+      quantity
+      is_disable
+      sale_price
+      options {
+        name
+        value
+      }
+    }
+  }
+}
+
+mutation DeleteProduct($id: ID!) {
+  deleteProduct(id: $id) {
+    ...ProductParts
+  }
+}
+
+mutation ImportProducts($shop_id: ID!, $csv: Upload!) {
+  importProducts(shop_id: $shop_id, csv: $csv)
+}
+
+mutation ImportVariationOptions($shop_id: ID!, $csv: Upload!) {
+  importVariationOptions(shop_id: $shop_id, csv: $csv)
+}

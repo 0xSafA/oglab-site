@@ -1,0 +1,137 @@
+fragment TypeParts on Type {
+  id
+  name
+  slug
+  language
+  translated_languages
+  icon
+  banners {
+    title
+    description
+    image {
+      id
+      thumbnail
+      original
+    }
+  }
+  settings {
+    isHome
+    layoutType
+    productCard
+    bestSelling {
+      enable
+      title
+    }
+    popularProducts {
+      enable
+      title
+    }
+    category {
+      enable
+      title
+    }
+    handpickedProducts {
+      enable
+      title
+      enableSlider
+      products {
+        id
+        name
+        slug
+        image {
+          id
+          thumbnail
+          original
+        }
+        regular_price
+        sale_price
+        min_price
+        max_price
+        product_type
+        quantity
+        is_external
+        unit
+        price
+        external_product_url
+        status
+      }
+    }
+    newArrival {
+      enable
+      title
+    }
+    authors {
+      enable
+      title
+    }
+    manufactures {
+      enable
+      title
+    }
+  }
+  promotional_sliders {
+    id
+    thumbnail
+    original
+  }
+}
+
+query Types(
+  $text: String
+  $language: String
+  $orderBy: [QueryTypesOrderByOrderByClause!]
+) {
+  types(text: $text, language: $language, orderBy: $orderBy) {
+    id
+    name
+    language
+    translated_languages
+    slug
+    icon
+    banners {
+      title
+      description
+      image {
+        id
+        thumbnail
+        original
+      }
+    }
+    promotional_sliders {
+      id
+      thumbnail
+      original
+    }
+  }
+}
+
+query Type($id: ID, $language: String, $slug: String) {
+  type(id: $id, language: $language, slug: $slug) {
+    ...TypeParts
+  }
+}
+
+mutation CreateType($input: CreateTypeInput!) {
+  createType(input: $input) {
+    ...TypeParts
+  }
+}
+
+mutation UpdateType($input: UpdateTypeInput!) {
+  updateType(input: $input) {
+    ...TypeParts
+  }
+}
+mutation DeleteType($id: ID!) {
+  deleteType(id: $id) {
+    id
+    name
+    slug
+    icon
+    promotional_sliders {
+      id
+      thumbnail
+      original
+    }
+  }
+}

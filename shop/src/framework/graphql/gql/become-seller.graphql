@@ -1,0 +1,123 @@
+fragment BecameSellerParts on BecomeSellerWithCommission {
+  page_options {
+    id
+    language
+    page_options {
+      banner {
+        image {
+          id
+          original
+          thumbnail
+        }
+        title
+        description
+        newsTickerURL
+        newsTickerTitle
+        button1Link
+        button1Name
+        button2Link
+        button2Name
+      }
+      faqTitle
+      faqItems {
+        title
+        description
+      }
+      faqDescription
+      contact {
+        title
+        description
+      }
+      sellingStepsTitle
+      sellingStepsItem {
+        image {
+          id
+          original
+          thumbnail
+        }
+        title
+        description
+      }
+      guidelineTitle
+      guidelineItems {
+        link
+        title
+      }
+      commissionTitle
+      commissionDescription
+      purposeTitle
+      purposeDescription
+      purposeItems {
+        title
+        description
+        icon {
+          value
+        }
+      }
+      userStoryTitle
+      userStoryDescription
+      userStories {
+        link
+        title
+        description
+        thumbnail {
+          id
+          original
+          thumbnail
+        }
+      }
+      sellerOpportunity {
+        image {
+          id
+          original
+          thumbnail
+        }
+        title
+        description
+        buttonLink
+        buttonName
+        button2Link
+        button2Name
+      }
+      dashboard {
+        image {
+          id
+          original
+          thumbnail
+        }
+        title
+        description
+        buttonLink
+        buttonName
+        button2Link
+        button2Name
+      }
+      guidelineDescription
+      isMultiCommissionRate
+      sellingStepsDescription
+      defaultCommissionRate
+      defaultCommissionDetails
+    }
+  }
+  commissions {
+    id
+    level
+    sub_level
+    description
+    min_balance
+    max_balance
+    commission
+    image {
+      id
+      original
+      thumbnail
+    }
+    language
+  }
+}
+
+query BecameSeller($language: String) {
+  becameSeller(language: $language) {
+    ...BecameSellerParts
+  }
+}
