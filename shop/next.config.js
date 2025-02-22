@@ -9,7 +9,6 @@ const { i18n } = require('./next-i18next.config');
 // });
 
 module.exports = {
-  basePath: `/admin`,
   reactStrictMode: true,
   i18n,
   images: {

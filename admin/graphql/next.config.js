@@ -14,6 +14,7 @@ const nextConfig = {
     esmExternals: false,
   },
   i18n,
+  basePath: '/admin',
   images: {
     domains: [
       'oglab.com',
