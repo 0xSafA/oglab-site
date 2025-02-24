@@ -12,8 +12,10 @@ const { i18n } = require('./next-i18next.config');
 const nextConfig = {
   reactStrictMode: true,
   i18n,
+  basePath: '/admin',
   images: {
     domains: [
+      'oglab.com'
       'via.placeholder.com',
       'res.cloudinary.com',
       's3.amazonaws.com',
