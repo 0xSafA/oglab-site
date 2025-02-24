@@ -15,7 +15,7 @@ const nextConfig = {
   basePath: '/admin',
   images: {
     domains: [
-      'oglab.com'
+      'oglab.com',
       'via.placeholder.com',
       'res.cloudinary.com',
       's3.amazonaws.com',
