@@ -1,4 +1,4 @@
-schema: ${NEXT_PUBLIC_GRAPHQL_API_ENDPOINT}
+schema: https://oglab.com/backend/graphql
 documents: ./src/**/*.graphql
 plugins:
   - typescript-operations
