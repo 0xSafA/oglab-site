@@ -1,6 +1,6 @@
 server {
     # Прослушиваем HTTPS
-    listen 443 ssl;
+   listen 443 ssl default_server;
     server_name oglab.com;
 
     # Пути к SSL сертификатам
