@@ -37,7 +37,7 @@ await $`rm -rf shop/node_modules`
 
 
 echo('Install Node For shop')
-await $`ssh -o StrictHostKeyChecking=no -l ${username} ${ip_address} "yarn --cwd /var/www/salesagram/shop";`
+await $`ssh -o StrictHostKeyChecking=no -l ${username} ${ip_address} "yarn --cwd /var/www/oglab_site/shop";`
 
 await $`ssh -o StrictHostKeyChecking=no -l ${username} ${ip_address} "pm2 restart all";`;
 echo(chalk.green('Your application build and upload successful'))

@@ -29,10 +29,10 @@ echo(chalk.green(`Your domain name is: ${domainName} \n`))
 
 let whichConfig = await question('What api do you want to use? Enter 1 for REST api or 2 for GraphQL: ')
 
-await $`sudo rm -f /etc/nginx/sites-enabled/salesagram`
-await $`sudo rm -f /etc/nginx/sites-available/salesagram`
-await $`sudo touch /etc/nginx/sites-available/salesagram`
-await $`sudo chmod -R 777 /etc/nginx/sites-available/salesagram`
+await $`sudo rm -f /etc/nginx/sites-enabled/oglab.com`
+await $`sudo rm -f /etc/nginx/sites-available/oglab.com`
+await $`sudo touch /etc/nginx/sites-available/oglab.com`
+await $`sudo chmod -R 777 /etc/nginx/sites-available/oglab.com`
 
 if(whichConfig == 1) {
     echo(chalk.blue('Settings Running For REST API'))
@@ -52,7 +52,7 @@ if(whichConfig == 1) {
 
         # For API
         location /backend {
-            alias /var/www/salesagram/api/public;
+            alias /var/www/oglab.com/api/public;
             try_files $uri $uri/ @backend;
                 location ~ \\.php$ {
                 include fastcgi_params;
@@ -96,7 +96,7 @@ if(whichConfig == 1) {
         location ~ /\\.(?!well-known).* {
             deny all;
         }
-    }' > '/etc/nginx/sites-available/salesagram'`;
+    }' > '/etc/nginx/sites-available/oglab.com'`;
 
 } else {
     echo(chalk.blue('Settings For GraphQL API'))
@@ -116,7 +116,7 @@ if(whichConfig == 1) {
 
         # For API
         location /backend {
-            alias /var/www/salesagram/api/public;
+            alias /var/www/oglab.com/api/public;
             try_files $uri $uri/ @backend;
                 location ~ \\.php$ {
                 include fastcgi_params;
@@ -160,11 +160,11 @@ if(whichConfig == 1) {
         location ~ /\\.(?!well-known).* {
             deny all;
         }
-    }' > '/etc/nginx/sites-available/salesagram'`;
+    }' > '/etc/nginx/sites-available/oglab.com'`;
 }
 
 echo(chalk.blue('\nEnabling the config'))
-await $`sudo ln -s /etc/nginx/sites-available/salesagram /etc/nginx/sites-enabled/`
+await $`sudo ln -s /etc/nginx/sites-available/oglab.com /etc/nginx/sites-enabled/`
 
 //below comment will check nginx error
 await $`sudo nginx -t`

@@ -30,7 +30,7 @@ if (whichConfig == 1) {
 
    
     echo('Install Node For admin')
-    await $`ssh -o StrictHostKeyChecking=no -l ${username} ${ip_address} "yarn --cwd /var/www/salesagram/admin/rest";`
+    await $`ssh -o StrictHostKeyChecking=no -l ${username} ${ip_address} "yarn --cwd /var/www/oglab_site/admin/rest";`
 
     await $`ssh -o StrictHostKeyChecking=no -l ${username} ${ip_address} "pm2 restart all";`;
     echo(chalk.green('Your application build and upload successful'))
@@ -60,7 +60,7 @@ if (whichConfig == 1) {
 
 
     echo('Install Node For admin')
-    await $`ssh -o StrictHostKeyChecking=no -l ${username} ${ip_address} "yarn --cwd /var/www/salesagram/admin/graphql";`
+    await $`ssh -o StrictHostKeyChecking=no -l ${username} ${ip_address} "yarn --cwd /var/www/oglab_site/admin/graphql";`
 
     await $`ssh -o StrictHostKeyChecking=no -l ${username} ${ip_address} "pm2 restart all";`;
     echo(chalk.green('Your application build and upload successful'))
