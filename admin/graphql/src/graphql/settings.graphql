@@ -1,0 +1,318 @@
+# import EventSettingsParts from './settings.fragment.graphql'
+
+query Settings($language: String) {
+  settings(language: $language) {
+    id
+    language
+    options {
+      seo {
+        ogImage {
+          id
+          original
+          thumbnail
+        }
+        ogTitle
+        metaTags
+        metaTitle
+        canonicalUrl
+        ogDescription
+        twitterHandle
+        metaDescription
+        twitterCardType
+      }
+      logo {
+        id
+        original
+        thumbnail
+      }
+      collapseLogo {
+        id
+        original
+        thumbnail
+      }
+      useOtp
+      currency
+      taxClass
+      siteTitle
+      deliveryTime {
+        title
+        description
+      }
+      freeShipping
+      signupPoints
+      siteSubtitle
+      useGoogleMap
+      shippingClass
+      enableTerms
+      enableCoupons
+      contactDetails {
+        contact
+        website
+        emailAddress
+        socials {
+          icon
+          url
+        }
+        location {
+          lat
+          lng
+          zip
+          city
+          state
+          country
+          formattedAddress
+        }
+      }
+      paymentGateway {
+        name
+        title
+      }
+      currencyOptions {
+        formation
+        fractions
+      }
+      pushNotification {
+        all {
+          order
+          message
+          storeNotice
+        }
+      }
+      isProductReview
+      useEnableGateway
+      useCashOnDelivery
+      freeShippingAmount
+      minimumOrderAmount
+      useMustVerifyEmail
+      maximumQuestionLimit
+      currencyToWalletRatio
+      defaultPaymentGateway
+      StripeCardOnly
+      guestCheckout
+      smsEvent {
+        ...EventSettingsParts
+      }
+      emailEvent {
+        ...EventSettingsParts
+      }
+      server_info {
+        upload_max_filesize
+        memory_limit
+        max_execution_time
+        max_input_time
+        post_max_size
+      }
+      useAi
+      defaultAi
+      maxShopDistance
+      siteLink
+      copyrightText
+      externalText
+      externalLink
+      isUnderMaintenance
+      maintenance {
+        title
+        image {
+          id
+          thumbnail
+          original
+        }
+        aboutUsTitle
+        aboutUsDescription
+        contactUsTitle
+        buttonTitleOne
+        buttonTitleTwo
+        isOverlayColor
+        overlayColor
+        overlayColorRange
+        newsLetterTitle
+        newsLetterDescription
+        description
+        start
+        until
+      }
+      isPromoPopUp
+      promoPopup {
+        image {
+          id
+          thumbnail
+          original
+        }
+        title
+        description
+        popUpDelay
+        popUpExpiredIn
+        isPopUpNotShow
+        popUpNotShow {
+          title
+          popUpExpiredIn
+        }
+      }
+      enableEmailForDigitalProduct
+      isMultiCommissionRate
+      enableReviewPopup
+      reviewSystem {
+        name
+        value
+      }
+    }
+  }
+}
+
+mutation UpdateSettings($input: SettingsInput!) {
+  updateSettings(input: $input) {
+    id
+    language
+    options {
+      seo {
+        ogImage {
+          id
+          original
+          thumbnail
+        }
+        ogTitle
+        metaTags
+        metaTitle
+        canonicalUrl
+        ogDescription
+        twitterHandle
+        metaDescription
+        twitterCardType
+      }
+      enableTerms
+      enableCoupons
+      logo {
+        id
+        original
+        thumbnail
+      }
+      collapseLogo {
+        id
+        original
+        thumbnail
+      }
+      useOtp
+      currency
+      taxClass
+      siteTitle
+      deliveryTime {
+        title
+        description
+      }
+      freeShipping
+      signupPoints
+      siteSubtitle
+      useGoogleMap
+      shippingClass
+      contactDetails {
+        contact
+        website
+        emailAddress
+        socials {
+          icon
+          url
+        }
+        location {
+          lat
+          lng
+          zip
+          city
+          state
+          country
+          formattedAddress
+        }
+      }
+      paymentGateway {
+        name
+        title
+      }
+      currencyOptions {
+        formation
+        fractions
+      }
+      pushNotification {
+        all {
+          order
+          message
+          storeNotice
+        }
+      }
+      isProductReview
+      useEnableGateway
+      useCashOnDelivery
+      freeShippingAmount
+      minimumOrderAmount
+      useMustVerifyEmail
+      maximumQuestionLimit
+      currencyToWalletRatio
+      defaultPaymentGateway
+      StripeCardOnly
+      guestCheckout
+      smsEvent {
+        ...EventSettingsParts
+      }
+      emailEvent {
+        ...EventSettingsParts
+      }
+      server_info {
+        upload_max_filesize
+        memory_limit
+        max_execution_time
+        max_input_time
+        post_max_size
+      }
+      useAi
+      defaultAi
+      maxShopDistance
+      siteLink
+      copyrightText
+      externalText
+      externalLink
+      isUnderMaintenance
+      maintenance {
+        title
+        image {
+          id
+          thumbnail
+          original
+        }
+        description
+        start
+        until
+        buttonTitleOne
+        newsLetterTitle
+        buttonTitleTwo
+        contactUsTitle
+        aboutUsTitle
+        newsLetterDescription
+        aboutUsDescription
+        isOverlayColor
+        overlayColor
+        overlayColorRange
+      }
+      isPromoPopUp
+      promoPopup {
+        image {
+          id
+          thumbnail
+          original
+        }
+        title
+        description
+        popUpDelay
+        popUpExpiredIn
+        isPopUpNotShow
+        popUpNotShow {
+          title
+          popUpExpiredIn
+        }
+      }
+      enableEmailForDigitalProduct
+      enableReviewPopup
+      reviewSystem {
+        name
+        value
+      }
+    }
+  }
+}

@@ -1,0 +1,152 @@
+# import PaginatorParts from './paginator.fragment.graphql'
+fragment OwnershipTransferPart on OwnershipTransfer {
+  id
+  transaction_identifier
+  previous_owner {
+    name
+    email
+    profile {
+      contact
+      avatar {
+        id
+        thumbnail
+        original
+      }
+    }
+  }
+  current_owner {
+    name
+    email
+    profile {
+      contact
+      bio
+      avatar {
+        id
+        thumbnail
+        original
+      }
+    }
+  }
+  message
+  status
+  shop {
+    id
+    logo {
+      id
+      thumbnail
+      original
+    }
+    name
+    description
+    cover_image {
+      id
+      thumbnail
+      original
+    }
+    address {
+      street_address
+      country
+      city
+      state
+      zip
+    }
+    settings {
+      socials {
+        url
+        icon
+      }
+    }
+  }
+  order_info {
+    pending
+    processing
+    complete
+    cancelled
+    refunded
+    failed
+    localFacility
+    outForDelivery
+  }
+  balance_info {
+    admin_commission_rate
+    total_earnings
+    withdrawn_amount
+    current_balance
+    payment_info
+  }
+
+  refund_info {
+    id
+    created_at
+    status
+  }
+  withdrawal_info {
+    id
+    amount
+    shop_id
+    created_at
+    payment_method
+    status
+  }
+  updated_at
+}
+query OwnershipTransfers(
+  $search: String
+  $orderBy: String
+  $sortedBy: String
+  $language: String
+  $searchJoin: String = "AND"
+  $first: Int = 15
+  $page: Int
+  $type: String
+  $text: String
+
+) {
+  ownershipTransfers(
+    search: $search
+    orderBy: $orderBy
+    sortedBy: $sortedBy
+    language: $language
+    searchJoin: $searchJoin
+    first: $first
+    page: $page
+    type: $type
+    text: $text
+  ) {
+    data {
+      ...OwnershipTransferPart
+    }
+    paginatorInfo {
+      ...PaginatorParts
+    }
+  }
+}
+
+query OwnershipTransfer(
+  $transaction_identifier: String
+  $request_view_type: String
+) {
+  ownershipTransfer(
+    transaction_identifier: $transaction_identifier
+    request_view_type: $request_view_type
+  ) {
+    ...OwnershipTransferPart
+  }
+}
+
+# mutation CreateAuthor($input: CreateAuthorInput!) {
+#   createAuthor(input: $input) {
+#     ...AuthorPart
+#   }
+# }
+
+mutation UpdateOwnershipTransfer($input: UpdateOwnershipTransferInput!) {
+  updateOwnershipTransfer(input: $input) {
+    ...OwnershipTransferPart
+  }
+}
+mutation DeleteOwnershipTransfer($id: ID!) {
+  deleteOwnershipTransfer(id: $id) {
+    ...OwnershipTransferPart
+  }
+}

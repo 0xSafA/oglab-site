@@ -1,0 +1,84 @@
+# import PaginatorParts from './paginator.fragment.graphql'
+fragment TermsAndConditionsParts on TermsAndConditions {
+  id
+  title
+  slug
+  description
+  type
+  issued_by
+  is_approved
+  language
+  translated_languages
+  shop_id
+}
+query TermsAndConditions(
+  $search: String
+  $orderBy: String
+  $sortedBy: String
+  $language: String
+  $searchJoin: String
+  $type: String
+  $issued_by: String
+  $is_approved: Boolean
+  $first: Int = 15
+  $page: Int
+  $shop_id: ID
+) {
+  termsConditions(
+    search: $search
+    orderBy: $orderBy
+    sortedBy: $sortedBy
+    language: $language
+    searchJoin: $searchJoin
+    type: $type
+    issued_by: $issued_by
+    shop_id: $shop_id
+    first: $first
+    is_approved: $is_approved
+    page: $page
+  ) {
+    data {
+      ...TermsAndConditionsParts
+    }
+    paginatorInfo {
+      ...PaginatorParts
+    }
+  }
+}
+
+
+query TermsCondition($id: ID, $slug: String, $language: String) {
+  termsCondition(id: $id, slug: $slug, language: $language) {
+    ...TermsAndConditionsParts
+  }
+}
+
+mutation CreateTermsConditions($input: CreateTermsConditionsInput!) {
+  createTermsConditions(input: $input) {
+    ...TermsAndConditionsParts
+  }
+}
+
+mutation UpdateTermsConditions($input: UpdateTermsConditionsInput!) {
+  updateTermsConditions(input: $input) {
+    ...TermsAndConditionsParts
+  }
+}
+
+mutation DeleteTermsConditions($id: ID!) {
+  deleteTermsConditions(id: $id) {
+    ...TermsAndConditionsParts
+  }
+}
+
+mutation DisApproveTermsConditions($id: ID!) {
+  disApproveTermsConditions(id: $id) {
+    ...TermsAndConditionsParts
+  }
+}
+
+mutation ApproveTermsConditions($id: ID!) {
+  approveTermsConditions(id: $id) {
+    ...TermsAndConditionsParts
+  }
+}

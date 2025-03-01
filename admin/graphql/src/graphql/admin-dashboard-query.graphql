@@ -1,0 +1,156 @@
+# import OrderByStatusParts from './fragments/analytics.fragment.graphql'
+# import CategoryWiseProductParts from './fragments/analytics.fragment.graphql'
+# import CategoryWiseProductSaleParts from './fragments/analytics.fragment.graphql'
+# import TopRatedProductParts from './fragments/analytics.fragment.graphql'
+# import PaginatorParts from './paginator.fragment.graphql'
+query AdminDashboard(
+  $limit: Int! = 10
+  $language: String! = "en"
+  $searchJoin: String = "and"
+  $search: String = ""
+  $type_id: ID
+  $shop_id: ID
+) {
+  analytics {
+    totalRevenue
+    totalRefunds
+    totalShops
+    totalVendors
+    todaysRevenue
+    totalOrders
+    newCustomers
+    totalYearSaleByMonth {
+      total
+      month
+    }
+    yearlyTotalOrderByStatus {
+      ...OrderByStatusParts
+    }
+    monthlyTotalOrderByStatus {
+      ...OrderByStatusParts
+    }
+    weeklyTotalOrderByStatus {
+      ...OrderByStatusParts
+    }
+    todayTotalOrderByStatus {
+      ...OrderByStatusParts
+    }
+  }
+  popularProducts(limit: 10) {
+    id
+    sku
+    slug
+    name
+    description
+    product_type
+    shop {
+      name
+    }
+    image {
+      id
+      thumbnail
+      original
+    }
+    type {
+      id
+      name
+    }
+    price
+    max_price
+    min_price
+    quantity
+    unit
+    status
+  }
+  orders(first: 10, orderBy: "created_at", sortedBy: "DESC") {
+    data {
+      id
+      tracking_number
+      customer {
+        name
+        email
+      }
+      products {
+        id
+      }
+      total
+      created_at
+      order_status
+      payment_status
+    }
+    paginatorInfo {
+      ...PaginatorParts
+    }
+  }
+  withdraws(first: 10, orderBy: "created_at", sortedBy: "DESC") {
+    data {
+      id
+      amount
+      status
+      created_at
+      shop {
+        name
+      }
+    }
+  }
+  categoryWiseProduct(
+    limit: $limit
+    language: $language
+    searchJoin: $searchJoin
+    search: $search
+  ) {
+    ...CategoryWiseProductParts
+  }
+  categoryWiseProductSale(
+    limit: $limit
+    language: $language
+    searchJoin: $searchJoin
+    search: $search
+  ) {
+    ...CategoryWiseProductSaleParts
+  }
+  lowStockProducts(
+    limit: $limit
+    language: $language
+    searchJoin: $searchJoin
+    search: $search
+    type_id: $type_id
+    shop_id: $shop_id
+  ) {
+    id
+    name
+    image {
+      id
+      thumbnail
+      original
+    }
+    sku
+    type {
+      id
+      name
+      slug
+    }
+    price
+    sale_price
+    min_price
+    max_price
+    quantity
+    product_type
+    shop {
+      name
+      logo {
+        id
+        thumbnail
+        original
+      }
+    }
+  }
+  topRatedProducts(
+    limit: $limit
+    language: $language
+    searchJoin: $searchJoin
+    search: $search
+  ) {
+    ...TopRatedProductParts
+  }
+}

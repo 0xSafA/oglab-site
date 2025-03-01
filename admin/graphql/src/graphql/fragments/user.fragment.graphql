@@ -1,0 +1,26 @@
+fragment UserParts on User {
+  id
+  name
+  email
+  permissions {
+    id
+    name
+  }
+  is_active
+  profile {
+    id
+    avatar {
+      id
+      original
+      thumbnail
+    }
+    bio
+  }
+  wallet {
+    id
+    total_points
+    points_used
+    available_points
+  }
+  created_at
+}

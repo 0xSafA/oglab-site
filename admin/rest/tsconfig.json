@@ -2,13 +2,12 @@
   "compilerOptions": {
     "baseUrl": ".",
     "target": "es5",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": ["dom", "dom.iterable", "esnext", "es2015"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,
-    "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "module": "esnext",
     "moduleResolution": "node",
@@ -16,12 +15,10 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "paths": {
-      "@/*": ["src/*"],
-      "@/framework/*": ["src/framework/rest/*"],
-      "@/framework/static/*": ["src/framework/static/*"]
+      "@/*": ["src/*"]
     },
     "incremental": true
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
-  "exclude": ["__generated__", "node_modules", "src/framework/graphql"]
+  "exclude": ["node_modules"]
 }
