@@ -1,6 +1,6 @@
 {
-  "name": "@oglab_site/shop",
-  "version": "11.13.0",
+  "name": "@pick-bazar/shop",
+  "version": "11.14.0",
   "private": true,
   "scripts": {
     "clean": "rimraf -g \"{.next,node_modules,__generated__,.cache,src/framework/graphql/**/*.d.ts}\"",
@@ -111,7 +111,7 @@
     "postcss": "8.4.47",
     "prettier": "3.3.3",
     "prettier-plugin-tailwindcss": "0.5.6",
-    "rimraf": "^5.0.5",
+    "rimraf": "5.0.5",
     "tailwindcss": "3.4.14",
     "ts-node": "10.9.2",
     "typescript": "5.6.3",

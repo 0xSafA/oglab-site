@@ -34,7 +34,7 @@ const Drawer: FC<SidebarProps> = ({
   useEffect(() => {
     if (ref.current) {
       if (open) {
-        disableBodyScroll(ref.current);
+        disableBodyScroll(ref.current, { allowTouchMove: () => true });
       } else {
         enableBodyScroll(ref.current);
       }

@@ -2,10 +2,36 @@
 
 // Copyright 2021 Google LLC
 
+echo(chalk.green('Started Setup server'))
+
+echo(chalk.blue('#Step 1 - Installing Nginx'))
+echo('Running: sudo apt update.. ')
+await $`sudo apt update`
+
 echo("Add ppa:ondrej/php");
 await $`sudo add-apt-repository ppa:ondrej/php`
 await $`sudo apt update`
 
+echo('Running: sudo apt install nginx.. ')
+await $`sudo apt install nginx`
+
+echo(chalk.blue('#Step 2: Adjusting the Firewall'))
+echo('Check ufw app list')
+await $`sudo ufw app list`
+
+echo('Add ssh to the firewall')
+await $`sudo ufw allow ssh`
+await $`sudo ufw allow OpenSSH`
+
+echo('Enable Nginx on the firewall')
+await $`sudo ufw allow 'Nginx HTTP'`
+
+echo('Enable the firewall')
+await $`sudo ufw enable`
+await $`sudo ufw default deny`
+
+echo('Check the changes status')
+await $`sudo ufw status`
 
 
 echo(chalk.blue('#Step 3 – Checking your Web Server'))
@@ -22,6 +48,8 @@ await $`php composer-setup.php`
 await $`php -r "unlink('composer-setup.php');"`
 await $`sudo mv composer.phar /usr/bin/composer`
 
+echo(chalk.blue('#Step 5 - Install MySQL'))
+await $`sudo apt install mysql-server`
 
 echo(chalk.blue('#Step 9: Setting Up Server & Project'))
 let domainName = await question('What is your domain name? ')
@@ -29,10 +57,10 @@ echo(chalk.green(`Your domain name is: ${domainName} \n`))
 
 let whichConfig = await question('What api do you want to use? Enter 1 for REST api or 2 for GraphQL: ')
 
-await $`sudo rm -f /etc/nginx/sites-enabled/oglab.com`
-await $`sudo rm -f /etc/nginx/sites-available/oglab.com`
-await $`sudo touch /etc/nginx/sites-available/oglab.com`
-await $`sudo chmod -R 777 /etc/nginx/sites-available/oglab.com`
+await $`sudo rm -f /etc/nginx/sites-enabled/pickbazar`
+await $`sudo rm -f /etc/nginx/sites-available/pickbazar`
+await $`sudo touch /etc/nginx/sites-available/pickbazar`
+await $`sudo chmod -R 777 /etc/nginx/sites-available/pickbazar`
 
 if(whichConfig == 1) {
     echo(chalk.blue('Settings Running For REST API'))
@@ -52,7 +80,7 @@ if(whichConfig == 1) {
 
         # For API
         location /backend {
-            alias /var/www/oglab.com/api/public;
+            alias /var/www/pickbazar-laravel/api/public;
             try_files $uri $uri/ @backend;
                 location ~ \\.php$ {
                 include fastcgi_params;
@@ -96,7 +124,7 @@ if(whichConfig == 1) {
         location ~ /\\.(?!well-known).* {
             deny all;
         }
-    }' > '/etc/nginx/sites-available/oglab.com'`;
+    }' > '/etc/nginx/sites-available/pickbazar'`;
 
 } else {
     echo(chalk.blue('Settings For GraphQL API'))
@@ -116,7 +144,7 @@ if(whichConfig == 1) {
 
         # For API
         location /backend {
-            alias /var/www/oglab.com/api/public;
+            alias /var/www/pickbazar-laravel/api/public;
             try_files $uri $uri/ @backend;
                 location ~ \\.php$ {
                 include fastcgi_params;
@@ -160,11 +188,11 @@ if(whichConfig == 1) {
         location ~ /\\.(?!well-known).* {
             deny all;
         }
-    }' > '/etc/nginx/sites-available/oglab.com'`;
+    }' > '/etc/nginx/sites-available/pickbazar'`;
 }
 
 echo(chalk.blue('\nEnabling the config'))
-await $`sudo ln -s /etc/nginx/sites-available/oglab.com /etc/nginx/sites-enabled/`
+await $`sudo ln -s /etc/nginx/sites-available/pickbazar /etc/nginx/sites-enabled/`
 
 //below comment will check nginx error
 await $`sudo nginx -t`

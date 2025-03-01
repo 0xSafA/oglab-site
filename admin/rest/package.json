@@ -1,6 +1,6 @@
 {
   "name": "@marvel/admin-rest",
-  "version": "11.6.0",
+  "version": "11.14.0",
   "private": true,
   "scripts": {
     "dev": "next dev -p 3002",

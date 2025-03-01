@@ -1,0 +1,71 @@
+# import ShopParts from './shops.graphql'
+
+fragment MeParts on User {
+  id
+  name
+  email
+  profile {
+    id
+    avatar {
+      id
+      thumbnail
+      original
+    }
+    bio
+    socials {
+      type
+      link
+    }
+    contact
+    notifications {
+      email
+      enable
+    }
+  }
+  address {
+    id
+    title
+    default
+    type
+    address {
+      country
+      city
+      state
+      zip
+      street_address
+    }
+  }
+  wallet {
+    id
+    total_points
+    points_used
+    available_points
+  }
+  is_active
+  managed_shop {
+    id
+    slug
+    name
+    is_active
+    description
+    logo {
+      thumbnail
+    }
+  }
+  shops {
+    id
+    slug
+    is_active
+    name
+    description
+    logo {
+      thumbnail
+    }
+  }
+}
+
+query Me {
+  me {
+    ...MeParts
+  }
+}

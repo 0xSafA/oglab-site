@@ -9,7 +9,7 @@
     ],
     "license": "MIT",
     "require": {
-        "php": "^8.2|^8.3",
+        "php": "^8.0|^8.1",
         "barryvdh/laravel-dompdf": "2.0.1",
         "doctrine/dbal": "3.7.1",
         "guzzlehttp/guzzle": "7.8.0",
@@ -17,7 +17,7 @@
         "laravel/framework": "10.30.1",
         "laravel/socialite": "5.10.0",
         "laravel/tinker": "2.8.2",
-        "marvel/shop": "dev-main",
+        "marvel/shop": "dev-master",
         "messagebird/php-rest-api": "3.1.4",
         "psr/log": "3.0.0",
         "stevebauman/purify": "6.0.2",

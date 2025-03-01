@@ -17,7 +17,7 @@
     "NEXT_PUBLIC_STORE_NOTICE_CREATED_EVENT": "store.notice.event",
     "NEXT_PUBLIC_ORDER_CREATED_EVENT": "order.create.event",
     "NEXT_PUBLIC_MESSAGE_EVENT": "message.event",
-    "NEXT_PUBLIC_VERSION": "11.13.0"
+    "NEXT_PUBLIC_VERSION": "11.14.0"
   },
   "build": {
     "env": {
@@ -38,7 +38,7 @@
       "NEXT_PUBLIC_STORE_NOTICE_CREATED_EVENT": "store.notice.event",
       "NEXT_PUBLIC_ORDER_CREATED_EVENT": "order.create.event",
       "NEXT_PUBLIC_MESSAGE_EVENT": "message.event",
-      "NEXT_PUBLIC_VERSION": "11.13.0"
+      "NEXT_PUBLIC_VERSION": "11.14.0"
     }
   }
 }

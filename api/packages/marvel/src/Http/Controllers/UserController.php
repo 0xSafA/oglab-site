@@ -142,7 +142,7 @@ class UserController extends CoreController
             return $this->repository->permission(Permission::STORE_OWNER)
                 ->where('is_active', $is_active)
                 ->whereNotIn('id', $admins)
-                ->when($exclude, fn ($query) => $query->where('id', '!=', $exclude));
+                ->when($exclude, fn($query) => $query->where('id', '!=', $exclude));
         }
         return $this->repository->permission(null);
     }
@@ -405,7 +405,19 @@ class UserController extends CoreController
                 'token' => 'required|string'
             ]);
 
+            $resetRecord = DB::table('password_resets')
+                ->where('email', $request->email)
+                ->where('token', $request->token)
+                ->first();
+
+            if (!$resetRecord) {
+                return ['message' => 'Invalid or expired reset token', 'success' => false];
+            }
+
             $user = $this->repository->where('email', $request->email)->first();
+            if (!$user) {
+                return ['message' => 'User not found', 'success' => false];
+            }
             $user->password = Hash::make($request->password);
             $user->save();
 
@@ -789,7 +801,7 @@ class UserController extends CoreController
                 break;
             case Permission::STORE_OWNER:
                 $excludeUsers = User::permission(Permission::SUPER_ADMIN)->pluck('id')->toArray();
-                if(isset($request->exclude)){
+                if (isset($request->exclude)) {
                     $excludeUsers = [...$excludeUsers, $request->exclude];
                 }
                 $query->permission($permission)->whereNotIn('id', $excludeUsers);
@@ -810,7 +822,7 @@ class UserController extends CoreController
     }
 
 
-        /**
+    /**
      * generateDownloadableUrl
      *
      * @param mixed $request

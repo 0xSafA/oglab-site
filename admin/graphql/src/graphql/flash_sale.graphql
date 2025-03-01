@@ -1,0 +1,111 @@
+# import PaginatorParts from './paginator.fragment.graphql'
+# import ProductParts from './products.graphql'
+fragment FlashSalePart on FlashSale {
+  id
+  title
+  description
+  slug
+  translated_languages
+  language
+  start_date
+  end_date
+  sale_status
+  type
+  rate
+  language
+  cover_image {
+    id
+    thumbnail
+    original
+  }
+  image {
+    id
+    thumbnail
+    original
+  }
+  products {
+    ...ProductParts
+  }
+  sale_builder {
+    data_type
+    product_ids
+  }
+}
+
+query FlashSales(
+  $search: String
+  $orderBy: String
+  $sortedBy: String
+  $language: String
+  $first: Int!
+  $page: Int
+  $request_from: String
+) {
+  flashSales(
+    language: $language
+    orderBy: $orderBy
+    search: $search
+    sortedBy: $sortedBy
+    first: $first
+    page: $page
+    request_from: $request_from
+  ) {
+    data {
+      ...FlashSalePart
+    }
+    paginatorInfo {
+      ...PaginatorParts
+    }
+  }
+}
+
+query FlashSale($id: ID, $slug: String, $language: String) {
+  flashSale(id: $id, slug: $slug, language: $language) {
+    ...FlashSalePart
+  }
+}
+
+query ProductsByFlashSale(
+  $slug: String!
+  $first: Int!
+  $page: Int
+  $search: String
+) {
+  productsByFlashSale(
+    slug: $slug
+    search: $search
+    first: $first
+    page: $page
+  ) {
+    data {
+      ...ProductParts
+    }
+    paginatorInfo {
+      ...PaginatorParts
+    }
+  }
+}
+
+query FlashSaleInfoByProductID($id: String!) {
+  flashSaleInfoByProductID(id: $id) {
+    ...FlashSalePart
+  }
+}
+
+mutation CreateFlashSale($input: CreateFlashSaleInput!) {
+  createFlashSale(input: $input) {
+    ...FlashSalePart
+  }
+}
+
+mutation UpdateFlashSale($input: UpdateFlashSaleInput!) {
+  updateFlashSale(input: $input) {
+    ...FlashSalePart
+  }
+}
+
+mutation DeleteFlashSale($id: ID!) {
+  deleteFlashSale(id: $id) {
+    ...FlashSalePart
+  }
+}

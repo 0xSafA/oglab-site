@@ -9,7 +9,7 @@ ssh SERVER_USERNAME@SERVERIP
 #### Upload api and deployment project to Virtual Server form youp PC - RUN on Local PC
 To upload the zipped `api` and `deployment` files to server you need to run the below command form your pickbazar project root
 > while running below command you will asked for enter your server `username` and `ip address` by entering and a successful connection you will also asked for enter your `api.zip` and `deployment.zip`
-> files path and the path will be look like `/home/your_project_folder_path/oglab_site/api.zip` for api.zip file so forth for `deployment.zip`
+> files path and the path will be look like `/home/your_project_folder_path/pickbazar-laravel/api.zip` for api.zip file so forth for `deployment.zip`
 
 ```bash
     bash deployment/deployment.sh
@@ -18,23 +18,23 @@ To upload the zipped `api` and `deployment` files to server you need to run the 
 #### Server Environment setup script - RUN on Virtual Server
 
 ```bash
-    bash /var/www/oglab_site/deployment/nodesetup.sh
+    bash /var/www/pickbazar-laravel/deployment/nodesetup.sh
 ````
 
 #### Nginx Setup And Settings - RUN on Virtual Server
 
 ```bash
-    zx /var/www/oglab_site/deployment/setenv.mjs
+    zx /var/www/pickbazar-laravel/deployment/setenv.mjs
 ````
 
 #### Backend build - RUN on Virtual Server
 
 ```bash
-    sudo zx /var/www/oglab_site/deployment/backendbuildscript.mjs
+    sudo zx /var/www/pickbazar-laravel/deployment/backendbuildscript.mjs
 ```
 
 #### Frontend build script - RUN on Local PC
-Run the below command from your oglab_site project root
+Run the below command from your pickbazar-laravel project root
 
 ```bash
     zx deployment/frontendbuildscript.mjs
@@ -43,5 +43,5 @@ Run the below command from your oglab_site project root
 #### Frontend run script - RUN on Virtual Server
 
 ```bash
-    zx /var/www/oglab_site/deployment/frontendrunscript.mjs
+    zx /var/www/pickbazar-laravel/deployment/frontendrunscript.mjs
 ```

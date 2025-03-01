@@ -1,0 +1,77 @@
+# import PaginatorParts from './paginator.fragment.graphql'
+
+fragment NotifyLogPart on NotifyLogs {
+  id
+  receiver
+  sender
+  notify_type
+  notify_receiver_type
+  is_read
+  notify_tracker
+  notify_text
+  receiver_user {
+    id
+    name
+    email
+    profile {
+      avatar {
+        thumbnail
+        original
+        id
+      }
+    }
+  }
+  sender_user {
+    id
+    name
+    email
+    profile {
+      avatar {
+        thumbnail
+        original
+        id
+      }
+    }
+  }
+  created_at
+  updated_at
+  deleted_at
+}
+
+query NotifyLogs(
+  $receiver: ID
+  $notify_type: String
+  $orderBy: String
+  $sortedBy: String
+  $search: String
+  $first: Int = 15
+  $page: Int
+) {
+  notifyLogs(
+    receiver: $receiver
+    notify_type: $notify_type
+    orderBy: $orderBy
+    sortedBy: $sortedBy
+    first: $first
+    page: $page
+    search: $search
+  ) {
+    data {
+      ...NotifyLogPart
+    }
+    paginatorInfo {
+      ...PaginatorParts
+    }
+  }
+}
+
+mutation NotifyLogAllRead($input: UpdateNotifyLogInput!) {
+  notifyLogAllRead(input: $input) {
+    ...NotifyLogPart
+  }
+}
+mutation ReadNotifyLogs($id: ID!) {
+  readNotifyLogs(id: $id) {
+    ...NotifyLogPart
+  }
+}
