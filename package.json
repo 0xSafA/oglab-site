@@ -7,6 +7,9 @@
     "admin/*",
     "shop"
   ],
+  "packageManager": "^yarn@4.7.0"
+}
+
   "scripts": {
     "clean": "yarn workspaces run rimraf \"{.next,node_modules,__generated__,.cache,src/graphql/*.d.ts,src/framework/graphql/**/*.d.ts}\" && rimraf node_modules",
     "gql-clean": "yarn workspaces run rimraf \"{__generated__,src/graphql/*.d.ts,src/framework/graphql/**/*.d.ts}\"",
