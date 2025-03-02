@@ -1,9 +1,9 @@
 <?php
 
 
-namespace oglab\Database\Repositories;
+namespace Marvel\Database\Repositories;
 
-use oglab\Database\Models\Language;
+use Marvel\Database\Models\Language;
 
 class LanguageRepository extends BaseRepository
 {

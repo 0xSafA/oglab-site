@@ -1,14 +1,14 @@
 <?php
 
-namespace oglab\Http\Requests;
+namespace Marvel\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Validation\Rule;
-use oglab\Database\Models\Shop;
-use oglab\Enums\RefundPolicyStatus;
-use oglab\Enums\RefundPolicyTarget;
+use Marvel\Database\Models\Shop;
+use Marvel\Enums\RefundPolicyStatus;
+use Marvel\Enums\RefundPolicyTarget;
 
 class UpdateRefundPolicyRequest extends FormRequest
 {

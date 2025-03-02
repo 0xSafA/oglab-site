@@ -1,16 +1,16 @@
 <?php
 
 
-namespace oglab\GraphQL\Queries;
+namespace Marvel\GraphQL\Queries;
 
 
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
-use oglab\Facades\Shop;
+use Marvel\Facades\Shop;
 
 class ManufacturerQuery
 {
     public function topManufacturer($rootValue, array $args, GraphQLContext $context)
     {
-        return Shop::call('oglab\Http\Controllers\ManufacturerController@topManufacturer', $args);
+        return Shop::call('Marvel\Http\Controllers\ManufacturerController@topManufacturer', $args);
     }
 }

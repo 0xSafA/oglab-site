@@ -1,21 +1,21 @@
 <?php
 
-namespace oglab\Http\Controllers;
+namespace Marvel\Http\Controllers;
 
 use Carbon\Carbon;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use oglab\Database\Models\Category;
-use oglab\Database\Models\Product;
-use oglab\Database\Models\Shop;
-use oglab\Database\Models\Type;
-use oglab\Database\Models\User;
-use oglab\Database\Repositories\AddressRepository;
-use oglab\Enums\OrderStatus;
-use oglab\Enums\Permission;
-use oglab\Exceptions\oglabException;
+use Marvel\Database\Models\Category;
+use Marvel\Database\Models\Product;
+use Marvel\Database\Models\Shop;
+use Marvel\Database\Models\Type;
+use Marvel\Database\Models\User;
+use Marvel\Database\Repositories\AddressRepository;
+use Marvel\Enums\OrderStatus;
+use Marvel\Enums\Permission;
+use Marvel\Exceptions\MarvelException;
 use Spatie\Permission\Models\Permission as ModelsPermission;
 
 class AnalyticsController extends CoreController
@@ -143,8 +143,8 @@ class AnalyticsController extends CoreController
                 'monthlyTotalOrderByStatus' => $monthlyTotalOrderByStatus,
                 'yearlyTotalOrderByStatus'  => $yearlyTotalOrderByStatus,
             ];
-        } catch (oglabException $e) {
-            throw new oglabException(SOMETHING_WENT_WRONG, $e->getMessage());
+        } catch (MarvelException $e) {
+            throw new MarvelException(SOMETHING_WENT_WRONG, $e->getMessage());
         }
     }
 
@@ -303,8 +303,8 @@ class AnalyticsController extends CoreController
             try {
                 $type = Type::where('slug', $request->type_slug)->where('language', $language)->firstOrFail();
                 $type_id = $type->id;
-            } catch (oglabException $e) {
-                throw new oglabException(NOT_FOUND);
+            } catch (MarvelException $e) {
+                throw new MarvelException(NOT_FOUND);
             }
         }
         $products_query = Product::with(['type', 'shop'])->where('language', $language)->where('quantity', '<', 10);

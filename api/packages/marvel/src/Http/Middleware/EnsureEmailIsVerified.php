@@ -1,10 +1,10 @@
 <?php
 
-namespace oglab\Http\Middleware;
+namespace Marvel\Http\Middleware;
 
 use Closure;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
-use oglab\Database\Models\Settings;
+use Marvel\Database\Models\Settings;
 
 class EnsureEmailIsVerified
 {

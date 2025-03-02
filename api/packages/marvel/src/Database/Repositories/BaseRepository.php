@@ -1,14 +1,14 @@
 <?php
 
 
-namespace oglab\Database\Repositories;
+namespace Marvel\Database\Repositories;
 
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use oglab\Database\Models\Shop;
-use oglab\Enums\Permission;
-use oglab\Exceptions\oglabException;
+use Marvel\Database\Models\Shop;
+use Marvel\Enums\Permission;
+use Marvel\Exceptions\MarvelException;
 use Prettus\Repository\Contracts\CacheableInterface;
 use Prettus\Repository\Traits\CacheableRepository;
 use Prettus\Repository\Eloquent\BaseRepository as Repository;
@@ -53,7 +53,7 @@ abstract class BaseRepository extends Repository implements CacheableInterface
     {
         $model = $this->findByField($field, $value, $columns = ['*']);
         if (!$model->first()) {
-            throw new oglabException(NOT_FOUND);
+            throw new MarvelException(NOT_FOUND);
         }
         return $model->first();
     }
@@ -180,7 +180,7 @@ abstract class BaseRepository extends Repository implements CacheableInterface
             return false;
         }
         if (!$shop->is_active) {
-            throw new oglabException(SHOP_NOT_APPROVED);
+            throw new MarvelException(SHOP_NOT_APPROVED);
         }
         if ($user &&  $user->hasPermissionTo(Permission::STORE_OWNER)) {
             if ($shop->owner_id === $user->id) {

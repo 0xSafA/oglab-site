@@ -1,20 +1,20 @@
 <?php
 
-namespace oglab\Http\Controllers;
+namespace Marvel\Http\Controllers;
 
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Collection;
-use oglab\Exceptions\oglabException;
-use oglab\Http\Requests\CouponRequest;
-use oglab\Http\Requests\UpdateCouponRequest;
-use oglab\Database\Repositories\CouponRepository;
+use Marvel\Exceptions\MarvelException;
+use Marvel\Http\Requests\CouponRequest;
+use Marvel\Http\Requests\UpdateCouponRequest;
+use Marvel\Database\Repositories\CouponRepository;
 use Prettus\Validator\Exceptions\ValidatorException;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use oglab\Enums\Permission;
-use oglab\Http\Resources\CouponResource;
+use Marvel\Enums\Permission;
+use Marvel\Http\Resources\CouponResource;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Throwable;
 
@@ -71,8 +71,8 @@ class CouponController extends CoreController
                 $query->where('language', $language);
             }
             return $query;
-        } catch (oglabException $e) {
-            throw new oglabException(SOMETHING_WENT_WRONG, $e->getMessage());
+        } catch (MarvelException $e) {
+            throw new MarvelException(SOMETHING_WENT_WRONG, $e->getMessage());
         }
     }
 
@@ -87,8 +87,8 @@ class CouponController extends CoreController
     {
         try {
             return $this->repository->storeCoupon($request);
-        } catch (oglabException $e) {
-            throw new oglabException(COULD_NOT_CREATE_THE_RESOURCE, $e->getMessage());
+        } catch (MarvelException $e) {
+            throw new MarvelException(COULD_NOT_CREATE_THE_RESOURCE, $e->getMessage());
         }
     }
 
@@ -111,8 +111,8 @@ class CouponController extends CoreController
             } catch (Throwable $e) {
                 throw new ModelNotFoundException(NOT_FOUND);
             }
-        } catch (oglabException $e) {
-            throw new oglabException(NOT_FOUND);
+        } catch (MarvelException $e) {
+            throw new MarvelException(NOT_FOUND);
         }
     }
     /**
@@ -129,8 +129,8 @@ class CouponController extends CoreController
         ]);
         try {
             return $this->repository->verifyCoupon($request);
-        } catch (oglabException $e) {
-            throw new oglabException(NOT_FOUND);
+        } catch (MarvelException $e) {
+            throw new MarvelException(NOT_FOUND);
         }
     }
 
@@ -146,8 +146,8 @@ class CouponController extends CoreController
         try {
             $request->id = $id;
             return $this->updateCoupon($request);
-        } catch (oglabException $th) {
-            throw new oglabException();
+        } catch (MarvelException $th) {
+            throw new MarvelException();
         }
     }
 
@@ -196,8 +196,8 @@ class CouponController extends CoreController
     {
         try {
             return $this->repository->findOrFail($id)->delete();
-        } catch (oglabException $e) {
-            throw new oglabException(NOT_FOUND);
+        } catch (MarvelException $e) {
+            throw new MarvelException(NOT_FOUND);
         }
     }
 
@@ -206,13 +206,13 @@ class CouponController extends CoreController
 
         try {
             if (!$request->user()->hasPermissionTo(Permission::SUPER_ADMIN)) {
-                throw new oglabException(NOT_AUTHORIZED);
+                throw new MarvelException(NOT_AUTHORIZED);
             }
             $coupon = $this->repository->findOrFail($request->id);
             $coupon->update(['is_approve' => true]);
             return $coupon;
-        } catch (oglabException $th) {
-            throw new oglabException(SOMETHING_WENT_WRONG);
+        } catch (MarvelException $th) {
+            throw new MarvelException(SOMETHING_WENT_WRONG);
         }
     }
 
@@ -220,14 +220,14 @@ class CouponController extends CoreController
     {
         try {
             if (!$request->user()->hasPermissionTo(Permission::SUPER_ADMIN)) {
-                throw new oglabException(NOT_AUTHORIZED);
+                throw new MarvelException(NOT_AUTHORIZED);
             }
             $coupon = $this->repository->findOrFail($request->id);
             $coupon->is_approve = false;
             $coupon->save();
             return $coupon;
-        } catch (oglabException $th) {
-            throw new oglabException(SOMETHING_WENT_WRONG);
+        } catch (MarvelException $th) {
+            throw new MarvelException(SOMETHING_WENT_WRONG);
         }
     }
 }

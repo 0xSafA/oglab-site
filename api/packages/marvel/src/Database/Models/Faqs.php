@@ -1,12 +1,12 @@
 <?php
 
-namespace oglab\Database\Models;
+namespace Marvel\Database\Models;
 
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use oglab\Database\Models\Shop;
-use oglab\Traits\TranslationTrait;
+use Marvel\Database\Models\Shop;
+use Marvel\Traits\TranslationTrait;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
 

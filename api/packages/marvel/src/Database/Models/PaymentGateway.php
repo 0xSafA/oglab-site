@@ -1,12 +1,12 @@
 <?php
 
-namespace oglab\Database\Models;
+namespace Marvel\Database\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use oglab\Traits\TranslationTrait;
+use Marvel\Traits\TranslationTrait;
 
 class PaymentGateway extends Model
 {

@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use oglab\Enums\FlashSaleType;
+use Marvel\Enums\FlashSaleType;
 
 return new class extends Migration
 {

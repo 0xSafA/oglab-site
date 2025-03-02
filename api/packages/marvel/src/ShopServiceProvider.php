@@ -1,59 +1,59 @@
 <?php
 
-namespace oglab;
+namespace Marvel;
 
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\ServiceProvider;
-use oglab\Console\oglabVerification;
-use oglab\Http\Middleware\EnsureEmailIsVerified;
+use Marvel\Console\MarvelVerification;
+use Marvel\Http\Middleware\EnsureEmailIsVerified;
 use Nuwave\Lighthouse\Schema\TypeRegistry;
 use Nuwave\Lighthouse\Schema\Types\LaravelEnumType;
-use oglab\Enums\CouponType;
-use oglab\Enums\ShippingType;
-use oglab\Enums\Permission;
-use oglab\Providers\GraphQLServiceProvider;
-use oglab\Providers\RestApiServiceProvider;
-use oglab\Providers\EventServiceProvider;
-use oglab\Console\InstallCommand;
+use Marvel\Enums\CouponType;
+use Marvel\Enums\ShippingType;
+use Marvel\Enums\Permission;
+use Marvel\Providers\GraphQLServiceProvider;
+use Marvel\Providers\RestApiServiceProvider;
+use Marvel\Providers\EventServiceProvider;
+use Marvel\Console\InstallCommand;
 use Illuminate\Support\Facades\App;
 use Nuwave\Lighthouse\WhereConditions\WhereConditionsServiceProvider;
 use Illuminate\Support\Facades\Gate;
-use oglab\Ai\Ai;
-use oglab\Console\AdminCreateCommand;
-use oglab\Console\AWSSetupCommand;
-use oglab\Console\CopyFilesCommand;
-use oglab\Console\DatabaseSetupCommand;
-use oglab\Console\DefaultLanguageSetupCommand;
-use oglab\Console\ENVSetupCommand;
-use oglab\Console\FrontendSetupCommand;
-use oglab\Console\ImportDemoData;
-use oglab\Console\MailchimpNewsletterSetupCommand;
-use oglab\Console\MailSetupCommand;
-use oglab\Console\oglabInfoCommand;
-use oglab\Console\OpenAiSetupCommand;
-use oglab\Console\OTPGatewaySetupCommand;
-use oglab\Console\QueueConnectionSetupCommand;
-use oglab\Console\SettingsDataImporter;
-use oglab\Console\TestMailSendCommand;
-use oglab\Console\TranslationEnabledCommand;
-use oglab\Database\Models\Settings;
-use oglab\Enums\EventType;
-use oglab\Enums\ManufacturerType;
-use oglab\Enums\OrderStatus;
-use oglab\Enums\ProductType;
-use oglab\Enums\RefundStatus;
-use oglab\Enums\WithdrawStatus;
-use oglab\Enums\PaymentGatewayType;
-use oglab\Enums\PaymentStatus;
-use oglab\Enums\ProductStatus;
-use oglab\Enums\RefundPolicyStatus;
-use oglab\Enums\RefundPolicyTarget;
-use oglab\Enums\Role;
-use oglab\Payments\Payment;
-use oglab\Enums\StoreNoticePriority;
-use oglab\Enums\StoreNoticeType;
-use oglab\Http\Resources\Resource;
-use oglab\Providers\oglabBroadcastServiceProvider;
+use Marvel\Ai\Ai;
+use Marvel\Console\AdminCreateCommand;
+use Marvel\Console\AWSSetupCommand;
+use Marvel\Console\CopyFilesCommand;
+use Marvel\Console\DatabaseSetupCommand;
+use Marvel\Console\DefaultLanguageSetupCommand;
+use Marvel\Console\ENVSetupCommand;
+use Marvel\Console\FrontendSetupCommand;
+use Marvel\Console\ImportDemoData;
+use Marvel\Console\MailchimpNewsletterSetupCommand;
+use Marvel\Console\MailSetupCommand;
+use Marvel\Console\MarvelInfoCommand;
+use Marvel\Console\OpenAiSetupCommand;
+use Marvel\Console\OTPGatewaySetupCommand;
+use Marvel\Console\QueueConnectionSetupCommand;
+use Marvel\Console\SettingsDataImporter;
+use Marvel\Console\TestMailSendCommand;
+use Marvel\Console\TranslationEnabledCommand;
+use Marvel\Database\Models\Settings;
+use Marvel\Enums\EventType;
+use Marvel\Enums\ManufacturerType;
+use Marvel\Enums\OrderStatus;
+use Marvel\Enums\ProductType;
+use Marvel\Enums\RefundStatus;
+use Marvel\Enums\WithdrawStatus;
+use Marvel\Enums\PaymentGatewayType;
+use Marvel\Enums\PaymentStatus;
+use Marvel\Enums\ProductStatus;
+use Marvel\Enums\RefundPolicyStatus;
+use Marvel\Enums\RefundPolicyTarget;
+use Marvel\Enums\Role;
+use Marvel\Payments\Payment;
+use Marvel\Enums\StoreNoticePriority;
+use Marvel\Enums\StoreNoticeType;
+use Marvel\Http\Resources\Resource;
+use Marvel\Providers\MarvelBroadcastServiceProvider;
 
 class ShopServiceProvider extends ServiceProvider
 {
@@ -65,7 +65,7 @@ class ShopServiceProvider extends ServiceProvider
         RestApiServiceProvider::class,
         EventServiceProvider::class,
         WhereConditionsServiceProvider::class,
-        oglabBroadcastServiceProvider::class,
+        MarvelBroadcastServiceProvider::class,
         // Maatwebsite\Excel\ExcelServiceProvider::class,
 
     ];
@@ -110,7 +110,7 @@ class ShopServiceProvider extends ServiceProvider
         ENVSetupCommand::class,
         OpenAiSetupCommand::class,
         DatabaseSetupCommand::class,
-        oglabInfoCommand::class,
+        MarvelInfoCommand::class,
         TestMailSendCommand::class,
     ];
 
@@ -248,10 +248,10 @@ class ShopServiceProvider extends ServiceProvider
             }
 
             try {
-                $gateway = 'oglab\\Payments\\' . ucfirst($active_payment_gateway);
+                $gateway = 'Marvel\\Payments\\' . ucfirst($active_payment_gateway);
                 return new Payment($app->make($gateway));
             } catch (\Throwable $th) {
-                $gateway = 'oglab\\Payments\\' . ucfirst($settings->options['defaultPaymentGateway']);
+                $gateway = 'Marvel\\Payments\\' . ucfirst($settings->options['defaultPaymentGateway']);
                 return new Payment($app->make($gateway));
             }
         });
@@ -266,12 +266,12 @@ class ShopServiceProvider extends ServiceProvider
                 $active_ai = $settings->options['defaultAi'];
             }
 
-            $ai = 'oglab\\Ai\\' . ucfirst($active_ai);
+            $ai = 'Marvel\\Ai\\' . ucfirst($active_ai);
             return new Ai($app->make($ai));
         });
 
-        $this->app->singleton(oglabVerification::class, function ($app) {
-            return new oglabVerification();
+        $this->app->singleton(MarvelVerification::class, function ($app) {
+            return new MarvelVerification();
         });
     }
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace oglab\Http\Controllers;
+namespace Marvel\Http\Controllers;
 
 use Carbon\Carbon;
 use Exception;
@@ -8,13 +8,13 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use oglab\Database\Repositories\OwnershipTransferRepository;
-use oglab\Enums\OrderStatus;
-use oglab\Exceptions\oglabException;
-use oglab\Exceptions\oglabNotFoundException;
-use oglab\Http\Resources\OwnershipTransferResource;
-use oglab\Enums\Permission;
-use oglab\Events\OwnershipTransferStatusControl;
+use Marvel\Database\Repositories\OwnershipTransferRepository;
+use Marvel\Enums\OrderStatus;
+use Marvel\Exceptions\MarvelException;
+use Marvel\Exceptions\MarvelNotFoundException;
+use Marvel\Http\Resources\OwnershipTransferResource;
+use Marvel\Enums\Permission;
+use Marvel\Events\OwnershipTransferStatusControl;
 
 class OwnershipTransferController extends CoreController
 {
@@ -74,8 +74,8 @@ class OwnershipTransferController extends CoreController
         try {
             $request->merge(["transaction_identifier" => $transaction_identifier]);
             return $this->fetchOwnerTransferHistory($request);
-        } catch (oglabException $th) {
-            throw new oglabException(NOT_FOUND);
+        } catch (MarvelException $th) {
+            throw new MarvelException(NOT_FOUND);
         }
     }
     /**
@@ -93,7 +93,7 @@ class OwnershipTransferController extends CoreController
             $ownershipTransfer = $this->repository->getOwnershipTransferHistory($request);
             return new OwnershipTransferResource($ownershipTransfer);
         } catch (Exception $e) {
-            throw new oglabNotFoundException(NOT_FOUND);
+            throw new MarvelNotFoundException(NOT_FOUND);
         }
     }
 
@@ -103,15 +103,15 @@ class OwnershipTransferController extends CoreController
      * @param Request $request
      * @param int $id
      * @return OwnershipTransferResource
-     * @throws \oglab\Exceptions\oglabException
+     * @throws \Marvel\Exceptions\MarvelException
      */
     public function update(Request $request, $id)
     {
         try {
             $request->merge(['id' => $id]);
             return $this->updateOwnershipTransfer($request);
-        } catch (oglabException $th) {
-            throw new oglabException(COULD_NOT_UPDATE_THE_RESOURCE);
+        } catch (MarvelException $th) {
+            throw new MarvelException(COULD_NOT_UPDATE_THE_RESOURCE);
         }
     }
 
@@ -127,8 +127,8 @@ class OwnershipTransferController extends CoreController
             event(new OwnershipTransferStatusControl($data));
 
             return new OwnershipTransferResource($data);
-        } catch (oglabException $th) {
-            throw new oglabException(COULD_NOT_UPDATE_THE_RESOURCE);
+        } catch (MarvelException $th) {
+            throw new MarvelException(COULD_NOT_UPDATE_THE_RESOURCE);
         }
     }
 
@@ -143,8 +143,8 @@ class OwnershipTransferController extends CoreController
         try {
             $request->merge(['id' => $id]);
             return $this->deleteOwnershipTransfer($request);
-        } catch (oglabException $th) {
-            throw new oglabException(COULD_NOT_DELETE_THE_RESOURCE);
+        } catch (MarvelException $th) {
+            throw new MarvelException(COULD_NOT_DELETE_THE_RESOURCE);
         }
     }
 

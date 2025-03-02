@@ -1,17 +1,17 @@
 <?php
 
-namespace oglab\Payments;
+namespace Marvel\Payments;
 
 use Exception;
 
-use oglab\Database\Models\Order;
+use Marvel\Database\Models\Order;
 use Stripe\StripeClient;
-use oglab\Payments\PaymentInterface;
-use oglab\Payments\Base;
-use oglab\Traits\OrderStatusManagerWithPaymentTrait;
-use oglab\Enums\OrderStatus;
-use oglab\Enums\PaymentStatus;
-use oglab\Traits\PaymentTrait;
+use Marvel\Payments\PaymentInterface;
+use Marvel\Payments\Base;
+use Marvel\Traits\OrderStatusManagerWithPaymentTrait;
+use Marvel\Enums\OrderStatus;
+use Marvel\Enums\PaymentStatus;
+use Marvel\Traits\PaymentTrait;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class Stripe extends Base implements PaymentInterface
@@ -103,7 +103,7 @@ class Stripe extends Base implements PaymentInterface
       $intent_array = [
         'amount' => round($amount, 2) * 100,
         'currency' => $this->currency,
-        'description' => 'oglab Payment',
+        'description' => 'Marvel Payment',
 
         /**
          *  If you want selective payment method type then list those method name in the "payment_method_types" array 

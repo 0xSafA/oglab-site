@@ -1,17 +1,17 @@
 <?php
 
 
-namespace oglab\Http\Controllers;
+namespace Marvel\Http\Controllers;
 
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use oglab\Database\Models\Tag;
-use oglab\Database\Repositories\TagRepository;
-use oglab\Exceptions\oglabException;
-use oglab\Http\Requests\TagCreateRequest;
-use oglab\Http\Requests\TagUpdateRequest;
-use oglab\Http\Resources\TagResource;
+use Marvel\Database\Models\Tag;
+use Marvel\Database\Repositories\TagRepository;
+use Marvel\Exceptions\MarvelException;
+use Marvel\Http\Requests\TagCreateRequest;
+use Marvel\Http\Requests\TagUpdateRequest;
+use Marvel\Http\Resources\TagResource;
 use Prettus\Validator\Exceptions\ValidatorException;
 
 
@@ -51,8 +51,8 @@ class TagController extends CoreController
             $validatedData = $request->validated();
             $validatedData['slug'] = $this->repository->makeSlug($request);
             return $this->repository->create($validatedData);
-        } catch (oglabException $th) {
-            throw new oglabException(COULD_NOT_CREATE_THE_RESOURCE);
+        } catch (MarvelException $th) {
+            throw new MarvelException(COULD_NOT_CREATE_THE_RESOURCE);
         }
     }
 
@@ -74,8 +74,8 @@ class TagController extends CoreController
             }
             $tag = $this->repository->where('slug', $params)->where('language', $language)->with(['type'])->firstOrFail();
             return new TagResource($tag);
-        } catch (oglabException $th) {
-            throw new oglabException(COULD_NOT_CREATE_THE_RESOURCE);
+        } catch (MarvelException $th) {
+            throw new MarvelException(COULD_NOT_CREATE_THE_RESOURCE);
         }
     }
 
@@ -91,8 +91,8 @@ class TagController extends CoreController
         try {
             $request['id'] = $id;
             return $this->tagUpdate($request);
-        } catch (oglabException $th) {
-            throw new oglabException(COULD_NOT_CREATE_THE_RESOURCE);
+        } catch (MarvelException $th) {
+            throw new MarvelException(COULD_NOT_CREATE_THE_RESOURCE);
         }
     }
 
@@ -101,8 +101,8 @@ class TagController extends CoreController
         try {
             $tag = $this->repository->findOrFail($request->id);
             return $this->repository->updateTag($request, $tag);
-        } catch (oglabException $th) {
-            throw new oglabException(COULD_NOT_CREATE_THE_RESOURCE);
+        } catch (MarvelException $th) {
+            throw new MarvelException(COULD_NOT_CREATE_THE_RESOURCE);
         }
     }
 
@@ -116,8 +116,8 @@ class TagController extends CoreController
     {
         try {
             return $this->repository->findOrFail($id)->delete();
-        } catch (oglabException $th) {
-            throw new oglabException(COULD_NOT_CREATE_THE_RESOURCE);
+        } catch (MarvelException $th) {
+            throw new MarvelException(COULD_NOT_CREATE_THE_RESOURCE);
         }
     }
 }

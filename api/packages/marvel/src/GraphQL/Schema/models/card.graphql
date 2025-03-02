@@ -1,7 +1,7 @@
 extend type Query {
     cards: [Card]
-        @field(resolver: "oglab\\GraphQL\\Queries\\CardQuery@fetchCards")
-        @can(ability: "customer", model: "oglab\\Database\\Models\\PaymentGateway")
+        @field(resolver: "Marvel\\GraphQL\\Queries\\CardQuery@fetchCards")
+        @can(ability: "customer", model: "Marvel\\Database\\Models\\PaymentGateway")
 }
 
 type Card {
@@ -30,8 +30,8 @@ extend type Mutation {
         @field(resolver: "CardMutator@store")
     deleteCard(id: ID!): Boolean
         @field(resolver: "CardMutator@delete")
-        @can(ability: "customer", model: "oglab\\Database\\Models\\PaymentGateway")
+        @can(ability: "customer", model: "Marvel\\Database\\Models\\PaymentGateway")
     setDefaultPaymentMethod(method_id: ID!): Card
         @field(resolver: "CardMutator@setDefaultPaymentMethod")
-        @can(ability: "customer", model: "oglab\\Database\\Models\\PaymentGateway")
+        @can(ability: "customer", model: "Marvel\\Database\\Models\\PaymentGateway")
 }

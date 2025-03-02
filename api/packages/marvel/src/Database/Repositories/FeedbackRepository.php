@@ -1,9 +1,9 @@
 <?php
 
 
-namespace oglab\Database\Repositories;
+namespace Marvel\Database\Repositories;
 
-use oglab\Database\Models\Feedback;
+use Marvel\Database\Models\Feedback;
 use Prettus\Repository\Criteria\RequestCriteria;
 use Prettus\Repository\Exceptions\RepositoryException;
 

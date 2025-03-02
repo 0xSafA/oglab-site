@@ -274,7 +274,7 @@
   "text-yearly": "שְׁנָתִי",
   "text-order-details": "פרטי הזמנה",
   "text-no-image-found": "לא נמצאה תמונה",
-  "oglab_ERROR.ALREADY_REFUNDED": "כבר הוחזר",
+  "MARVEL_ERROR.ALREADY_REFUNDED": "כבר הוחזר",
   "text-item": "פריט",
   "text-add": "לְהוֹסִיף",
   "text-cart": "עֲגָלָה",

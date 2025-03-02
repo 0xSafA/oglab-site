@@ -1,6 +1,6 @@
 <?php
 
-namespace oglab\Http\Requests;
+namespace Marvel\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
@@ -31,8 +31,8 @@ class ManufacturerRequest extends FormRequest
             'name' => ['required', 'string'],
             'slug'        => ['nullable', 'string'],
             'description' => ['nullable', 'string', 'max:10000'],
-            'type_id' => ['required', 'exists:oglab\Database\Models\Type,id'],
-            'shop_id'     => ['nullable', 'exists:oglab\Database\Models\Shop,id'],
+            'type_id' => ['required', 'exists:Marvel\Database\Models\Type,id'],
+            'shop_id'     => ['nullable', 'exists:Marvel\Database\Models\Shop,id'],
             'image' => ['array'],
             'language'     => ['nullable', 'string'],
             'cover_image' => ['array'],

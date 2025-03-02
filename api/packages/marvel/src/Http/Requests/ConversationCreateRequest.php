@@ -1,7 +1,7 @@
 <?php
 
 
-namespace oglab\Http\Requests;
+namespace Marvel\Http\Requests;
 
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
@@ -28,7 +28,7 @@ class ConversationCreateRequest extends FormRequest
     public function rules()
     {
         return [
-            'shop_id' => ['required', 'exists:oglab\Database\Models\Shop,id'],
+            'shop_id' => ['required', 'exists:Marvel\Database\Models\Shop,id'],
         ];
     }
 

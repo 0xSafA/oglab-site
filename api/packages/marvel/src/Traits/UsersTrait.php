@@ -1,10 +1,10 @@
 <?php
 
-namespace oglab\Traits;
+namespace Marvel\Traits;
 
 use Illuminate\Support\Facades\Cache;
-use oglab\Enums\Permission;
-use oglab\Database\Models\User;
+use Marvel\Enums\Permission;
+use Marvel\Database\Models\User;
 
 trait UsersTrait
 {

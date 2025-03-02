@@ -1,7 +1,7 @@
 <?php
 
 
-namespace oglab\Database\Repositories;
+namespace Marvel\Database\Repositories;
 
 use Carbon\Carbon;
 use Exception;
@@ -12,31 +12,31 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
-use oglab\Database\Models\Balance;
-use oglab\Database\Models\Coupon;
-use oglab\Database\Models\Order;
-use oglab\Database\Models\OrderedFile;
-use oglab\Database\Models\OrderWalletPoint;
-use oglab\Database\Models\Wallet;
-use oglab\Database\Models\Product;
-use oglab\Database\Models\Settings;
-use oglab\Database\Models\User;
-use oglab\Database\Models\Variation;
-use oglab\Enums\CouponType;
-use oglab\Enums\OrderStatus;
-use oglab\Enums\Permission;
-use oglab\Enums\ProductType;
-use oglab\Enums\PaymentGatewayType;
-use oglab\Enums\PaymentStatus;
-use oglab\Events\OrderCreated;
-use oglab\Events\OrderProcessed;
-use oglab\Events\OrderReceived;
-use oglab\Exceptions\oglabBadRequestException;
-use oglab\Traits\CalculatePaymentTrait;
-use oglab\Traits\OrderManagementTrait;
-use oglab\Traits\OrderStatusManagerWithPaymentTrait;
-use oglab\Traits\PaymentTrait;
-use oglab\Traits\WalletsTrait;
+use Marvel\Database\Models\Balance;
+use Marvel\Database\Models\Coupon;
+use Marvel\Database\Models\Order;
+use Marvel\Database\Models\OrderedFile;
+use Marvel\Database\Models\OrderWalletPoint;
+use Marvel\Database\Models\Wallet;
+use Marvel\Database\Models\Product;
+use Marvel\Database\Models\Settings;
+use Marvel\Database\Models\User;
+use Marvel\Database\Models\Variation;
+use Marvel\Enums\CouponType;
+use Marvel\Enums\OrderStatus;
+use Marvel\Enums\Permission;
+use Marvel\Enums\ProductType;
+use Marvel\Enums\PaymentGatewayType;
+use Marvel\Enums\PaymentStatus;
+use Marvel\Events\OrderCreated;
+use Marvel\Events\OrderProcessed;
+use Marvel\Events\OrderReceived;
+use Marvel\Exceptions\MarvelBadRequestException;
+use Marvel\Traits\CalculatePaymentTrait;
+use Marvel\Traits\OrderManagementTrait;
+use Marvel\Traits\OrderStatusManagerWithPaymentTrait;
+use Marvel\Traits\PaymentTrait;
+use Marvel\Traits\WalletsTrait;
 use Prettus\Repository\Criteria\RequestCriteria;
 use Prettus\Repository\Exceptions\RepositoryException;
 
@@ -210,7 +210,7 @@ class OrderRepository extends BaseRepository
 
         $eligible = $this->checkOrderEligibility();
         if (!$eligible) {
-            throw new oglabBadRequestException('COULD_NOT_PROCESS_THE_ORDER_PLEASE_CONTACT_WITH_THE_ADMIN');
+            throw new MarvelBadRequestException('COULD_NOT_PROCESS_THE_ORDER_PLEASE_CONTACT_WITH_THE_ADMIN');
         }
         // Create Intent
         if (!in_array($order->payment_gateway, [

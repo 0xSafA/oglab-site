@@ -1,33 +1,33 @@
 <?php
 
 
-namespace oglab\GraphQL\Mutation;
+namespace Marvel\GraphQL\Mutation;
 
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
-use oglab\Facades\Shop;
+use Marvel\Facades\Shop;
 
 class StoreNoticeMutator
 {
 
     public function createStoreNotice($rootValue, array $args, GraphQLContext $context)
     {
-        return Shop::call('oglab\Http\Controllers\StoreNoticeController@store', $args);
+        return Shop::call('Marvel\Http\Controllers\StoreNoticeController@store', $args);
     }
 
     public function updateStoreNotice($rootValue, array $args, GraphQLContext $context)
     {
-        return Shop::call('oglab\Http\Controllers\StoreNoticeController@updateStoreNotice', $args);
+        return Shop::call('Marvel\Http\Controllers\StoreNoticeController@updateStoreNotice', $args);
     }
     public function deleteStoreNotice($rootValue, array $args, GraphQLContext $context)
     {
-        return Shop::call('oglab\Http\Controllers\StoreNoticeController@deleteStoreNotice', $args);
+        return Shop::call('Marvel\Http\Controllers\StoreNoticeController@deleteStoreNotice', $args);
     }
     public function readNotice($rootValue, array $args, GraphQLContext $context)
     {
-        return Shop::call('oglab\Http\Controllers\StoreNoticeController@readNotice', $args);
+        return Shop::call('Marvel\Http\Controllers\StoreNoticeController@readNotice', $args);
     }
     public function readAllNotice($rootValue, array $args, GraphQLContext $context)
     {
-        return Shop::call('oglab\Http\Controllers\StoreNoticeController@readAllNotice', $args);
+        return Shop::call('Marvel\Http\Controllers\StoreNoticeController@readAllNotice', $args);
     }
 }

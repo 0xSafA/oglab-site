@@ -274,7 +274,7 @@
   "text-yearly": "Anual",
   "text-order-details": "Detalles del pedido",
   "text-no-image-found": "No se encontró ninguna imagen",
-  "oglab_ERROR.ALREADY_REFUNDED": "Ya reembolsado",
+  "MARVEL_ERROR.ALREADY_REFUNDED": "Ya reembolsado",
   "text-item": "Artículo",
   "text-add": "Agregar",
   "text-cart": "Carro",

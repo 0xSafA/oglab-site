@@ -1,27 +1,27 @@
 <?php
 
 
-namespace oglab\GraphQL\Queries;
+namespace Marvel\GraphQL\Queries;
 
 
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
-use oglab\Facades\Shop;
+use Marvel\Facades\Shop;
 
 class StoreNoticeQuery
 {
     public function fetchStoreNotices($rootValue, array $args, GraphQLContext $context)
     {
-        return Shop::call('oglab\Http\Controllers\StoreNoticeController@fetchStoreNotices', $args);
+        return Shop::call('Marvel\Http\Controllers\StoreNoticeController@fetchStoreNotices', $args);
     }
 
     public function getStoreNoticeType($rootValue, array $args, GraphQLContext $context)
     {
-        return Shop::call('oglab\Http\Controllers\StoreNoticeController@getStoreNoticeType', $args);
+        return Shop::call('Marvel\Http\Controllers\StoreNoticeController@getStoreNoticeType', $args);
     }
 
     public function getUsersToNotify($rootValue, array $args, GraphQLContext $context)
     {
-        return Shop::call('oglab\Http\Controllers\StoreNoticeController@getUsersToNotify', $args);
+        return Shop::call('Marvel\Http\Controllers\StoreNoticeController@getUsersToNotify', $args);
     }
     
 }

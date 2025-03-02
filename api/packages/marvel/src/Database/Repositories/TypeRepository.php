@@ -1,10 +1,10 @@
 <?php
 
 
-namespace oglab\Database\Repositories;
+namespace Marvel\Database\Repositories;
 
-use oglab\Database\Models\Banner;
-use oglab\Database\Models\Type;
+use Marvel\Database\Models\Banner;
+use Marvel\Database\Models\Type;
 use Prettus\Repository\Criteria\RequestCriteria;
 use Prettus\Repository\Exceptions\RepositoryException;
 

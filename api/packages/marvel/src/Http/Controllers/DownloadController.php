@@ -1,16 +1,16 @@
 <?php
 
-namespace oglab\Http\Controllers;
+namespace Marvel\Http\Controllers;
 
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
-use oglab\Database\Models\DownloadToken;
-use oglab\Database\Models\OrderedFile;
-use oglab\Database\Models\Product;
-use oglab\Database\Models\Variation;
-use oglab\Database\Repositories\DownloadRepository;
-use oglab\Exceptions\oglabException;
+use Marvel\Database\Models\DownloadToken;
+use Marvel\Database\Models\OrderedFile;
+use Marvel\Database\Models\Product;
+use Marvel\Database\Models\Variation;
+use Marvel\Database\Repositories\DownloadRepository;
+use Marvel\Exceptions\MarvelException;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -29,7 +29,7 @@ class DownloadController extends CoreController
      *
      * @param mixed $request
      * @return void
-     * @throws oglabException
+     * @throws MarvelException
      */
     public function fetchDownloadableFiles(Request $request)
     {
@@ -45,7 +45,7 @@ class DownloadController extends CoreController
      *
      * @param mixed $request
      * @return mixed
-     * @throws oglabException
+     * @throws MarvelException
      */
     public function fetchFiles(Request $request)
     {
@@ -55,8 +55,8 @@ class DownloadController extends CoreController
                 return OrderedFile::where('customer_id', $user->id)->with(['order']);
             }
             throw new AuthorizationException(NOT_AUTHORIZED);
-        } catch (oglabException $th) {
-            throw new oglabException(NOT_AUTHORIZED);
+        } catch (MarvelException $th) {
+            throw new MarvelException(NOT_AUTHORIZED);
         }
     }
 
@@ -65,7 +65,7 @@ class DownloadController extends CoreController
      *
      * @param mixed $request
      * @return void
-     * @throws oglabException
+     * @throws MarvelException
      */
     public function generateDownloadableUrl(Request $request)
     {
@@ -82,8 +82,8 @@ class DownloadController extends CoreController
                 return route('download_url.token', ['token' => $newToken->token]);
             }
             throw new AuthorizationException(NOT_AUTHORIZED);
-        } catch (oglabException $e) {
-            throw new oglabException(NOT_AUTHORIZED);
+        } catch (MarvelException $e) {
+            throw new MarvelException(NOT_AUTHORIZED);
         }
     }
 
@@ -92,7 +92,7 @@ class DownloadController extends CoreController
      *
      * @param mixed $token
      * @return void
-     * @throws oglabException
+     * @throws MarvelException
      */
     public function downloadFile($token)
     {
@@ -113,8 +113,8 @@ class DownloadController extends CoreController
                 return ['message' => NOT_FOUND];
             }
             return $mediaItem;
-        } catch (oglabException $e) {
-            throw new oglabException(NOT_FOUND);
+        } catch (MarvelException $e) {
+            throw new MarvelException(NOT_FOUND);
         }
     }
 }

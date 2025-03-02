@@ -1,28 +1,28 @@
 <?php
 
-namespace oglab\Http\Controllers;
+namespace Marvel\Http\Controllers;
 
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
-use oglab\Enums\Permission;
-use oglab\Database\Models\Shop;
-use oglab\Database\Models\User;
+use Marvel\Enums\Permission;
+use Marvel\Database\Models\Shop;
+use Marvel\Database\Models\User;
 use Illuminate\Http\JsonResponse;
-use oglab\Database\Models\Balance;
-use oglab\Database\Models\Product;
+use Marvel\Database\Models\Balance;
+use Marvel\Database\Models\Product;
 use Illuminate\Support\Facades\Hash;
-use oglab\Exceptions\oglabException;
-use oglab\Http\Requests\ShopCreateRequest;
-use oglab\Http\Requests\ShopUpdateRequest;
-use oglab\Http\Requests\TransferShopOwnerShipRequest;
-use oglab\Http\Requests\UserCreateRequest;
+use Marvel\Exceptions\MarvelException;
+use Marvel\Http\Requests\ShopCreateRequest;
+use Marvel\Http\Requests\ShopUpdateRequest;
+use Marvel\Http\Requests\TransferShopOwnerShipRequest;
+use Marvel\Http\Requests\UserCreateRequest;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
-use oglab\Database\Models\Settings;
-use oglab\Database\Repositories\ShopRepository;
-use oglab\Enums\Role;
-use oglab\Traits\OrderStatusManagerWithPaymentTrait;
+use Marvel\Database\Models\Settings;
+use Marvel\Database\Repositories\ShopRepository;
+use Marvel\Enums\Role;
+use Marvel\Traits\OrderStatusManagerWithPaymentTrait;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class ShopController extends CoreController
@@ -65,8 +65,8 @@ class ShopController extends CoreController
                 return $this->repository->storeShop($request);
             }
             throw new AuthorizationException(NOT_AUTHORIZED);
-        } catch (oglabException $th) {
-            throw new oglabException(COULD_NOT_CREATE_THE_RESOURCE);
+        } catch (MarvelException $th) {
+            throw new MarvelException(COULD_NOT_CREATE_THE_RESOURCE);
         }
     }
 
@@ -89,8 +89,8 @@ class ShopController extends CoreController
                 is_numeric($slug) => $shop->where('id', $slug)->firstOrFail(),
                 is_string($slug)  => $shop->where('slug', $slug)->firstOrFail(),
             };
-        } catch (oglabException $e) {
-            throw new oglabException(NOT_FOUND);
+        } catch (MarvelException $e) {
+            throw new MarvelException(NOT_FOUND);
         }
     }
 
@@ -106,8 +106,8 @@ class ShopController extends CoreController
         try {
             $request->id = $id;
             return $this->updateShop($request);
-        } catch (oglabException $th) {
-            throw new oglabException(COULD_NOT_UPDATE_THE_RESOURCE);
+        } catch (MarvelException $th) {
+            throw new MarvelException(COULD_NOT_UPDATE_THE_RESOURCE);
         }
     }
 
@@ -124,8 +124,8 @@ class ShopController extends CoreController
         try {
             $id = $request->shop_id;
             return $this->repository->maintenanceShopEvent($request, $id);
-        } catch (oglabException $th) {
-            throw new oglabException(COULD_NOT_UPDATE_THE_RESOURCE);
+        } catch (MarvelException $th) {
+            throw new MarvelException(COULD_NOT_UPDATE_THE_RESOURCE);
         }
     }
 
@@ -140,8 +140,8 @@ class ShopController extends CoreController
         try {
             $request->id = $id;
             return $this->deleteShop($request);
-        } catch (oglabException $th) {
-            throw new oglabException(COULD_NOT_DELETE_THE_RESOURCE);
+        } catch (MarvelException $th) {
+            throw new MarvelException(COULD_NOT_DELETE_THE_RESOURCE);
         }
     }
 
@@ -165,7 +165,7 @@ class ShopController extends CoreController
 
         try {
             if (!$request->user()->hasPermissionTo(Permission::SUPER_ADMIN)) {
-                throw new oglabException(NOT_AUTHORIZED);
+                throw new MarvelException(NOT_AUTHORIZED);
             }
             $id = $request->id;
             $admin_commission_rate = $request->admin_commission_rate;
@@ -192,8 +192,8 @@ class ShopController extends CoreController
             $balance->is_custom_commission = $request->isCustomCommission;
             $balance->save();
             return $shop;
-        } catch (oglabException $th) {
-            throw new oglabException(SOMETHING_WENT_WRONG);
+        } catch (MarvelException $th) {
+            throw new MarvelException(SOMETHING_WENT_WRONG);
         }
     }
 
@@ -201,7 +201,7 @@ class ShopController extends CoreController
     {
         try {
             if (!$request->user()->hasPermissionTo(Permission::SUPER_ADMIN)) {
-                throw new oglabException(NOT_AUTHORIZED);
+                throw new MarvelException(NOT_AUTHORIZED);
             }
             $id = $request->id;
             try {
@@ -216,8 +216,8 @@ class ShopController extends CoreController
             Product::where('shop_id', '=', $id)->update(['status' => 'draft']);
 
             return $shop;
-        } catch (oglabException $th) {
-            throw new oglabException(SOMETHING_WENT_WRONG);
+        } catch (MarvelException $th) {
+            throw new MarvelException(SOMETHING_WENT_WRONG);
         }
     }
 
@@ -239,8 +239,8 @@ class ShopController extends CoreController
                 return true;
             }
             throw new AuthorizationException(NOT_AUTHORIZED);
-        } catch (oglabException $th) {
-            throw new oglabException(SOMETHING_WENT_WRONG);
+        } catch (MarvelException $th) {
+            throw new MarvelException(SOMETHING_WENT_WRONG);
         }
     }
 
@@ -249,8 +249,8 @@ class ShopController extends CoreController
         try {
             $request->id = $id;
             return $this->removeStaff($request);
-        } catch (oglabException $th) {
-            throw new oglabException(COULD_NOT_DELETE_THE_RESOURCE);
+        } catch (MarvelException $th) {
+            throw new MarvelException(COULD_NOT_DELETE_THE_RESOURCE);
         }
     }
 
@@ -281,7 +281,7 @@ class ShopController extends CoreController
      *
      * @param Request $request
      * @return array
-     * @throws oglabException
+     * @throws MarvelException
      */
     public function followedShopsPopularProducts(Request $request)
     {
@@ -298,8 +298,8 @@ class ShopController extends CoreController
             $products_query = Product::withCount('orders')->with(['shop'])->whereIn('shop_id', $followedShopIds)->orderBy('orders_count', 'desc');
 
             return $products_query->take($limit)->get();
-        } catch (oglabException $e) {
-            throw new oglabException(NOT_FOUND);
+        } catch (MarvelException $e) {
+            throw new MarvelException(NOT_FOUND);
         }
     }
 
@@ -323,7 +323,7 @@ class ShopController extends CoreController
      *
      * @param Request $request
      * @return bool
-     * @throws oglabException
+     * @throws MarvelException
      */
     public function userFollowedShop(Request $request)
     {
@@ -339,8 +339,8 @@ class ShopController extends CoreController
             $shop_id = (int)$request->input('shop_id');
 
             return in_array($shop_id, $followedShopIds);
-        } catch (oglabException $e) {
-            throw new oglabException(NOT_FOUND);
+        } catch (MarvelException $e) {
+            throw new MarvelException(NOT_FOUND);
         }
     }
 
@@ -349,7 +349,7 @@ class ShopController extends CoreController
      *
      * @param Request $request
      * @return bool
-     * @throws oglabException
+     * @throws MarvelException
      */
     public function handleFollowShop(Request $request)
     {
@@ -379,8 +379,8 @@ class ShopController extends CoreController
             if (count($response['detached'])) {
                 return false;
             }
-        } catch (oglabException $e) {
-            throw new oglabException(NOT_FOUND);
+        } catch (MarvelException $e) {
+            throw new MarvelException(NOT_FOUND);
         }
     }
 
@@ -419,8 +419,8 @@ class ShopController extends CoreController
                 ->where('distance', '<', $maxShopDistance);
 
             return $near_shop;
-        } catch (oglabException $e) {
-            throw new oglabException(SOMETHING_WENT_WRONG);
+        } catch (MarvelException $e) {
+            throw new MarvelException(SOMETHING_WENT_WRONG);
         }
     }
 
@@ -435,8 +435,8 @@ class ShopController extends CoreController
         try {
             $limit = $request->limit ? $request->limit : 15;
             return $this->repository->withCount(['orders', 'products'])->with(['owner.profile'])->where('is_active', '=', $request->is_active)->paginate($limit)->withQueryString();
-        } catch (oglabException $e) {
-            throw new oglabException(SOMETHING_WENT_WRONG, $e->getMessage());
+        } catch (MarvelException $e) {
+            throw new MarvelException(SOMETHING_WENT_WRONG, $e->getMessage());
         }
     }
 
@@ -448,8 +448,8 @@ class ShopController extends CoreController
     {
         try {
             return DB::transaction(fn () => $this->repository->transferShopOwnership($request));
-        } catch (oglabException $th) {
-            throw new oglabException(SOMETHING_WENT_WRONG);
+        } catch (MarvelException $th) {
+            throw new MarvelException(SOMETHING_WENT_WRONG);
         }
     }
 }

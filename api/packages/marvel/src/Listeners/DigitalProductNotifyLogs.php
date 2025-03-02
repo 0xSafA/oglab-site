@@ -1,24 +1,24 @@
 <?php
 
-namespace oglab\Listeners;
+namespace Marvel\Listeners;
 
 use App\Events\ReviewCreated;
 use App\Notifications\NewReviewCreated;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
-use oglab\Database\Models\NotifyLogs;
-use oglab\Database\Models\Order;
-use oglab\Database\Models\Shop;
-use oglab\Enums\EventType;
+use Marvel\Database\Models\NotifyLogs;
+use Marvel\Database\Models\Order;
+use Marvel\Database\Models\Shop;
+use Marvel\Enums\EventType;
 use Illuminate\Support\Facades\Cache;
-use oglab\Database\Models\User;
-use oglab\Enums\Permission;
-use oglab\Events\DigitalProductUpdateEvent;
-use oglab\Notifications\DigitalProductUpdateNotification;
-use oglab\Traits\UsersTrait;
+use Marvel\Database\Models\User;
+use Marvel\Enums\Permission;
+use Marvel\Events\DigitalProductUpdateEvent;
+use Marvel\Notifications\DigitalProductUpdateNotification;
+use Marvel\Traits\UsersTrait;
 use Illuminate\Support\Facades\DB;
-use oglab\Database\Models\Settings;
-use oglab\Exceptions\oglabException;
+use Marvel\Database\Models\Settings;
+use Marvel\Exceptions\MarvelException;
 
 class DigitalProductNotifyLogsListener implements ShouldQueue
 {
@@ -111,8 +111,8 @@ class DigitalProductNotifyLogsListener implements ShouldQueue
     //     //         }
     //     //     }
     //     //     return $enableDigitalProductEmail;
-    //     // } catch (oglabException $th) {
-    //     //     throw new oglabException(SOMETHING_WENT_WRONG, $th->getMessage());
+    //     // } catch (MarvelException $th) {
+    //     //     throw new MarvelException(SOMETHING_WENT_WRONG, $th->getMessage());
     //     // }
     // }
 }

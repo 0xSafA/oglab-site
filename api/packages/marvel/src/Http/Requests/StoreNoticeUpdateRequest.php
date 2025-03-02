@@ -1,15 +1,15 @@
 <?php
 
-namespace oglab\Http\Requests;
+namespace Marvel\Http\Requests;
 
 use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Validation\Rule;
-use oglab\Enums\Permission;
-use oglab\Enums\StoreNoticePriority;
-use oglab\Enums\StoreNoticeType;
+use Marvel\Enums\Permission;
+use Marvel\Enums\StoreNoticePriority;
+use Marvel\Enums\StoreNoticeType;
 
 class StoreNoticeUpdateRequest extends FormRequest
 {

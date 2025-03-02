@@ -1,20 +1,20 @@
 <?php
 
-namespace oglab\Listeners;
+namespace Marvel\Listeners;
 
 use App\Events\ReviewCreated;
 use App\Notifications\NewReviewCreated;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
-use oglab\Database\Models\NotifyLogs;
-use oglab\Database\Models\Order;
-use oglab\Database\Models\Shop;
-use oglab\Enums\EventType;
+use Marvel\Database\Models\NotifyLogs;
+use Marvel\Database\Models\Order;
+use Marvel\Database\Models\Shop;
+use Marvel\Enums\EventType;
 use Illuminate\Support\Facades\Cache;
-use oglab\Database\Models\User;
-use oglab\Enums\Permission;
-use oglab\Events\MessageSent;
-use oglab\Traits\UsersTrait;
+use Marvel\Database\Models\User;
+use Marvel\Enums\Permission;
+use Marvel\Events\MessageSent;
+use Marvel\Traits\UsersTrait;
 
 class StoredMessagedNotifyLogsListener implements ShouldQueue
 {

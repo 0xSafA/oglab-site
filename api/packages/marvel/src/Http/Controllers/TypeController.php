@@ -1,15 +1,15 @@
 <?php
 
-namespace oglab\Http\Controllers;
+namespace Marvel\Http\Controllers;
 
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use oglab\Database\Models\Type;
-use oglab\Database\Repositories\TypeRepository;
-use oglab\Exceptions\oglabException;
-use oglab\Http\Requests\TypeRequest;
-use oglab\Http\Resources\TypeResource;
+use Marvel\Database\Models\Type;
+use Marvel\Database\Repositories\TypeRepository;
+use Marvel\Exceptions\MarvelException;
+use Marvel\Http\Requests\TypeRequest;
+use Marvel\Http\Resources\TypeResource;
 use Prettus\Validator\Exceptions\ValidatorException;
 
 class TypeController extends CoreController
@@ -46,8 +46,8 @@ class TypeController extends CoreController
     {
         try {
             return $this->repository->storeType($request);
-        } catch (oglabException $th) {
-            throw new oglabException(COULD_NOT_CREATE_THE_RESOURCE);
+        } catch (MarvelException $th) {
+            throw new MarvelException(COULD_NOT_CREATE_THE_RESOURCE);
         }
     }
 
@@ -69,8 +69,8 @@ class TypeController extends CoreController
             }
             $type = $this->repository->where('slug', $params)->where('language', $language)->with('banners')->firstOrFail();
             return new TypeResource($type);
-        } catch (oglabException $e) {
-            throw new oglabException(NOT_FOUND);
+        } catch (MarvelException $e) {
+            throw new MarvelException(NOT_FOUND);
         }
     }
 
@@ -91,8 +91,8 @@ class TypeController extends CoreController
     {
         try {
             $type = $this->repository->with('banners')->findOrFail($request->id);
-        } catch (oglabException $e) {
-            throw new oglabException(NOT_FOUND);
+        } catch (MarvelException $e) {
+            throw new MarvelException(NOT_FOUND);
         }
         return $this->repository->updateType($request, $type);
     }
@@ -107,8 +107,8 @@ class TypeController extends CoreController
     {
         try {
             return $this->repository->findOrFail($id)->delete();
-        } catch (oglabException $e) {
-            throw new oglabException(NOT_FOUND);
+        } catch (MarvelException $e) {
+            throw new MarvelException(NOT_FOUND);
         }
     }
 }

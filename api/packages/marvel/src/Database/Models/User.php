@@ -1,6 +1,6 @@
 <?php
 
-namespace oglab\Database\Models;
+namespace Marvel\Database\Models;
 
 use App\Enums\RoleType;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -13,8 +13,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-use oglab\Enums\OrderStatus;
-use oglab\Enums\PaymentStatus;
+use Marvel\Enums\OrderStatus;
+use Marvel\Enums\PaymentStatus;
 
 class User extends Authenticatable implements MustVerifyEmail
 {

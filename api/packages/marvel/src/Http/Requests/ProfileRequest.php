@@ -1,6 +1,6 @@
 <?php
 
-namespace oglab\Http\Requests;
+namespace Marvel\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
@@ -31,7 +31,7 @@ class ProfileRequest extends FormRequest
             'socials'     => ['array'],
             'bio'         => ['string'],
             'contact'     => ['string'],
-            'customer_id' => ['required', 'exists:oglab\Database\Models\User,id'],
+            'customer_id' => ['required', 'exists:Marvel\Database\Models\User,id'],
         ];
     }
 

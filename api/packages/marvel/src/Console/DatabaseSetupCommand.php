@@ -1,10 +1,10 @@
 <?php
 
-namespace oglab\Console;
+namespace Marvel\Console;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
-use oglab\Traits\ENVSetupTrait;
+use Marvel\Traits\ENVSetupTrait;
 
 use function Laravel\Prompts\{text, table, confirm, info, password};
 
@@ -16,7 +16,7 @@ class DatabaseSetupCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'oglab:database-setup';
+    protected $signature = 'marvel:database-setup';
 
     /**
      * The console command description.

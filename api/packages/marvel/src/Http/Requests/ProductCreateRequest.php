@@ -1,13 +1,13 @@
 <?php
 
-namespace oglab\Http\Requests;
+namespace Marvel\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Validation\Rule;
-use oglab\Enums\ProductStatus;
-use oglab\Enums\ProductType;
+use Marvel\Enums\ProductStatus;
+use Marvel\Enums\ProductType;
 
 class ProductCreateRequest extends FormRequest
 {
@@ -48,10 +48,10 @@ class ProductCreateRequest extends FormRequest
             'slug'                         => ['nullable', 'string'],
             'price'                        => ['nullable', 'numeric'],
             'sale_price'                   => ['nullable', 'lte:price'],
-            'type_id'                      => ['required', 'exists:oglab\Database\Models\Type,id'],
-            'shop_id'                      => ['required', 'exists:oglab\Database\Models\Shop,id'],
-            'manufacturer_id'              => ['nullable', 'exists:oglab\Database\Models\Manufacturer,id'],
-            'author_id'                    => ['nullable', 'exists:oglab\Database\Models\Author,id'],
+            'type_id'                      => ['required', 'exists:Marvel\Database\Models\Type,id'],
+            'shop_id'                      => ['required', 'exists:Marvel\Database\Models\Shop,id'],
+            'manufacturer_id'              => ['nullable', 'exists:Marvel\Database\Models\Manufacturer,id'],
+            'author_id'                    => ['nullable', 'exists:Marvel\Database\Models\Author,id'],
             'product_type'                 => ['required', Rule::in($productType)],
             'categories'                   => ['array'],
             'tags'                         => ['array'],

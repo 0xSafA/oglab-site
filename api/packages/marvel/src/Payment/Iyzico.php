@@ -1,6 +1,6 @@
 <?php
 
-namespace oglab\Payments;
+namespace Marvel\Payments;
 
 use ErrorException;
 use Exception;
@@ -17,11 +17,11 @@ use Iyzipay\Model\PayWithIyzicoInitialize;
 use Iyzipay\Options as IyzicoClient;
 use Iyzipay\Request\CreatePayWithIyzicoInitializeRequest;
 use Iyzipay\Request\RetrieveCheckoutFormRequest;
-use oglab\Database\Models\Order;
-use oglab\Database\Models\PaymentIntent;
-use oglab\Enums\OrderStatus;
-use oglab\Enums\PaymentStatus;
-use oglab\Traits\PaymentTrait;
+use Marvel\Database\Models\Order;
+use Marvel\Database\Models\PaymentIntent;
+use Marvel\Enums\OrderStatus;
+use Marvel\Enums\PaymentStatus;
+use Marvel\Traits\PaymentTrait;
 use Throwable;
 
 class Iyzico extends Base implements PaymentInterface

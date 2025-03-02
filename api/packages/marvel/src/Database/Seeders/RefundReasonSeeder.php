@@ -1,6 +1,6 @@
 <?php
 
-namespace oglab\Database\Seeders;
+namespace Marvel\Database\Seeders;
 
 use Carbon\Carbon;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;

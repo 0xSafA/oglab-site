@@ -6,12 +6,12 @@ extend type Query {
         shop_id: ID @eq
     ): [Withdraw]
         @paginate(
-            builder: "oglab\\GraphQL\\Queries\\WithdrawQuery@fetchWithdraws"
+            builder: "Marvel\\GraphQL\\Queries\\WithdrawQuery@fetchWithdraws"
             defaultCount: 15
         )
     withdraw(id: ID): Withdraw
         @field(
-            resolver: "oglab\\GraphQL\\Queries\\WithdrawQuery@fetchSingleWithdraw"
+            resolver: "Marvel\\GraphQL\\Queries\\WithdrawQuery@fetchSingleWithdraw"
         )
 }
 
@@ -44,11 +44,11 @@ input ApproveWithdrawInput {
 extend type Mutation {
     deleteWithdraw(id: ID!): Withdraw @delete @can(ability: "super_admin")
     createWithdraw(input: CreateWithdrawInput! @spread): Withdraw
-        @field(resolver: "oglab\\GraphQL\\Mutation\\WithdrawMutation@store")
+        @field(resolver: "Marvel\\GraphQL\\Mutation\\WithdrawMutation@store")
         @can(ability: "store_owner")
     approveWithdraw(input: ApproveWithdrawInput! @spread): Withdraw
         @field(
-            resolver: "oglab\\GraphQL\\Mutation\\WithdrawMutation@approveWithdraw"
+            resolver: "Marvel\\GraphQL\\Mutation\\WithdrawMutation@approveWithdraw"
         )
         @can(ability: "super_admin")
 }

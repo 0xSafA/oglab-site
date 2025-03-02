@@ -1,10 +1,10 @@
 <?php
 
-namespace oglab\Http\Controllers;
+namespace Marvel\Http\Controllers;
 
 use Illuminate\Http\Request;
-use oglab\Facades\Payment;
-use oglab\Payments\Flutterwave;
+use Marvel\Facades\Payment;
+use Marvel\Payments\Flutterwave;
 
 class WebHookController extends CoreController
 {

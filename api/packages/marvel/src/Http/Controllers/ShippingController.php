@@ -1,15 +1,15 @@
 <?php
 
-namespace oglab\Http\Controllers;
+namespace Marvel\Http\Controllers;
 
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
-use oglab\Http\Requests\CreateShippingRequest;
-use oglab\Http\Requests\UpdateShippingRequest;
-use oglab\Database\Repositories\ShippingRepository;
-use oglab\Exceptions\oglabException;
+use Marvel\Http\Requests\CreateShippingRequest;
+use Marvel\Http\Requests\UpdateShippingRequest;
+use Marvel\Database\Repositories\ShippingRepository;
+use Marvel\Exceptions\MarvelException;
 use Prettus\Validator\Exceptions\ValidatorException;
 
 class ShippingController extends CoreController
@@ -44,8 +44,8 @@ class ShippingController extends CoreController
         try {
             $validateData = $request->validated();
             return $this->repository->create($validateData);
-        } catch (oglabException $th) {
-            throw new oglabException(SOMETHING_WENT_WRONG);
+        } catch (MarvelException $th) {
+            throw new MarvelException(SOMETHING_WENT_WRONG);
         }
     }
 
@@ -59,8 +59,8 @@ class ShippingController extends CoreController
     {
         try {
             return $this->repository->findOrFail($id);
-        } catch (oglabException $e) {
-            throw new oglabException(NOT_FOUND);
+        } catch (MarvelException $e) {
+            throw new MarvelException(NOT_FOUND);
         }
     }
 
@@ -76,8 +76,8 @@ class ShippingController extends CoreController
         try {
             $validateData = $request->validated();
             return $this->repository->findOrFail($id)->update($validateData);
-        } catch (oglabException $e) {
-            throw new oglabException(NOT_FOUND);
+        } catch (MarvelException $e) {
+            throw new MarvelException(NOT_FOUND);
         }
     }
 
@@ -91,8 +91,8 @@ class ShippingController extends CoreController
     {
         try {
             return $this->repository->findOrFail($id)->delete();
-        } catch (oglabException $e) {
-            throw new oglabException(NOT_FOUND);
+        } catch (MarvelException $e) {
+            throw new MarvelException(NOT_FOUND);
         }
     }
 }

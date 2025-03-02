@@ -2,7 +2,7 @@
 
 namespace App\Events;
 
-use oglab\Database\Models\Question;
+use Marvel\Database\Models\Question;
 
 class QuestionAnswered
 {

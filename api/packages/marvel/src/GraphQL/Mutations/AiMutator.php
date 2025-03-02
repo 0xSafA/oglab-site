@@ -1,15 +1,15 @@
 <?php
 
 
-namespace oglab\GraphQL\Mutation;
+namespace Marvel\GraphQL\Mutation;
 
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
-use oglab\Facades\Shop;
+use Marvel\Facades\Shop;
 
 class AiMutator
 {
     public function generateDescription($rootValue, array $args, GraphQLContext $context)
     {
-        return Shop::call('oglab\Http\Controllers\AiController@generateDescription', $args);
+        return Shop::call('Marvel\Http\Controllers\AiController@generateDescription', $args);
     }
 }

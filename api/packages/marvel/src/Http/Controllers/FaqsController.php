@@ -1,18 +1,18 @@
 <?php
 
-namespace oglab\Http\Controllers;
+namespace Marvel\Http\Controllers;
 
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use oglab\Database\Models\Faqs;
-use oglab\Database\Repositories\FaqsRepository;
-use oglab\Enums\Permission;
-use oglab\Exceptions\oglabException;
-use oglab\Http\Requests\CreateFaqsRequest;
-use oglab\Http\Requests\UpdateFaqsRequest;
-use oglab\Http\Resources\FaqResource;
+use Marvel\Database\Models\Faqs;
+use Marvel\Database\Repositories\FaqsRepository;
+use Marvel\Enums\Permission;
+use Marvel\Exceptions\MarvelException;
+use Marvel\Http\Requests\CreateFaqsRequest;
+use Marvel\Http\Requests\UpdateFaqsRequest;
+use Marvel\Http\Resources\FaqResource;
 use Prettus\Validator\Exceptions\ValidatorException;
 
 class FaqsController extends CoreController
@@ -110,8 +110,8 @@ class FaqsController extends CoreController
                         ->whereNotNull('id');
                 }
             }
-        } catch (oglabException $e) {
-            throw new oglabException(SOMETHING_WENT_WRONG, $e->getMessage());
+        } catch (MarvelException $e) {
+            throw new MarvelException(SOMETHING_WENT_WRONG, $e->getMessage());
         }
     }
 
@@ -127,8 +127,8 @@ class FaqsController extends CoreController
         try {
             return $this->repository->storeFaqs($request);
             // return $this->repository->create($validatedData);
-        } catch (oglabException $e) {
-            throw new oglabException(COULD_NOT_CREATE_THE_RESOURCE, $e->getMessage());
+        } catch (MarvelException $e) {
+            throw new MarvelException(COULD_NOT_CREATE_THE_RESOURCE, $e->getMessage());
         }
     }
 
@@ -143,8 +143,8 @@ class FaqsController extends CoreController
         try {
             $faq = $this->repository->with('shop')->findOrFail($id);
             return new FaqResource($faq);
-        } catch (oglabException $e) {
-            throw new oglabException(NOT_FOUND, $e->getMessage());
+        } catch (MarvelException $e) {
+            throw new MarvelException(NOT_FOUND, $e->getMessage());
         }
     }
 
@@ -160,8 +160,8 @@ class FaqsController extends CoreController
         try {
             $request["id"] = $id;
             return $this->updateFaqs($request);
-        } catch (oglabException $e) {
-            throw new oglabException(COULD_NOT_UPDATE_THE_RESOURCE, $e->getMessage());
+        } catch (MarvelException $e) {
+            throw new MarvelException(COULD_NOT_UPDATE_THE_RESOURCE, $e->getMessage());
         }
     }
 
@@ -199,8 +199,8 @@ class FaqsController extends CoreController
                 return $this->repository->findOrFail($id)->delete();
             }
             throw new AuthorizationException(NOT_AUTHORIZED);
-        } catch (oglabException $e) {
-            throw new oglabException(NOT_FOUND, $e->getMessage());
+        } catch (MarvelException $e) {
+            throw new MarvelException(NOT_FOUND, $e->getMessage());
         }
     }
 }

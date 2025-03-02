@@ -1,12 +1,12 @@
 <?php
 
-namespace oglab\Http\Resources;
+namespace Marvel\Http\Resources;
 
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use oglab\Database\Models\Shop;
-use oglab\Enums\OrderStatus;
+use Marvel\Database\Models\Shop;
+use Marvel\Enums\OrderStatus;
 
 class OwnershipTransferResource extends Resource
 {

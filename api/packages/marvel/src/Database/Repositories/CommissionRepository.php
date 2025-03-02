@@ -1,10 +1,10 @@
 <?php
 
 
-namespace oglab\Database\Repositories;
+namespace Marvel\Database\Repositories;
 
 use Carbon\Carbon;
-use oglab\Database\Models\Commission;
+use Marvel\Database\Models\Commission;
 
 class CommissionRepository extends BaseRepository
 {

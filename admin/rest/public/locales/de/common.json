@@ -274,7 +274,7 @@
   "text-yearly": "Jährlich",
   "text-order-details": "Bestelldetails",
   "text-no-image-found": "Kein Bild gefunden",
-  "oglab_ERROR.ALREADY_REFUNDED": "Bereits erstattet",
+  "MARVEL_ERROR.ALREADY_REFUNDED": "Bereits erstattet",
   "text-item": "Artikel",
   "text-add": "Hinzufügen",
   "text-cart": "Wagen",

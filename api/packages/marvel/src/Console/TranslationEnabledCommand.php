@@ -1,10 +1,10 @@
 <?php
 
-namespace oglab\Console;
+namespace Marvel\Console;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
-use oglab\Traits\ENVSetupTrait;
+use Marvel\Traits\ENVSetupTrait;
 
 use function Laravel\Prompts\{confirm, info, select, table, error};
 
@@ -16,7 +16,7 @@ class TranslationEnabledCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'oglab:translation-enable';
+    protected $signature = 'marvel:translation-enable';
 
     /**
      * The console command description.

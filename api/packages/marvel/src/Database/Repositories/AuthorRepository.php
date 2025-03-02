@@ -1,10 +1,10 @@
 <?php
 
 
-namespace oglab\Database\Repositories;
+namespace Marvel\Database\Repositories;
 
-use oglab\Database\Models\Author;
-use oglab\Enums\Permission;
+use Marvel\Database\Models\Author;
+use Marvel\Enums\Permission;
 use Prettus\Repository\Criteria\RequestCriteria;
 use Prettus\Repository\Exceptions\RepositoryException;
 

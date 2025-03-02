@@ -1,6 +1,6 @@
 <?php
 
-namespace oglab\Http\Requests;
+namespace Marvel\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
@@ -31,7 +31,7 @@ class AuthorRequest extends FormRequest
             'name' => ['required', 'string'],
             'slug'        => ['nullable', 'string'],
             'bio' => ['nullable', 'string'],
-            'shop_id'     => ['nullable', 'exists:oglab\Database\Models\Shop,id'],
+            'shop_id'     => ['nullable', 'exists:Marvel\Database\Models\Shop,id'],
             'image' => ['array'],
             'cover_image' => ['array'],
             'is_approved' => ['boolean'],

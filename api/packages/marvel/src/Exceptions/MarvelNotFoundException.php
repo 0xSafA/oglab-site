@@ -1,12 +1,12 @@
 <?php
 
-namespace oglab\Exceptions;
+namespace Marvel\Exceptions;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Throwable;
 
-class oglabNotFoundException extends HttpException
+class MarvelNotFoundException extends HttpException
 {
     /**
      * Create a new "Not Found" exception instance for REST Client.

@@ -1,38 +1,38 @@
 <?php
 
 
-namespace oglab\GraphQL\Mutation;
+namespace Marvel\GraphQL\Mutation;
 
 
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
-use oglab\Facades\Shop;
+use Marvel\Facades\Shop;
 
 class ProductMutator
 {
     public function store($rootValue, array $args, GraphQLContext $context)
     {
-        return Shop::call('oglab\Http\Controllers\ProductController@ProductStore', $args);
+        return Shop::call('Marvel\Http\Controllers\ProductController@ProductStore', $args);
     }
 
     public function updateProduct($rootValue, array $args, GraphQLContext $context)
     {
-        return Shop::call('oglab\Http\Controllers\ProductController@updateProduct', $args);
+        return Shop::call('Marvel\Http\Controllers\ProductController@updateProduct', $args);
     }
 
     public function importProducts($rootValue, array $args, GraphQLContext $context)
     {
-        return Shop::call('oglab\Http\Controllers\ProductController@importProducts', $args);
+        return Shop::call('Marvel\Http\Controllers\ProductController@importProducts', $args);
     }
     public function importVariationOptions($rootValue, array $args, GraphQLContext $context)
     {
-        return Shop::call('oglab\Http\Controllers\ProductController@importVariationOptions', $args);
+        return Shop::call('Marvel\Http\Controllers\ProductController@importVariationOptions', $args);
     }
     public function calculateRentalPrice($rootValue, array $args, GraphQLContext $context)
     {
-        return Shop::call('oglab\Http\Controllers\ProductController@calculateRentalPrice', $args);
+        return Shop::call('Marvel\Http\Controllers\ProductController@calculateRentalPrice', $args);
     }
     public function destroy($rootValue, array $args, GraphQLContext $context)
     {
-        return Shop::call('oglab\Http\Controllers\ProductController@destroyProduct', $args);
+        return Shop::call('Marvel\Http\Controllers\ProductController@destroyProduct', $args);
     }
 }

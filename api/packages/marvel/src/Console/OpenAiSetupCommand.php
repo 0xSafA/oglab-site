@@ -1,10 +1,10 @@
 <?php
 
-namespace oglab\Console;
+namespace Marvel\Console;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
-use oglab\Traits\ENVSetupTrait;
+use Marvel\Traits\ENVSetupTrait;
 
 use function Laravel\Prompts\{text, table, confirm, info};
 
@@ -16,7 +16,7 @@ class OpenAiSetupCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'oglab:open-ai-setup';
+    protected $signature = 'marvel:open-ai-setup';
 
     /**
      * The console command description.

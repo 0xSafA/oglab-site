@@ -1,11 +1,11 @@
 <?php
 
-namespace oglab\Traits;
+namespace Marvel\Traits;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Arr;
-use oglab\Exceptions\oglabException;
+use Marvel\Exceptions\MarvelException;
 
 trait TranslationTrait
 {
@@ -37,7 +37,7 @@ trait TranslationTrait
         try {
             $translation =  DB::table('translations')->where('item_id', $this->model->id)->where('item_type', get_class($this))->first();
         } catch (\Throwable $th) {
-            throw new oglabException(NOT_FOUND);
+            throw new MarvelException(NOT_FOUND);
         }
 
         if ($translation->language_code === DEFAULT_LANGUAGE) {

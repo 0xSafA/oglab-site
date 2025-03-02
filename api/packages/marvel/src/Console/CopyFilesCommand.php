@@ -1,6 +1,6 @@
 <?php
 
-namespace oglab\Console;
+namespace Marvel\Console;
 
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
@@ -12,7 +12,7 @@ use function Laravel\Prompts\{info, error};
 
 class CopyFilesCommand extends Command
 {
-    protected $signature = 'oglab:copy-files';
+    protected $signature = 'marvel:copy-files';
 
     protected $description = 'Copy necessary files';
     public function handle()

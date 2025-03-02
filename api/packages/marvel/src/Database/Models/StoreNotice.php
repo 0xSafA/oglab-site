@@ -1,13 +1,13 @@
 <?php
 
-namespace oglab\Database\Models;
+namespace Marvel\Database\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
-use oglab\Enums\Permission;
+use Marvel\Enums\Permission;
 
 class StoreNotice extends Model
 {

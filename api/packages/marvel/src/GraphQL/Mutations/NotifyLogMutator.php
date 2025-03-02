@@ -1,25 +1,25 @@
 <?php
 
 
-namespace oglab\GraphQL\Mutation;
+namespace Marvel\GraphQL\Mutation;
 
 
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
-use oglab\Facades\Shop;
+use Marvel\Facades\Shop;
 
 
 class NotifyLogMutator
 {
     public function readNotifyLogs($rootValue, array $args, GraphQLContext $context)
     {
-        return Shop::call('oglab\Http\Controllers\NotifyLogsController@readNotifyLogs', $args);
+        return Shop::call('Marvel\Http\Controllers\NotifyLogsController@readNotifyLogs', $args);
     }
     public function notifyLogAllRead($rootValue, array $args, GraphQLContext $context)
     {
-        return Shop::call('oglab\Http\Controllers\NotifyLogsController@readAllNotifyLogs', $args);
+        return Shop::call('Marvel\Http\Controllers\NotifyLogsController@readAllNotifyLogs', $args);
     }
     public function deleteNotifyLogs($rootValue, array $args, GraphQLContext $context)
     {
-        return Shop::call('oglab\Http\Controllers\NotifyLogsController@deleteNotifyLogs', $args);
+        return Shop::call('Marvel\Http\Controllers\NotifyLogsController@deleteNotifyLogs', $args);
     }
 }

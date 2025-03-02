@@ -1,6 +1,6 @@
 <?php
 
-namespace oglab\Listeners;
+namespace Marvel\Listeners;
 
 
 use Carbon\Carbon;
@@ -8,13 +8,13 @@ use Exception;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Notification;
-use oglab\Database\Models\Settings;
-use oglab\Database\Models\User;
-use oglab\Enums\Permission;
-use oglab\Events\Maintenance;
-use oglab\Events\StoreNoticeEvent;
-use oglab\Notifications\MaintenanceReminder;
-use oglab\Notifications\StoreNoticeNotification;
+use Marvel\Database\Models\Settings;
+use Marvel\Database\Models\User;
+use Marvel\Enums\Permission;
+use Marvel\Events\Maintenance;
+use Marvel\Events\StoreNoticeEvent;
+use Marvel\Notifications\MaintenanceReminder;
+use Marvel\Notifications\StoreNoticeNotification;
 
 class MaintenanceNotification
 {

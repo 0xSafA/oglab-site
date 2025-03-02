@@ -1,6 +1,6 @@
 <?php
 
-namespace oglab\Traits;
+namespace Marvel\Traits;
 
 use function Laravel\Prompts\{text, table, confirm, info, error};
 

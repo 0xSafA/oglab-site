@@ -1,12 +1,12 @@
 <?php
 
-namespace oglab\Http\Requests;
+namespace Marvel\Http\Requests;
 
 use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
-use oglab\Enums\PaymentGatewayType;
+use Marvel\Enums\PaymentGatewayType;
 
 class OrderCreateRequest extends FormRequest
 {
@@ -28,9 +28,9 @@ class OrderCreateRequest extends FormRequest
     public function rules()
     {
         return [
-            'coupon_id'               => 'nullable|exists:oglab\Database\Models\Coupon,id',
-            'shop_id'                 => 'nullable|exists:oglab\Database\Models\Shop,id',
-            'customer_id'             => 'nullable|exists:oglab\Database\Models\User,id',
+            'coupon_id'               => 'nullable|exists:Marvel\Database\Models\Coupon,id',
+            'shop_id'                 => 'nullable|exists:Marvel\Database\Models\Shop,id',
+            'customer_id'             => 'nullable|exists:Marvel\Database\Models\User,id',
             'language'                => ['nullable', 'string'],
             'amount'                  => 'required|numeric',
             'paid_total'              => 'required|numeric',

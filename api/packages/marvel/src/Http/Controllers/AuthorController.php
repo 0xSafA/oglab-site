@@ -1,6 +1,6 @@
 <?php
 
-namespace oglab\Http\Controllers;
+namespace Marvel\Http\Controllers;
 
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -8,12 +8,12 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use oglab\Database\Models\Product;
-use oglab\Database\Repositories\AuthorRepository;
-use oglab\Enums\Permission;
-use oglab\Exceptions\oglabException;
-use oglab\Http\Requests\AuthorRequest;
-use oglab\Http\Resources\AuthorResource;
+use Marvel\Database\Models\Product;
+use Marvel\Database\Repositories\AuthorRepository;
+use Marvel\Enums\Permission;
+use Marvel\Exceptions\MarvelException;
+use Marvel\Http\Requests\AuthorRequest;
+use Marvel\Http\Resources\AuthorResource;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class AuthorController extends CoreController
@@ -59,8 +59,8 @@ class AuthorController extends CoreController
                 return $this->repository->storeAuthor($request);
             }
             throw new AuthorizationException(NOT_AUTHORIZED);
-        } catch (oglabException $e) {
-            throw new oglabException(COULD_NOT_CREATE_THE_RESOURCE);
+        } catch (MarvelException $e) {
+            throw new MarvelException(COULD_NOT_CREATE_THE_RESOURCE);
         }
     }
 
@@ -76,8 +76,8 @@ class AuthorController extends CoreController
             $request->slug = $slug;
             $author = $this->fetchAuthor($request);
             return new AuthorResource($author);
-        } catch (oglabException $th) {
-            throw new oglabException(NOT_FOUND);
+        } catch (MarvelException $th) {
+            throw new MarvelException(NOT_FOUND);
         }
     }
 
@@ -111,8 +111,8 @@ class AuthorController extends CoreController
         try {
             $request->id = $id;
             return $this->updateAuthor($request);
-        } catch (oglabException $th) {
-            throw new oglabException(COULD_NOT_UPDATE_THE_RESOURCE);
+        } catch (MarvelException $th) {
+            throw new MarvelException(COULD_NOT_UPDATE_THE_RESOURCE);
         }
     }
 
@@ -140,8 +140,8 @@ class AuthorController extends CoreController
        try {
         $request['id'] = $id;
         return $this->deleteAuthor($request);
-       } catch (oglabException $th) {
-        throw new oglabException(COULD_NOT_DELETE_THE_RESOURCE);
+       } catch (MarvelException $th) {
+        throw new MarvelException(COULD_NOT_DELETE_THE_RESOURCE);
     }
     }
     public function deleteAuthor(Request $request)
@@ -151,7 +151,7 @@ class AuthorController extends CoreController
             $author->delete();
             return $author;
         }
-        throw new oglabException(NOT_AUTHORIZED);
+        throw new MarvelException(NOT_AUTHORIZED);
     }
 
     public function topAuthor(Request $request)

@@ -1,14 +1,14 @@
 <?php
 
-namespace oglab\Database\Repositories;
+namespace Marvel\Database\Repositories;
 
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
-use oglab\Database\Models\Variation;
-use oglab\Database\Models\Wishlist;
-use oglab\Exceptions\oglabException;
+use Marvel\Database\Models\Variation;
+use Marvel\Database\Models\Wishlist;
+use Marvel\Exceptions\MarvelException;
 use Prettus\Repository\Criteria\RequestCriteria;
 use Prettus\Repository\Exceptions\RepositoryException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -79,7 +79,7 @@ class WishlistRepository extends BaseRepository
                 return false;
             }
         } catch (\Exception $e) {
-            throw new oglabException(SOMETHING_WENT_WRONG);
+            throw new MarvelException(SOMETHING_WENT_WRONG);
         }
     }
 }

@@ -1,11 +1,11 @@
 <?php
 
-namespace oglab\Database\Models;
+namespace Marvel\Database\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use oglab\Events\RefundRequested;
-use oglab\Events\RefundUpdate;
+use Marvel\Events\RefundRequested;
+use Marvel\Events\RefundUpdate;
 
 class Refund extends Model
 {

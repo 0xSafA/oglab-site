@@ -1,16 +1,16 @@
 <?php
 
 
-namespace oglab\GraphQL\Queries;
+namespace Marvel\GraphQL\Queries;
 
 
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
-use oglab\Facades\Shop;
+use Marvel\Facades\Shop;
 
 class MessageQuery
 {
     public function fetchMessages($rootValue, array $args, GraphQLContext $context)
     {
-        return Shop::call('oglab\Http\Controllers\MessageController@fetchMessages', $args);
+        return Shop::call('Marvel\Http\Controllers\MessageController@fetchMessages', $args);
     }
 }

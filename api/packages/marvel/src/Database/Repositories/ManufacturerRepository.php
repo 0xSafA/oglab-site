@@ -1,12 +1,12 @@
 <?php
 
 
-namespace oglab\Database\Repositories;
+namespace Marvel\Database\Repositories;
 
-use oglab\Database\Models\Manufacturer;
+use Marvel\Database\Models\Manufacturer;
 use Prettus\Repository\Criteria\RequestCriteria;
 use Prettus\Repository\Exceptions\RepositoryException;
-use oglab\Enums\Permission;
+use Marvel\Enums\Permission;
 
 
 class ManufacturerRepository extends BaseRepository

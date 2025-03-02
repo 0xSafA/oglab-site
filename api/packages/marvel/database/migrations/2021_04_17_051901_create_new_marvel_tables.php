@@ -3,9 +3,9 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use oglab\Enums\WithdrawStatus;
+use Marvel\Enums\WithdrawStatus;
 
-class CreateNewoglabTables extends Migration
+class CreateNewMarvelTables extends Migration
 {
     /**
      * Run the migrations.

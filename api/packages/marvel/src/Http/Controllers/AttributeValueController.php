@@ -1,16 +1,16 @@
 <?php
 
-namespace oglab\Http\Controllers;
+namespace Marvel\Http\Controllers;
 
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use oglab\Database\Repositories\AttributeValueRepository;
-use oglab\Exceptions\oglabException;
-use oglab\Http\Requests\AttributeValueRequest;
-use oglab\Http\Resources\AttributeValueResource;
+use Marvel\Database\Repositories\AttributeValueRepository;
+use Marvel\Exceptions\MarvelException;
+use Marvel\Http\Requests\AttributeValueRequest;
+use Marvel\Http\Resources\AttributeValueResource;
 use Prettus\Validator\Exceptions\ValidatorException;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 
@@ -50,8 +50,8 @@ class AttributeValueController extends CoreController
                 return $this->repository->create($validatedData);
             }
             throw new AuthorizationException(NOT_AUTHORIZED);
-        } catch (oglabException $th) {
-            throw new oglabException(SOMETHING_WENT_WRONG);
+        } catch (MarvelException $th) {
+            throw new MarvelException(SOMETHING_WENT_WRONG);
         }
     }
 
@@ -65,8 +65,8 @@ class AttributeValueController extends CoreController
     {
         try {
             return $this->repository->with('attribute')->findOrFail($id);
-        } catch (oglabException $th) {
-            throw new oglabException(NOT_FOUND);
+        } catch (MarvelException $th) {
+            throw new MarvelException(NOT_FOUND);
         }
     }
 
@@ -82,8 +82,8 @@ class AttributeValueController extends CoreController
         try {
             $request->id = $id;
             return $this->updateAttributeValues($request);
-        } catch (oglabException $th) {
-            throw new oglabException(COULD_NOT_UPDATE_THE_RESOURCE);
+        } catch (MarvelException $th) {
+            throw new MarvelException(COULD_NOT_UPDATE_THE_RESOURCE);
         }
     }
     public function updateAttributeValues(AttributeValueRequest $request)
@@ -110,8 +110,8 @@ class AttributeValueController extends CoreController
         try {
             $request->id = $id;
             return $this->destroyAttributeValues($request);
-        } catch (oglabException $th) {
-            throw new oglabException(COULD_NOT_DELETE_THE_RESOURCE);
+        } catch (MarvelException $th) {
+            throw new MarvelException(COULD_NOT_DELETE_THE_RESOURCE);
         }
     }
     /**

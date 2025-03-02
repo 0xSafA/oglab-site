@@ -1,12 +1,12 @@
 <?php
 
-namespace oglab\GraphQL\Directives;
+namespace Marvel\GraphQL\Directives;
 
 use Closure;
 use GraphQL\Type\Definition\ResolveInfo;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
-use oglab\Database\Models\Settings;
-use oglab\Exceptions\oglabException;
+use Marvel\Database\Models\Settings;
+use Marvel\Exceptions\MarvelException;
 use Nuwave\Lighthouse\Schema\Directives\BaseDirective;
 use Nuwave\Lighthouse\Schema\Values\FieldValue;
 use Nuwave\Lighthouse\Support\Contracts\FieldMiddleware;
@@ -39,10 +39,10 @@ GRAPHQL;
             $localLicense = getConfig();
             $useLocalLicense = isset($localLicense['trust']) ? $localLicense['trust'] : false;
             if($useMustVerifyEmail && $context->user() && $context->user() instanceof MustVerifyEmail && !$context->request()->user()->hasVerifiedEmail()){
-                throw new oglabException(EMAIL_NOT_VERIFIED, EMAIL_NOT_VERIFIED);
+                throw new MarvelException(EMAIL_NOT_VERIFIED, EMAIL_NOT_VERIFIED);
             }
             if (!$useMustVerifyLicense || !$useLocalLicense) {
-                throw new oglabException(INVALID_LICENSE_KEY, INVALID_LICENSE_KEY);
+                throw new MarvelException(INVALID_LICENSE_KEY, INVALID_LICENSE_KEY);
             }
             // Call the actual resolver
             $result = $resolver($root, $args, $context, $resolveInfo);

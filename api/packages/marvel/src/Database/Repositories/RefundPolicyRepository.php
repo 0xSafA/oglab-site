@@ -1,10 +1,10 @@
 <?php
 
 
-namespace oglab\Database\Repositories;
+namespace Marvel\Database\Repositories;
 
 use Illuminate\Http\Request;
-use oglab\Database\Models\RefundPolicy;
+use Marvel\Database\Models\RefundPolicy;
 use Prettus\Repository\Criteria\RequestCriteria;
 use Prettus\Repository\Exceptions\RepositoryException;
 

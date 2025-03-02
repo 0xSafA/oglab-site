@@ -3,8 +3,8 @@
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Str;
-use oglab\Database\Models\User;
-use oglab\Enums\Permission;
+use Marvel\Database\Models\User;
+use Marvel\Enums\Permission;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Http;
 

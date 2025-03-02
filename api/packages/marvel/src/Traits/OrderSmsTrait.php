@@ -1,10 +1,10 @@
 <?php
 
-namespace oglab\Traits;
+namespace Marvel\Traits;
 
 use Illuminate\Support\Facades\App;
-use oglab\Database\Models\Order;
-use oglab\Enums\EventType;
+use Marvel\Database\Models\Order;
+use Marvel\Enums\EventType;
 
 trait OrderSmsTrait
 {

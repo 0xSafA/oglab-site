@@ -1,10 +1,10 @@
 <?php
 
-namespace oglab\Database\Models;
+namespace Marvel\Database\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use oglab\Traits\TranslationTrait;
+use Marvel\Traits\TranslationTrait;
 
 class Availability extends Model
 {

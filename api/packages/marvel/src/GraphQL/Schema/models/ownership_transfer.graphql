@@ -9,7 +9,7 @@ extend type Query {
         text: String @where(operator: "like", key: "transaction_identifier")
     ): [OwnershipTransfer]
         @paginate(
-            builder: "oglab\\GraphQL\\Queries\\OwnershipTransferQuery@fetchOwnershipTransfer"
+            builder: "Marvel\\GraphQL\\Queries\\OwnershipTransferQuery@fetchOwnershipTransfer"
             defaultCount: 15
         )
     ownershipTransfer(
@@ -17,7 +17,7 @@ extend type Query {
         request_view_type: String
     ): OwnershipTransfer
         @field(
-            resolver: "oglab\\GraphQL\\Queries\\OwnershipTransferQuery@fetchSingleOwnershipTransfer"
+            resolver: "Marvel\\GraphQL\\Queries\\OwnershipTransferQuery@fetchSingleOwnershipTransfer"
         )
 }
 type OrderInfo {

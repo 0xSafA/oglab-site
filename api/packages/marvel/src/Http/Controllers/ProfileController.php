@@ -1,14 +1,14 @@
 <?php
 
-namespace oglab\Http\Controllers;
+namespace Marvel\Http\Controllers;
 
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use oglab\Database\Models\Profile;
-use oglab\Database\Repositories\ProfileRepository;
-use oglab\Exceptions\oglabException;
-use oglab\Http\Requests\ProfileRequest;
+use Marvel\Database\Models\Profile;
+use Marvel\Database\Repositories\ProfileRepository;
+use Marvel\Exceptions\MarvelException;
+use Marvel\Http\Requests\ProfileRequest;
 use Prettus\Validator\Exceptions\ValidatorException;
 
 class ProfileController extends CoreController
@@ -55,8 +55,8 @@ class ProfileController extends CoreController
     {
         try {
             return $this->repository->with('customer')->findOrFail($id);
-        } catch (oglabException $e) {
-            throw new oglabException(NOT_FOUND);
+        } catch (MarvelException $e) {
+            throw new MarvelException(NOT_FOUND);
         }
     }
 
@@ -72,8 +72,8 @@ class ProfileController extends CoreController
         try {
             $validatedData = $request->all();
             return $this->repository->findOrFail($id)->update($validatedData);
-        } catch (oglabException $e) {
-            throw new oglabException(NOT_FOUND);
+        } catch (MarvelException $e) {
+            throw new MarvelException(NOT_FOUND);
         }
     }
 
@@ -87,8 +87,8 @@ class ProfileController extends CoreController
     {
         try {
             return $this->repository->findOrFail($id)->delete();
-        } catch (oglabException $e) {
-            throw new oglabException(NOT_FOUND);
+        } catch (MarvelException $e) {
+            throw new MarvelException(NOT_FOUND);
         }
     }
 }

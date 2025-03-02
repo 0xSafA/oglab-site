@@ -1,17 +1,17 @@
 <?php
 
-namespace oglab\Traits;
+namespace Marvel\Traits;
 
 use Exception;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use oglab\Database\Models\Profile;
-use oglab\Database\Models\Settings;
-use oglab\Database\Models\User;
-use oglab\Enums\EventType;
-use oglab\Enums\Permission;
-use oglab\Otp\Gateways\OtpGateway;
+use Marvel\Database\Models\Profile;
+use Marvel\Database\Models\Settings;
+use Marvel\Database\Models\User;
+use Marvel\Enums\EventType;
+use Marvel\Enums\Permission;
+use Marvel\Otp\Gateways\OtpGateway;
 
 trait SmsTrait
 {
@@ -110,7 +110,7 @@ trait SmsTrait
     protected function getOtpGateway()
     {
         $gateway = config('auth.active_otp_gateway');
-        $gateWayClass = "oglab\\Otp\\Gateways\\" . ucfirst($gateway) . 'Gateway';
+        $gateWayClass = "Marvel\\Otp\\Gateways\\" . ucfirst($gateway) . 'Gateway';
         return new OtpGateway(new $gateWayClass());
     }
 

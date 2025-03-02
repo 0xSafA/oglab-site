@@ -1,10 +1,10 @@
 <?php
 
-namespace oglab\Console;
+namespace Marvel\Console;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
-use oglab\Traits\ENVSetupTrait;
+use Marvel\Traits\ENVSetupTrait;
 
 use function Laravel\Prompts\{text, table, confirm, info, error};
 
@@ -16,7 +16,7 @@ class DefaultLanguageSetupCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'oglab:default-language-setup';
+    protected $signature = 'marvel:default-language-setup';
 
     /**
      * The console command description.

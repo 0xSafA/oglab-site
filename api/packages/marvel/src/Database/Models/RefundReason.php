@@ -1,11 +1,11 @@
 <?php
 
-namespace oglab\Database\Models;
+namespace Marvel\Database\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Builder;
-use oglab\Traits\TranslationTrait;
+use Marvel\Traits\TranslationTrait;
 
 class RefundReason extends Model
 {

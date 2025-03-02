@@ -35,8 +35,8 @@ while kill -0 $PID 2> /dev/null; do
 done
 echo  "]"
 
-echo "Installing oglab dependncies..."
-./vendor/bin/sail artisan oglab:install
+echo "Installing marvel dependncies..."
+./vendor/bin/sail artisan marvel:install
 
 FILE=public/storage
 if [ ! -h "$FILE" ]; then

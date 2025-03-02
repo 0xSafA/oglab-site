@@ -1,8 +1,8 @@
 <?php
 
-namespace oglab\Payments;
+namespace Marvel\Payments;
 
-use oglab\Database\Models\Settings;
+use Marvel\Database\Models\Settings;
 
 abstract class Base
 {

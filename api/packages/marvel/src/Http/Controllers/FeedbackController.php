@@ -1,17 +1,17 @@
 <?php
 
 
-namespace oglab\Http\Controllers;
+namespace Marvel\Http\Controllers;
 
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use oglab\Database\Models\Feedback;
-use oglab\Database\Repositories\FeedbackRepository;
-use oglab\Exceptions\oglabException;
-use oglab\Http\Requests\FeedbackCreateRequest;
-use oglab\Http\Requests\FeedbackUpdateRequest;
+use Marvel\Database\Models\Feedback;
+use Marvel\Database\Repositories\FeedbackRepository;
+use Marvel\Exceptions\MarvelException;
+use Marvel\Http\Requests\FeedbackCreateRequest;
+use Marvel\Http\Requests\FeedbackUpdateRequest;
 use Prettus\Validator\Exceptions\ValidatorException;
 
 
@@ -60,7 +60,7 @@ class FeedbackController extends CoreController
         try {
             $model_id = $request['model_id'];
             $model_type = $request['model_type'];
-            $model_name = "\\oglab\\Database\\Models\\{$model_type}";
+            $model_name = "\\Marvel\\Database\\Models\\{$model_type}";
             $model = $model_name::findOrFail($model_id);
             $user_id = $request->user()->id;
             $feedback = $model->feedbacks()->where('user_id', $user_id)->first();
@@ -84,8 +84,8 @@ class FeedbackController extends CoreController
                     ]);
                 }
             }
-        } catch (oglabException $e) {
-            throw new oglabException(SOMETHING_WENT_WRONG);
+        } catch (MarvelException $e) {
+            throw new MarvelException(SOMETHING_WENT_WRONG);
         }
     }
 
@@ -93,8 +93,8 @@ class FeedbackController extends CoreController
     {
         try {
             return $this->repository->findOrFail($id);
-        } catch (oglabException $e) {
-            throw new oglabException(NOT_FOUND);
+        } catch (MarvelException $e) {
+            throw new MarvelException(NOT_FOUND);
         }
     }
 
@@ -113,8 +113,8 @@ class FeedbackController extends CoreController
     {
         try {
             return $this->repository->findOrFail($id)->delete();
-        } catch (oglabException $e) {
-            throw new oglabException(NOT_FOUND);
+        } catch (MarvelException $e) {
+            throw new MarvelException(NOT_FOUND);
         }
     }
 }

@@ -1,12 +1,12 @@
 <?php
 
-namespace oglab\Payments;
+namespace Marvel\Payments;
 
 use Exception;
-use oglab\Database\Models\Order;
-use oglab\Enums\OrderStatus;
-use oglab\Enums\PaymentStatus;
-use oglab\Traits\PaymentTrait;
+use Marvel\Database\Models\Order;
+use Marvel\Enums\OrderStatus;
+use Marvel\Enums\PaymentStatus;
+use Marvel\Traits\PaymentTrait;
 use Razorpay\Api\Errors\SignatureVerificationError;
 use Srmklive\PayPal\Services\PayPal as PayPalClient;
 use Symfony\Component\HttpKernel\Exception\HttpException;

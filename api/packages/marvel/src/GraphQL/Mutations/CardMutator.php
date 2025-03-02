@@ -1,48 +1,48 @@
 <?php
 
 
-namespace oglab\GraphQL\Mutation;
+namespace Marvel\GraphQL\Mutation;
 
 
-use oglab\Exceptions\oglabException;
+use Marvel\Exceptions\MarvelException;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
-use oglab\Facades\Shop;
+use Marvel\Facades\Shop;
 
 class CardMutator
 {
     /**
-     * @throws oglabException
+     * @throws MarvelException
      */
     public function delete($rootValue, array $args, GraphQLContext $context)
     {
         try {
-            return Shop::call('oglab\Http\Controllers\PaymentMethodController@deletePaymentMethod', $args);
+            return Shop::call('Marvel\Http\Controllers\PaymentMethodController@deletePaymentMethod', $args);
         } catch (\Exception $e) {
-            throw new oglabException(SOMETHING_WENT_WRONG);
+            throw new MarvelException(SOMETHING_WENT_WRONG);
         }
     }
 
     /**
-     * @throws oglabException
+     * @throws MarvelException
      */
     public function store($rootValue, array $args, GraphQLContext $context)
     {
         try {
-            return Shop::call('oglab\Http\Controllers\PaymentMethodController@store', $args);
+            return Shop::call('Marvel\Http\Controllers\PaymentMethodController@store', $args);
         } catch (\Exception $e) {
-            throw new oglabException(SOMETHING_WENT_WRONG);
+            throw new MarvelException(SOMETHING_WENT_WRONG);
         }
     }
 
     /**
-     * @throws oglabException
+     * @throws MarvelException
      */
     public function setDefaultPaymentMethod($rootValue, array $args, GraphQLContext $context)
     {
         try {
-            return Shop::call('oglab\Http\Controllers\PaymentMethodController@setDefaultPaymentMethod', $args);
+            return Shop::call('Marvel\Http\Controllers\PaymentMethodController@setDefaultPaymentMethod', $args);
         } catch (\Exception $e) {
-            throw new oglabException(SOMETHING_WENT_WRONG);
+            throw new MarvelException(SOMETHING_WENT_WRONG);
         }
     }
 }

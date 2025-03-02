@@ -7,12 +7,12 @@ extend type Query {
         shop_id: ID @eq
     ): [Order!]!
         @paginate(
-            builder: "oglab\\GraphQL\\Queries\\OrderQuery@fetchOrders"
+            builder: "Marvel\\GraphQL\\Queries\\OrderQuery@fetchOrders"
             defaultCount: 10
         )
     order(id: ID, tracking_number: String): Order
         @field(
-            resolver: "oglab\\GraphQL\\Queries\\OrderQuery@fetchSingleOrder"
+            resolver: "Marvel\\GraphQL\\Queries\\OrderQuery@fetchSingleOrder"
         )
 }
 

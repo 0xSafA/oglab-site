@@ -4529,11 +4529,11 @@
             "time": "2022-12-02T22:17:43+00:00"
         },
         {
-            "name": "oglab/shop",
+            "name": "marvel/shop",
             "version": "dev-master",
             "dist": {
                 "type": "path",
-                "url": "packages/oglab",
+                "url": "packages/marvel",
                 "reference": "2970130a1ed0be9a74a3599ad31507daf00b6f35"
             },
             "require": {
@@ -4579,10 +4579,10 @@
             "extra": {
                 "laravel": {
                     "providers": [
-                        "oglab\\ShopServiceProvider"
+                        "Marvel\\ShopServiceProvider"
                     ],
                     "aliases": {
-                        "Shop": "oglab\\Facades\\Shop"
+                        "Shop": "Marvel\\Facades\\Shop"
                     }
                 }
             },
@@ -4594,7 +4594,7 @@
             },
             "autoload-dev": {
                 "psr-4": {
-                    "oglab\\Tests\\": "tests"
+                    "Marvel\\Tests\\": "tests"
                 }
             },
             "license": [
@@ -4608,7 +4608,7 @@
                 }
             ],
             "description": ":package_description",
-            "homepage": "https://github.com/oglab/gateway",
+            "homepage": "https://github.com/marvel/gateway",
             "keywords": [
                 "Laravel",
                 "Shop"
@@ -14177,7 +14177,7 @@
     "minimum-stability": "dev",
     "stability-flags": {
         "karim007/laravel-bkash-tokenize": 20,
-        "oglab/shop": 20,
+        "marvel/shop": 20,
         "kingflamez/laravelrave": 20
     },
     "prefer-stable": true,

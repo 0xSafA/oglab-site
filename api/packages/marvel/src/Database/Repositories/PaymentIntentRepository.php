@@ -1,10 +1,10 @@
 <?php
 
 
-namespace oglab\Database\Repositories;
+namespace Marvel\Database\Repositories;
 
-use oglab\Database\Models\PaymentIntent;
-use oglab\Traits\PaymentTrait;
+use Marvel\Database\Models\PaymentIntent;
+use Marvel\Traits\PaymentTrait;
 use Prettus\Repository\Criteria\RequestCriteria;
 use Prettus\Repository\Exceptions\RepositoryException;
 

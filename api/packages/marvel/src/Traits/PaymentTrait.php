@@ -1,20 +1,20 @@
 <?php
 
-namespace oglab\Traits;
+namespace Marvel\Traits;
 
 use Exception;
 use Illuminate\Http\Request;
-use oglab\Database\Models\Order;
-use oglab\Database\Models\PaymentGateway;
-use oglab\Database\Models\Settings;
-use oglab\Exceptions\oglabException;
-use oglab\Database\Models\PaymentMethod;
-use oglab\Database\Models\PaymentIntent;
-use oglab\Enums\OrderStatus;
-use oglab\Enums\PaymentGatewayType;
-use oglab\Enums\PaymentStatus;
-use oglab\Events\PaymentMethods;
-use oglab\Facades\Payment;
+use Marvel\Database\Models\Order;
+use Marvel\Database\Models\PaymentGateway;
+use Marvel\Database\Models\Settings;
+use Marvel\Exceptions\MarvelException;
+use Marvel\Database\Models\PaymentMethod;
+use Marvel\Database\Models\PaymentIntent;
+use Marvel\Enums\OrderStatus;
+use Marvel\Enums\PaymentGatewayType;
+use Marvel\Enums\PaymentStatus;
+use Marvel\Events\PaymentMethods;
+use Marvel\Facades\Payment;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 trait PaymentTrait
@@ -226,8 +226,8 @@ trait PaymentTrait
      */
     public function saveCard($payment_method, $request): PaymentMethod
     {
-        // brand & network are equivalent with razorpay & stripe, "network" in oglab DB
-        // type & funding are equivalent with razorpay & stripe, "type" in oglab DB
+        // brand & network are equivalent with razorpay & stripe, "network" in marvel DB
+        // type & funding are equivalent with razorpay & stripe, "type" in marvel DB
 
         try {
             $customers_gateway = PaymentGateway::where('user_id', '=', $request->user()->id)->where('gateway_name', '=', $request->payment_gateway)->first();
@@ -268,7 +268,7 @@ trait PaymentTrait
 
             return $payment_method;
         } catch (\Exception $e) {
-            throw new oglabException(SOMETHING_WENT_WRONG);
+            throw new MarvelException(SOMETHING_WENT_WRONG);
         }
     }
 

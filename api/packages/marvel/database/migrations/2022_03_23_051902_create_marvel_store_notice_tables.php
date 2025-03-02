@@ -3,10 +3,10 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use oglab\Enums\StoreNoticePriority;
-use oglab\Enums\StoreNoticeType;
+use Marvel\Enums\StoreNoticePriority;
+use Marvel\Enums\StoreNoticeType;
 
-class CreateoglabStoreNoticeTables extends Migration
+class CreateMarvelStoreNoticeTables extends Migration
 {
     /**
      * Run the migrations.

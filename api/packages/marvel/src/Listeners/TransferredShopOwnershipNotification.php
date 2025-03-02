@@ -1,14 +1,14 @@
 <?php
 
-namespace oglab\Listeners;
+namespace Marvel\Listeners;
 
 
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
-use oglab\Events\ProcessOwnershipTransition;
-use oglab\Notifications\TransferredShopOwnership;
-use oglab\Traits\UsersTrait;
+use Marvel\Events\ProcessOwnershipTransition;
+use Marvel\Notifications\TransferredShopOwnership;
+use Marvel\Traits\UsersTrait;
 
 class TransferredShopOwnershipNotification implements ShouldQueue
 {

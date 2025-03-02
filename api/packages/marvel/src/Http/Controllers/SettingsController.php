@@ -1,17 +1,17 @@
 <?php
 
-namespace oglab\Http\Controllers;
+namespace Marvel\Http\Controllers;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use oglab\Database\Models\Address;
-use oglab\Database\Repositories\SettingsRepository;
-use oglab\Events\Maintenance;
-use oglab\Exceptions\oglabException;
+use Marvel\Database\Models\Address;
+use Marvel\Database\Repositories\SettingsRepository;
+use Marvel\Events\Maintenance;
+use Marvel\Exceptions\MarvelException;
 use Illuminate\Support\Facades\Cache;
-use oglab\Http\Requests\SettingsRequest;
+use Marvel\Http\Requests\SettingsRequest;
 use Prettus\Validator\Exceptions\ValidatorException;
 
 class SettingsController extends CoreController
@@ -106,7 +106,7 @@ class SettingsController extends CoreController
         try {
             return $this->repository->first();
         } catch (\Exception $e) {
-            throw new oglabException(NOT_FOUND);
+            throw new MarvelException(NOT_FOUND);
         }
     }
 
@@ -136,6 +136,6 @@ class SettingsController extends CoreController
      */
     public function destroy($id)
     {
-        throw new oglabException(ACTION_NOT_VALID);
+        throw new MarvelException(ACTION_NOT_VALID);
     }
 }

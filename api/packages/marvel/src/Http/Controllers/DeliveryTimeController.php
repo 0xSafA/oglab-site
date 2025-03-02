@@ -1,15 +1,15 @@
 <?php
 
-namespace oglab\Http\Controllers;
+namespace Marvel\Http\Controllers;
 
 use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use oglab\Database\Models\DeliveryTime;
-use oglab\Database\Repositories\DeliveryTimeRepository;
-use oglab\Exceptions\oglabException;
-use oglab\Http\Requests\DeliveryTimeRequest;
+use Marvel\Database\Models\DeliveryTime;
+use Marvel\Database\Repositories\DeliveryTimeRepository;
+use Marvel\Exceptions\MarvelException;
+use Marvel\Http\Requests\DeliveryTimeRequest;
 use Prettus\Validator\Exceptions\ValidatorException;
 
 class DeliveryTimeController extends CoreController
@@ -45,8 +45,8 @@ class DeliveryTimeController extends CoreController
     {
         try {
             return $this->repository->create($request->validated());
-        } catch (oglabException $th) {
-            throw new oglabException(COULD_NOT_CREATE_THE_RESOURCE);
+        } catch (MarvelException $th) {
+            throw new MarvelException(COULD_NOT_CREATE_THE_RESOURCE);
         }
     }
 
@@ -61,8 +61,8 @@ class DeliveryTimeController extends CoreController
         try {
             $language = $request->language ?? DEFAULT_LANGUAGE;
             return $this->repository->where('id', $params)->where('language', $language)->firstOrFail();
-        } catch (oglabException $e) {
-            throw new oglabException(NOT_FOUND);
+        } catch (MarvelException $e) {
+            throw new MarvelException(NOT_FOUND);
         }
     }
 
@@ -81,8 +81,8 @@ class DeliveryTimeController extends CoreController
             } catch (\Throwable $th) {
                 abort(400, COULD_NOT_UPDATE_THE_RESOURCE);
             }
-        } catch (oglabException $e) {
-            throw new oglabException(COULD_NOT_UPDATE_THE_RESOURCE);
+        } catch (MarvelException $e) {
+            throw new MarvelException(COULD_NOT_UPDATE_THE_RESOURCE);
         }
     }
 
@@ -96,8 +96,8 @@ class DeliveryTimeController extends CoreController
     {
         try {
             return $this->repository->findOrFail($id)->delete();
-        } catch (oglabException $e) {
-            throw new oglabException(NOT_FOUND);
+        } catch (MarvelException $e) {
+            throw new MarvelException(NOT_FOUND);
         }
     }
 }

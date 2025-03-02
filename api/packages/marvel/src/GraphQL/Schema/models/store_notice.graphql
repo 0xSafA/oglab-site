@@ -10,7 +10,7 @@ extend type Query {
         searchJoin: String = "AND"
     ): [StoreNotice]
         @paginate(
-            builder: "oglab\\GraphQL\\Queries\\StoreNoticeQuery@fetchStoreNotices"
+            builder: "Marvel\\GraphQL\\Queries\\StoreNoticeQuery@fetchStoreNotices"
             defaultCount: 15
         )
     storeNoticeTypes(role: String): [[String]!]!

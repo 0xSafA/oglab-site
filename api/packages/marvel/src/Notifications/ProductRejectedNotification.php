@@ -1,12 +1,12 @@
 <?php
 
-namespace oglab\Notifications;
+namespace Marvel\Notifications;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use oglab\Database\Models\Product;
+use Marvel\Database\Models\Product;
 
 class ProductRejectedNotification extends Notification implements ShouldQueue
 {

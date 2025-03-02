@@ -1,16 +1,16 @@
 <?php
 
 
-namespace oglab\Database\Repositories;
+namespace Marvel\Database\Repositories;
 
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Prettus\Repository\Criteria\RequestCriteria;
 use Prettus\Repository\Exceptions\RepositoryException;
 use Illuminate\Http\Request;
-use oglab\Database\Models\FlashSale;
-use oglab\Database\Models\Product;
-use oglab\Enums\Permission;
+use Marvel\Database\Models\FlashSale;
+use Marvel\Database\Models\Product;
+use Marvel\Enums\Permission;
 
 class FlashSaleRepository extends BaseRepository
 {

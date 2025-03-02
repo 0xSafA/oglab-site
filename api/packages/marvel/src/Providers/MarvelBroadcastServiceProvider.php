@@ -1,11 +1,11 @@
 <?php
 
-namespace oglab\Providers;
+namespace Marvel\Providers;
 
 use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Support\ServiceProvider;
 
-class oglabBroadcastServiceProvider extends ServiceProvider
+class MarvelBroadcastServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap any application services.

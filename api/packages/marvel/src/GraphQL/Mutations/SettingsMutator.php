@@ -1,16 +1,16 @@
 <?php
 
 
-namespace oglab\GraphQL\Mutation;
+namespace Marvel\GraphQL\Mutation;
 
 
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
-use oglab\Facades\Shop;
+use Marvel\Facades\Shop;
 
 class SettingsMutator
 {
     public function update($rootValue, array $args, GraphQLContext $context)
     {
-        return Shop::call('oglab\Http\Controllers\SettingsController@store', $args);
+        return Shop::call('Marvel\Http\Controllers\SettingsController@store', $args);
     }
 }

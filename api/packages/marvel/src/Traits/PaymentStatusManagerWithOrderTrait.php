@@ -1,14 +1,14 @@
 <?php
 
-namespace oglab\Traits;
+namespace Marvel\Traits;
 
 use Exception;
 use Illuminate\Http\Request;
-use oglab\Database\Models\Order;
-use oglab\Database\Models\Settings;
-use oglab\Enums\OrderStatus;
-use oglab\Enums\PaymentStatus;
-use oglab\Facades\Payment;
+use Marvel\Database\Models\Order;
+use Marvel\Database\Models\Settings;
+use Marvel\Enums\OrderStatus;
+use Marvel\Enums\PaymentStatus;
+use Marvel\Facades\Payment;
 
 trait PaymentStatusManagerWithOrderTrait
 {

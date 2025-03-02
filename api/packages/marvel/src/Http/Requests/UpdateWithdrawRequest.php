@@ -1,13 +1,13 @@
 <?php
 
 
-namespace oglab\Http\Requests;
+namespace Marvel\Http\Requests;
 
 use Illuminate\Validation\Rule;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
-use oglab\Enums\WithdrawStatus;
+use Marvel\Enums\WithdrawStatus;
 
 class UpdateWithdrawRequest extends FormRequest
 {
@@ -29,7 +29,7 @@ class UpdateWithdrawRequest extends FormRequest
     public function rules()
     {
         return [
-            'shop_id'     => ['required', 'exists:oglab\Database\Models\Shop,id'],
+            'shop_id'     => ['required', 'exists:Marvel\Database\Models\Shop,id'],
             'amount'   => ['required', 'numeric'],
             'payment_method' => ['nullable', 'string'],
             'details' => ['nullable', 'string'],

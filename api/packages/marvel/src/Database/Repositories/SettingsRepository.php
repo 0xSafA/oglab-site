@@ -1,12 +1,12 @@
 <?php
 
 
-namespace oglab\Database\Repositories;
+namespace Marvel\Database\Repositories;
 
 use Carbon\Carbon;
 use Exception;
-use oglab\Console\oglabVerification;
-use oglab\Database\Models\Settings;
+use Marvel\Console\MarvelVerification;
+use Marvel\Database\Models\Settings;
 
 class SettingsRepository extends BaseRepository
 {
@@ -28,7 +28,7 @@ class SettingsRepository extends BaseRepository
 
     private function getAppSettingsData(): array
     {
-        $config = new oglabVerification();
+        $config = new MarvelVerification();
         $apiData = $config->jsonSerialize();
         try {
             $licenseKey = $config->getPrivateKey();

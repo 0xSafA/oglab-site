@@ -1,10 +1,10 @@
 <?php
 
-namespace oglab\Console;
+namespace Marvel\Console;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
-use oglab\Traits\ENVSetupTrait;
+use Marvel\Traits\ENVSetupTrait;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Exception;
 use Illuminate\Support\Facades\Mail;
@@ -19,7 +19,7 @@ class TestMailSendCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'oglab:test-mail-send';
+    protected $signature = 'marvel:test-mail-send';
 
     /**
      * The console command description.

@@ -7,7 +7,7 @@ extend type Query {
         searchJoin: String = "AND"
     ): [FlashSaleRequests!]!
         @paginate(
-            builder: "oglab\\GraphQL\\Queries\\FlashSaleRequestQuery@fetchFlashSaleRequests"
+            builder: "Marvel\\GraphQL\\Queries\\FlashSaleRequestQuery@fetchFlashSaleRequests"
             defaultCount: 15
         )
     flashSaleRequest(id: ID @eq, language: String @eq): FlashSaleRequests @find
@@ -16,7 +16,7 @@ extend type Query {
         language: String @eq
     ): [Product]!
         @paginate(
-            builder: "oglab\\GraphQL\\Queries\\FlashSaleRequestQuery@fetchFlashSaleRequestedProducts"
+            builder: "Marvel\\GraphQL\\Queries\\FlashSaleRequestQuery@fetchFlashSaleRequestedProducts"
             defaultCount: 15
         )
 }

@@ -1,14 +1,14 @@
 <?php
 
-namespace oglab\Listeners;
+namespace Marvel\Listeners;
 
 use Carbon\Carbon;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Notification;
-use oglab\Database\Models\User;
-use oglab\Events\ShopMaintenance;
-use oglab\Notifications\ShopMaintenanceNotification;
-use oglab\Traits\UsersTrait;
+use Marvel\Database\Models\User;
+use Marvel\Events\ShopMaintenance;
+use Marvel\Notifications\ShopMaintenanceNotification;
+use Marvel\Traits\UsersTrait;
 
 class ShopMaintenanceListener implements ShouldQueue
 {

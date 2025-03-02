@@ -10,7 +10,7 @@ extend type Query {
         hasRefundReason: _ @whereHasConditions(columns: ["slug"])
     ): [Refund!]!
         @paginate(
-            builder: "oglab\\GraphQL\\Queries\\RefundQuery@fetchRefunds"
+            builder: "Marvel\\GraphQL\\Queries\\RefundQuery@fetchRefunds"
             defaultCount: 10
         )
     refund(id: ID @eq): Refund @find

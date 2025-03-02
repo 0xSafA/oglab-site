@@ -1,8 +1,8 @@
 <?php
 
-namespace oglab\Events;
+namespace Marvel\Events;
 
-use oglab\Database\Models\Shop;
+use Marvel\Database\Models\Shop;
 
 class ShopMaintenance
 {

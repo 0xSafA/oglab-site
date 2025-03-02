@@ -7,10 +7,10 @@ if [ ! -f "$FILE" ]; then
     cp .env.example .env
 fi
 
-FILE=packages/oglab/stubs
+FILE=packages/marvel/stubs
 if [ ! -h "$FILE" ]; then
     echo "Creating stubs..."
-     cp -R packages/oglab/stubs-backup packages/oglab/stubs
+     cp -R packages/marvel/stubs-backup packages/marvel/stubs
 fi
 
 echo "Building docker image..."
@@ -43,8 +43,8 @@ while kill -0 $PID 2> /dev/null; do
 done
 echo  "]"
 
-echo "Installing oglab dependncies..."
-./vendor/bin/sail artisan oglab:install
+echo "Installing marvel dependncies..."
+./vendor/bin/sail artisan marvel:install
 
 FILE=public/storage
 if [ ! -h "$FILE" ]; then

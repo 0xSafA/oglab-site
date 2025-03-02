@@ -1,13 +1,13 @@
 <?php
 
-namespace oglab\Database\Repositories;
+namespace Marvel\Database\Repositories;
 
 use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Collection;
-use oglab\Database\Models\AbusiveReport;
-use oglab\Exceptions\oglabException;
+use Marvel\Database\Models\AbusiveReport;
+use Marvel\Exceptions\MarvelException;
 use Prettus\Repository\Criteria\RequestCriteria;
 use Prettus\Repository\Exceptions\RepositoryException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -51,7 +51,7 @@ class AbusiveReportRepository extends BaseRepository
         try {
             $model_id   = $request['model_id'];
             $model_type = $request['model_type'];
-            $model_name = "oglab\\Database\\Models\\{$model_type}";
+            $model_name = "Marvel\\Database\\Models\\{$model_type}";
             $isAbusiveReportExist = $this->where('model_id', $model_id)->where('model_type', $model_name)->exists();
             if ($isAbusiveReportExist) {
                 throw new BadRequestHttpException(YOU_HAVE_ALREADY_GIVEN_ABUSIVE_REPORT_FOR_THIS);

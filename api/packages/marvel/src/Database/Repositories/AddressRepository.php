@@ -1,9 +1,9 @@
 <?php
 
 
-namespace oglab\Database\Repositories;
+namespace Marvel\Database\Repositories;
 
-use oglab\Database\Models\Address;
+use Marvel\Database\Models\Address;
 
 class AddressRepository extends BaseRepository
 {

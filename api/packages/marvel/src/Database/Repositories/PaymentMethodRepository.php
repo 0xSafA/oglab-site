@@ -1,13 +1,13 @@
 <?php
 
 
-namespace oglab\Database\Repositories;
+namespace Marvel\Database\Repositories;
 
 use Exception;
-use oglab\Database\Models\PaymentMethod;
-use oglab\Events\PaymentMethods;
-use oglab\Facades\Payment;
-use oglab\Traits\PaymentTrait;
+use Marvel\Database\Models\PaymentMethod;
+use Marvel\Events\PaymentMethods;
+use Marvel\Facades\Payment;
+use Marvel\Traits\PaymentTrait;
 use Prettus\Repository\Criteria\RequestCriteria;
 use Prettus\Repository\Exceptions\RepositoryException;
 use Symfony\Component\HttpKernel\Exception\HttpException;

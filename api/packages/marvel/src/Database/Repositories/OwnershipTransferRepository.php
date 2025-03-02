@@ -1,16 +1,16 @@
 <?php
 
 
-namespace oglab\Database\Repositories;
+namespace Marvel\Database\Repositories;
 
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use oglab\Database\Models\Order;
-use oglab\Database\Models\OwnershipTransfer;
-use oglab\Enums\OrderStatus;
-use oglab\Exceptions\oglabBadRequestException;
+use Marvel\Database\Models\Order;
+use Marvel\Database\Models\OwnershipTransfer;
+use Marvel\Enums\OrderStatus;
+use Marvel\Exceptions\MarvelBadRequestException;
 use Prettus\Repository\Criteria\RequestCriteria;
 use Prettus\Repository\Exceptions\RepositoryException;
 
@@ -75,7 +75,7 @@ class OwnershipTransferRepository extends BaseRepository
         // 
         // if those 3 above condition is true, then a shop status can be changed.
         if ($totalIncompleteOrders || (round($currentBalance, 2) > 1.00) || $nonApprovedWithdrawCount) {
-            throw new oglabBadRequestException(COULD_NOT_SETTLE_THE_TRANSITION);
+            throw new MarvelBadRequestException(COULD_NOT_SETTLE_THE_TRANSITION);
         }
         $transferHistory->update(['status' => $request['status']]);
         return $transferHistory->refresh();

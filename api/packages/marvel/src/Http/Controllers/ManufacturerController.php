@@ -1,17 +1,17 @@
 <?php
 
-namespace oglab\Http\Controllers;
+namespace Marvel\Http\Controllers;
 
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use oglab\Database\Models\Manufacturer;
-use oglab\Database\Repositories\ManufacturerRepository;
-use oglab\Exceptions\oglabException;
-use oglab\Http\Requests\ManufacturerRequest;
-use oglab\Http\Resources\ManufacturerResource;
+use Marvel\Database\Models\Manufacturer;
+use Marvel\Database\Repositories\ManufacturerRepository;
+use Marvel\Exceptions\MarvelException;
+use Marvel\Http\Requests\ManufacturerRequest;
+use Marvel\Http\Resources\ManufacturerResource;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class ManufacturerController extends CoreController
@@ -52,8 +52,8 @@ class ManufacturerController extends CoreController
                 return $this->repository->storeManufacturer($request);
             }
             throw new AuthorizationException(NOT_AUTHORIZED);
-        } catch (oglabException $th) {
-            throw new oglabException(NOT_AUTHORIZED);
+        } catch (MarvelException $th) {
+            throw new MarvelException(NOT_AUTHORIZED);
         }
     }
 
@@ -69,8 +69,8 @@ class ManufacturerController extends CoreController
             $request['slug'] = $slug;
             $manufacturer = $this->fetchManufacturer($request);
             return new ManufacturerResource($manufacturer);
-        } catch (oglabException $th) {
-            throw new oglabException(NOT_FOUND);
+        } catch (MarvelException $th) {
+            throw new MarvelException(NOT_FOUND);
         }
     }
 
@@ -108,8 +108,8 @@ class ManufacturerController extends CoreController
         try {
             $request['id'] = $id;
             return $this->updateManufacturer($request);
-        } catch (oglabException $th) {
-            throw new oglabException(COULD_NOT_UPDATE_THE_RESOURCE);
+        } catch (MarvelException $th) {
+            throw new MarvelException(COULD_NOT_UPDATE_THE_RESOURCE);
         }
     }
 
@@ -137,8 +137,8 @@ class ManufacturerController extends CoreController
         try {
             $request['id'] = $id;
             return $this->deleteManufacturer($request);
-        } catch (oglabException $th) {
-            throw new oglabException(COULD_NOT_DELETE_THE_RESOURCE);
+        } catch (MarvelException $th) {
+            throw new MarvelException(COULD_NOT_DELETE_THE_RESOURCE);
         }
     }
 
@@ -149,7 +149,7 @@ class ManufacturerController extends CoreController
             $manufacturer->delete();
             return $manufacturer;
         }
-        throw new oglabException(NOT_AUTHORIZED);
+        throw new MarvelException(NOT_AUTHORIZED);
     }
 
     public function topManufacturer(Request $request)

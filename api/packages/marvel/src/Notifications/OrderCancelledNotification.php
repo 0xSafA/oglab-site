@@ -1,14 +1,14 @@
 <?php
 
-namespace oglab\Notifications;
+namespace Marvel\Notifications;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\App;
-use oglab\Database\Models\Order;
-use oglab\Traits\SmsTrait;
+use Marvel\Database\Models\Order;
+use Marvel\Traits\SmsTrait;
 
 class OrderCancelledNotification extends Notification implements ShouldQueue
 {

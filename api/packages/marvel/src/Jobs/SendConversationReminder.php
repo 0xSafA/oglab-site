@@ -9,8 +9,8 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
-use oglab\Database\Models\Participant;
-use oglab\Mail\ConversationReminderMail;
+use Marvel\Database\Models\Participant;
+use Marvel\Mail\ConversationReminderMail;
 use Mail;
 
 class SendConversationReminder implements ShouldQueue

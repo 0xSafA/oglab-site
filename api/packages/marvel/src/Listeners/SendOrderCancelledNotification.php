@@ -1,15 +1,15 @@
 <?php
 
-namespace oglab\Listeners;
+namespace Marvel\Listeners;
 
 use App\Models\User;
 use Exception;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use oglab\Enums\EventType;
-use oglab\Events\OrderCancelled;
-use oglab\Notifications\OrderCancelledNotification;
-use oglab\Traits\OrderSmsTrait;
-use oglab\Traits\SmsTrait;
+use Marvel\Enums\EventType;
+use Marvel\Events\OrderCancelled;
+use Marvel\Notifications\OrderCancelledNotification;
+use Marvel\Traits\OrderSmsTrait;
+use Marvel\Traits\SmsTrait;
 
 
 class SendOrderCancelledNotification implements ShouldQueue

@@ -1,7 +1,7 @@
 <?php
 
 
-namespace oglab\Http\Requests;
+namespace Marvel\Http\Requests;
 
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
@@ -28,8 +28,8 @@ class WishlistCreateRequest extends FormRequest
     public function rules()
     {
         return [
-            'product_id'            => ['required', 'exists:oglab\Database\Models\Product,id'],
-            'variation_option_id'   => ['integer', 'exists:oglab\Database\Models\Variation,id'],
+            'product_id'            => ['required', 'exists:Marvel\Database\Models\Product,id'],
+            'variation_option_id'   => ['integer', 'exists:Marvel\Database\Models\Variation,id'],
         ];
     }
 

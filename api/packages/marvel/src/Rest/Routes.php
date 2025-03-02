@@ -3,54 +3,54 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Support\Facades\Route;
-use oglab\Database\Models\Commission;
-use oglab\Enums\Permission;
-use oglab\Http\Controllers\AbusiveReportController;
-use oglab\Http\Controllers\AddressController;
-use oglab\Http\Controllers\AiController;
-use oglab\Http\Controllers\AnalyticsController;
-use oglab\Http\Controllers\AttachmentController;
-use oglab\Http\Controllers\AttributeController;
-use oglab\Http\Controllers\AttributeValueController;
-use oglab\Http\Controllers\AuthorController;
-use oglab\Http\Controllers\BecameSellerController;
-use oglab\Http\Controllers\CategoryController;
-use oglab\Http\Controllers\CheckoutController;
-use oglab\Http\Controllers\ConversationController;
-use oglab\Http\Controllers\CouponController;
-use oglab\Http\Controllers\DeliveryTimeController;
-use oglab\Http\Controllers\DownloadController;
-use oglab\Http\Controllers\FaqsController;
-use oglab\Http\Controllers\FeedbackController;
-use oglab\Http\Controllers\FlashSaleController;
-use oglab\Http\Controllers\FlashSaleVendorRequestController;
-use oglab\Http\Controllers\ManufacturerController;
-use oglab\Http\Controllers\MessageController;
-use oglab\Http\Controllers\OrderController;
-use oglab\Http\Controllers\PaymentIntentController;
-use oglab\Http\Controllers\PaymentMethodController;
-use oglab\Http\Controllers\ProductController;
-use oglab\Http\Controllers\QuestionController;
-use oglab\Http\Controllers\RefundController;
-use oglab\Http\Controllers\ResourceController;
-use oglab\Http\Controllers\ReviewController;
-use oglab\Http\Controllers\SettingsController;
-use oglab\Http\Controllers\ShippingController;
-use oglab\Http\Controllers\ShopController;
-use oglab\Http\Controllers\TagController;
-use oglab\Http\Controllers\TaxController;
-use oglab\Http\Controllers\TypeController;
-use oglab\Http\Controllers\UserController;
-use oglab\Http\Controllers\WebHookController;
-use oglab\Http\Controllers\WishlistController;
-use oglab\Http\Controllers\WithdrawController;
-use oglab\Http\Controllers\LanguageController;
-use oglab\Http\Controllers\NotifyLogsController;
-use oglab\Http\Controllers\OwnershipTransferController;
-use oglab\Http\Controllers\RefundPolicyController;
-use oglab\Http\Controllers\RefundReasonController;
-use oglab\Http\Controllers\StoreNoticeController;
-use oglab\Http\Controllers\TermsAndConditionsController;
+use Marvel\Database\Models\Commission;
+use Marvel\Enums\Permission;
+use Marvel\Http\Controllers\AbusiveReportController;
+use Marvel\Http\Controllers\AddressController;
+use Marvel\Http\Controllers\AiController;
+use Marvel\Http\Controllers\AnalyticsController;
+use Marvel\Http\Controllers\AttachmentController;
+use Marvel\Http\Controllers\AttributeController;
+use Marvel\Http\Controllers\AttributeValueController;
+use Marvel\Http\Controllers\AuthorController;
+use Marvel\Http\Controllers\BecameSellerController;
+use Marvel\Http\Controllers\CategoryController;
+use Marvel\Http\Controllers\CheckoutController;
+use Marvel\Http\Controllers\ConversationController;
+use Marvel\Http\Controllers\CouponController;
+use Marvel\Http\Controllers\DeliveryTimeController;
+use Marvel\Http\Controllers\DownloadController;
+use Marvel\Http\Controllers\FaqsController;
+use Marvel\Http\Controllers\FeedbackController;
+use Marvel\Http\Controllers\FlashSaleController;
+use Marvel\Http\Controllers\FlashSaleVendorRequestController;
+use Marvel\Http\Controllers\ManufacturerController;
+use Marvel\Http\Controllers\MessageController;
+use Marvel\Http\Controllers\OrderController;
+use Marvel\Http\Controllers\PaymentIntentController;
+use Marvel\Http\Controllers\PaymentMethodController;
+use Marvel\Http\Controllers\ProductController;
+use Marvel\Http\Controllers\QuestionController;
+use Marvel\Http\Controllers\RefundController;
+use Marvel\Http\Controllers\ResourceController;
+use Marvel\Http\Controllers\ReviewController;
+use Marvel\Http\Controllers\SettingsController;
+use Marvel\Http\Controllers\ShippingController;
+use Marvel\Http\Controllers\ShopController;
+use Marvel\Http\Controllers\TagController;
+use Marvel\Http\Controllers\TaxController;
+use Marvel\Http\Controllers\TypeController;
+use Marvel\Http\Controllers\UserController;
+use Marvel\Http\Controllers\WebHookController;
+use Marvel\Http\Controllers\WishlistController;
+use Marvel\Http\Controllers\WithdrawController;
+use Marvel\Http\Controllers\LanguageController;
+use Marvel\Http\Controllers\NotifyLogsController;
+use Marvel\Http\Controllers\OwnershipTransferController;
+use Marvel\Http\Controllers\RefundPolicyController;
+use Marvel\Http\Controllers\RefundReasonController;
+use Marvel\Http\Controllers\StoreNoticeController;
+use Marvel\Http\Controllers\TermsAndConditionsController;
 
 // use Illuminate\Support\Facades\Auth;
 
@@ -238,7 +238,7 @@ Route::group(['middleware' => ['can:' . Permission::CUSTOMER, 'auth:sanctum', 'e
     ]);
     Route::get('wishlists/in_wishlist/{product_id}', [WishlistController::class, 'in_wishlist']);
     Route::get('my-wishlists', [ProductController::class, 'myWishlists']);
-    Route::get('orders/tracking-number/{tracking_number}', 'oglab\Http\Controllers\OrderController@findByTrackingNumber');
+    Route::get('orders/tracking-number/{tracking_number}', 'Marvel\Http\Controllers\OrderController@findByTrackingNumber');
     Route::apiResource('attachments', AttachmentController::class, [
         'only' => ['store', 'update', 'destroy'],
     ]);
@@ -305,7 +305,7 @@ Route::group(
         // Route::get('shop-notification/{id}', [ShopNotificationController::class, 'show']);
         // Route::put('shop-notification/{id}', [ShopNotificationController::class, 'update']);
         // Route::get('popular-products', [AnalyticsController::class, 'popularProducts']);
-        // Route::get('shops/refunds', 'oglab\Http\Controllers\ShopController@refunds');
+        // Route::get('shops/refunds', 'Marvel\Http\Controllers\ShopController@refunds');
         Route::apiResource('questions', QuestionController::class, [
             'only' => ['update'],
         ]);
@@ -323,8 +323,8 @@ Route::group(
             'only' => ['show', 'store', 'update', 'destroy']
         ]);
 
-        Route::get('export-order-url/{shop_id?}', 'oglab\Http\Controllers\OrderController@exportOrderUrl');
-        Route::post('download-invoice-url', 'oglab\Http\Controllers\OrderController@downloadInvoiceUrl');
+        Route::get('export-order-url/{shop_id?}', 'Marvel\Http\Controllers\OrderController@exportOrderUrl');
+        Route::post('download-invoice-url', 'Marvel\Http\Controllers\OrderController@downloadInvoiceUrl');
         Route::apiResource('faqs', FaqsController::class, [
             'only' => ['store', 'update', 'destroy'],
         ]);

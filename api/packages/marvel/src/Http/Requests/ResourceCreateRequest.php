@@ -1,13 +1,13 @@
 <?php
 
 
-namespace oglab\Http\Requests;
+namespace Marvel\Http\Requests;
 
 use Illuminate\Validation\Rule;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
-use oglab\Enums\ResourceType;
+use Marvel\Enums\ResourceType;
 
 class ResourceCreateRequest extends FormRequest
 {

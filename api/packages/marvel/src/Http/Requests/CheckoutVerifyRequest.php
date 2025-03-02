@@ -1,6 +1,6 @@
 <?php
 
-namespace oglab\Http\Requests;
+namespace Marvel\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
@@ -19,7 +19,7 @@ class CheckoutVerifyRequest extends FormRequest
     {
         return [
             'amount'           => 'required|numeric',
-            'customer_id'      => 'nullable|exists:oglab\Database\Models\User,id',
+            'customer_id'      => 'nullable|exists:Marvel\Database\Models\User,id',
             'products'         => 'required|array',
             'billing_address'  => 'array',
             'shipping_address' => 'array',

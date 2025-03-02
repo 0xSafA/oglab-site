@@ -1,18 +1,18 @@
 <?php
 
 
-namespace oglab\Http\Controllers;
+namespace Marvel\Http\Controllers;
 
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
-use oglab\Database\Models\Conversation;
-use oglab\Database\Models\Shop;
-use oglab\Database\Repositories\ConversationRepository;
-use oglab\Exceptions\oglabException;
-use oglab\Http\Requests\ConversationCreateRequest;
+use Marvel\Database\Models\Conversation;
+use Marvel\Database\Models\Shop;
+use Marvel\Database\Repositories\ConversationRepository;
+use Marvel\Exceptions\MarvelException;
+use Marvel\Http\Requests\ConversationCreateRequest;
 use Prettus\Validator\Exceptions\ValidatorException;
 
 
@@ -76,15 +76,15 @@ class ConversationController extends CoreController
     {
         $user = $request->user();
         if (empty($user)) {
-            throw new oglabException(NOT_AUTHORIZED);
+            throw new MarvelException(NOT_AUTHORIZED);
         }
 
         $shop = Shop::findOrFail($request->shop_id);
         if ($shop->owner_id === $request->user()->id) {
-            throw new oglabException(YOU_CAN_NOT_SEND_MESSAGE_TO_YOUR_OWN_SHOP);
+            throw new MarvelException(YOU_CAN_NOT_SEND_MESSAGE_TO_YOUR_OWN_SHOP);
         }
         if ($request->shop_id === $request->user()->shop_id) {
-            throw new oglabException(YOU_CAN_NOT_SEND_MESSAGE_TO_YOUR_OWN_SHOP);
+            throw new MarvelException(YOU_CAN_NOT_SEND_MESSAGE_TO_YOUR_OWN_SHOP);
         }
         return $this->repository->firstOrCreate([
             'user_id' => $user->id,

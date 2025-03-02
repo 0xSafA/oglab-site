@@ -1,6 +1,6 @@
 <?php
 
-namespace oglab\Http\Controllers;
+namespace Marvel\Http\Controllers;
 
 use App\Events\QuestionAnswered;
 use App\Events\RefundApproved;
@@ -10,17 +10,17 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use oglab\Database\Models\Balance;
-use oglab\Database\Models\Order;
-use oglab\Database\Models\Wallet;
-use oglab\Database\Repositories\RefundRepository;
-use oglab\Enums\Permission;
-use oglab\Enums\RefundStatus;
-use oglab\Exceptions\oglabException;
-use oglab\Http\Requests\RefundRequest;
-use oglab\Http\Resources\GetSingleRefundResource;
-use oglab\Http\Resources\RefundResource;
-use oglab\Traits\WalletsTrait;
+use Marvel\Database\Models\Balance;
+use Marvel\Database\Models\Order;
+use Marvel\Database\Models\Wallet;
+use Marvel\Database\Repositories\RefundRepository;
+use Marvel\Enums\Permission;
+use Marvel\Enums\RefundStatus;
+use Marvel\Exceptions\MarvelException;
+use Marvel\Http\Requests\RefundRequest;
+use Marvel\Http\Resources\GetSingleRefundResource;
+use Marvel\Http\Resources\RefundResource;
+use Marvel\Traits\WalletsTrait;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class RefundController extends CoreController
@@ -82,8 +82,8 @@ class RefundController extends CoreController
                     return $orderQuery->where('customer_id', $user->id)->where('shop_id', null);
                     break;
             }
-        } catch (oglabException $th) {
-            throw new oglabException(SOMETHING_WENT_WRONG);
+        } catch (MarvelException $th) {
+            throw new MarvelException(SOMETHING_WENT_WRONG);
         }
     }
 
@@ -101,8 +101,8 @@ class RefundController extends CoreController
                 throw new AuthorizationException(NOT_AUTHORIZED);
             }
             return $this->repository->storeRefund($request);
-        } catch (oglabException $th) {
-            throw new oglabException(COULD_NOT_CREATE_THE_RESOURCE);
+        } catch (MarvelException $th) {
+            throw new MarvelException(COULD_NOT_CREATE_THE_RESOURCE);
         }
     }
 
@@ -117,8 +117,8 @@ class RefundController extends CoreController
         try {
             $refund = $this->repository->with(['shop', 'order', 'customer', 'refund_policy','refund_reason'])->findOrFail($id);
             return new GetSingleRefundResource($refund);
-        } catch (oglabException $e) {
-            throw new oglabException(NOT_FOUND);
+        } catch (MarvelException $e) {
+            throw new MarvelException(NOT_FOUND);
         }
     }
 
@@ -134,8 +134,8 @@ class RefundController extends CoreController
         try {
             $request->merge(['id' => $id]);
             return $this->updateRefund($request);
-        } catch (oglabException $th) {
-            throw new oglabException(COULD_NOT_UPDATE_THE_RESOURCE);
+        } catch (MarvelException $th) {
+            throw new MarvelException(COULD_NOT_UPDATE_THE_RESOURCE);
         }
     }
 
@@ -190,8 +190,8 @@ class RefundController extends CoreController
         try {
             $request->merge(['id' => $id]);
             return $this->deleteRefund($request);
-        } catch (oglabException $th) {
-            throw new oglabException(COULD_NOT_DELETE_THE_RESOURCE);
+        } catch (MarvelException $th) {
+            throw new MarvelException(COULD_NOT_DELETE_THE_RESOURCE);
         }
     }
 

@@ -1,10 +1,10 @@
 <?php
 
-namespace oglab\Http\Controllers;
+namespace Marvel\Http\Controllers;
 
-use oglab\Exceptions\oglabException;
-use oglab\Facades\Ai;
-use oglab\Http\Requests\AiDescriptionRequest;
+use Marvel\Exceptions\MarvelException;
+use Marvel\Facades\Ai;
+use Marvel\Http\Requests\AiDescriptionRequest;
 
 class AiController extends CoreController
 {
@@ -13,8 +13,8 @@ class AiController extends CoreController
     {
         try {
             return Ai::generateDescription($request);
-        } catch (oglabException $e) {
-            throw new oglabException(SOMETHING_WENT_WRONG, $e->getMessage());
+        } catch (MarvelException $e) {
+            throw new MarvelException(SOMETHING_WENT_WRONG, $e->getMessage());
         }
     }
 }

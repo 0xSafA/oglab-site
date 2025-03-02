@@ -1,19 +1,19 @@
 <?php
 
-namespace oglab\Http\Controllers;
+namespace Marvel\Http\Controllers;
 
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use oglab\Database\Repositories\RefundPolicyRepository;
-use oglab\Enums\Permission;
-use oglab\Exceptions\oglabException;
-use oglab\Exceptions\oglabNotFoundException;
-use oglab\Http\Requests\StoreRefundPolicyRequest;
-use oglab\Http\Requests\UpdateRefundPolicyRequest;
-use oglab\Http\Resources\RefundPolicyResource;
+use Marvel\Database\Repositories\RefundPolicyRepository;
+use Marvel\Enums\Permission;
+use Marvel\Exceptions\MarvelException;
+use Marvel\Exceptions\MarvelNotFoundException;
+use Marvel\Http\Requests\StoreRefundPolicyRequest;
+use Marvel\Http\Requests\UpdateRefundPolicyRequest;
+use Marvel\Http\Resources\RefundPolicyResource;
 
 class RefundPolicyController extends CoreController
 {
@@ -56,8 +56,8 @@ class RefundPolicyController extends CoreController
                 return $this->repository->storeRefundPolicy($request);
             }
             throw new AuthorizationException(NOT_AUTHORIZED);
-        } catch (oglabException $e) {
-            throw new oglabException(COULD_NOT_CREATE_THE_RESOURCE);
+        } catch (MarvelException $e) {
+            throw new MarvelException(COULD_NOT_CREATE_THE_RESOURCE);
         }
     }
 
@@ -72,8 +72,8 @@ class RefundPolicyController extends CoreController
         try {
             $request->merge(['slug' => $slug]);
             return $this->fetchRefundPolicy($request);
-        } catch (oglabException $th) {
-            throw new oglabException(NOT_FOUND);
+        } catch (MarvelException $th) {
+            throw new MarvelException(NOT_FOUND);
         }
     }
 
@@ -100,15 +100,15 @@ class RefundPolicyController extends CoreController
      * @param UpdateRefundPolicyRequest $request
      * @param int $id
      * @return array
-     * @throws oglab\Exceptions\oglabException
+     * @throws Marvel\Exceptions\MarvelException
      */
     public function update(UpdateRefundPolicyRequest $request, $id)
     {
         try {
             $request->merge(['id' => $id]);
             return $this->updateRefundPolicy($request);
-        } catch (oglabException $th) {
-            throw new oglabException(COULD_NOT_UPDATE_THE_RESOURCE);
+        } catch (MarvelException $th) {
+            throw new MarvelException(COULD_NOT_UPDATE_THE_RESOURCE);
         }
     }
 
@@ -121,7 +121,7 @@ class RefundPolicyController extends CoreController
                 $refundPolicy = $this->repository->findRefundPolicy($slug, $language);
                 return $this->repository->updateRefundPolicy($request, $refundPolicy);
             } catch (Exception $e) {
-                throw new oglabNotFoundException(NOT_FOUND);
+                throw new MarvelNotFoundException(NOT_FOUND);
             }
         }
         throw new AuthorizationException(NOT_AUTHORIZED);
@@ -138,8 +138,8 @@ class RefundPolicyController extends CoreController
         try {
             $request->merge(['id' => $id]);
             return $this->deleteRefundPolicy($request);
-        } catch (oglabException $th) {
-            throw new oglabException(COULD_NOT_DELETE_THE_RESOURCE);
+        } catch (MarvelException $th) {
+            throw new MarvelException(COULD_NOT_DELETE_THE_RESOURCE);
         }
     }
 

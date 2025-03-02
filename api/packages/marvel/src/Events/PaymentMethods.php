@@ -1,10 +1,10 @@
 <?php
 
 
-namespace oglab\Events;
+namespace Marvel\Events;
 
 use Illuminate\Contracts\Queue\ShouldQueue;
-use oglab\Database\Models\PaymentMethod;
+use Marvel\Database\Models\PaymentMethod;
 
 class PaymentMethods implements ShouldQueue
 {

@@ -1,10 +1,10 @@
 <?php
 
 
-namespace oglab\Database\Repositories;
+namespace Marvel\Database\Repositories;
 
 
-use oglab\Database\Models\Attachment;
+use Marvel\Database\Models\Attachment;
 
 class AttachmentRepository extends BaseRepository
 {

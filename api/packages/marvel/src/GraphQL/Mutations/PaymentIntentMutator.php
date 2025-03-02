@@ -1,24 +1,24 @@
 <?php
 
 
-namespace oglab\GraphQL\Mutation;
+namespace Marvel\GraphQL\Mutation;
 
 
-use oglab\Exceptions\oglabException;
+use Marvel\Exceptions\MarvelException;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
-use oglab\Facades\Shop;
+use Marvel\Facades\Shop;
 
 class PaymentIntentMutator
 {
     /**
-     * @throws oglabException
+     * @throws MarvelException
      */
     public function savePaymentMethod($rootValue, array $args, GraphQLContext $context)
     {
         try {
-            return Shop::call('oglab\Http\Controllers\PaymentMethodController@savePaymentMethod', $args);
+            return Shop::call('Marvel\Http\Controllers\PaymentMethodController@savePaymentMethod', $args);
         } catch (\Exception $e) {
-            throw new oglabException(SOMETHING_WENT_WRONG);
+            throw new MarvelException(SOMETHING_WENT_WRONG);
         }
     }
 }

@@ -1,12 +1,12 @@
 <?php
 
-namespace oglab\Http\Requests;
+namespace Marvel\Http\Requests;
 
 use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
-use oglab\Enums\OrderStatus;
+use Marvel\Enums\OrderStatus;
 
 class OrderUpdateRequest extends FormRequest
 {
@@ -20,8 +20,8 @@ class OrderUpdateRequest extends FormRequest
     protected function getRules()
     {
         return [
-            'coupon_id'       => 'nullable|exists:oglab\Database\Models\Coupon,id',
-            'shop_id'         => 'exists:oglab\Database\Models\Shop,id',
+            'coupon_id'       => 'nullable|exists:Marvel\Database\Models\Coupon,id',
+            'shop_id'         => 'exists:Marvel\Database\Models\Shop,id',
             'products'        => 'array',
             'amount'          => 'numeric',
             'paid_total'      => 'numeric',
@@ -33,7 +33,7 @@ class OrderUpdateRequest extends FormRequest
                 OrderStatus::OUT_FOR_DELIVERY,
                 OrderStatus::CANCELLED
             ])],
-            'customer_id'     => 'exists:oglab\Database\Models\User,id',
+            'customer_id'     => 'exists:Marvel\Database\Models\User,id',
             'payment_gateway' => 'string',
             'altered_payment_gateway' => 'nullable|string',
         ];

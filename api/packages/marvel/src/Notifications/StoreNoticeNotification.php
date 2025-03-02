@@ -1,13 +1,13 @@
 <?php
 
-namespace oglab\Notifications;
+namespace Marvel\Notifications;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use oglab\Database\Models\StoreNotice;
-use oglab\Enums\Permission;
+use Marvel\Database\Models\StoreNotice;
+use Marvel\Enums\Permission;
 
 class StoreNoticeNotification extends Notification implements ShouldQueue
 {
@@ -18,7 +18,7 @@ class StoreNoticeNotification extends Notification implements ShouldQueue
 
     /**
      * Create a new notification instance.
-     * @param \oglab\Database\Models\StoreNotice $storeNotice
+     * @param \Marvel\Database\Models\StoreNotice $storeNotice
      * @param null|string $action
      * @return void
      */

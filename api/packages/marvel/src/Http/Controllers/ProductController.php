@@ -1,35 +1,35 @@
 <?php
 
-namespace oglab\Http\Controllers;
+namespace Marvel\Http\Controllers;
 
 use Exception;
 use Carbon\Carbon;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use oglab\Database\Models\Type;
+use Marvel\Database\Models\Type;
 use Illuminate\Http\JsonResponse;
-use oglab\Database\Models\Product;
-use oglab\Database\Models\Wishlist;
-use oglab\Database\Models\Variation;
-use oglab\Exceptions\oglabException;
+use Marvel\Database\Models\Product;
+use Marvel\Database\Models\Wishlist;
+use Marvel\Database\Models\Variation;
+use Marvel\Exceptions\MarvelException;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Cache;
-use oglab\Database\Models\Author;
-use oglab\Database\Models\Category;
-use oglab\Database\Models\Manufacturer;
-use oglab\Http\Requests\ProductCreateRequest;
-use oglab\Http\Requests\ProductUpdateRequest;
-use oglab\Database\Repositories\ProductRepository;
-use oglab\Database\Repositories\SettingsRepository;
+use Marvel\Database\Models\Author;
+use Marvel\Database\Models\Category;
+use Marvel\Database\Models\Manufacturer;
+use Marvel\Http\Requests\ProductCreateRequest;
+use Marvel\Http\Requests\ProductUpdateRequest;
+use Marvel\Database\Repositories\ProductRepository;
+use Marvel\Database\Repositories\SettingsRepository;
 use Symfony\Component\HttpKernel\Exception\HttpException;
-use oglab\Database\Models\Settings;
-use oglab\Database\Models\Tag;
-use oglab\Exceptions\oglabNotFoundException;
+use Marvel\Database\Models\Settings;
+use Marvel\Database\Models\Tag;
+use Marvel\Exceptions\MarvelNotFoundException;
 use \OpenAI;
-use oglab\Enums\Permission;
-use oglab\Http\Resources\GetSingleProductResource;
-use oglab\Http\Resources\ProductResource;
+use Marvel\Enums\Permission;
+use Marvel\Http\Resources\GetSingleProductResource;
+use Marvel\Http\Resources\ProductResource;
 
 class ProductController extends CoreController
 {
@@ -120,8 +120,8 @@ class ProductController extends CoreController
             } else {
                 throw new AuthorizationException(NOT_AUTHORIZED);
             }
-        } catch (oglabException $e) {
-            throw new oglabException(SOMETHING_WENT_WRONG, $e->getMessage());
+        } catch (MarvelException $e) {
+            throw new MarvelException(SOMETHING_WENT_WRONG, $e->getMessage());
         }
     }
 
@@ -139,8 +139,8 @@ class ProductController extends CoreController
         try {
             $product = $this->fetchSingleProduct($request);
             return new GetSingleProductResource($product);
-        } catch (oglabException $e) {
-            throw new oglabException(NOT_FOUND);
+        } catch (MarvelException $e) {
+            throw new MarvelException(NOT_FOUND);
         }
     }
 
@@ -172,7 +172,7 @@ class ProductController extends CoreController
 
             return $product;
         } catch (Exception $e) {
-            throw new oglabNotFoundException();
+            throw new MarvelNotFoundException();
         }
     }
 
@@ -189,8 +189,8 @@ class ProductController extends CoreController
         try {
             $request->id = $id;
             return $this->updateProduct($request);
-        } catch (oglabException $e) {
-            throw new oglabException(COULD_NOT_UPDATE_THE_RESOURCE);
+        } catch (MarvelException $e) {
+            throw new MarvelException(COULD_NOT_UPDATE_THE_RESOURCE);
         }
     }
 
@@ -241,8 +241,8 @@ class ProductController extends CoreController
                 return $product;
             }
             throw new AuthorizationException(NOT_AUTHORIZED);
-        } catch (oglabException $e) {
-            throw new oglabException($e->getMessage());
+        } catch (MarvelException $e) {
+            throw new MarvelException($e->getMessage());
         }
     }
 
@@ -433,7 +433,7 @@ class ProductController extends CoreController
 
             foreach ($products as $key => $product) {
                 if (!isset($product['type_id'])) {
-                    throw new oglabException("oglab_ERROR.WRONG_CSV");
+                    throw new MarvelException("MARVEL_ERROR.WRONG_CSV");
                 }
                 unset($product['id']);
                 $product['shop_id'] = $shop_id;
@@ -492,7 +492,7 @@ class ProductController extends CoreController
                 $uploadedCsv = current($requestFile);
             }
         } else {
-            throw new oglabException(CSV_NOT_FOUND);
+            throw new MarvelException(CSV_NOT_FOUND);
         }
 
         if (!$this->repository->hasPermission($user, $shop_id)) {
@@ -505,7 +505,7 @@ class ProductController extends CoreController
 
             foreach ($attributes as $key => $attribute) {
                 if (!isset($attribute['title']) || !isset($attribute['price'])) {
-                    throw new oglabException("oglab_ERROR.WRONG_CSV");
+                    throw new MarvelException("MARVEL_ERROR.WRONG_CSV");
                 }
                 unset($attribute['id']);
                 $attribute['options'] = json_decode($attribute['options'], true);
@@ -592,8 +592,8 @@ class ProductController extends CoreController
             try {
                 $type = Type::where('slug', $request->type_slug)->where('language', $language)->firstOrFail();
                 $type_id = $type->id;
-            } catch (oglabException $e) {
-                throw new oglabException(NOT_FOUND);
+            } catch (MarvelException $e) {
+                throw new MarvelException(NOT_FOUND);
             }
         }
         $products_query = $this->repository->withCount('orders')->with(['type', 'shop'])->orderBy('orders_count', 'desc')->where('language', $language);
@@ -623,11 +623,11 @@ class ProductController extends CoreController
         $product_id = $request->product_id;
         try {
             $product = Product::findOrFail($product_id);
-        } catch (oglabException $th) {
-            throw new oglabException(NOT_FOUND);
+        } catch (MarvelException $th) {
+            throw new MarvelException(NOT_FOUND);
         }
         if (!$product->is_rental) {
-            throw new oglabException(NOT_A_RENTAL_PRODUCT);
+            throw new MarvelException(NOT_A_RENTAL_PRODUCT);
         }
         $variation_id = $request->variation_id;
         $quantity = $request->quantity;
@@ -642,13 +642,13 @@ class ProductController extends CoreController
             $blockedDates = $this->repository->fetchBlockedDatesForAVariationInRange($from, $to, $variation_id);
             $isAvailable = $this->repository->isVariationAvailableAt($from, $to, $variation_id, $blockedDates, $quantity);
             if (!$isAvailable) {
-                throw new oglabException(NOT_AVAILABLE_FOR_BOOKING);
+                throw new marvelException(NOT_AVAILABLE_FOR_BOOKING);
             }
         } else {
             $blockedDates = $this->repository->fetchBlockedDatesForAProductInRange($from, $to, $product_id);
             $isAvailable = $this->repository->isProductAvailableAt($from, $to, $product_id, $blockedDates, $quantity);
             if (!$isAvailable) {
-                throw new oglabException(NOT_AVAILABLE_FOR_BOOKING);
+                throw new marvelException(NOT_AVAILABLE_FOR_BOOKING);
             }
         }
 

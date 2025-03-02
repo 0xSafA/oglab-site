@@ -1,19 +1,19 @@
 <?php
 
 
-namespace oglab\Database\Repositories;
+namespace Marvel\Database\Repositories;
 
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
-use oglab\Database\Models\Shop;
-use oglab\Database\Models\StoreNotice;
-use oglab\Database\Models\User;
-use oglab\Enums\Permission;
-use oglab\Enums\StoreNoticeType;
-use oglab\Events\StoreNoticeEvent;
-use oglab\Exceptions\oglabException;
-use oglab\Traits\StoreNoticeable;
+use Marvel\Database\Models\Shop;
+use Marvel\Database\Models\StoreNotice;
+use Marvel\Database\Models\User;
+use Marvel\Enums\Permission;
+use Marvel\Enums\StoreNoticeType;
+use Marvel\Events\StoreNoticeEvent;
+use Marvel\Exceptions\MarvelException;
+use Marvel\Traits\StoreNoticeable;
 use Mpdf\Container\NotFoundException;
 use Prettus\Repository\Criteria\RequestCriteria;
 use Prettus\Repository\Exceptions\RepositoryException;
@@ -70,7 +70,7 @@ class StoreNoticeRepository extends BaseRepository
     /**
      * @param Request $request
      * @return mixed
-     * @throws oglabException
+     * @throws MarvelException
      */
     public function fetchStoreNotices(Request $request): mixed
     {
@@ -149,7 +149,7 @@ class StoreNoticeRepository extends BaseRepository
      * This method will generate User list or Shop list based on requested user permission
      * @param Request $request
      * @return Builder[]|\Illuminate\Database\Eloquent\Collection|\Illuminate\Http\Response
-     * @throws oglabException
+     * @throws MarvelException
      */
     public function fetchUserToSendNotification(Request $request)
     {
@@ -188,7 +188,7 @@ class StoreNoticeRepository extends BaseRepository
     /**
      * Updating Specific resource in storage
      *
-     * @param \oglab\Database\Models\StoreNotice $storeNotice
+     * @param \Marvel\Database\Models\StoreNotice $storeNotice
      * @param array $data
      * @return mixed
      */

@@ -1,20 +1,20 @@
 <?php
 
 
-namespace oglab\Http\Controllers;
+namespace Marvel\Http\Controllers;
 
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use oglab\Database\Models\Balance;
-use oglab\Database\Models\Withdraw;
-use oglab\Database\Repositories\WithdrawRepository;
-use oglab\Enums\Permission;
-use oglab\Enums\WithdrawStatus;
-use oglab\Exceptions\oglabException;
-use oglab\Http\Requests\UpdateWithdrawRequest;
-use oglab\Http\Requests\WithdrawRequest;
+use Marvel\Database\Models\Balance;
+use Marvel\Database\Models\Withdraw;
+use Marvel\Database\Repositories\WithdrawRepository;
+use Marvel\Enums\Permission;
+use Marvel\Enums\WithdrawStatus;
+use Marvel\Exceptions\MarvelException;
+use Marvel\Http\Requests\UpdateWithdrawRequest;
+use Marvel\Http\Requests\WithdrawRequest;
 use Prettus\Validator\Exceptions\ValidatorException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -61,8 +61,8 @@ class WithdrawController extends CoreController
                     throw new AuthorizationException(NOT_AUTHORIZED);
                 }
             }
-        } catch (oglabException $e) {
-            throw new oglabException($e->getMessage());
+        } catch (MarvelException $e) {
+            throw new MarvelException($e->getMessage());
         }
     }
 
@@ -93,8 +93,8 @@ class WithdrawController extends CoreController
                 return $withdraw;
             }
             throw new AuthorizationException(NOT_AUTHORIZED);
-        } catch (oglabException $e) {
-            throw new oglabException(SOMETHING_WENT_WRONG);
+        } catch (MarvelException $e) {
+            throw new MarvelException(SOMETHING_WENT_WRONG);
         }
     }
 
@@ -119,8 +119,8 @@ class WithdrawController extends CoreController
                 return $withdraw;
             }
             throw new AuthorizationException(NOT_AUTHORIZED);
-        } catch (oglabException $e) {
-            throw new oglabException(SOMETHING_WENT_WRONG);
+        } catch (MarvelException $e) {
+            throw new MarvelException(SOMETHING_WENT_WRONG);
         }
     }
 
@@ -149,8 +149,8 @@ class WithdrawController extends CoreController
                 return $this->repository->findOrFail($id)->delete();
             }
             throw new AuthorizationException(NOT_AUTHORIZED);
-        } catch (oglabException $e) {
-            throw new oglabException(COULD_NOT_DELETE_THE_RESOURCE);
+        } catch (MarvelException $e) {
+            throw new MarvelException(COULD_NOT_DELETE_THE_RESOURCE);
         }
     }
 
@@ -166,8 +166,8 @@ class WithdrawController extends CoreController
                 return $withdraw;
             }
             throw new AuthorizationException(NOT_AUTHORIZED);
-        } catch (oglabException $e) {
-            throw new oglabException(SOMETHING_WENT_WRONG);
+        } catch (MarvelException $e) {
+            throw new MarvelException(SOMETHING_WENT_WRONG);
         }
     }
 }

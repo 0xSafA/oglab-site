@@ -1,11 +1,11 @@
 <?php
 
 
-namespace oglab\GraphQL\Mutation;
+namespace Marvel\GraphQL\Mutation;
 
-use oglab\Facades\Shop;
+use Marvel\Facades\Shop;
 use Illuminate\Support\Facades\Log;
-use oglab\Exceptions\oglabException;
+use Marvel\Exceptions\MarvelException;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
 class CouponMutator
@@ -13,24 +13,24 @@ class CouponMutator
 
     public function verify($rootValue, array $args, GraphQLContext $context)
     {
-        return Shop::call('oglab\Http\Controllers\CouponController@verify', $args);
+        return Shop::call('Marvel\Http\Controllers\CouponController@verify', $args);
     }
 
     public function store($rootValue, array $args, GraphQLContext $context)
     {
-        return Shop::call('oglab\Http\Controllers\CouponController@store', $args);
+        return Shop::call('Marvel\Http\Controllers\CouponController@store', $args);
     }
 
     public function update($rootValue, array $args, GraphQLContext $context)
     {
-        return Shop::call('oglab\Http\Controllers\CouponController@updateCoupon', $args);
+        return Shop::call('Marvel\Http\Controllers\CouponController@updateCoupon', $args);
     }
     public function approveCoupon($rootValue, array $args, GraphQLContext $context)
     {
-        return Shop::call('oglab\Http\Controllers\CouponController@approveCoupon', $args);
+        return Shop::call('Marvel\Http\Controllers\CouponController@approveCoupon', $args);
     }
     public function disApproveCoupon($rootValue, array $args, GraphQLContext $context)
     {
-        return Shop::call('oglab\Http\Controllers\CouponController@disApproveCoupon', $args);
+        return Shop::call('Marvel\Http\Controllers\CouponController@disApproveCoupon', $args);
     }
 }

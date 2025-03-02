@@ -1,12 +1,12 @@
 <?php
 
-namespace oglab\Http\Requests;
+namespace Marvel\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Validation\Rule;
-use oglab\Database\Models\FlashSale;
+use Marvel\Database\Models\FlashSale;
 
 class CreateFlashSaleRequest extends FormRequest
 {

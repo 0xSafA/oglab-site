@@ -1,6 +1,6 @@
 <?php
 
-namespace oglab\Console;
+namespace Marvel\Console;
 
 
 use Illuminate\Console\Command;
@@ -8,7 +8,7 @@ use function Laravel\Prompts\{info, select, table};
 
 class ENVSetupCommand extends Command
 {
-    protected $signature = 'oglab:env-setup {key?}';
+    protected $signature = 'marvel:env-setup {key?}';
 
     protected $description = 'Setup necessary key in .env file';
 
@@ -17,11 +17,11 @@ class ENVSetupCommand extends Command
         $optionalValue = $this->argument('key');
         if (!$optionalValue) {
             do {
-                $this->info('Setup oglab .env file');
+                $this->info('Setup Marvel .env file');
                 $this->info('Available terminal command. you can use quick access key to run specific command.');
 
                 table(['The command looks like:'], [
-                    ['php artisan oglab:env-setup mail'],
+                    ['php artisan marvel:env-setup mail'],
                 ]);
                 table(['Quick Access Key', 'Details'], [
                     ['mail', 'Mail server setup (mailtrap, mailgun, gmail)'],
@@ -78,29 +78,29 @@ class ENVSetupCommand extends Command
     private function commandOption($role)
     {
         if ($role == 'mail') {
-            $this->call('oglab:mail-setup');
+            $this->call('marvel:mail-setup');
         } elseif ($role == 'database') {
-            $this->call('oglab:database-setup');
+            $this->call('marvel:database-setup');
         } elseif ($role == 'mail-test') {
-            $this->call('oglab:test-mail-send');
+            $this->call('marvel:test-mail-send');
         } elseif ($role == 'aws') {
-            $this->call('oglab:aws-setup');
+            $this->call('marvel:aws-setup');
         } elseif ($role == 'translation-enable') {
-            $this->call('oglab:translation-enable');
+            $this->call('marvel:translation-enable');
         } elseif ($role == 'default-language') {
-            $this->call('oglab:default-language-setup');
+            $this->call('marvel:default-language-setup');
         } elseif ($role == 'queue-connection') {
-            $this->call('oglab:queue-setup');
+            $this->call('marvel:queue-setup');
         } elseif ($role == 'frontend-connection') {
-            $this->call('oglab:frontend-setup');
+            $this->call('marvel:frontend-setup');
         } elseif ($role == 'newsletter') {
-            $this->call('oglab:mailchimp-newsletter');
+            $this->call('marvel:mailchimp-newsletter');
         } elseif ($role == 'otp') {
-            $this->call('oglab:otp-gateway-setup');
+            $this->call('marvel:otp-gateway-setup');
         } elseif ($role == 'open-ai') {
-            $this->call('oglab:open-ai-setup');
+            $this->call('marvel:open-ai-setup');
         } elseif ($role == 'test-mail') {
-            $this->call('oglab:test-mail-send');
+            $this->call('marvel:test-mail-send');
         } else {
             $role = false;
         }

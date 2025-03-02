@@ -341,7 +341,7 @@ VALUES (
         6,
         4,
         NULL,
-        'Absolutely oglabous and fresh sprouts available in the country.',
+        'Absolutely marvelous and fresh sprouts available in the country.',
         5,
         '[]',
         NULL,

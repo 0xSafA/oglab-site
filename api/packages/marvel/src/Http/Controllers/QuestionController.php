@@ -1,19 +1,19 @@
 <?php
 
 
-namespace oglab\Http\Controllers;
+namespace Marvel\Http\Controllers;
 
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use oglab\Database\Models\Question;
-use oglab\Database\Models\Settings;
-use oglab\Database\Repositories\QuestionRepository;
-use oglab\Exceptions\oglabException;
-use oglab\Http\Requests\QuestionCreateRequest;
-use oglab\Http\Requests\QuestionUpdateRequest;
+use Marvel\Database\Models\Question;
+use Marvel\Database\Models\Settings;
+use Marvel\Database\Repositories\QuestionRepository;
+use Marvel\Exceptions\MarvelException;
+use Marvel\Http\Requests\QuestionCreateRequest;
+use Marvel\Http\Requests\QuestionUpdateRequest;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class QuestionController extends CoreController
@@ -76,8 +76,8 @@ class QuestionController extends CoreController
             }
 
             return $this->repository->storeQuestion($request);
-        } catch (oglabException $e) {
-            throw new oglabException(MAXIMUM_QUESTION_LIMIT_EXCEEDED);
+        } catch (MarvelException $e) {
+            throw new MarvelException(MAXIMUM_QUESTION_LIMIT_EXCEEDED);
         }
     }
 
@@ -91,8 +91,8 @@ class QuestionController extends CoreController
     {
         try {
             return $this->repository->findOrFail($id);
-        } catch (oglabException $e) {
-            throw new oglabException(NOT_FOUND);
+        } catch (MarvelException $e) {
+            throw new MarvelException(NOT_FOUND);
         }
     }
 
@@ -110,8 +110,8 @@ class QuestionController extends CoreController
                 return $this->repository->updateQuestion($request, $id);
             }
             throw new AuthorizationException(NOT_AUTHORIZED);
-        } catch (oglabException $th) {
-            throw new oglabException(COULD_NOT_UPDATE_THE_RESOURCE);
+        } catch (MarvelException $th) {
+            throw new MarvelException(COULD_NOT_UPDATE_THE_RESOURCE);
         }
     }
 
@@ -125,8 +125,8 @@ class QuestionController extends CoreController
     {
         try {
             return $this->repository->findOrFail($id)->delete();
-        } catch (oglabException $e) {
-            throw new oglabException(NOT_FOUND);
+        } catch (MarvelException $e) {
+            throw new MarvelException(NOT_FOUND);
         }
     }
 

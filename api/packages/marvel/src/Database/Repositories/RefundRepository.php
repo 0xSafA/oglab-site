@@ -1,17 +1,17 @@
 <?php
 
 
-namespace oglab\Database\Repositories;
+namespace Marvel\Database\Repositories;
 
 use Exception;
-use oglab\Database\Models\Address;
-use oglab\Database\Models\Order;
-use oglab\Database\Models\Refund;
-use oglab\Enums\OrderStatus;
-use oglab\Enums\PaymentStatus;
-use oglab\Enums\Permission;
-use oglab\Enums\RefundStatus;
-use oglab\Exceptions\oglabException;
+use Marvel\Database\Models\Address;
+use Marvel\Database\Models\Order;
+use Marvel\Database\Models\Refund;
+use Marvel\Enums\OrderStatus;
+use Marvel\Enums\PaymentStatus;
+use Marvel\Enums\Permission;
+use Marvel\Enums\RefundStatus;
+use Marvel\Exceptions\MarvelException;
 use Prettus\Repository\Criteria\RequestCriteria;
 use Prettus\Repository\Exceptions\RepositoryException;
 
@@ -55,18 +55,18 @@ class RefundRepository extends BaseRepository
         $user = $request->user();
         $refunds = $this->where('order_id', $request->order_id)->get();
         if (count($refunds)) {
-            throw new oglabException(ORDER_ALREADY_HAS_REFUND_REQUEST);
+            throw new MarvelException(ORDER_ALREADY_HAS_REFUND_REQUEST);
         }
         try {
             $order = Order::findOrFail($request->order_id);
             if ($order->parent !== null) {
-                throw new oglabException(REFUND_ONLY_ALLOWED_FOR_MAIN_ORDER);
+                throw new MarvelException(REFUND_ONLY_ALLOWED_FOR_MAIN_ORDER);
             }
         } catch (Exception $th) {
-            throw new oglabException(NOT_FOUND);
+            throw new MarvelException(NOT_FOUND);
         }
         if ($user->id !== $order->customer_id || $user->hasPermissionTo(Permission::SUPER_ADMIN)) {
-            throw new oglabException(NOT_AUTHORIZED);
+            throw new MarvelException(NOT_AUTHORIZED);
         }
         $data = $request->only($this->dataArray);
         $data['customer_id'] = $order->customer_id;
@@ -87,14 +87,14 @@ class RefundRepository extends BaseRepository
                 $this->create($data);
             }
         } catch (Exception $th) {
-            throw new oglabException(SOMETHING_WENT_WRONG);
+            throw new MarvelException(SOMETHING_WENT_WRONG);
         }
     }
 
     public function updateRefund($request, $refund)
     {
         if ($refund->shop_id !==  null) {
-            throw new oglabException(WRONG_REFUND);
+            throw new MarvelException(WRONG_REFUND);
         }
         $data = $request->only(['status']);
         $refund->update($data);

@@ -1,18 +1,18 @@
 <?php
 
 
-namespace oglab\Database\Repositories;
+namespace Marvel\Database\Repositories;
 
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Arr;
-use oglab\Database\Models\Product;
-use oglab\Database\Models\Tax;
-use oglab\Database\Models\Shipping;
-use oglab\Database\Models\Settings;
-use oglab\Database\Models\User;
-use oglab\Database\Models\Variation;
-use oglab\Traits\WalletsTrait;
+use Marvel\Database\Models\Product;
+use Marvel\Database\Models\Tax;
+use Marvel\Database\Models\Shipping;
+use Marvel\Database\Models\Settings;
+use Marvel\Database\Models\User;
+use Marvel\Database\Models\Variation;
+use Marvel\Traits\WalletsTrait;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class CheckoutRepository

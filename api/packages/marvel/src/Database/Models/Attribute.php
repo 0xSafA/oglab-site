@@ -1,6 +1,6 @@
 <?php
 
-namespace oglab\Database\Models;
+namespace Marvel\Database\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -9,8 +9,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\DB;
-use oglab\Exceptions\oglabException;
-use oglab\Traits\TranslationTrait;
+use Marvel\Exceptions\MarvelException;
+use Marvel\Traits\TranslationTrait;
 
 class Attribute extends Model
 {

@@ -1,10 +1,10 @@
 <?php
 
 
-namespace oglab\Events;
+namespace Marvel\Events;
 
 use Illuminate\Contracts\Queue\ShouldQueue;
-use oglab\Database\Models\Order;
+use Marvel\Database\Models\Order;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -13,14 +13,14 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
-use oglab\Database\Models\NotifyLogs;
-use oglab\Database\Models\Settings;
-use oglab\Database\Models\Shop;
-use oglab\Database\Models\StoreNotice;
-use oglab\Database\Models\User;
-use oglab\Exceptions\oglabException;
-use oglab\Enums\Permission;
-use oglab\Traits\UsersTrait;
+use Marvel\Database\Models\NotifyLogs;
+use Marvel\Database\Models\Settings;
+use Marvel\Database\Models\Shop;
+use Marvel\Database\Models\StoreNotice;
+use Marvel\Database\Models\User;
+use Marvel\Exceptions\MarvelException;
+use Marvel\Enums\Permission;
+use Marvel\Traits\UsersTrait;
 
 class OrderCreated implements ShouldQueue, ShouldBroadcast
 {
@@ -135,8 +135,8 @@ class OrderCreated implements ShouldQueue, ShouldBroadcast
                 }
             }
             return $enableBroadCast;
-        } catch (oglabException $th) {
-            throw new oglabException(SOMETHING_WENT_WRONG, $th->getMessage());
+        } catch (MarvelException $th) {
+            throw new MarvelException(SOMETHING_WENT_WRONG, $th->getMessage());
         }
     }
 }

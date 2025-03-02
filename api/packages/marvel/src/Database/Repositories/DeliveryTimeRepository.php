@@ -1,9 +1,9 @@
 <?php
 
 
-namespace oglab\Database\Repositories;
+namespace Marvel\Database\Repositories;
 
-use oglab\Database\Models\DeliveryTime;
+use Marvel\Database\Models\DeliveryTime;
 
 class DeliveryTimeRepository extends BaseRepository
 {

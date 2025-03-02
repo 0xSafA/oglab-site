@@ -1,45 +1,45 @@
 <?php
 
 
-namespace oglab\GraphQL\Queries;
+namespace Marvel\GraphQL\Queries;
 
 
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
-use oglab\Facades\Shop;
+use Marvel\Facades\Shop;
 
 class AnalyticsQuery
 {
     public function analytics($rootValue, array $args, GraphQLContext $context)
     {
-        return Shop::call('oglab\Http\Controllers\AnalyticsController@analytics', $args);
+        return Shop::call('Marvel\Http\Controllers\AnalyticsController@analytics', $args);
     }
 
     public function popularProducts($rootValue, array $args, GraphQLContext $context)
     {
-        return Shop::call('oglab\Http\Controllers\ProductController@popularProducts', $args);
+        return Shop::call('Marvel\Http\Controllers\ProductController@popularProducts', $args);
     }
     public function bestsellingProducts($rootValue, array $args, GraphQLContext $context)
     {
-        return Shop::call('oglab\Http\Controllers\ProductController@bestSellingProducts', $args);
+        return Shop::call('Marvel\Http\Controllers\ProductController@bestSellingProducts', $args);
     }
     public function categoryWiseProduct($rootValue, array $args, GraphQLContext $context)
     {
-        return Shop::call('oglab\Http\Controllers\AnalyticsController@categoryWiseProduct', $args);
+        return Shop::call('Marvel\Http\Controllers\AnalyticsController@categoryWiseProduct', $args);
     }
     public function categoryWiseProductSale($rootValue, array $args, GraphQLContext $context)
     {
-        return Shop::call('oglab\Http\Controllers\AnalyticsController@categoryWiseProductSale', $args);
+        return Shop::call('Marvel\Http\Controllers\AnalyticsController@categoryWiseProductSale', $args);
     }
     public function lowStockProducts($rootValue, array $args, GraphQLContext $context)
     {
-        return Shop::call('oglab\Http\Controllers\AnalyticsController@lowStockProducts', $args);
+        return Shop::call('Marvel\Http\Controllers\AnalyticsController@lowStockProducts', $args);
     }
     public function lowStockProductsWithPagination($rootValue, array $args, GraphQLContext $context)
     {
-        return Shop::call('oglab\Http\Controllers\AnalyticsController@lowStockProductsWithPagination', $args);
+        return Shop::call('Marvel\Http\Controllers\AnalyticsController@lowStockProductsWithPagination', $args);
     }
     public function topRatedProducts($rootValue, array $args, GraphQLContext $context)
     {
-        return Shop::call('oglab\Http\Controllers\AnalyticsController@topRatedProducts', $args);
+        return Shop::call('Marvel\Http\Controllers\AnalyticsController@topRatedProducts', $args);
     }
 }

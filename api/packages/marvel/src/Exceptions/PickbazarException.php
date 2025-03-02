@@ -1,11 +1,11 @@
 <?php
 
-namespace oglab\Exceptions;
+namespace Marvel\Exceptions;
 
 use Exception;
 use Nuwave\Lighthouse\Exceptions\RendersErrorsExtensions;
 
-class oglabException extends Exception implements RendersErrorsExtensions
+class MarvelException extends Exception implements RendersErrorsExtensions
 {
     /**
      * @var @string
@@ -40,7 +40,7 @@ class oglabException extends Exception implements RendersErrorsExtensions
      */
     public function getCategory(): string
     {
-        return 'oglab';
+        return 'marvel';
     }
 
     /**

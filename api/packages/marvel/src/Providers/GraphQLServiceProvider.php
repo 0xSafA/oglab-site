@@ -1,6 +1,6 @@
 <?php
 
-namespace oglab\Providers;
+namespace Marvel\Providers;
 
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\ServiceProvider;

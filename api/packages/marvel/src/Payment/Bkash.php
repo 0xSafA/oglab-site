@@ -1,17 +1,17 @@
 <?php
 
-namespace oglab\Payments;
+namespace Marvel\Payments;
 
 use Exception;
 use Illuminate\Support\Facades\Http;
 use Karim007\LaravelBkashTokenize\Facade\BkashPaymentTokenize;
-use oglab\Exceptions\oglabException;
-use oglab\Payments\PaymentInterface;
-use oglab\Enums\OrderStatus;
-use oglab\Database\Models\Order;
-use oglab\Enums\PaymentStatus;
-use oglab\Traits\PaymentTrait;
-use oglab\Payments\Base;
+use Marvel\Exceptions\MarvelException;
+use Marvel\Payments\PaymentInterface;
+use Marvel\Enums\OrderStatus;
+use Marvel\Database\Models\Order;
+use Marvel\Enums\PaymentStatus;
+use Marvel\Traits\PaymentTrait;
+use Marvel\Payments\Base;
 
 
 class Bkash extends Base implements PaymentInterface
@@ -50,7 +50,7 @@ class Bkash extends Base implements PaymentInterface
         'redirect_url' => $response['bkashURL']
       ];
     } catch (Exception $e) {
-      throw new oglabException(SOMETHING_WENT_WRONG_WITH_PAYMENT);
+      throw new MarvelException(SOMETHING_WENT_WRONG_WITH_PAYMENT);
     }
   }
 
@@ -69,7 +69,7 @@ class Bkash extends Base implements PaymentInterface
 
       return isset($result['transactionStatus']) ? $result['transactionStatus'] : false;
     } catch (Exception $e) {
-      throw new oglabException(SOMETHING_WENT_WRONG_WITH_PAYMENT);
+      throw new MarvelException(SOMETHING_WENT_WRONG_WITH_PAYMENT);
     }
   }
 

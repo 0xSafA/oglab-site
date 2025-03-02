@@ -1,27 +1,27 @@
 <?php
 
-namespace oglab\Http\Controllers;
+namespace Marvel\Http\Controllers;
 
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use oglab\Database\Models\FlashSale;
-use oglab\Database\Models\Product;
-use oglab\Database\Repositories\FlashSaleRepository;
-use oglab\Enums\Permission;
-use oglab\Events\FlashSaleProcessed;
-use oglab\Exceptions\oglabException;
-use oglab\Http\Requests\CreateFlashSaleRequest;
-use oglab\Http\Requests\UpdateFlashSaleRequest;
+use Marvel\Database\Models\FlashSale;
+use Marvel\Database\Models\Product;
+use Marvel\Database\Repositories\FlashSaleRepository;
+use Marvel\Enums\Permission;
+use Marvel\Events\FlashSaleProcessed;
+use Marvel\Exceptions\MarvelException;
+use Marvel\Http\Requests\CreateFlashSaleRequest;
+use Marvel\Http\Requests\UpdateFlashSaleRequest;
 use Prettus\Validator\Exceptions\ValidatorException;
 use Illuminate\Support\Facades\DB;
-use oglab\Database\Models\FlashSaleRequests;
-use oglab\Database\Repositories\FlashSaleVendorRequestRepository;
-use oglab\Http\Requests\CreateVendorFlashSaleRequest;
-use oglab\Http\Requests\UpdateVendorFlashSaleRequest;
-use oglab\Http\Resources\FlashSaleResource;
-use oglab\Database\Repositories\ProductRepository;
+use Marvel\Database\Models\FlashSaleRequests;
+use Marvel\Database\Repositories\FlashSaleVendorRequestRepository;
+use Marvel\Http\Requests\CreateVendorFlashSaleRequest;
+use Marvel\Http\Requests\UpdateVendorFlashSaleRequest;
+use Marvel\Http\Resources\FlashSaleResource;
+use Marvel\Database\Repositories\ProductRepository;
 
 
 
@@ -49,8 +49,8 @@ class FlashSaleVendorRequestController extends CoreController
         try {
             $limit = $request->limit ? $request->limit : 10;
             return $this->fetchFlashSalesRequests($request)->paginate($limit)->withQueryString();
-        } catch (oglabException $e) {
-            throw new oglabException(SOMETHING_WENT_WRONG, $e->getMessage());
+        } catch (MarvelException $e) {
+            throw new MarvelException(SOMETHING_WENT_WRONG, $e->getMessage());
         }
     }
 
@@ -78,8 +78,8 @@ class FlashSaleVendorRequestController extends CoreController
     {
         try {
             return $this->repository->storeFlashSaleRequest($request);
-        } catch (oglabException $e) {
-            throw new oglabException(COULD_NOT_CREATE_THE_RESOURCE, $e->getMessage());
+        } catch (MarvelException $e) {
+            throw new MarvelException(COULD_NOT_CREATE_THE_RESOURCE, $e->getMessage());
         }
     }
 
@@ -94,8 +94,8 @@ class FlashSaleVendorRequestController extends CoreController
         try {
             $language = $request->language ?? DEFAULT_LANGUAGE;
             return $this->repository->where('language', $language)->where('id', '=', $id)->first();
-        } catch (oglabException $e) {
-            throw new oglabException(NOT_FOUND, $e->getMessage());
+        } catch (MarvelException $e) {
+            throw new MarvelException(NOT_FOUND, $e->getMessage());
         }
     }
 
@@ -112,8 +112,8 @@ class FlashSaleVendorRequestController extends CoreController
         try {
             $request->merge(['id' => $id]);
             return $this->updateFlashSaleRequest($request);
-        } catch (oglabException $e) {
-            throw new oglabException(COULD_NOT_UPDATE_THE_RESOURCE, $e->getMessage());
+        } catch (MarvelException $e) {
+            throw new MarvelException(COULD_NOT_UPDATE_THE_RESOURCE, $e->getMessage());
         }
     }
 
@@ -177,8 +177,8 @@ class FlashSaleVendorRequestController extends CoreController
                 return $flash_sale_request;
             }
             throw new AuthorizationException(NOT_AUTHORIZED);
-        } catch (oglabException $e) {
-            throw new oglabException(NOT_FOUND, $e->getMessage());
+        } catch (MarvelException $e) {
+            throw new MarvelException(NOT_FOUND, $e->getMessage());
         }
     }
 
@@ -192,12 +192,12 @@ class FlashSaleVendorRequestController extends CoreController
     {
         try {
             if (!$request->user()->hasPermissionTo(Permission::SUPER_ADMIN)) {
-                throw new oglabException(NOT_AUTHORIZED);
+                throw new MarvelException(NOT_AUTHORIZED);
             }
             $id = $request->id;
             $this->repository->approveFlashSaleVendorRequestFunc($id);
-        } catch (oglabException $e) {
-            throw new oglabException(SOMETHING_WENT_WRONG, $e->getMessage());
+        } catch (MarvelException $e) {
+            throw new MarvelException(SOMETHING_WENT_WRONG, $e->getMessage());
         }
     }
 
@@ -211,12 +211,12 @@ class FlashSaleVendorRequestController extends CoreController
     {
         try {
             if (!$request->user()->hasPermissionTo(Permission::SUPER_ADMIN)) {
-                throw new oglabException(NOT_AUTHORIZED);
+                throw new MarvelException(NOT_AUTHORIZED);
             }
             $id = $request->id;
             $this->repository->disapproveFlashSaleVendorRequestFunc($id);
-        } catch (oglabException $e) {
-            throw new oglabException(SOMETHING_WENT_WRONG, $e->getMessage());
+        } catch (MarvelException $e) {
+            throw new MarvelException(SOMETHING_WENT_WRONG, $e->getMessage());
         }
     }
 
@@ -232,8 +232,8 @@ class FlashSaleVendorRequestController extends CoreController
         try {
             $limit = $request->limit ? $request->limit : 10;
             return $this->fetchRequestedProducts($request)->paginate($limit)->withQueryString();
-        } catch (oglabException $e) {
-            throw new oglabException(SOMETHING_WENT_WRONG, $e->getMessage());
+        } catch (MarvelException $e) {
+            throw new MarvelException(SOMETHING_WENT_WRONG, $e->getMessage());
         }
     }
 

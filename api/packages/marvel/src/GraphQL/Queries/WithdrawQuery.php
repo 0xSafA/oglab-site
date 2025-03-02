@@ -1,21 +1,21 @@
 <?php
 
 
-namespace oglab\GraphQL\Queries;
+namespace Marvel\GraphQL\Queries;
 
 
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
-use oglab\Facades\Shop;
+use Marvel\Facades\Shop;
 
 class WithdrawQuery
 {
     public function fetchWithdraws($rootValue, array $args, GraphQLContext $context)
     {
-        return Shop::call('oglab\Http\Controllers\WithdrawController@fetchWithdraws', $args);
+        return Shop::call('Marvel\Http\Controllers\WithdrawController@fetchWithdraws', $args);
     }
 
     public function fetchSingleWithdraw($rootValue, array $args, GraphQLContext $context)
     {
-        return Shop::call('oglab\Http\Controllers\WithdrawController@fetchSingleWithdraw', $args);
+        return Shop::call('Marvel\Http\Controllers\WithdrawController@fetchSingleWithdraw', $args);
     }
 }

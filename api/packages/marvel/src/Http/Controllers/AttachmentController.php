@@ -1,15 +1,15 @@
 <?php
 
 
-namespace oglab\Http\Controllers;
+namespace Marvel\Http\Controllers;
 
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use oglab\Database\Models\Attachment;
-use oglab\Database\Repositories\AttachmentRepository;
-use oglab\Exceptions\oglabException;
-use oglab\Http\Requests\AttachmentRequest;
+use Marvel\Database\Models\Attachment;
+use Marvel\Database\Repositories\AttachmentRepository;
+use Marvel\Exceptions\MarvelException;
+use Marvel\Http\Requests\AttachmentRequest;
 use Prettus\Validator\Exceptions\ValidatorException;
 
 
@@ -77,8 +77,8 @@ class AttachmentController extends CoreController
     {
         try {
             return $this->repository->findOrFail($id);
-        } catch (oglabException $e) {
-            throw new oglabException(NOT_FOUND);
+        } catch (MarvelException $e) {
+            throw new MarvelException(NOT_FOUND);
         }
     }
 
@@ -104,8 +104,8 @@ class AttachmentController extends CoreController
     {
         try {
             return $this->repository->findOrFail($id)->delete();
-        } catch (oglabException $e) {
-            throw new oglabException(NOT_FOUND);
+        } catch (MarvelException $e) {
+            throw new MarvelException(NOT_FOUND);
         }
     }
 }

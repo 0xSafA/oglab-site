@@ -8,7 +8,7 @@ extend type Query {
         receiver: ID
     ): [NotifyLogs!]!
         @paginate(
-            builder: "oglab\\GraphQL\\Queries\\NotifyLogQuery@fetchNotifyLogs"
+            builder: "Marvel\\GraphQL\\Queries\\NotifyLogQuery@fetchNotifyLogs"
             defaultCount: 15
         )
     notifyLog(id: ID @eq): NotifyLogs @find

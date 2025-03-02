@@ -6,18 +6,18 @@ use App\Events\ReviewCreated;
 use App\Notifications\NewReviewCreated;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
-use oglab\Database\Models\Shop;
-use oglab\Enums\EventType;
-use oglab\Events\CommissionRateUpdateEvent;
-use oglab\Traits\SmsTrait;
+use Marvel\Database\Models\Shop;
+use Marvel\Enums\EventType;
+use Marvel\Events\CommissionRateUpdateEvent;
+use Marvel\Traits\SmsTrait;
 use App\Mail\CommissionRateUpdateNotificationMail;
 use Exception;
 use Illuminate\Support\Facades\Mail;
-use oglab\Mail\AdminCommissionRateUpdate;
-use oglab\Mail\CommissionRateUpdate;
-use oglab\Mail\CommissionRateUpdateForAdminMail;
-use oglab\Mail\VendorCommissionRateUpdate;
-use oglab\Traits\UsersTrait;
+use Marvel\Mail\AdminCommissionRateUpdate;
+use Marvel\Mail\CommissionRateUpdate;
+use Marvel\Mail\CommissionRateUpdateForAdminMail;
+use Marvel\Mail\VendorCommissionRateUpdate;
+use Marvel\Traits\UsersTrait;
 
 class CommissionRateUpdateListener
 {

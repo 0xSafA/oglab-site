@@ -1,13 +1,13 @@
 <?php
 
-namespace oglab\Payments;
+namespace Marvel\Payments;
 
 use Exception;
-use oglab\Database\Models\Order;
-use oglab\Enums\OrderStatus;
-use oglab\Enums\PaymentStatus;
-use oglab\Exceptions\oglabException;
-use oglab\Traits\PaymentTrait;
+use Marvel\Database\Models\Order;
+use Marvel\Enums\OrderStatus;
+use Marvel\Enums\PaymentStatus;
+use Marvel\Exceptions\MarvelException;
+use Marvel\Traits\PaymentTrait;
 use Razorpay\Api\Errors\SignatureVerificationError;
 use DGvai\SSLCommerz\SSLCommerz as SslCommerzClient;
 use Throwable;
@@ -47,7 +47,7 @@ class Sslcommerz extends Base implements PaymentInterface
             $orderIntentJson = $this->sslCommerzClient
                 ->amount($amount)
                 ->trxid($order_tracking_number)
-                ->product('oglab_product')
+                ->product('Marvel_product')
                 ->customer(
                     $order->customer_name ?? $faker['name'],
                     $order->customer->email ?? $faker['email'],
@@ -86,7 +86,7 @@ class Sslcommerz extends Base implements PaymentInterface
             it will return false. */
             return isset($lastElement->status) ? $lastElement->status : false;
         } catch (Exception $e) {
-            throw new oglabException(SOMETHING_WENT_WRONG_WITH_PAYMENT);
+            throw new MarvelException(SOMETHING_WENT_WRONG_WITH_PAYMENT);
         }
     }
 

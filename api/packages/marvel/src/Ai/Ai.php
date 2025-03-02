@@ -1,6 +1,6 @@
 <?php
 
-namespace oglab\Ai;
+namespace Marvel\Ai;
 
 
 class Ai

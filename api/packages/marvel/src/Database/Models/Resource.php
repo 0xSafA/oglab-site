@@ -1,12 +1,12 @@
 <?php
 
-namespace oglab\Database\Models;
+namespace Marvel\Database\Models;
 
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use oglab\Traits\TranslationTrait;
+use Marvel\Traits\TranslationTrait;
 
 class Resource extends Model
 {

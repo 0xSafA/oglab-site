@@ -1,6 +1,6 @@
 <?php
 
-namespace oglab\Traits;
+namespace Marvel\Traits;
 
 trait Excludable
 {

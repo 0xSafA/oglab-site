@@ -10,7 +10,7 @@ extend type Query {
     me: User @ensureEmailIsVerified @field(resolver: "UserQuery@me")
     downloads: [OrderedFile]
         @paginate(
-            builder: "oglab\\GraphQL\\Queries\\UserQuery@fetchDownloadableFiles"
+            builder: "Marvel\\GraphQL\\Queries\\UserQuery@fetchDownloadableFiles"
             defaultCount: 15
         )
     usersByPermission(
@@ -24,7 +24,7 @@ extend type Query {
         exclude: String
     ): [User]!
         @paginate(
-            builder: "oglab\\GraphQL\\Queries\\UserQuery@fetchUsersByPermission"
+            builder: "Marvel\\GraphQL\\Queries\\UserQuery@fetchUsersByPermission"
             defaultCount: 15
         )
     myStaffs(
@@ -34,7 +34,7 @@ extend type Query {
         search: String
     ): [User]!
         @paginate(
-            builder: "oglab\\GraphQL\\Queries\\UserQuery@fetchMyStaffs"
+            builder: "Marvel\\GraphQL\\Queries\\UserQuery@fetchMyStaffs"
             defaultCount: 15
         )
 }

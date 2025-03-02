@@ -1,11 +1,11 @@
 <?php
 
-namespace oglab\Events;
+namespace Marvel\Events;
 
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
-use oglab\Database\Models\Refund;
+use Marvel\Database\Models\Refund;
 
 class RefundUpdate
 {

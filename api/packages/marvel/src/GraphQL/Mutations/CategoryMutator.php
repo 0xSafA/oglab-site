@@ -1,20 +1,20 @@
 <?php
 
 
-namespace oglab\GraphQL\Mutation;
+namespace Marvel\GraphQL\Mutation;
 
 
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
-use oglab\Facades\Shop;
+use Marvel\Facades\Shop;
 
 class CategoryMutator
 {
     public function storeCategory($rootValue, array $args, GraphQLContext $context)
     {
-        return Shop::call('oglab\Http\Controllers\CategoryController@store', $args);
+        return Shop::call('Marvel\Http\Controllers\CategoryController@store', $args);
     }
     public function updateCategory($rootValue, array $args, GraphQLContext $context)
     {
-        return Shop::call('oglab\Http\Controllers\CategoryController@categoryUpdate', $args);
+        return Shop::call('Marvel\Http\Controllers\CategoryController@categoryUpdate', $args);
     }
 }
