@@ -1,6 +1,6 @@
 <?php
 
-namespace Marvel\Http\Requests;
+namespace oglab\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
@@ -27,11 +27,11 @@ class RefundRequest extends FormRequest
     public function rules()
     {
         return [
-            'order_id' => ['required', 'exists:Marvel\Database\Models\Order,id'],
+            'order_id' => ['required', 'exists:oglab\Database\Models\Order,id'],
             'title' => ['string'],
             'description' => ['string', 'nullable', 'max:10000'],
             'images' => ['array', 'nullable'],
-            'refund_reason_id' => ['exists:Marvel\Database\Models\RefundReason,id'],
+            'refund_reason_id' => ['exists:oglab\Database\Models\RefundReason,id'],
         ];
     }
 

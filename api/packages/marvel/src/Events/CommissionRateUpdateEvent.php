@@ -1,15 +1,15 @@
 <?php
 
-namespace Marvel\Events;
+namespace oglab\Events;
 
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
-use Marvel\Database\Models\Balance;
-use Marvel\Database\Models\Order;
-use Marvel\Database\Models\Refund;
-use Marvel\Database\Models\Shop;
-use Marvel\Database\Models\User;
+use oglab\Database\Models\Balance;
+use oglab\Database\Models\Order;
+use oglab\Database\Models\Refund;
+use oglab\Database\Models\Shop;
+use oglab\Database\Models\User;
 
 class CommissionRateUpdateEvent
 {

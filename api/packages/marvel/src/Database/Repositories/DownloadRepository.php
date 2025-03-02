@@ -1,9 +1,9 @@
 <?php
 
 
-namespace Marvel\Database\Repositories;
+namespace oglab\Database\Repositories;
 
-use Marvel\Database\Models\OrderedFile;
+use oglab\Database\Models\OrderedFile;
 use Prettus\Repository\Criteria\RequestCriteria;
 use Prettus\Repository\Exceptions\RepositoryException;
 

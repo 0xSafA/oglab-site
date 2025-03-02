@@ -1,9 +1,9 @@
 <?php
 
-namespace Marvel\Http\Requests;
+namespace oglab\Http\Requests;
 
 use Illuminate\Validation\Rule;
-use Marvel\Enums\CouponType;
+use oglab\Enums\CouponType;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
@@ -40,7 +40,7 @@ class CouponRequest extends FormRequest
             'code'                => ['required', Rule::unique('coupons')->where('language', $language)],
             'amount'              => $rules['amount'],
             'minimum_cart_amount' => ['required', 'numeric', 'min:0'],
-            'shop_id'             => ['nullable', 'exists:Marvel\Database\Models\Shop,id'],
+            'shop_id'             => ['nullable', 'exists:oglab\Database\Models\Shop,id'],
             'type'                => ['required', Rule::in(CouponType::getValues())],
             'description'         => ['nullable', 'string'],
             'image'               => ['array'],

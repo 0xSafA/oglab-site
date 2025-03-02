@@ -1,9 +1,9 @@
 <?php
 
 
-namespace Marvel\Database\Repositories;
+namespace oglab\Database\Repositories;
 
-use Marvel\Database\Models\Tax;
+use oglab\Database\Models\Tax;
 use Prettus\Repository\Criteria\RequestCriteria;
 use Prettus\Repository\Exceptions\RepositoryException;
 

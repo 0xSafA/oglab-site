@@ -55,8 +55,8 @@ echo(chalk.green('Successfully downloaded dependencies \n'))
 echo('Generating application key')
 await $`php /var/www/pickbazar-laravel/api/artisan key:generate`;
 
-echo('Installing marvel packages...')
-await $`php /var/www/pickbazar-laravel/api/artisan marvel:install`;
+echo('Installing oglab packages...')
+await $`php /var/www/pickbazar-laravel/api/artisan oglab:install`;
 
 echo('Add storage link...')
 await $`php /var/www/pickbazar-laravel/api/artisan storage:link`;

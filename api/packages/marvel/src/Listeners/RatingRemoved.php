@@ -3,7 +3,7 @@
 namespace App\Listeners;
 
 use App\Events\RefundApproved;
-use Marvel\Database\Models\Review;
+use oglab\Database\Models\Review;
 
 class RatingRemoved
 {

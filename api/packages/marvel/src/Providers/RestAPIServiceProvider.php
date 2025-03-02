@@ -1,6 +1,6 @@
 <?php
 
-namespace Marvel\Providers;
+namespace oglab\Providers;
 
 use Illuminate\Support\ServiceProvider;
 

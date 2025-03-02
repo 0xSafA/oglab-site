@@ -1,8 +1,8 @@
 <?php
 
-namespace Marvel\Otp\Gateways;
+namespace oglab\Otp\Gateways;
 
-use Marvel\Otp\OtpInterface;
+use oglab\Otp\OtpInterface;
 
 /**
  * SmsGateway class

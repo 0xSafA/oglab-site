@@ -1,12 +1,12 @@
 <?php
 
-namespace Marvel\Database\Repositories;
+namespace oglab\Database\Repositories;
 
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Collection;
-use Marvel\Database\Models\Participant;
-use Marvel\Exceptions\MarvelException;
+use oglab\Database\Models\Participant;
+use oglab\Exceptions\oglabException;
 use Prettus\Repository\Criteria\RequestCriteria;
 use Prettus\Repository\Exceptions\RepositoryException;
 

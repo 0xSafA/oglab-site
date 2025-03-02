@@ -1,14 +1,14 @@
 <?php
 
-namespace Marvel\Listeners;
+namespace oglab\Listeners;
 
 
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Database\Eloquent\Builder;
-use Marvel\Database\Models\User;
-use Marvel\Enums\Permission;
-use Marvel\Events\StoreNoticeEvent;
-use Marvel\Notifications\StoreNoticeNotification;
+use oglab\Database\Models\User;
+use oglab\Enums\Permission;
+use oglab\Events\StoreNoticeEvent;
+use oglab\Notifications\StoreNoticeNotification;
 
 class StoreNoticeListener implements ShouldQueue
 {

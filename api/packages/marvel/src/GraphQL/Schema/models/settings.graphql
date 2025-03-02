@@ -1,7 +1,7 @@
 extend type Query {
     settings(language: String): Settings!
         @field(
-            resolver: "Marvel\\GraphQL\\Queries\\SettingsQuery@fetchSettings"
+            resolver: "oglab\\GraphQL\\Queries\\SettingsQuery@fetchSettings"
         )
 }
 

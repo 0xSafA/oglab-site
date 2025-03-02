@@ -1,8 +1,8 @@
 {
-  "name": "marvel-admin",
+  "name": "oglab-admin",
   "version": "11.14.0",
   "private": true,
-  "repository": "git@github.com:tarex/marvel-admin.git",
+  "repository": "git@github.com:tarex/oglab-admin.git",
   "author": "RedQ, Inc <redqteam@gmail.com>",
   "workspaces": [
     "rest",
@@ -11,12 +11,12 @@
   "scripts": {
     "clean": "yarn workspaces run rimraf -g \"{.next,node_modules,__generated__,.cache,src/graphql/*.d.ts,src/framework/graphql/**/*.d.ts}\" && rimraf node_modules",
     "gql-clean": "yarn workspaces run rimraf -g \"{__generated__,src/graphql/*.d.ts,src/framework/graphql/**/*.d.ts}\"",
-    "dev:rest": "yarn workspace @marvel/admin-rest dev",
-    "build:rest": "yarn workspace @marvel/admin-rest build",
-    "start:rest": "yarn workspace @marvel/admin-rest start",
-    "dev:gql": "yarn workspace @marvel/admin-graphql dev",
-    "build:gql": "yarn workspace @marvel/admin-graphql build",
-    "start:gql": "yarn workspace @marvel/admin-graphql start"
+    "dev:rest": "yarn workspace @oglab/admin-rest dev",
+    "build:rest": "yarn workspace @oglab/admin-rest build",
+    "start:rest": "yarn workspace @oglab/admin-rest start",
+    "dev:gql": "yarn workspace @oglab/admin-graphql dev",
+    "build:gql": "yarn workspace @oglab/admin-graphql build",
+    "start:gql": "yarn workspace @oglab/admin-graphql start"
   },
   "devDependencies": {
     "prettier": "3.0.3",

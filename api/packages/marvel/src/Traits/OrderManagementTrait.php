@@ -1,10 +1,10 @@
 <?php
 
-namespace Marvel\Traits;
+namespace oglab\Traits;
 
-use Marvel\Enums\PaymentStatus;
-use Marvel\Enums\PaymentGatewayType;
-use Marvel\Enums\OrderStatus as OrderStatusEnum;
+use oglab\Enums\PaymentStatus;
+use oglab\Enums\PaymentGatewayType;
+use oglab\Enums\OrderStatus as OrderStatusEnum;
 
 trait OrderManagementTrait
 {

@@ -2,7 +2,7 @@
 
 namespace App\Events;
 
-use Marvel\Database\Models\Review;
+use oglab\Database\Models\Review;
 
 class ReviewCreated
 {

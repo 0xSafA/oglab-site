@@ -1,8 +1,8 @@
 <?php
 
-namespace Marvel\Ai;
+namespace oglab\Ai;
 
-use Marvel\Database\Models\Settings;
+use oglab\Database\Models\Settings;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 abstract class Base

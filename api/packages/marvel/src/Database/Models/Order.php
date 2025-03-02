@@ -1,6 +1,6 @@
 <?php
 
-namespace Marvel\Database\Models;
+namespace oglab\Database\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Marvel\Traits\TranslationTrait;
+use oglab\Traits\TranslationTrait;
 
 class Order extends Model
 {
@@ -82,7 +82,7 @@ class Order extends Model
      */
     public function children()
     {
-        return $this->hasMany('Marvel\Database\Models\Order', 'parent_id', 'id');
+        return $this->hasMany('oglab\Database\Models\Order', 'parent_id', 'id');
     }
 
     /**
@@ -90,7 +90,7 @@ class Order extends Model
      */
     public function parent_order()
     {
-        return $this->hasOne('Marvel\Database\Models\Order', 'id', 'parent_id');
+        return $this->hasOne('oglab\Database\Models\Order', 'id', 'parent_id');
     }
 
     /**

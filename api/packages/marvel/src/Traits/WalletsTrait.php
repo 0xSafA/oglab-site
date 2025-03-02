@@ -1,9 +1,9 @@
 <?php
 
-namespace Marvel\Traits;
+namespace oglab\Traits;
 
-use Marvel\Database\Models\Settings;
-use Marvel\Database\Models\Wallet;
+use oglab\Database\Models\Settings;
+use oglab\Database\Models\Wallet;
 
 trait WalletsTrait
 {

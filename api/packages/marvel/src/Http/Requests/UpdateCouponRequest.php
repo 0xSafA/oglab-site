@@ -1,8 +1,8 @@
 <?php
 
-namespace Marvel\Http\Requests;
+namespace oglab\Http\Requests;
 
-use Marvel\Enums\CouponType;
+use oglab\Enums\CouponType;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Foundation\Http\FormRequest;

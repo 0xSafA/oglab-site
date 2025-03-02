@@ -1,12 +1,12 @@
 <?php
 
-namespace Marvel\Listeners;
+namespace oglab\Listeners;
 
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Marvel\Enums\EventType;
-use Marvel\Events\OrderReceived;
-use Marvel\Notifications\NewOrderReceived;
-use Marvel\Traits\SmsTrait;
+use oglab\Enums\EventType;
+use oglab\Events\OrderReceived;
+use oglab\Notifications\NewOrderReceived;
+use oglab\Traits\SmsTrait;
 
 class SendOrderReceivedNotification implements ShouldQueue
 {

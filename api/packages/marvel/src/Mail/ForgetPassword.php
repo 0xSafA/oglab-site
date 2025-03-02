@@ -1,6 +1,6 @@
 <?php
 
-namespace Marvel\Mail;
+namespace oglab\Mail;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Marvel\Database\Models;
+namespace oglab\Database\Models;
 
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Spatie\Permission\Models\Permission as SpatiePermission;

@@ -1,14 +1,14 @@
 <?php
 
-namespace Marvel\Database\Repositories;
+namespace oglab\Database\Repositories;
 
 use App\Events\ReviewCreated;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
-use Marvel\Database\Models\NotifyLogs;
-use Marvel\Exceptions\MarvelException;
+use oglab\Database\Models\NotifyLogs;
+use oglab\Exceptions\oglabException;
 use Prettus\Repository\Criteria\RequestCriteria;
 use Prettus\Repository\Exceptions\RepositoryException;
 use Stevebauman\Purify\Facades\Purify;

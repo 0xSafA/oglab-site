@@ -1,11 +1,11 @@
 <?php
 
 
-namespace Marvel\Events;
+namespace oglab\Events;
 
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Marvel\Database\Models\Shop;
-use Marvel\Database\Models\User;
+use oglab\Database\Models\Shop;
+use oglab\Database\Models\User;
 
 class ProcessOwnershipTransition implements ShouldQueue
 {

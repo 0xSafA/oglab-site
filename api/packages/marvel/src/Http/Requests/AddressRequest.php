@@ -1,6 +1,6 @@
 <?php
 
-namespace Marvel\Http\Requests;
+namespace oglab\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
@@ -31,7 +31,7 @@ class AddressRequest extends FormRequest
             'type'        => ['required', 'string', 'max:255'],
             'default'     => ['boolean'],
             'address'     => ['required', 'array'],
-            'customer_id' => ['required', 'exists:Marvel\Database\Models\User,id'],
+            'customer_id' => ['required', 'exists:oglab\Database\Models\User,id'],
         ];
     }
 

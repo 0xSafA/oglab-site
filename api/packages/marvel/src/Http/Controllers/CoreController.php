@@ -1,6 +1,6 @@
 <?php
 
-namespace Marvel\Http\Controllers;
+namespace oglab\Http\Controllers;
 
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;

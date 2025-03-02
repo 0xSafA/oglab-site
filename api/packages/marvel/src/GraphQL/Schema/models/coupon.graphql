@@ -10,7 +10,7 @@ extend type Query {
         is_approve: Boolean
     ): [Coupon!]!
         @paginate(
-            builder: "Marvel\\GraphQL\\Queries\\CouponQuery@fetchCoupons"
+            builder: "oglab\\GraphQL\\Queries\\CouponQuery@fetchCoupons"
             defaultCount: 15
         )
     coupon(id: ID @eq, code: String @eq, language: String @eq): Coupon @find

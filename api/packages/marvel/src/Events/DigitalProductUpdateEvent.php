@@ -1,11 +1,11 @@
 <?php
 
 
-namespace Marvel\Events;
+namespace oglab\Events;
 
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Marvel\Database\Models\Product;
-use Marvel\Database\Models\User;
+use oglab\Database\Models\Product;
+use oglab\Database\Models\User;
 
 class DigitalProductUpdateEvent implements ShouldQueue
 {

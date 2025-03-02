@@ -1,7 +1,7 @@
 extend type Query {
     becameSeller(language: String): BecomeSellerWithCommission!
         @field(
-            resolver: "Marvel\\GraphQL\\Queries\\BecameSellerQuery@fetchBecameSeller"
+            resolver: "oglab\\GraphQL\\Queries\\BecameSellerQuery@fetchBecameSeller"
         )
 }
 

@@ -1,11 +1,11 @@
 <?php
 
-namespace Marvel\Listeners;
+namespace oglab\Listeners;
 
 use Exception;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Marvel\Database\Models\PaymentMethod;
-use Marvel\Events\PaymentMethods;
+use oglab\Database\Models\PaymentMethod;
+use oglab\Events\PaymentMethods;
 
 class CheckAndSetDefaultCard implements ShouldQueue
 {

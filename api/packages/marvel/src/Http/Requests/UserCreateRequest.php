@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Marvel\Http\Requests;
+namespace oglab\Http\Requests;
 
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
@@ -31,7 +31,7 @@ class UserCreateRequest extends FormRequest
             'name'     => ['required', 'string', 'max:255'],
             'email'    => ['required', 'email', 'unique:users'],
             'password' => ['required', 'string'],
-            'shop_id' => ['nullable', 'exists:Marvel\Database\Models\Shop,id'],
+            'shop_id' => ['nullable', 'exists:oglab\Database\Models\Shop,id'],
             'profile'  => ['array'],
             'address'  => ['array'],
             // 'shop'  => ['array'],

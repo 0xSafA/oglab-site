@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Marvel\Otp;
+namespace oglab\Otp;
 
 use InvalidArgumentException;
 

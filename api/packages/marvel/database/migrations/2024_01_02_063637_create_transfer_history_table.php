@@ -3,8 +3,8 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use Marvel\Enums\DefaultStatusType;
-use Marvel\Enums\ProductVisibilityStatus;
+use oglab\Enums\DefaultStatusType;
+use oglab\Enums\ProductVisibilityStatus;
 
 return new class extends Migration
 {

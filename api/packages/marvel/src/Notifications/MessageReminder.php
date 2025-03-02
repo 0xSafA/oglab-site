@@ -1,13 +1,13 @@
 <?php
 
-namespace Marvel\Notifications;
+namespace oglab\Notifications;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Log;
-use Marvel\Database\Models\Participant;
+use oglab\Database\Models\Participant;
 
 class MessageReminder extends Notification implements ShouldQueue
 {

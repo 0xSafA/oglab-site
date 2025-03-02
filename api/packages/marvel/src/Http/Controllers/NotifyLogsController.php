@@ -1,17 +1,17 @@
 <?php
 
 
-namespace Marvel\Http\Controllers;
+namespace oglab\Http\Controllers;
 
 use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
-use Marvel\Database\Repositories\NotifyLogsRepository;
-use Marvel\Database\Repositories\UserRepository;
-use Marvel\Enums\Permission;
-use Marvel\Exceptions\MarvelException;
+use oglab\Database\Repositories\NotifyLogsRepository;
+use oglab\Database\Repositories\UserRepository;
+use oglab\Enums\Permission;
+use oglab\Exceptions\oglabException;
 
 class NotifyLogsController extends CoreController
 {
@@ -36,8 +36,8 @@ class NotifyLogsController extends CoreController
         try {
             $limit = $request->limit ? $request->limit : 10;
             return $this->fetchNotifyLogs($request)->paginate($limit)->withQueryString();
-        } catch (MarvelException $th) {
-            throw new MarvelException(SOMETHING_WENT_WRONG, $th->getMessage());
+        } catch (oglabException $th) {
+            throw new oglabException(SOMETHING_WENT_WRONG, $th->getMessage());
         }
     }
 
@@ -70,8 +70,8 @@ class NotifyLogsController extends CoreController
         try {
             $request['id'] = $id;
             return $this->fetchNotifyLog($request);
-        } catch (MarvelException $th) {
-            throw new MarvelException(NOT_FOUND);
+        } catch (oglabException $th) {
+            throw new oglabException(NOT_FOUND);
         }
     }
 
@@ -104,8 +104,8 @@ class NotifyLogsController extends CoreController
         try {
             $request['id'] = $id;
             return $this->deleteNotifyLogs($request);
-        } catch (MarvelException $th) {
-            throw new MarvelException(SOMETHING_WENT_WRONG, $th->getMessage());
+        } catch (oglabException $th) {
+            throw new oglabException(SOMETHING_WENT_WRONG, $th->getMessage());
         }
     }
 
@@ -115,8 +115,8 @@ class NotifyLogsController extends CoreController
             if ($request->user()->hasPermissionTo(Permission::SUPER_ADMIN)) {
                 return $this->repository->findOrFail($request->id)->delete();
             }
-        } catch (MarvelException $th) {
-            throw new MarvelException(NOT_AUTHORIZED, $th->getMessage());
+        } catch (oglabException $th) {
+            throw new oglabException(NOT_AUTHORIZED, $th->getMessage());
         }
     }
 
@@ -133,8 +133,8 @@ class NotifyLogsController extends CoreController
             $notify_log->is_read = true;
             $notify_log->save();
             return $notify_log;
-        } catch (MarvelException $th) {
-            throw new MarvelException(NOT_AUTHORIZED, $th->getMessage());
+        } catch (oglabException $th) {
+            throw new oglabException(NOT_AUTHORIZED, $th->getMessage());
         }
     }
 
@@ -158,8 +158,8 @@ class NotifyLogsController extends CoreController
 
                 return $notify_logs;
             }
-        } catch (MarvelException $th) {
-            throw new MarvelException(NOT_AUTHORIZED, $th->getMessage());
+        } catch (oglabException $th) {
+            throw new oglabException(NOT_AUTHORIZED, $th->getMessage());
         }
     }
 }

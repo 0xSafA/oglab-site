@@ -1,10 +1,10 @@
 <?php
 
 
-namespace Marvel\Events;
+namespace oglab\Events;
 
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Marvel\Database\Models\Product;
+use oglab\Database\Models\Product;
 
 class ProductReviewApproved implements ShouldQueue
 {

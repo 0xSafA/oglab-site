@@ -1,14 +1,14 @@
 <?php
 
-namespace Marvel\Http\Controllers;
+namespace oglab\Http\Controllers;
 
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Marvel\Database\Models\Language;
-use Marvel\Database\Repositories\LanguageRepository;
-use Marvel\Exceptions\MarvelException;
-use Marvel\Http\Requests\LanguageRequest;
+use oglab\Database\Models\Language;
+use oglab\Database\Repositories\LanguageRepository;
+use oglab\Exceptions\oglabException;
+use oglab\Http\Requests\LanguageRequest;
 use Prettus\Validator\Exceptions\ValidatorException;
 
 class LanguageController extends CoreController
@@ -43,8 +43,8 @@ class LanguageController extends CoreController
     {
         try {
             return $this->repository->create($request->validated());
-        } catch (MarvelException $e) {
-            throw new MarvelException(COULD_NOT_CREATE_THE_RESOURCE);
+        } catch (oglabException $e) {
+            throw new oglabException(COULD_NOT_CREATE_THE_RESOURCE);
         }
     }
 
@@ -58,8 +58,8 @@ class LanguageController extends CoreController
     {
         try {
             return $this->repository->where('id', $params)->firstOrFail();
-        } catch (MarvelException $e) {
-            throw new MarvelException(NOT_FOUND);
+        } catch (oglabException $e) {
+            throw new oglabException(NOT_FOUND);
         }
     }
 
@@ -74,8 +74,8 @@ class LanguageController extends CoreController
     {
         try {
             return $this->repository->findOrFail($id)->update($request->validated());
-        } catch (MarvelException $e) {
-            throw new MarvelException(COULD_NOT_UPDATE_THE_RESOURCE);
+        } catch (oglabException $e) {
+            throw new oglabException(COULD_NOT_UPDATE_THE_RESOURCE);
         }
     }
 
@@ -89,8 +89,8 @@ class LanguageController extends CoreController
     {
         try {
             return $this->repository->findOrFail($id)->delete();
-        } catch (MarvelException $e) {
-            throw new MarvelException(NOT_FOUND);
+        } catch (oglabException $e) {
+            throw new oglabException(NOT_FOUND);
         }
     }
 }

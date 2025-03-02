@@ -1,9 +1,9 @@
 <?php
 
-namespace Marvel\Listeners;
+namespace oglab\Listeners;
 
-use Marvel\Events\MessageSent;
-use Marvel\Database\Models\Participant;
+use oglab\Events\MessageSent;
+use oglab\Database\Models\Participant;
 
 class MessageParticipantNotification
 {

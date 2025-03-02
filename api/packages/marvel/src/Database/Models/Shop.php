@@ -1,6 +1,6 @@
 <?php
 
-namespace Marvel\Database\Models;
+namespace oglab\Database\Models;
 
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Model;

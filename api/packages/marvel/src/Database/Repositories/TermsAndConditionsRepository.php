@@ -1,14 +1,14 @@
 <?php
 
 
-namespace Marvel\Database\Repositories;
+namespace oglab\Database\Repositories;
 
 use Exception;
 use Prettus\Repository\Criteria\RequestCriteria;
 use Prettus\Repository\Exceptions\RepositoryException;
 use Illuminate\Http\Request;
-use Marvel\Database\Models\Shop;
-use Marvel\Database\Models\TermsAndConditions;
+use oglab\Database\Models\Shop;
+use oglab\Database\Models\TermsAndConditions;
 
 class TermsAndConditionsRepository extends BaseRepository
 {

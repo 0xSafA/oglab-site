@@ -1,6 +1,6 @@
 <?php
 
-namespace Marvel\Console;
+namespace oglab\Console;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
@@ -16,7 +16,7 @@ class MailSetupCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'marvel:mail-setup';
+    protected $signature = 'oglab:mail-setup';
 
     /**
      * The console command description.
@@ -185,7 +185,7 @@ class MailSetupCommand extends Command
                 // If the user wants to reconfigure, the loop will continue
             } while ($reconfigure);
             info('If you want to test your mail configuration, then you can run this command');
-            table(['Command', 'Details'], [['marvel:test-mail-send', 'It will send a test mail']]);
+            table(['Command', 'Details'], [['oglab:test-mail-send', 'It will send a test mail']]);
         } catch (\Exception $e) {
             $this->error($e->getMessage());
         }

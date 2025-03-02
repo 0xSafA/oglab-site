@@ -1,9 +1,9 @@
 {
-    "name": "redq/marvel",
+    "name": "redq/oglab",
     "type": "project",
-    "description": "Marvel, a complete e-commerce engine for both rest and graphql",
+    "description": "oglab, a complete e-commerce engine for both rest and graphql",
     "keywords": [
-        "marvel",
+        "oglab",
         "graphql",
         "rest-api"
     ],
@@ -17,7 +17,7 @@
         "laravel/framework": "10.30.1",
         "laravel/socialite": "5.10.0",
         "laravel/tinker": "2.8.2",
-        "marvel/shop": "dev-master",
+        "oglab/shop": "dev-master",
         "messagebird/php-rest-api": "3.1.4",
         "psr/log": "3.0.0",
         "stevebauman/purify": "6.0.2",
@@ -74,15 +74,15 @@
         ]
     },
     "repositories": {
-        "marvel/shop": {
+        "oglab/shop": {
             "type": "path",
-            "url": "packages/marvel"
+            "url": "packages/oglab"
         },
-        "marvel/bkash": {
+        "oglab/bkash": {
             "type": "vcs",
             "url": "https://github.com/CodersFaruk/laravel-bkash-tokenize"
         },
-        "marvel/flutterwave": {
+        "oglab/flutterwave": {
             "type": "vcs",
             "url": "https://github.com/CodersFaruk/laravel-flutterwave"
         }

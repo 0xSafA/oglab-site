@@ -1,15 +1,15 @@
 <?php
 
-namespace Marvel\Http\Controllers;
+namespace oglab\Http\Controllers;
 
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
-use Marvel\Http\Requests\CreateTaxRequest;
-use Marvel\Http\Requests\UpdateTaxRequest;
-use Marvel\Database\Repositories\TaxRepository;
-use Marvel\Exceptions\MarvelException;
+use oglab\Http\Requests\CreateTaxRequest;
+use oglab\Http\Requests\UpdateTaxRequest;
+use oglab\Database\Repositories\TaxRepository;
+use oglab\Exceptions\oglabException;
 use Prettus\Validator\Exceptions\ValidatorException;
 
 class TaxController extends CoreController
@@ -55,8 +55,8 @@ class TaxController extends CoreController
     {
         try {
             return $this->repository->findOrFail($id);
-        } catch (MarvelException $e) {
-            throw new MarvelException(NOT_FOUND);
+        } catch (oglabException $e) {
+            throw new oglabException(NOT_FOUND);
         }
     }
 
@@ -72,8 +72,8 @@ class TaxController extends CoreController
         try {
             $validatedData = $request->validated();
             return $this->repository->findOrFail($id)->update($validatedData);
-        } catch (MarvelException $e) {
-            throw new MarvelException(NOT_FOUND);
+        } catch (oglabException $e) {
+            throw new oglabException(NOT_FOUND);
         }
     }
 
@@ -87,8 +87,8 @@ class TaxController extends CoreController
     {
         try {
             return $this->repository->findOrFail($id)->delete();
-        } catch (MarvelException $e) {
-            throw new MarvelException(NOT_FOUND);
+        } catch (oglabException $e) {
+            throw new oglabException(NOT_FOUND);
         }
     }
 }

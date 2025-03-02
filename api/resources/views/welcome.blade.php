@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Marvel Laravel</title>
+    <title>oglab Laravel</title>
 
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300&display=swap" rel="stylesheet">
@@ -68,7 +68,7 @@
 </head>
 
 <body class="welcome">
-    <h1>Marvel Laravel</h1>
+    <h1>oglab Laravel</h1>
     <ul>
         <li><a href="https://pickbazarapi.redq.io/front/playground">GraphQL Playground</a></li>
         <li><a href="https://pickbazar-doc.vercel.app/">Documentation</a></li>

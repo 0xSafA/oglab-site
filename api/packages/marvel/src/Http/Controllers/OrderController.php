@@ -1,6 +1,6 @@
 <?php
 
-namespace Marvel\Http\Controllers;
+namespace oglab\Http\Controllers;
 
 use Barryvdh\DomPDF\Facade\Pdf as PDF;
 use Dompdf\Options;
@@ -14,21 +14,21 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Facades\Excel;
-use Marvel\Database\Models\DownloadToken;
-use Marvel\Database\Models\Order;
-use Marvel\Database\Models\Settings;
-use Marvel\Database\Repositories\OrderRepository;
-use Marvel\Enums\PaymentGatewayType;
-use Marvel\Enums\Permission;
-use Marvel\Exceptions\MarvelException;
-use Marvel\Exports\OrderExport;
-use Marvel\Http\Requests\OrderCreateRequest;
-use Marvel\Http\Requests\OrderUpdateRequest;
-use Marvel\Traits\OrderManagementTrait;
-use Marvel\Traits\PaymentStatusManagerWithOrderTrait;
-use Marvel\Traits\PaymentTrait;
-use Marvel\Traits\TranslationTrait;
-use Marvel\Traits\WalletsTrait;
+use oglab\Database\Models\DownloadToken;
+use oglab\Database\Models\Order;
+use oglab\Database\Models\Settings;
+use oglab\Database\Repositories\OrderRepository;
+use oglab\Enums\PaymentGatewayType;
+use oglab\Enums\Permission;
+use oglab\Exceptions\oglabException;
+use oglab\Exports\OrderExport;
+use oglab\Http\Requests\OrderCreateRequest;
+use oglab\Http\Requests\OrderUpdateRequest;
+use oglab\Traits\OrderManagementTrait;
+use oglab\Traits\PaymentStatusManagerWithOrderTrait;
+use oglab\Traits\PaymentTrait;
+use oglab\Traits\TranslationTrait;
+use oglab\Traits\WalletsTrait;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -125,7 +125,7 @@ class OrderController extends CoreController
      *
      * @param OrderCreateRequest $request
      * @return LengthAwarePaginator|\Illuminate\Support\Collection|mixed
-     * @throws MarvelException
+     * @throws oglabException
      */
     public function store(OrderCreateRequest $request)
     {
@@ -136,8 +136,8 @@ class OrderController extends CoreController
             // }
 
             return DB::transaction(fn () => $this->repository->storeOrder($request, $this->settings));
-        } catch (MarvelException $th) {
-            throw new MarvelException(SOMETHING_WENT_WRONG, $th->getMessage());
+        } catch (oglabException $th) {
+            throw new oglabException(SOMETHING_WENT_WRONG, $th->getMessage());
         }
     }
 
@@ -147,15 +147,15 @@ class OrderController extends CoreController
      * @param Request $request
      * @param $params
      * @return JsonResponse
-     * @throws MarvelException
+     * @throws oglabException
      */
     public function show(Request $request, $params)
     {
         $request["tracking_number"] = $params;
         try {
             return $this->fetchSingleOrder($request);
-        } catch (MarvelException $e) {
-            throw new MarvelException($e->getMessage());
+        } catch (oglabException $e) {
+            throw new oglabException($e->getMessage());
         }
     }
 
@@ -164,7 +164,7 @@ class OrderController extends CoreController
      *
      * @param mixed $request
      * @return void
-     * @throws MarvelException
+     * @throws oglabException
      */
     public function fetchSingleOrder(Request $request)
     {
@@ -228,8 +228,8 @@ class OrderController extends CoreController
             } else {
                 throw new AuthorizationException(NOT_AUTHORIZED);
             }
-        } catch (MarvelException $e) {
-            throw new MarvelException(NOT_FOUND);
+        } catch (oglabException $e) {
+            throw new oglabException(NOT_FOUND);
         }
     }
 
@@ -245,8 +245,8 @@ class OrderController extends CoreController
         try {
             $request["id"] = $id;
             return $this->updateOrder($request);
-        } catch (MarvelException $e) {
-            throw new MarvelException(COULD_NOT_UPDATE_THE_RESOURCE, $e->getMessage());
+        } catch (oglabException $e) {
+            throw new oglabException(COULD_NOT_UPDATE_THE_RESOURCE, $e->getMessage());
         }
     }
 
@@ -265,8 +265,8 @@ class OrderController extends CoreController
     {
         try {
             return $this->repository->findOrFail($id)->delete();
-        } catch (MarvelException $e) {
-            throw new MarvelException(NOT_FOUND);
+        } catch (oglabException $e) {
+            throw new oglabException(NOT_FOUND);
         }
     }
 
@@ -294,8 +294,8 @@ class OrderController extends CoreController
             $newToken = DownloadToken::create($dataArray);
 
             return route('export_order.token', ['token' => $newToken->token]);
-        } catch (MarvelException $e) {
-            throw new MarvelException(SOMETHING_WENT_WRONG, $e->getMessage());
+        } catch (oglabException $e) {
+            throw new oglabException(SOMETHING_WENT_WRONG, $e->getMessage());
         }
     }
 
@@ -313,14 +313,14 @@ class OrderController extends CoreController
 
             $shop_id = $downloadToken->payload;
             $downloadToken->delete();
-        } catch (MarvelException $e) {
-            throw new MarvelException(TOKEN_NOT_FOUND);
+        } catch (oglabException $e) {
+            throw new oglabException(TOKEN_NOT_FOUND);
         }
 
         try {
             return Excel::download(new OrderExport($this->repository, $shop_id), 'orders.xlsx');
-        } catch (MarvelException $e) {
-            throw new MarvelException(NOT_FOUND);
+        } catch (oglabException $e) {
+            throw new oglabException(NOT_FOUND);
         }
     }
 
@@ -364,8 +364,8 @@ class OrderController extends CoreController
             $newToken = DownloadToken::create($data);
 
             return route('download_invoice.token', ['token' => $newToken->token]);
-        } catch (MarvelException $e) {
-            throw new MarvelException($e->getMessage());
+        } catch (oglabException $e) {
+            throw new oglabException($e->getMessage());
         }
     }
 
@@ -382,8 +382,8 @@ class OrderController extends CoreController
             $downloadToken = DownloadToken::where('token', $token)->firstOrFail();
             $payloads = unserialize($downloadToken->payload);
             $downloadToken->delete();
-        } catch (MarvelException $e) {
-            throw new MarvelException(TOKEN_NOT_FOUND);
+        } catch (oglabException $e) {
+            throw new oglabException(TOKEN_NOT_FOUND);
         }
 
         try {
@@ -406,8 +406,8 @@ class OrderController extends CoreController
             $filename = 'invoice-order-' . $payloads['order_id'] . '.pdf';
 
             return $pdf->download($filename);
-        } catch (MarvelException $e) {
-            throw new MarvelException(NOT_FOUND);
+        } catch (oglabException $e) {
+            throw new oglabException(NOT_FOUND);
         }
     }
 
@@ -474,8 +474,8 @@ class OrderController extends CoreController
                     $this->flutterwave($order, $request, $this->settings);
                     break;
             }
-        } catch (MarvelException $e) {
-            throw new MarvelException(SOMETHING_WENT_WRONG, $e->getMessage());
+        } catch (oglabException $e) {
+            throw new oglabException(SOMETHING_WENT_WRONG, $e->getMessage());
         }
     }
 }

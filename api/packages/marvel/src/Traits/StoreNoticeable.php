@@ -1,13 +1,13 @@
 <?php
 
-namespace Marvel\Traits;
+namespace oglab\Traits;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
-use Marvel\Database\Models\StoreNotice;
-use Marvel\Database\Models\User;
-use Marvel\Enums\Permission;
-use Marvel\Enums\StoreNoticeType;
+use oglab\Database\Models\StoreNotice;
+use oglab\Database\Models\User;
+use oglab\Enums\Permission;
+use oglab\Enums\StoreNoticeType;
 
 trait StoreNoticeable
 {

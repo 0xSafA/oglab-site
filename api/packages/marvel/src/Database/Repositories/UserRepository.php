@@ -1,23 +1,23 @@
 <?php
 
-namespace Marvel\Database\Repositories;
+namespace oglab\Database\Repositories;
 
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
-use Marvel\Database\Models\User;
+use oglab\Database\Models\User;
 use Prettus\Validator\Exceptions\ValidatorException;
 use Spatie\Permission\Models\Permission;
-use Marvel\Enums\Permission as UserPermission;
+use oglab\Enums\Permission as UserPermission;
 use Prettus\Repository\Criteria\RequestCriteria;
 use Prettus\Repository\Exceptions\RepositoryException;
-use Marvel\Mail\ForgetPassword;
+use oglab\Mail\ForgetPassword;
 use Illuminate\Support\Facades\Mail;
-use Marvel\Database\Models\Address;
-use Marvel\Database\Models\Profile;
-use Marvel\Database\Models\Settings;
-use Marvel\Database\Models\Shop;
-use Marvel\Exceptions\MarvelException;
+use oglab\Database\Models\Address;
+use oglab\Database\Models\Profile;
+use oglab\Database\Models\Settings;
+use oglab\Database\Models\Shop;
+use oglab\Exceptions\oglabException;
 
 class UserRepository extends BaseRepository
 {
@@ -75,7 +75,7 @@ class UserRepository extends BaseRepository
             $user->managed_shop = $user->managed_shop;
             return $user;
         } catch (ValidatorException $e) {
-            throw new MarvelException(SOMETHING_WENT_WRONG);
+            throw new oglabException(SOMETHING_WENT_WRONG);
         }
     }
 
@@ -109,7 +109,7 @@ class UserRepository extends BaseRepository
             $user->managed_shop = $user->managed_shop;
             return $user;
         } catch (ValidationException $e) {
-            throw new MarvelException(SOMETHING_WENT_WRONG);
+            throw new oglabException(SOMETHING_WENT_WRONG);
         }
     }
 

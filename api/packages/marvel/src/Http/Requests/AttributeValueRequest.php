@@ -1,6 +1,6 @@
 <?php
 
-namespace Marvel\Http\Requests;
+namespace oglab\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
@@ -30,8 +30,8 @@ class AttributeValueRequest extends FormRequest
             'value'         => ['required', 'string', 'max:255'],
             'meta'          => ['nullable', 'string'],
             'price'         => ['numeric'],
-            'shop_id'       => ['required', 'exists:Marvel\Database\Models\Shop,id'],
-            'attribute_id'  => ['required', 'exists:Marvel\Database\Models\Attribute,id'],
+            'shop_id'       => ['required', 'exists:oglab\Database\Models\Shop,id'],
+            'attribute_id'  => ['required', 'exists:oglab\Database\Models\Attribute,id'],
         ];
     }
 

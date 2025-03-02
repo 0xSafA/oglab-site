@@ -1,15 +1,15 @@
 <?php
 
-namespace Marvel\Http\Controllers;
+namespace oglab\Http\Controllers;
 
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Marvel\Database\Models\Address;
-use Marvel\Database\Repositories\AddressRepository;
-use Marvel\Enums\Permission;
-use Marvel\Exceptions\MarvelException;
-use Marvel\Http\Requests\AddressRequest;
+use oglab\Database\Models\Address;
+use oglab\Database\Repositories\AddressRepository;
+use oglab\Enums\Permission;
+use oglab\Exceptions\oglabException;
+use oglab\Http\Requests\AddressRequest;
 use Prettus\Validator\Exceptions\ValidatorException;
 
 class AddressController extends CoreController
@@ -45,8 +45,8 @@ class AddressController extends CoreController
         try {
             $validatedData = $request->all();
             return $this->repository->create($validatedData);
-        } catch (MarvelException $e) {
-            throw new MarvelException(COULD_NOT_CREATE_THE_RESOURCE);
+        } catch (oglabException $e) {
+            throw new oglabException(COULD_NOT_CREATE_THE_RESOURCE);
         }
     }
 
@@ -60,8 +60,8 @@ class AddressController extends CoreController
     {
         try {
             return $this->repository->with('customer')->findOrFail($id);
-        } catch (MarvelException $e) {
-            throw new MarvelException(NOT_FOUND);
+        } catch (oglabException $e) {
+            throw new oglabException(NOT_FOUND);
         }
     }
 
@@ -77,8 +77,8 @@ class AddressController extends CoreController
         try {
             $validatedData = $request->all();
             return $this->repository->findOrFail($id)->update($validatedData);
-        } catch (MarvelException $e) {
-            throw new MarvelException(COULD_NOT_UPDATE_THE_RESOURCE);
+        } catch (oglabException $e) {
+            throw new oglabException(COULD_NOT_UPDATE_THE_RESOURCE);
         }
     }
 
@@ -100,8 +100,8 @@ class AddressController extends CoreController
                     return $address->delete();
                 }
             }
-        } catch (MarvelException $e) {
-            throw new MarvelException(NOT_FOUND);
+        } catch (oglabException $e) {
+            throw new oglabException(NOT_FOUND);
         }
     }
 }

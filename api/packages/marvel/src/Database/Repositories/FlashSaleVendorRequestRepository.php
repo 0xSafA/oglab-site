@@ -1,15 +1,15 @@
 <?php
 
 
-namespace Marvel\Database\Repositories;
+namespace oglab\Database\Repositories;
 
 use Exception;
-use Marvel\Database\Models\FlashSale;
+use oglab\Database\Models\FlashSale;
 use Prettus\Repository\Criteria\RequestCriteria;
 use Prettus\Repository\Exceptions\RepositoryException;
-use Marvel\Database\Models\FlashSaleRequests;
+use oglab\Database\Models\FlashSaleRequests;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Marvel\Events\FlashSaleProcessed;
+use oglab\Events\FlashSaleProcessed;
 
 class FlashSaleVendorRequestRepository extends BaseRepository
 {

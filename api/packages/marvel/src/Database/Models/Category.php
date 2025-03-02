@@ -1,6 +1,6 @@
 <?php
 
-namespace Marvel\Database\Models;
+namespace oglab\Database\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use Marvel\Traits\TranslationTrait;
+use oglab\Traits\TranslationTrait;
 
 class Category extends Model
 {
@@ -81,7 +81,7 @@ class Category extends Model
      */
     public function children()
     {
-        return $this->hasMany('Marvel\Database\Models\Category', 'parent', 'id')->with('children')->withCount('products');
+        return $this->hasMany('oglab\Database\Models\Category', 'parent', 'id')->with('children')->withCount('products');
     }
 
     /**
@@ -89,7 +89,7 @@ class Category extends Model
      */
     public function subCategories()
     {
-        return $this->hasMany('Marvel\Database\Models\Category', 'parent', 'id')->with('subCategories', 'parent')->withCount('products');
+        return $this->hasMany('oglab\Database\Models\Category', 'parent', 'id')->with('subCategories', 'parent')->withCount('products');
     }
 
     /**
@@ -97,7 +97,7 @@ class Category extends Model
      */
     public function parent()
     {
-        return $this->hasOne('Marvel\Database\Models\Category', 'id', 'parent')->with('parent');
+        return $this->hasOne('oglab\Database\Models\Category', 'id', 'parent')->with('parent');
     }
     
     /**
@@ -105,6 +105,6 @@ class Category extends Model
      */
     public function parentCategory()
     {
-        return $this->hasOne('Marvel\Database\Models\Category', 'id', 'parent')->with('parentCategory');
+        return $this->hasOne('oglab\Database\Models\Category', 'id', 'parent')->with('parentCategory');
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Marvel\Ai;
+namespace oglab\Ai;
 
 interface AiInterface
 {

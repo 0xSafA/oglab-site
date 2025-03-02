@@ -7,7 +7,7 @@ extend type Query {
         searchJoin: String = "AND"
     ): [RefundReason]
         @paginate(
-            builder: "Marvel\\GraphQL\\Queries\\RefundReasonQuery@fetchRefundReasons"
+            builder: "oglab\\GraphQL\\Queries\\RefundReasonQuery@fetchRefundReasons"
             defaultCount: 15
         )
     refundReason(id: ID @eq, slug: String @eq, language: String @eq): RefundReason @find

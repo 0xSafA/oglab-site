@@ -1,25 +1,25 @@
 <?php
 
 
-namespace Marvel\GraphQL\Mutation;
+namespace oglab\GraphQL\Mutation;
 
 
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
-use Marvel\Facades\Shop;
+use oglab\Facades\Shop;
 
 // TODO use this as a graphql resolver and fix the issues
 class FaqMutator
 {
     public function storeFaq($rootValue, array $args, GraphQLContext $context)
     {
-        return Shop::call('Marvel\Http\Controllers\FaqsController@store', $args);
+        return Shop::call('oglab\Http\Controllers\FaqsController@store', $args);
     }
     public function updateFaq($rootValue, array $args, GraphQLContext $context)
     {
-        return Shop::call('Marvel\Http\Controllers\FaqsController@updateFaqs', $args);
+        return Shop::call('oglab\Http\Controllers\FaqsController@updateFaqs', $args);
     }
     public function deleteFaq($rootValue, array $args, GraphQLContext $context)
     {
-        return Shop::call('Marvel\Http\Controllers\FaqsController@deleteFaq', $args);
+        return Shop::call('oglab\Http\Controllers\FaqsController@deleteFaq', $args);
     }
 }

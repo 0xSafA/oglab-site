@@ -1,11 +1,11 @@
 <?php
 
-namespace Marvel\Exceptions;
+namespace oglab\Exceptions;
 
 use InvalidArgumentException;
 use Throwable;
 
-class MarvelInvalidArgumentException extends InvalidArgumentException
+class oglabInvalidArgumentException extends InvalidArgumentException
 {
     /**
      * Constructor for the custom invalid argument exception.

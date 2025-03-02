@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Marvel\Otp;
+namespace oglab\Otp;
 
 
 interface OtpInterface

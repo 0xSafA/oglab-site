@@ -1,9 +1,9 @@
 <?php
 
-namespace Marvel\Http\Resources;
+namespace oglab\Http\Resources;
 
 use Illuminate\Http\Request;
-use Marvel\Helper\ResourceHelpers;
+use oglab\Helper\ResourceHelpers;
 
 class FlashSaleResource extends Resource
 {

@@ -5,7 +5,7 @@ extend type Query {
         sortedBy: String
     ): [Conversation]
         @paginate(
-            builder: "Marvel\\GraphQL\\Queries\\ConversationQuery@fetchConversations"
+            builder: "oglab\\GraphQL\\Queries\\ConversationQuery@fetchConversations"
             defaultCount: 15
         )
     conversation(id: ID @eq): Conversation @find

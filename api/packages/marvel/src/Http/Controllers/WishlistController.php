@@ -1,20 +1,20 @@
 <?php
 
 
-namespace Marvel\Http\Controllers;
+namespace oglab\Http\Controllers;
 
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
-use Marvel\Database\Models\Product;
+use oglab\Database\Models\Product;
 use Illuminate\Support\Facades\Auth;
-use Marvel\Exceptions\MarvelException;
-use Marvel\Database\Models\AbusiveReport;
+use oglab\Exceptions\oglabException;
+use oglab\Database\Models\AbusiveReport;
 use Illuminate\Database\Eloquent\Collection;
-use Marvel\Http\Requests\WishlistCreateRequest;
-use Marvel\Database\Repositories\WishlistRepository;
-use Marvel\Http\Requests\AbusiveReportCreateRequest;
+use oglab\Http\Requests\WishlistCreateRequest;
+use oglab\Database\Repositories\WishlistRepository;
+use oglab\Http\Requests\AbusiveReportCreateRequest;
 use Prettus\Validator\Exceptions\ValidatorException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -52,8 +52,8 @@ class WishlistController extends CoreController
     {
         try {
             return $this->repository->storeWishlist($request);
-        } catch (MarvelException $th) {
-            throw new MarvelException(COULD_NOT_CREATE_THE_RESOURCE);
+        } catch (oglabException $th) {
+            throw new oglabException(COULD_NOT_CREATE_THE_RESOURCE);
         }
     }
 
@@ -68,8 +68,8 @@ class WishlistController extends CoreController
     {
         try {
             return $this->repository->toggleWishlist($request);
-        } catch (MarvelException $th) {
-            throw new MarvelException(SOMETHING_WENT_WRONG);
+        } catch (oglabException $th) {
+            throw new oglabException(SOMETHING_WENT_WRONG);
         }
     }
 
@@ -84,8 +84,8 @@ class WishlistController extends CoreController
         try {
             $request->id = $id;
             return $this->delete($request);
-        } catch (MarvelException $th) {
-            throw new MarvelException(COULD_NOT_DELETE_THE_RESOURCE);
+        } catch (oglabException $th) {
+            throw new oglabException(COULD_NOT_DELETE_THE_RESOURCE);
         }
     }
 
@@ -101,8 +101,8 @@ class WishlistController extends CoreController
                 return $wishlist->delete();
             }
             throw new HttpException(404, NOT_FOUND);
-        } catch (MarvelException $th) {
-            throw new MarvelException(COULD_NOT_DELETE_THE_RESOURCE);
+        } catch (oglabException $th) {
+            throw new oglabException(COULD_NOT_DELETE_THE_RESOURCE);
         }
     }
 

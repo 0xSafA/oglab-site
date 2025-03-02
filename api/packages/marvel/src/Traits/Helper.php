@@ -1,6 +1,6 @@
 <?php
 
-namespace Marvel\Traits;
+namespace oglab\Traits;
 
 trait Helper
 {

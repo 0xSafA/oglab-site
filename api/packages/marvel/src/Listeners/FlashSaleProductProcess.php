@@ -1,15 +1,15 @@
 <?php
 
-namespace Marvel\Listeners;
+namespace oglab\Listeners;
 
 use Exception;
 use Carbon\Carbon;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Marvel\Database\Models\FlashSale;
-use Marvel\Database\Models\Product;
-use Marvel\Database\Models\Variation;
-use Marvel\Enums\ProductType;
-use Marvel\Events\FlashSaleProcessed;
+use oglab\Database\Models\FlashSale;
+use oglab\Database\Models\Product;
+use oglab\Database\Models\Variation;
+use oglab\Enums\ProductType;
+use oglab\Events\FlashSaleProcessed;
 
 
 class FlashSaleProductProcess implements ShouldQueue

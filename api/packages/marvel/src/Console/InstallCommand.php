@@ -1,15 +1,15 @@
 <?php
 
-namespace Marvel\Console;
+namespace oglab\Console;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Cache;
-use Marvel\Database\Models\Settings;
+use oglab\Database\Models\Settings;
 use Spatie\Permission\Models\Permission;
-use Marvel\Enums\Permission as UserPermission;
-use Marvel\Enums\Role as UserRole;
+use oglab\Enums\Permission as UserPermission;
+use oglab\Enums\Role as UserRole;
 use Spatie\Permission\Models\Role;
-use Marvel\Database\Seeders\MarvelSeeder;
+use oglab\Database\Seeders\oglabSeeder;
 use PDO;
 use PDOException;
 use function Laravel\Prompts\{text, confirm, info, error, table};
@@ -17,13 +17,13 @@ use function Laravel\Prompts\{text, confirm, info, error, table};
 class InstallCommand extends Command
 {
     private array $appData;
-    protected MarvelVerification $verification;
-    protected $signature = 'marvel:install';
+    protected oglabVerification $verification;
+    protected $signature = 'oglab:install';
 
-    protected $description = 'Installing Marvel Dependencies';
+    protected $description = 'Installing oglab Dependencies';
     public function handle()
     {
-        $this->verification = new MarvelVerification();
+        $this->verification = new oglabVerification();
         $shouldGetLicenseKeyFromUser = $this->shouldGetLicenseKey();
         if ($shouldGetLicenseKeyFromUser) {
             $this->getLicenseKey();
@@ -33,7 +33,7 @@ class InstallCommand extends Command
             $this->appData = $this->verification->jsonSerialize();
         }
 
-        info('Installing Marvel Dependencies...');
+        info('Installing oglab Dependencies...');
         info('Do you want to migrate Tables?');
         info('If you have already run this command or migrated tables then be aware.');
         info('Tt will erase all of your data.');
@@ -48,9 +48,9 @@ class InstallCommand extends Command
             info('Tables Migration completed.');
 
             if (confirm('Do you want to seed dummy data?')) {
-                $this->call('marvel:seed');
+                $this->call('oglab:seed');
                 $this->call('db:seed', [
-                    '--class' => MarvelSeeder::class
+                    '--class' => oglabSeeder::class
                 ]);
             }
 
@@ -59,7 +59,7 @@ class InstallCommand extends Command
             $this->call(
                 'db:seed',
                 [
-                    '--class' => '\\Marvel\\Database\\Seeders\\SettingsSeeder',
+                    '--class' => '\\oglab\\Database\\Seeders\\SettingsSeeder',
                 ]
 
             );
@@ -69,7 +69,7 @@ class InstallCommand extends Command
             info('Do you want to seed dummy Settings data?');
             info('If "yes", then please follow next steps carefully.');
             if (confirm('Are you sure!')) {
-                $this->call('marvel:settings-seed');
+                $this->call('oglab:settings-seed');
             }
         }
 
@@ -90,9 +90,9 @@ class InstallCommand extends Command
         Role::firstOrCreate(['name' => UserRole::STAFF])->syncPermissions($staffPermissions);
         Role::firstOrCreate(['name' => UserRole::CUSTOMER])->syncPermissions($customerPermissions);
 
-        $this->call('marvel:create-admin'); // creating Admin
+        $this->call('oglab:create-admin'); // creating Admin
 
-        $this->call('marvel:copy-files');
+        $this->call('oglab:copy-files');
 
         $this->modifySettingsData();
         
@@ -105,10 +105,10 @@ class InstallCommand extends Command
             no: 'No, I decline',
         );
         if ($confirmed) {
-            $this->call('marvel:mail-setup');
+            $this->call('oglab:mail-setup');
         } else {
             info('You can configuration by below command or manual process.');
-            table(['Command', 'Details'], [['marvel:mail-setup', 'Mail setup (mailtrap, mailgun, gmail)']]);
+            table(['Command', 'Details'], [['oglab:mail-setup', 'Mail setup (mailtrap, mailgun, gmail)']]);
         }
         
         info('Everything is successful. Now clearing all cached...');

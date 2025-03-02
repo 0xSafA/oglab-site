@@ -1,19 +1,19 @@
 <?php
 
-namespace Marvel\Http\Controllers;
+namespace oglab\Http\Controllers;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Marvel\Database\Models\Address;
-use Marvel\Database\Repositories\BecameSellersRepository;
-use Marvel\Exceptions\MarvelException;
+use oglab\Database\Models\Address;
+use oglab\Database\Repositories\BecameSellersRepository;
+use oglab\Exceptions\oglabException;
 use Illuminate\Support\Facades\Cache;
-use Marvel\Database\Models\Commission;
-use Marvel\Database\Repositories\CommissionRepository;
-use Marvel\Http\Requests\BecameSellersRequest;
-use Marvel\Http\Requests\CommissionRequest;
+use oglab\Database\Models\Commission;
+use oglab\Database\Repositories\CommissionRepository;
+use oglab\Http\Requests\BecameSellersRequest;
+use oglab\Http\Requests\CommissionRequest;
 use Prettus\Validator\Exceptions\ValidatorException;
 
 class BecameSellerController extends CoreController
@@ -92,7 +92,7 @@ class BecameSellerController extends CoreController
         try {
             return $this->repository->first();
         } catch (\Exception $e) {
-            throw new MarvelException(NOT_FOUND);
+            throw new oglabException(NOT_FOUND);
         }
     }
 
@@ -122,6 +122,6 @@ class BecameSellerController extends CoreController
      */
     public function destroy($id)
     {
-        throw new MarvelException(ACTION_NOT_VALID);
+        throw new oglabException(ACTION_NOT_VALID);
     }
 }

@@ -177,14 +177,14 @@ return [
     */
 
     'namespaces' => [
-        'models' => ['App', 'Marvel\\Database\\Models'],
-        'queries' => ['App\\GraphQL\\Queries', 'Marvel\\GraphQL\\Queries'],
-        'mutations' => ['App\\GraphQL\\Mutations',  'Marvel\\GraphQL\\Mutation'],
+        'models' => ['App', 'oglab\\Database\\Models'],
+        'queries' => ['App\\GraphQL\\Queries', 'oglab\\GraphQL\\Queries'],
+        'mutations' => ['App\\GraphQL\\Mutations',  'oglab\\GraphQL\\Mutation'],
         'subscriptions' => 'App\\GraphQL\\Subscriptions',
         'interfaces' => 'App\\GraphQL\\Interfaces',
         'unions' => 'App\\GraphQL\\Unions',
         'scalars' => 'App\\GraphQL\\Scalars',
-        'directives' => ['App\\GraphQL\\Directives', 'Marvel\\GraphQL\\Directives'],
+        'directives' => ['App\\GraphQL\\Directives', 'oglab\\GraphQL\\Directives'],
         'validators' => ['App\\GraphQL\\Validators'],
     ],
 

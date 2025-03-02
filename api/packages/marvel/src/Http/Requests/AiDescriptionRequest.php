@@ -1,13 +1,13 @@
 <?php
 
 
-namespace Marvel\Http\Requests;
+namespace oglab\Http\Requests;
 
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Validation\Rule;
-use Marvel\Enums\AiType;
+use oglab\Enums\AiType;
 
 class AiDescriptionRequest extends FormRequest
 {

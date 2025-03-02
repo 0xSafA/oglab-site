@@ -1,10 +1,10 @@
 <?php
 
-namespace Marvel\Ai;
+namespace oglab\Ai;
 
 use Exception;
-use Marvel\Ai\AiInterface;
-use Marvel\Ai\Base;
+use oglab\Ai\AiInterface;
+use oglab\Ai\Base;
 use OpenAI as OpenAIClient;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 

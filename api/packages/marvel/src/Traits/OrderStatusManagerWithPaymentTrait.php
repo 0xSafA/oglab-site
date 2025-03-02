@@ -1,19 +1,19 @@
 <?php
 
-namespace Marvel\Traits;
+namespace oglab\Traits;
 
-use Marvel\Database\Models\Balance;
-use Marvel\Database\Models\Commission;
-use Marvel\Database\Models\Order;
-use Marvel\Database\Models\Settings;
-use Marvel\Enums\OrderStatus;
-use Marvel\Enums\PaymentStatus;
-use Marvel\Events\CommissionRateUpdateEvent;
-use Marvel\Events\OrderCancelled;
-use Marvel\Events\OrderDelivered;
-use Marvel\Events\OrderStatusChanged;
-use Marvel\Events\PaymentFailed;
-use Marvel\Events\PaymentSuccess;
+use oglab\Database\Models\Balance;
+use oglab\Database\Models\Commission;
+use oglab\Database\Models\Order;
+use oglab\Database\Models\Settings;
+use oglab\Enums\OrderStatus;
+use oglab\Enums\PaymentStatus;
+use oglab\Events\CommissionRateUpdateEvent;
+use oglab\Events\OrderCancelled;
+use oglab\Events\OrderDelivered;
+use oglab\Events\OrderStatusChanged;
+use oglab\Events\PaymentFailed;
+use oglab\Events\PaymentSuccess;
 
 trait OrderStatusManagerWithPaymentTrait
 {

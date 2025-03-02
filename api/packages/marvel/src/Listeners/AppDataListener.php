@@ -1,13 +1,13 @@
 <?php
 
-namespace Marvel\Listeners;
+namespace oglab\Listeners;
 
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\Cache;
-use Marvel\Console\MarvelVerification;
-use Marvel\Database\Models\Settings;
-use Marvel\Events\ProcessUserData;
+use oglab\Console\oglabVerification;
+use oglab\Database\Models\Settings;
+use oglab\Events\ProcessUserData;
 
 class AppDataListener
 {
@@ -18,7 +18,7 @@ class AppDataListener
      *
      * @return void
      */
-    public function __construct(MarvelVerification $config)
+    public function __construct(oglabVerification $config)
     {
         $this->config =  $config;
     }

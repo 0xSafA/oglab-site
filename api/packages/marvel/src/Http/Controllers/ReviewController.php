@@ -1,21 +1,21 @@
 <?php
 
 
-namespace Marvel\Http\Controllers;
+namespace oglab\Http\Controllers;
 
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use Marvel\Database\Models\Order;
-use Marvel\Database\Models\Review;
-use Marvel\Database\Repositories\ReviewRepository;
-use Marvel\Database\Repositories\SettingsRepository;
-use Marvel\Exceptions\MarvelException;
-use Marvel\Http\Requests\FeedbackCreateRequest;
-use Marvel\Http\Requests\ReviewCreateRequest;
-use Marvel\Http\Requests\ReviewUpdateRequest;
+use oglab\Database\Models\Order;
+use oglab\Database\Models\Review;
+use oglab\Database\Repositories\ReviewRepository;
+use oglab\Database\Repositories\SettingsRepository;
+use oglab\Exceptions\oglabException;
+use oglab\Http\Requests\FeedbackCreateRequest;
+use oglab\Http\Requests\ReviewCreateRequest;
+use oglab\Http\Requests\ReviewUpdateRequest;
 use Prettus\Validator\Exceptions\ValidatorException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -89,8 +89,8 @@ class ReviewController extends CoreController
             }
 
             return $this->repository->storeReview($request);
-        } catch (MarvelException $e) {
-            throw new MarvelException(ALREADY_GIVEN_REVIEW_FOR_THIS_PRODUCT);
+        } catch (oglabException $e) {
+            throw new oglabException(ALREADY_GIVEN_REVIEW_FOR_THIS_PRODUCT);
         }
     }
 
@@ -98,8 +98,8 @@ class ReviewController extends CoreController
     {
         try {
             return $this->repository->findOrFail($id);
-        } catch (MarvelException $e) {
-            throw new MarvelException(NOT_FOUND);
+        } catch (oglabException $e) {
+            throw new oglabException(NOT_FOUND);
         }
     }
 
@@ -108,8 +108,8 @@ class ReviewController extends CoreController
         $request->merge(["id" => $id]);
         try {
             return $this->updateReview($request);
-        } catch (MarvelException $th) {
-            throw new MarvelException(SOMETHING_WENT_WRONG);
+        } catch (oglabException $th) {
+            throw new oglabException(SOMETHING_WENT_WRONG);
         }
     }
 
@@ -129,8 +129,8 @@ class ReviewController extends CoreController
     {
         try {
             return $this->repository->findOrFail($id)->delete();
-        } catch (MarvelException $e) {
-            throw new MarvelException(NOT_FOUND);
+        } catch (oglabException $e) {
+            throw new oglabException(NOT_FOUND);
         }
     }
 }

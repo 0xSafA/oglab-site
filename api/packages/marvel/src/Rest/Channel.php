@@ -1,8 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Broadcast;
-use Marvel\Database\Models\StoreNotice;
-use Marvel\Database\Models\User;
+use oglab\Database\Models\StoreNotice;
+use oglab\Database\Models\User;
 
 /*
 |--------------------------------------------------------------------------

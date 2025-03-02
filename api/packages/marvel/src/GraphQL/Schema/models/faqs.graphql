@@ -10,7 +10,7 @@ extend type Query {
         issued_by: String
     ): [Faqs!]!
         @paginate(
-            builder: "Marvel\\GraphQL\\Queries\\FaqQuery@fetchFaqs"
+            builder: "oglab\\GraphQL\\Queries\\FaqQuery@fetchFaqs"
             defaultCount: 15
         )
     faq(id: ID @eq, slug: String @eq, language: String @eq): Faqs @find

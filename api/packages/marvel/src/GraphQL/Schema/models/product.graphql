@@ -15,7 +15,7 @@ extend type Query {
         manufacturer: String
     ): [Product]
         @paginate(
-            builder: "Marvel\\GraphQL\\Queries\\ProductQuery@fetchProducts"
+            builder: "oglab\\GraphQL\\Queries\\ProductQuery@fetchProducts"
             defaultCount: 15
         )
     # products(
@@ -63,7 +63,7 @@ extend type Query {
         sortedBy: String
     ): [Product!]!
         @paginate(
-            builder: "Marvel\\GraphQL\\Queries\\ProductQuery@fetchProductStock"
+            builder: "oglab\\GraphQL\\Queries\\ProductQuery@fetchProductStock"
             defaultCount: 15
         )
 
@@ -78,7 +78,7 @@ extend type Query {
         sortedBy: String
     ): [Product!]!
         @paginate(
-            builder: "Marvel\\GraphQL\\Queries\\ProductQuery@fetchDraftedProducts"
+            builder: "oglab\\GraphQL\\Queries\\ProductQuery@fetchDraftedProducts"
             defaultCount: 15
         )
 }
@@ -113,7 +113,7 @@ type Variation {
     blocked_dates: [String]
     digital_file: DigitalFile
         @field(
-            resolver: "Marvel\\GraphQL\\Queries\\ProductQuery@fetchDigitalFilesForVariation"
+            resolver: "oglab\\GraphQL\\Queries\\ProductQuery@fetchDigitalFilesForVariation"
         )
     sku: String
     is_disable: Boolean
@@ -169,7 +169,7 @@ type Product {
     metas: [MetaData] @hasMany
     digital_file: DigitalFile
         @field(
-            resolver: "Marvel\\GraphQL\\Queries\\ProductQuery@fetchDigitalFilesForProduct"
+            resolver: "oglab\\GraphQL\\Queries\\ProductQuery@fetchDigitalFilesForProduct"
         )
     variations: [AttributeValue] @belongsToMany
     variation_options: [Variation] @hasMany
@@ -183,7 +183,7 @@ type Product {
     manufacturer_id: ID
     related_products(limit: Int): [Product]
         @field(
-            resolver: "Marvel\\GraphQL\\Queries\\ProductQuery@relatedProducts"
+            resolver: "oglab\\GraphQL\\Queries\\ProductQuery@relatedProducts"
         )
     blocked_dates: [String]
     description: String

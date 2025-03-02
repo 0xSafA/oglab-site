@@ -1,14 +1,14 @@
 <?php
 
-namespace Marvel\Listeners;
+namespace oglab\Listeners;
 
 use App\Models\User;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Marvel\Enums\EventType;
-use Marvel\Events\PaymentFailed;
-use Marvel\Notifications\PaymentFailedNotification;
-use Marvel\Traits\OrderSmsTrait;
-use Marvel\Traits\SmsTrait;
+use oglab\Enums\EventType;
+use oglab\Events\PaymentFailed;
+use oglab\Notifications\PaymentFailedNotification;
+use oglab\Traits\OrderSmsTrait;
+use oglab\Traits\SmsTrait;
 
 class SendPaymentFailedNotification implements ShouldQueue
 {

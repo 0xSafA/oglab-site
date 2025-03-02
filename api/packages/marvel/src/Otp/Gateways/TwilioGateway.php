@@ -1,10 +1,10 @@
 <?php
 
 
-namespace Marvel\Otp\Gateways;
+namespace oglab\Otp\Gateways;
 
-use Marvel\Otp\OtpInterface;
-use Marvel\Otp\Result;
+use oglab\Otp\OtpInterface;
+use oglab\Otp\Result;
 use Twilio\Exceptions\TwilioException;
 use Twilio\Rest\Client;
 

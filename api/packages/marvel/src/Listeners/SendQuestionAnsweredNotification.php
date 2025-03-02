@@ -1,14 +1,14 @@
 <?php
 
-namespace Marvel\Listeners;
+namespace oglab\Listeners;
 
 use App\Events\QuestionAnswered;
 use App\Models\User;
 use App\Notifications\NotifyQuestionAnswered;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
-use Marvel\Enums\EventType;
-use Marvel\Traits\SmsTrait;
+use oglab\Enums\EventType;
+use oglab\Traits\SmsTrait;
 
 class SendQuestionAnsweredNotification implements ShouldQueue
 {

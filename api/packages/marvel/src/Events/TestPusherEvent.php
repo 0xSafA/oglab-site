@@ -1,6 +1,6 @@
 <?php
 
-namespace Marvel\Events;
+namespace oglab\Events;
 
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
@@ -9,8 +9,8 @@ use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
-use Marvel\Database\Models\StoreNotice;
-use Marvel\Database\Models\User;
+use oglab\Database\Models\StoreNotice;
+use oglab\Database\Models\User;
 
 class TestPusherEvent implements ShouldBroadcast
 {

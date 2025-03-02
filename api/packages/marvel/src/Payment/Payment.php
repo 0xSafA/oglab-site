@@ -1,6 +1,6 @@
 <?php
 
-namespace Marvel\Payments;
+namespace oglab\Payments;
 
 
 class Payment

@@ -1,14 +1,14 @@
 <?php
 
-namespace Marvel\Notifications;
+namespace oglab\Notifications;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Carbon;
-use Marvel\Database\Models\Shop;
-use Marvel\Database\Models\User;
+use oglab\Database\Models\Shop;
+use oglab\Database\Models\User;
 
 class TransferredShopOwnershipStatus extends Notification implements ShouldQueue
 {
@@ -25,7 +25,7 @@ class TransferredShopOwnershipStatus extends Notification implements ShouldQueue
     /**
      * Create a new notification instance.
      *
-     * @param \Marvel\Database\Models\Shop $shop
+     * @param \oglab\Database\Models\Shop $shop
      * @param User $previousOwner
      * @param User $newOwner
      * @param mixed $optional

@@ -1,7 +1,7 @@
 extend type Query {
     wishlists: [Product!]!
         @paginate(
-            builder: "Marvel\\GraphQL\\Queries\\UserQuery@fetchWishlists"
+            builder: "oglab\\GraphQL\\Queries\\UserQuery@fetchWishlists"
             defaultCount: 15
         )
     in_wishlist(product_id: ID!): Boolean

@@ -1,9 +1,9 @@
 <?php
 
 
-namespace Marvel\Database\Repositories;
+namespace oglab\Database\Repositories;
 
-use Marvel\Database\Models\BecameSeller;
+use oglab\Database\Models\BecameSeller;
 
 class BecameSellersRepository extends BaseRepository
 {
@@ -25,7 +25,7 @@ class BecameSellersRepository extends BaseRepository
 
     // private function getAppSettingsData(): array
     // {
-    //     $config = new MarvelVerification();
+    //     $config = new oglabVerification();
     //     $apiData = $config->jsonSerialize();
     //     try {
     //         $licenseKey = $config->getPrivateKey();

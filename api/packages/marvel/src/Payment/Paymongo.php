@@ -1,14 +1,14 @@
 <?php
 
-namespace Marvel\Payments;
+namespace oglab\Payments;
 
 use Exception;
-use Marvel\Database\Models\Order;
-use Marvel\Exceptions\MarvelException;
-use Marvel\Traits\PaymentTrait;
+use oglab\Database\Models\Order;
+use oglab\Exceptions\oglabException;
+use oglab\Traits\PaymentTrait;
 use Luigel\Paymongo\Facades\Paymongo as PaymongoFacade;
-use Marvel\Enums\OrderStatus;
-use Marvel\Enums\PaymentStatus;
+use oglab\Enums\OrderStatus;
+use oglab\Enums\PaymentStatus;
 use Stripe\Exception\SignatureVerificationException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Throwable;
@@ -30,7 +30,7 @@ class Paymongo extends Base implements PaymentInterface
      *
      * @param $data
      * @return array
-     * @throws MarvelException
+     * @throws oglabException
      */
     public function getIntent($data): array
     {
@@ -59,7 +59,7 @@ class Paymongo extends Base implements PaymentInterface
                 'is_redirect'  => true,
             ];
         } catch (Exception $e) {
-            throw new MarvelException(SOMETHING_WENT_WRONG_WITH_PAYMENT);
+            throw new oglabException(SOMETHING_WENT_WRONG_WITH_PAYMENT);
         }
     }
 
@@ -68,7 +68,7 @@ class Paymongo extends Base implements PaymentInterface
      *
      * @param $id
      * @return false|mixed
-     * @throws MarvelException
+     * @throws oglabException
      */
     public function verify($paymentId): mixed
     {
@@ -89,7 +89,7 @@ class Paymongo extends Base implements PaymentInterface
             }
             return $source->status ?? false;
         } catch (Exception $e) {
-            throw new MarvelException(SOMETHING_WENT_WRONG_WITH_PAYMENT);
+            throw new oglabException(SOMETHING_WENT_WRONG_WITH_PAYMENT);
         }
     }
 

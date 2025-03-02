@@ -1,6 +1,6 @@
 <?php
 
-namespace Marvel\Events;
+namespace oglab\Events;
 
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
@@ -9,16 +9,16 @@ use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
-use Marvel\Database\Models\Conversation;
-use Marvel\Database\Models\Message;
+use oglab\Database\Models\Conversation;
+use oglab\Database\Models\Message;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Cache;
-use Marvel\Database\Models\Settings;
-use Marvel\Database\Models\Shop;
-use Marvel\Database\Models\User;
-use Marvel\Exceptions\MarvelException;
-use Marvel\Enums\Permission;
-use Marvel\Traits\UsersTrait;
+use oglab\Database\Models\Settings;
+use oglab\Database\Models\Shop;
+use oglab\Database\Models\User;
+use oglab\Exceptions\oglabException;
+use oglab\Enums\Permission;
+use oglab\Traits\UsersTrait;
 use Pusher\Pusher;
 
 // why it does not implement queue ? is it for instant delivery or there are another reasons ?
@@ -138,8 +138,8 @@ class MessageSent implements ShouldBroadcast
             }
             return $enableBroadCast;
             // return $settings->options['pushNotification']['all']['message'] == true;
-        } catch (MarvelException $th) {
-            throw new MarvelException(SOMETHING_WENT_WRONG, $th->getMessage());
+        } catch (oglabException $th) {
+            throw new oglabException(SOMETHING_WENT_WRONG, $th->getMessage());
         }
     }
 }

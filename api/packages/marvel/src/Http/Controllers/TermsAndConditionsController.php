@@ -1,19 +1,19 @@
 <?php
 
-namespace Marvel\Http\Controllers;
+namespace oglab\Http\Controllers;
 
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Marvel\Database\Models\TermsAndConditions;
-use Marvel\Database\Repositories\TermsAndConditionsRepository;
-use Marvel\Enums\Permission;
-use Marvel\Exceptions\MarvelException;
-use Marvel\Http\Requests\CreateTermsAndConditionsRequest;
-use Marvel\Http\Requests\UpdateTermsAndConditionsRequest;
+use oglab\Database\Models\TermsAndConditions;
+use oglab\Database\Repositories\TermsAndConditionsRepository;
+use oglab\Enums\Permission;
+use oglab\Exceptions\oglabException;
+use oglab\Http\Requests\CreateTermsAndConditionsRequest;
+use oglab\Http\Requests\UpdateTermsAndConditionsRequest;
 use Prettus\Validator\Exceptions\ValidatorException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Marvel\Http\Resources\TermsConditionResource;
+use oglab\Http\Resources\TermsConditionResource;
 
 class TermsAndConditionsController extends CoreController
 {
@@ -81,8 +81,8 @@ class TermsAndConditionsController extends CoreController
                     return $this->repository->with('shop')->where('is_approved', '=', true)->where('language', $language);
                 }
             }
-        } catch (MarvelException $e) {
-            throw new MarvelException(SOMETHING_WENT_WRONG, $e->getMessage());
+        } catch (oglabException $e) {
+            throw new oglabException(SOMETHING_WENT_WRONG, $e->getMessage());
         }
     }
 
@@ -98,8 +98,8 @@ class TermsAndConditionsController extends CoreController
         try {
             return $this->repository->storeTermsAndConditions($request);
             // return $this->repository->create($validatedData);
-        } catch (MarvelException $e) {
-            throw new MarvelException(COULD_NOT_CREATE_THE_RESOURCE, $e->getMessage());
+        } catch (oglabException $e) {
+            throw new oglabException(COULD_NOT_CREATE_THE_RESOURCE, $e->getMessage());
         }
     }
 
@@ -115,8 +115,8 @@ class TermsAndConditionsController extends CoreController
             $language = $request->language ?? DEFAULT_LANGUAGE;
             $termsAndCondition = $this->repository->with('shop')->where('language', $language)->where('slug', '=', $slug)->first();
             return new TermsConditionResource($termsAndCondition);
-        } catch (MarvelException $e) {
-            throw new MarvelException(NOT_FOUND, $e->getMessage());
+        } catch (oglabException $e) {
+            throw new oglabException(NOT_FOUND, $e->getMessage());
         }
     }
 
@@ -132,8 +132,8 @@ class TermsAndConditionsController extends CoreController
         try {
             $request["id"] = $id;
             return $this->updateTermsAndConditions($request);
-        } catch (MarvelException $e) {
-            throw new MarvelException(COULD_NOT_UPDATE_THE_RESOURCE, $e->getMessage());
+        } catch (oglabException $e) {
+            throw new oglabException(COULD_NOT_UPDATE_THE_RESOURCE, $e->getMessage());
         }
     }
 
@@ -169,8 +169,8 @@ class TermsAndConditionsController extends CoreController
             if ($user && ($user->hasPermissionTo(Permission::SUPER_ADMIN) || $user->hasPermissionTo(Permission::STORE_OWNER) || $user->hasPermissionTo(Permission::STAFF))) {
                 return $this->repository->findOrFail($request->id)->delete();
             }
-        } catch (MarvelException $e) {
-            throw new MarvelException(NOT_FOUND, $e->getMessage());
+        } catch (oglabException $e) {
+            throw new oglabException(NOT_FOUND, $e->getMessage());
         }
     }
 
@@ -184,7 +184,7 @@ class TermsAndConditionsController extends CoreController
     {
         try {
             if (!$request->user()->hasPermissionTo(Permission::SUPER_ADMIN)) {
-                throw new MarvelException(NOT_AUTHORIZED);
+                throw new oglabException(NOT_AUTHORIZED);
             }
             $id = $request->id;
             try {
@@ -195,8 +195,8 @@ class TermsAndConditionsController extends CoreController
             $term->is_approved = true;
             $term->save();
             return $term;
-        } catch (MarvelException $th) {
-            throw new MarvelException(SOMETHING_WENT_WRONG);
+        } catch (oglabException $th) {
+            throw new oglabException(SOMETHING_WENT_WRONG);
         }
     }
 
@@ -210,7 +210,7 @@ class TermsAndConditionsController extends CoreController
     {
         try {
             if (!$request->user()->hasPermissionTo(Permission::SUPER_ADMIN)) {
-                throw new MarvelException(NOT_AUTHORIZED);
+                throw new oglabException(NOT_AUTHORIZED);
             }
             $id = $request->id;
             try {
@@ -222,8 +222,8 @@ class TermsAndConditionsController extends CoreController
             $term->is_approved = false;
             $term->save();
             return $term;
-        } catch (MarvelException $th) {
-            throw new MarvelException(SOMETHING_WENT_WRONG);
+        } catch (oglabException $th) {
+            throw new oglabException(SOMETHING_WENT_WRONG);
         }
     }
 }

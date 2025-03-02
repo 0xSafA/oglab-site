@@ -1,8 +1,8 @@
 <?php
 
-namespace Marvel\Events;
+namespace oglab\Events;
 
-use Marvel\Database\Models\User;
+use oglab\Database\Models\User;
 
 class ProcessUserData
 {

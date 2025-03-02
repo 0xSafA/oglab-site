@@ -1,14 +1,14 @@
 <?php
 
-namespace Marvel\Listeners;
+namespace oglab\Listeners;
 
 use App\Models\User;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Marvel\Enums\EventType;
-use Marvel\Events\PaymentSuccess;
-use Marvel\Notifications\PaymentSuccessfulNotification;
-use Marvel\Traits\OrderSmsTrait;
-use Marvel\Traits\SmsTrait;
+use oglab\Enums\EventType;
+use oglab\Events\PaymentSuccess;
+use oglab\Notifications\PaymentSuccessfulNotification;
+use oglab\Traits\OrderSmsTrait;
+use oglab\Traits\SmsTrait;
 
 class SendPaymentSuccessNotification implements ShouldQueue
 {

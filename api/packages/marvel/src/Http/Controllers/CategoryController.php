@@ -1,17 +1,17 @@
 <?php
 
 
-namespace Marvel\Http\Controllers;
+namespace oglab\Http\Controllers;
 
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Marvel\Database\Models\Category;
-use Marvel\Database\Repositories\CategoryRepository;
-use Marvel\Exceptions\MarvelException;
-use Marvel\Http\Requests\CategoryCreateRequest;
-use Marvel\Http\Requests\CategoryUpdateRequest;
-use Marvel\Http\Resources\CategoryResource;
+use oglab\Database\Models\Category;
+use oglab\Database\Repositories\CategoryRepository;
+use oglab\Exceptions\oglabException;
+use oglab\Http\Requests\CategoryCreateRequest;
+use oglab\Http\Requests\CategoryUpdateRequest;
+use oglab\Http\Resources\CategoryResource;
 use Prettus\Validator\Exceptions\ValidatorException;
 
 
@@ -92,8 +92,8 @@ class CategoryController extends CoreController
     {
         try {
             return $this->repository->saveCategory($request);
-        } catch (MarvelException $th) {
-            throw new MarvelException(COULD_NOT_CREATE_THE_RESOURCE);
+        } catch (oglabException $th) {
+            throw new oglabException(COULD_NOT_CREATE_THE_RESOURCE);
         }
         // $language = $request->language ?? DEFAULT_LANGUAGE;
         // $translation_item_id = $request->translation_item_id ?? null;
@@ -118,8 +118,8 @@ class CategoryController extends CoreController
             }
             $category = $this->repository->with(['type', 'parentCategory', 'children'])->where('slug', $params)->firstOrFail();
             return new CategoryResource($category);
-        } catch (MarvelException $e) {
-            throw new MarvelException(NOT_FOUND);
+        } catch (oglabException $e) {
+            throw new oglabException(NOT_FOUND);
         }
     }
 
@@ -135,8 +135,8 @@ class CategoryController extends CoreController
         try {
             $request->merge(['id' => $id]);
             return $this->categoryUpdate($request);
-        } catch (MarvelException $e) {
-            throw new MarvelException(NOT_FOUND);
+        } catch (oglabException $e) {
+            throw new oglabException(NOT_FOUND);
         }
     }
 
@@ -157,8 +157,8 @@ class CategoryController extends CoreController
     {
         try {
             return $this->repository->findOrFail($id)->delete();
-        } catch (MarvelException $e) {
-            throw new MarvelException(NOT_FOUND);
+        } catch (oglabException $e) {
+            throw new oglabException(NOT_FOUND);
         }
     }
 }

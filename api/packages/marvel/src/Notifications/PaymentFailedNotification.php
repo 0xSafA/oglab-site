@@ -1,13 +1,13 @@
 <?php
 
-namespace Marvel\Notifications;
+namespace oglab\Notifications;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\App;
-use Marvel\Database\Models\Order;
+use oglab\Database\Models\Order;
 
 class PaymentFailedNotification extends Notification implements ShouldQueue
 {

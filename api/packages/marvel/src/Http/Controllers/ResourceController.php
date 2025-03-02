@@ -1,16 +1,16 @@
 <?php
 
 
-namespace Marvel\Http\Controllers;
+namespace oglab\Http\Controllers;
 
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Marvel\Database\Models\Resource;
-use Marvel\Database\Repositories\ResourceRepository;
-use Marvel\Exceptions\MarvelException;
-use Marvel\Http\Requests\ResourceCreateRequest;
-use Marvel\Http\Requests\ResourceUpdateRequest;
+use oglab\Database\Models\Resource;
+use oglab\Database\Repositories\ResourceRepository;
+use oglab\Exceptions\oglabException;
+use oglab\Http\Requests\ResourceCreateRequest;
+use oglab\Http\Requests\ResourceUpdateRequest;
 use Prettus\Validator\Exceptions\ValidatorException;
 
 
@@ -64,8 +64,8 @@ class ResourceController extends CoreController
                 return $this->repository->where('id', $params)->firstOrFail();
             }
             return $this->repository->where('slug', $params)->where('language', $language)->firstOrFail();
-        } catch (MarvelException $e) {
-            throw new MarvelException(NOT_FOUND);
+        } catch (oglabException $e) {
+            throw new oglabException(NOT_FOUND);
         }
     }
 
@@ -81,8 +81,8 @@ class ResourceController extends CoreController
         try {
             $validatedData = $request->validated();
             return $this->repository->findOrFail($id)->update($validatedData);
-        } catch (MarvelException $e) {
-            throw new MarvelException(NOT_FOUND);
+        } catch (oglabException $e) {
+            throw new oglabException(NOT_FOUND);
         }
     }
 
@@ -96,8 +96,8 @@ class ResourceController extends CoreController
     {
         try {
             return $this->repository->findOrFail($id)->delete();
-        } catch (MarvelException $e) {
-            throw new MarvelException(NOT_FOUND);
+        } catch (oglabException $e) {
+            throw new oglabException(NOT_FOUND);
         }
     }
 }

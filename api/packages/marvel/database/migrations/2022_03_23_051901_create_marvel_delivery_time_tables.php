@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateMarvelDeliveryTimeTables extends Migration
+class CreateoglabDeliveryTimeTables extends Migration
 {
     /**
      * Run the migrations.

@@ -1,6 +1,6 @@
 <?php
 
-namespace Marvel\Console;
+namespace oglab\Console;
 
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
@@ -10,7 +10,7 @@ use function Laravel\Prompts\info;
 
 class ImportDemoData extends Command
 {
-    protected $signature = 'marvel:seed';
+    protected $signature = 'oglab:seed';
 
     protected $description = 'Import Demo Data';
 

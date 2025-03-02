@@ -1,16 +1,16 @@
 <?php
 
 
-namespace Marvel\Http\Controllers;
+namespace oglab\Http\Controllers;
 
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Marvel\Database\Repositories\RefundReasonRepository;
-use Marvel\Exceptions\MarvelException;
-use Marvel\Http\Requests\RefundReasonCreateRequest;
-use Marvel\Http\Requests\RefundReasonUpdateRequest;
+use oglab\Database\Repositories\RefundReasonRepository;
+use oglab\Exceptions\oglabException;
+use oglab\Http\Requests\RefundReasonCreateRequest;
+use oglab\Http\Requests\RefundReasonUpdateRequest;
 use Prettus\Validator\Exceptions\ValidatorException;
 
 
@@ -54,8 +54,8 @@ class RefundReasonController extends CoreController
                 return $this->repository->storeRefundReason($request);
             }
             throw new AuthorizationException(NOT_AUTHORIZED);
-        } catch (MarvelException $e) {
-            throw new MarvelException(COULD_NOT_CREATE_THE_RESOURCE);
+        } catch (oglabException $e) {
+            throw new oglabException(COULD_NOT_CREATE_THE_RESOURCE);
         }
     }
 
@@ -75,8 +75,8 @@ class RefundReasonController extends CoreController
                 return $this->repository->where('id', $params)->firstOrFail();
             }
             return $this->repository->where('slug', $params)->firstOrFail();
-        } catch (MarvelException $th) {
-            throw new MarvelException(COULD_NOT_CREATE_THE_RESOURCE);
+        } catch (oglabException $th) {
+            throw new oglabException(COULD_NOT_CREATE_THE_RESOURCE);
         }
     }
 
@@ -92,8 +92,8 @@ class RefundReasonController extends CoreController
         try {
             $request['id'] = $id;
             return $this->refundReasonUpdate($request);
-        } catch (MarvelException $th) {
-            throw new MarvelException(COULD_NOT_CREATE_THE_RESOURCE);
+        } catch (oglabException $th) {
+            throw new oglabException(COULD_NOT_CREATE_THE_RESOURCE);
         }
     }
 
@@ -102,8 +102,8 @@ class RefundReasonController extends CoreController
         try {
             $item = $this->repository->findOrFail($request->id);
             return $this->repository->updateRefundReason($request, $item);
-        } catch (MarvelException $th) {
-            throw new MarvelException(COULD_NOT_CREATE_THE_RESOURCE);
+        } catch (oglabException $th) {
+            throw new oglabException(COULD_NOT_CREATE_THE_RESOURCE);
         }
     }
 
@@ -125,8 +125,8 @@ class RefundReasonController extends CoreController
             $refundReason = $this->repository->findOrFail($request->id);
             $refundReason->delete();
             return $refundReason;
-        } catch (MarvelException $th) {
-            throw new MarvelException(COULD_NOT_CREATE_THE_RESOURCE);
+        } catch (oglabException $th) {
+            throw new oglabException(COULD_NOT_CREATE_THE_RESOURCE);
         }
     }
 }

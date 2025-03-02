@@ -1,17 +1,17 @@
 <?php
 
-namespace Marvel\Database\Repositories;
+namespace oglab\Database\Repositories;
 
 use App\Events\ReviewCreated;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
-use Marvel\Database\Models\Conversation;
-use Marvel\Database\Models\Message;
-use Marvel\Database\Models\Participant;
-use Marvel\Events\MessageSent;
-use Marvel\Exceptions\MarvelException;
+use oglab\Database\Models\Conversation;
+use oglab\Database\Models\Message;
+use oglab\Database\Models\Participant;
+use oglab\Events\MessageSent;
+use oglab\Exceptions\oglabException;
 use Prettus\Repository\Criteria\RequestCriteria;
 use Prettus\Repository\Exceptions\RepositoryException;
 use Stevebauman\Purify\Facades\Purify;
@@ -63,7 +63,7 @@ class MessageRepository extends BaseRepository
                 $type =  "user";
             }
             if (false === $authorize['user'] && false === $authorize['shop']) {
-                throw new MarvelException(NOT_AUTHORIZED);
+                throw new oglabException(NOT_AUTHORIZED);
             }
 
             $message = $this->create([
@@ -78,7 +78,7 @@ class MessageRepository extends BaseRepository
 
             return $message;
         } catch (\Exception $e) {
-            throw new MarvelException(NOT_AUTHORIZED);
+            throw new oglabException(NOT_AUTHORIZED);
         }
     }
 }

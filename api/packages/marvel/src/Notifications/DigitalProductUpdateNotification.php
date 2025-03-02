@@ -1,14 +1,14 @@
 <?php
 
-namespace Marvel\Notifications;
+namespace oglab\Notifications;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use Marvel\Database\Models\Order;
-use Marvel\Database\Models\Product;
-use Marvel\Database\Models\User;
+use oglab\Database\Models\Order;
+use oglab\Database\Models\Product;
+use oglab\Database\Models\User;
 
 class DigitalProductUpdateNotification extends Notification implements ShouldQueue
 {

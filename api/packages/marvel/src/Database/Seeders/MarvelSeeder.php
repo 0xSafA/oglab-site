@@ -1,11 +1,11 @@
 <?php
 
-namespace Marvel\Database\Seeders;
+namespace oglab\Database\Seeders;
 
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 
-class MarvelSeeder extends Seeder
+class oglabSeeder extends Seeder
 {
     /**
      * Seed the application's database.

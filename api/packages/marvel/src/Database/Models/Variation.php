@@ -1,11 +1,11 @@
 <?php
 
-namespace Marvel\Database\Models;
+namespace oglab\Database\Models;
 
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Illuminate\Database\Eloquent\Model;
-use Marvel\Traits\TranslationTrait;
+use oglab\Traits\TranslationTrait;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class Variation extends Model
@@ -58,7 +58,7 @@ class Variation extends Model
 
   public function fetchBlockedDatesForAVariation()
   {
-    return  Availability::where('bookable_id', $this->id)->where('bookable_type', 'Marvel\Database\Models\Variation')->whereDate('to', '>=', Carbon::now())->get();
+    return  Availability::where('bookable_id', $this->id)->where('bookable_type', 'oglab\Database\Models\Variation')->whereDate('to', '>=', Carbon::now())->get();
   }
 
   public function digital_file()

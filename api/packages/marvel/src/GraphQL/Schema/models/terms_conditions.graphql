@@ -11,7 +11,7 @@ extend type Query {
         is_approved: Boolean
     ): [TermsAndConditions]
         @paginate(
-            builder: "Marvel\\GraphQL\\Queries\\TermsConditionsQuery@fetchTermsConditions"
+            builder: "oglab\\GraphQL\\Queries\\TermsConditionsQuery@fetchTermsConditions"
             defaultCount: 15
         )
     termsCondition(

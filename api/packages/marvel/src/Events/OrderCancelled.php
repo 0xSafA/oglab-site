@@ -1,10 +1,10 @@
 <?php
 
 
-namespace Marvel\Events;
+namespace oglab\Events;
 
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Marvel\Database\Models\Order;
+use oglab\Database\Models\Order;
 
 class OrderCancelled implements ShouldQueue
 {

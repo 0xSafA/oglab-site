@@ -1,18 +1,18 @@
 <?php
 
 
-namespace Marvel\Database\Repositories;
+namespace oglab\Database\Repositories;
 
 use Exception;
 use Illuminate\Http\Request;
-use Marvel\Database\Models\Coupon;
+use oglab\Database\Models\Coupon;
 use Prettus\Repository\Criteria\RequestCriteria;
 use Prettus\Repository\Exceptions\RepositoryException;
-use Marvel\Database\Models\Settings;
-use Marvel\Database\Models\Shop;
-use Marvel\Enums\CouponType;
-use Marvel\Enums\Permission;
-use Marvel\Exceptions\MarvelBadRequestException;
+use oglab\Database\Models\Settings;
+use oglab\Database\Models\Shop;
+use oglab\Enums\CouponType;
+use oglab\Enums\Permission;
+use oglab\Exceptions\oglabBadRequestException;
 
 class CouponRepository extends BaseRepository
 {
@@ -78,7 +78,7 @@ class CouponRepository extends BaseRepository
             $data['is_approve'] = $request->user()->hasPermissionTo(Permission::SUPER_ADMIN);
             return $this->create($data);
         } catch (Exception $th) {
-            throw new MarvelBadRequestException(COULD_NOT_CREATE_THE_RESOURCE);
+            throw new oglabBadRequestException(COULD_NOT_CREATE_THE_RESOURCE);
         }
     }
     public function verifyCoupon(Request $request)

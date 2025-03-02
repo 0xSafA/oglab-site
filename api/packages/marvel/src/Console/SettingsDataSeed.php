@@ -1,23 +1,23 @@
 <?php
 
-namespace Marvel\Console;
+namespace oglab\Console;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
-use Marvel\Database\Models\Settings;
+use oglab\Database\Models\Settings;
 use function Laravel\Prompts\{text,  confirm, info};
 
 class SettingsDataImporter extends Command
 {
     private array $appData;
-    protected MarvelVerification $verification;
-    protected $signature = 'marvel:settings-seed';
+    protected oglabVerification $verification;
+    protected $signature = 'oglab:settings-seed';
 
     protected $description = 'Import Settings Data';
 
     public function handle()
     {
-        $this->verification = new MarvelVerification();
+        $this->verification = new oglabVerification();
         $shouldGetLicenseKeyFromUser = $this->shouldGetLicenseKey();
         if ($shouldGetLicenseKeyFromUser) {
             $this->getLicenseKey();
@@ -37,7 +37,7 @@ class SettingsDataImporter extends Command
                 info('Importing dummy settings...');
 
                 $this->call('db:seed', [
-                    '--class' => '\\Marvel\\Database\\Seeders\\SettingsSeeder'
+                    '--class' => '\\oglab\\Database\\Seeders\\SettingsSeeder'
                 ]);
 
                 $this->verification->modifySettingsData();

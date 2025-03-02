@@ -1,11 +1,11 @@
 <?php
 
 
-namespace Marvel\Events;
+namespace oglab\Events;
 
 
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Marvel\Database\Models\OwnershipTransfer;
+use oglab\Database\Models\OwnershipTransfer;
 
 
 class OwnershipTransferStatusControl implements ShouldQueue

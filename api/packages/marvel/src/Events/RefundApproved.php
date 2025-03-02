@@ -5,7 +5,7 @@ namespace App\Events;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
-use Marvel\Database\Models\Refund;
+use oglab\Database\Models\Refund;
 
 class RefundApproved
 {

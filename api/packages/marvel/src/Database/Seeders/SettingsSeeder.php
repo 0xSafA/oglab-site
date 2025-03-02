@@ -1,6 +1,6 @@
 <?php
 
-namespace Marvel\Database\Seeders;
+namespace oglab\Database\Seeders;
 
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;

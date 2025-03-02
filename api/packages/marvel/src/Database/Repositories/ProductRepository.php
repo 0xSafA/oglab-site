@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Marvel\Database\Repositories;
+namespace oglab\Database\Repositories;
 
 use Carbon\Carbon;
 use Exception;
@@ -10,25 +10,25 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
-use Marvel\Database\Models\Availability;
-use Marvel\Database\Models\DigitalFile;
-use Marvel\Database\Models\Product;
-use Marvel\Database\Models\Resource;
-use Marvel\Database\Models\Type;
-use Marvel\Database\Models\Variation;
-use Marvel\Enums\ProductStatus;
-use Marvel\Enums\ProductType;
+use oglab\Database\Models\Availability;
+use oglab\Database\Models\DigitalFile;
+use oglab\Database\Models\Product;
+use oglab\Database\Models\Resource;
+use oglab\Database\Models\Type;
+use oglab\Database\Models\Variation;
+use oglab\Enums\ProductStatus;
+use oglab\Enums\ProductType;
 use Prettus\Repository\Criteria\RequestCriteria;
 use Prettus\Repository\Exceptions\RepositoryException;
 use Spatie\Period\Boundaries;
 use Spatie\Period\Period;
 use Spatie\Period\Precision;
-use Marvel\Enums\Permission;
-use Marvel\Events\ProductReviewApproved;
-use Marvel\Events\ProductReviewRejected;
-use Marvel\Events\DigitalProductUpdateEvent;
+use oglab\Enums\Permission;
+use oglab\Events\ProductReviewApproved;
+use oglab\Events\ProductReviewRejected;
+use oglab\Events\DigitalProductUpdateEvent;
 use Symfony\Component\HttpKernel\Exception\HttpException;
-use Marvel\Exceptions\MarvelException;
+use oglab\Exceptions\oglabException;
 
 class ProductRepository extends BaseRepository
 {
@@ -550,7 +550,7 @@ class ProductRepository extends BaseRepository
                 $type = Type::where('slug', $request->type_slug)->where('language', $language)->firstOrFail();
                 $type_id = $type->id;
             } catch (ModelNotFoundException $e) {
-                throw new MarvelException(NOT_FOUND);
+                throw new oglabException(NOT_FOUND);
             }
         }
 
@@ -633,7 +633,7 @@ class ProductRepository extends BaseRepository
 
     public function fetchBlockedDatesForAVariationInRange($from, $to, $variation_id)
     {
-        return  Availability::where('bookable_id', $variation_id)->where('bookable_type', 'Marvel\Database\Models\Variation')->whereDate('from', '>=', $from)->whereDate('to', '<=', $to)->get();
+        return  Availability::where('bookable_id', $variation_id)->where('bookable_type', 'oglab\Database\Models\Variation')->whereDate('from', '>=', $from)->whereDate('to', '<=', $to)->get();
     }
 
     public function isVariationAvailableAt($from, $to, $variationId, $_blockedDates, $requestedQuantity)

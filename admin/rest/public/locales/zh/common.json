@@ -273,7 +273,7 @@
   "text-yearly": "每年",
   "text-order-details": "订单详细信息",
   "text-no-image-found": "没有找到图片",
-  "MARVEL_ERROR.ALREADY_REFUNDED": "已退款",
+  "oglab_ERROR.ALREADY_REFUNDED": "已退款",
   "text-item": "物品",
   "text-add": "添加",
   "text-cart": "大车",

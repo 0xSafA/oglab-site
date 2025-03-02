@@ -71,7 +71,7 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model'  => \Marvel\Database\Models\User::class,
+            'model'  => \oglab\Database\Models\User::class,
         ],
 
         // 'users' => [

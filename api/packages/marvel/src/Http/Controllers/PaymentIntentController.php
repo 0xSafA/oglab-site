@@ -1,13 +1,13 @@
 <?php
 
-namespace Marvel\Http\Controllers;
+namespace oglab\Http\Controllers;
 
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
-use Marvel\Database\Models\Settings;
-use Marvel\Exceptions\MarvelException;
-use Marvel\Database\Repositories\PaymentIntentRepository;
+use oglab\Database\Models\Settings;
+use oglab\Exceptions\oglabException;
+use oglab\Database\Repositories\PaymentIntentRepository;
 
 class PaymentIntentController extends CoreController
 {
@@ -37,8 +37,8 @@ class PaymentIntentController extends CoreController
                 throw new AuthorizationException();
             }
             return $this->repository->getPaymentIntent($request, $this->settings);
-        } catch (MarvelException $e) {
-            throw new MarvelException(SOMETHING_WENT_WRONG, $e->getMessage());
+        } catch (oglabException $e) {
+            throw new oglabException(SOMETHING_WENT_WRONG, $e->getMessage());
         }
     }
 }

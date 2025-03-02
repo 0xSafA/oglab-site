@@ -1,10 +1,10 @@
 <?php
 
-namespace Marvel\Http\Controllers;
+namespace oglab\Http\Controllers;
 
-use Marvel\Database\Repositories\CheckoutRepository;
-use Marvel\Exceptions\MarvelException;
-use Marvel\Http\Requests\CheckoutVerifyRequest;
+use oglab\Database\Repositories\CheckoutRepository;
+use oglab\Exceptions\oglabException;
+use oglab\Http\Requests\CheckoutVerifyRequest;
 
 class CheckoutController extends CoreController
 {
@@ -25,8 +25,8 @@ class CheckoutController extends CoreController
     {
         try {
             return $this->repository->verify($request);
-        } catch (MarvelException $th) {
-            throw new MarvelException(SOMETHING_WENT_WRONG);
+        } catch (oglabException $th) {
+            throw new oglabException(SOMETHING_WENT_WRONG);
         }
     }
 }

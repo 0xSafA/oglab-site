@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Marvel\Http\Controllers;
+namespace oglab\Http\Controllers;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
@@ -9,13 +9,13 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
-use Marvel\Database\Models\Conversation;
-use Marvel\Database\Models\Message;
-use Marvel\Database\Models\Participant;
-use Marvel\Database\Repositories\ConversationRepository;
-use Marvel\Database\Repositories\MessageRepository;
-use Marvel\Exceptions\MarvelException;
-use Marvel\Http\Requests\MessageCreateRequest;
+use oglab\Database\Models\Conversation;
+use oglab\Database\Models\Message;
+use oglab\Database\Models\Participant;
+use oglab\Database\Repositories\ConversationRepository;
+use oglab\Database\Repositories\MessageRepository;
+use oglab\Exceptions\oglabException;
+use oglab\Http\Requests\MessageCreateRequest;
 use Prettus\Validator\Exceptions\ValidatorException;
 
 
@@ -95,14 +95,14 @@ class MessageController extends CoreController
                 ->with(['user', 'shop'])->first();
 
             if(empty($conversation)) {
-                throw new MarvelException(NOT_AUTHORIZED);
+                throw new oglabException(NOT_AUTHORIZED);
             }
 
             return $this->repository->where('conversation_id', $conversation_id)
                 ->with(['conversation.shop', 'conversation.user.profile'])
                 ->orderBy('id', 'DESC');
         } catch (\Exception $e) {
-            throw new MarvelException(NOT_AUTHORIZED);
+            throw new oglabException(NOT_AUTHORIZED);
         }
     }
 

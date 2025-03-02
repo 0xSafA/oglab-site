@@ -1,6 +1,6 @@
 <?php
 
-namespace Marvel\Http\Resources;
+namespace oglab\Http\Resources;
 
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Http\Request;

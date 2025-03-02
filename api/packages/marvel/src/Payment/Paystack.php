@@ -1,15 +1,15 @@
 <?php
 
-namespace Marvel\Payments;
+namespace oglab\Payments;
 
 use Exception;
 use Illuminate\Support\Facades\Http;
-use Marvel\Payments\PaymentInterface;
-use Marvel\Enums\OrderStatus;
-use Marvel\Database\Models\Order;
-use Marvel\Enums\PaymentStatus;
-use Marvel\Traits\PaymentTrait;
-use Marvel\Payments\Base;
+use oglab\Payments\PaymentInterface;
+use oglab\Enums\OrderStatus;
+use oglab\Database\Models\Order;
+use oglab\Enums\PaymentStatus;
+use oglab\Traits\PaymentTrait;
+use oglab\Payments\Base;
 use Razorpay\Api\Errors\SignatureVerificationError;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Unicodeveloper\Paystack\Facades\Paystack as PaystackFacade;

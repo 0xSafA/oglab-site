@@ -1,12 +1,12 @@
 <?php
 
-namespace Marvel\Exports;
+namespace oglab\Exports;
 
 use Illuminate\Support\Carbon;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\FromCollection;
-use Marvel\Database\Models\Settings;
-use Marvel\Traits\Helper;
+use oglab\Database\Models\Settings;
+use oglab\Traits\Helper;
 
 class OrderExport implements FromCollection, WithHeadings
 {

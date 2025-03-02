@@ -1,21 +1,21 @@
 <?php
 
 
-namespace Marvel\Database\Repositories;
+namespace oglab\Database\Repositories;
 
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
-use Marvel\Database\Models\Balance;
-use Marvel\Database\Models\OwnershipTransfer;
-use Marvel\Database\Models\Product;
-use Marvel\Database\Models\Shop;
-use Marvel\Database\Models\User;
-use Marvel\Enums\DefaultStatusType;
-use Marvel\Enums\Permission;
-use Marvel\Enums\ProductVisibilityStatus;
-use Marvel\Events\ProcessOwnershipTransition;
-use Marvel\Events\ShopMaintenance;
-use Marvel\Http\Requests\TransferShopOwnerShipRequest;
+use oglab\Database\Models\Balance;
+use oglab\Database\Models\OwnershipTransfer;
+use oglab\Database\Models\Product;
+use oglab\Database\Models\Shop;
+use oglab\Database\Models\User;
+use oglab\Enums\DefaultStatusType;
+use oglab\Enums\Permission;
+use oglab\Enums\ProductVisibilityStatus;
+use oglab\Events\ProcessOwnershipTransition;
+use oglab\Events\ShopMaintenance;
+use oglab\Http\Requests\TransferShopOwnerShipRequest;
 use Prettus\Repository\Criteria\RequestCriteria;
 use Prettus\Repository\Exceptions\RepositoryException;
 use Symfony\Component\HttpKernel\Exception\HttpException;

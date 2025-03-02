@@ -1,13 +1,13 @@
 <?php
 
 
-namespace Marvel\Otp\Gateways;
+namespace oglab\Otp\Gateways;
 
 use Exception;
 use MessageBird\Client;
 use MessageBird\Objects\Verify;
-use Marvel\Otp\OtpInterface;
-use Marvel\Otp\Result;
+use oglab\Otp\OtpInterface;
+use oglab\Otp\Result;
 
 class MessagebirdGateway implements OtpInterface
 {

@@ -1,14 +1,14 @@
 <?php
 
 
-namespace Marvel\Database\Repositories;
+namespace oglab\Database\Repositories;
 
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
-use Marvel\Database\Models\StoreNoticeRead;
-use Marvel\Exceptions\MarvelException;
+use oglab\Database\Models\StoreNoticeRead;
+use oglab\Exceptions\oglabException;
 use Prettus\Repository\Criteria\RequestCriteria;
 use Prettus\Repository\Exceptions\RepositoryException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -53,7 +53,7 @@ class StoreNoticeReadRepository extends BaseRepository
      * This method will update read_status of a single StoreNotice for requested user { id in requestBody }.
      * @param Request $request
      * @return mixed
-     * @throws MarvelException
+     * @throws oglabException
      */
     public function readSingleNotice(Request $request)
     {
@@ -85,7 +85,7 @@ class StoreNoticeReadRepository extends BaseRepository
      * This method will update read_status of a multiple StoreNotice for requested user { array of id in requestBody }.
      * @param Request $request
      * @return mixed
-     * @throws MarvelException
+     * @throws oglabException
      */
     public function readAllNotice(Request $request)
     {

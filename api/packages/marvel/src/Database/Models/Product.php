@@ -1,6 +1,6 @@
 <?php
 
-namespace Marvel\Database\Models;
+namespace oglab\Database\Models;
 
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
@@ -15,10 +15,10 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Marvel\Traits\Excludable;
+use oglab\Traits\Excludable;
 use Kodeine\Metable\Metable;
-use Marvel\Exceptions\MarvelException;
-use Marvel\Traits\TranslationTrait;
+use oglab\Exceptions\oglabException;
+use oglab\Traits\TranslationTrait;
 
 class Product extends Model
 {
@@ -95,7 +95,7 @@ class Product extends Model
 
     public function fetchBlockedDatesForAProduct()
     {
-        return  Availability::where('product_id', $this->id)->where('bookable_type', 'Marvel\Database\Models\Product')->whereDate('to', '>=', Carbon::now())->get();
+        return  Availability::where('product_id', $this->id)->where('bookable_type', 'oglab\Database\Models\Product')->whereDate('to', '>=', Carbon::now())->get();
     }
 
     /**

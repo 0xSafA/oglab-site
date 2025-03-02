@@ -1,16 +1,16 @@
 <?php
 
-namespace Marvel\Listeners;
+namespace oglab\Listeners;
 
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Log;
-use Marvel\Database\Models\Participant;
-use Marvel\Database\Models\Shop;
-use Marvel\Database\Models\User;
-use Marvel\Events\MessageSent;
-use Marvel\Notifications\MessageReminder;
+use oglab\Database\Models\Participant;
+use oglab\Database\Models\Shop;
+use oglab\Database\Models\User;
+use oglab\Events\MessageSent;
+use oglab\Notifications\MessageReminder;
 
 class SendMessageNotification implements ShouldQueue
 {

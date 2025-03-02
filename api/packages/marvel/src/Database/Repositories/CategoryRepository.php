@@ -1,11 +1,11 @@
 <?php
 
 
-namespace Marvel\Database\Repositories;
+namespace oglab\Database\Repositories;
 
 use Illuminate\Http\Request;
-use Marvel\Database\Models\Category;
-use Marvel\Http\Requests\CategoryCreateRequest;
+use oglab\Database\Models\Category;
+use oglab\Http\Requests\CategoryCreateRequest;
 use Prettus\Repository\Criteria\RequestCriteria;
 use Prettus\Repository\Exceptions\RepositoryException;
 

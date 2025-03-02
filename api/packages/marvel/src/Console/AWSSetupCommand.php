@@ -1,10 +1,10 @@
 <?php
 
-namespace Marvel\Console;
+namespace oglab\Console;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
-use Marvel\Traits\ENVSetupTrait;
+use oglab\Traits\ENVSetupTrait;
 
 use function Laravel\Prompts\{text, table, confirm, info, error};
 
@@ -16,7 +16,7 @@ class AWSSetupCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'marvel:aws-setup';
+    protected $signature = 'oglab:aws-setup';
 
     /**
      * The console command description.

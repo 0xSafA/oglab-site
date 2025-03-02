@@ -9,19 +9,19 @@ extend type Query {
         request_from: String
     ): [FlashSale!]!
         @paginate(
-            builder: "Marvel\\GraphQL\\Queries\\FlashSaleQuery@fetchFlashSales"
+            builder: "oglab\\GraphQL\\Queries\\FlashSaleQuery@fetchFlashSales"
             defaultCount: 15
         )
     flashSale(id: ID @eq, slug: String @eq, language: String @eq): FlashSale
         @find
     productsByFlashSale(slug: String!, search: String): [Product]!
         @paginate(
-            builder: "Marvel\\GraphQL\\Queries\\FlashSaleQuery@fetchProductsByFlashSale"
+            builder: "oglab\\GraphQL\\Queries\\FlashSaleQuery@fetchProductsByFlashSale"
             defaultCount: 15
         )
     flashSaleInfoByProductID(id: String): [FlashSale]!
         @field(
-            resolver: "Marvel\\GraphQL\\Queries\\FlashSaleQuery@fetchFlashSaleInfoByProductID"
+            resolver: "oglab\\GraphQL\\Queries\\FlashSaleQuery@fetchFlashSaleInfoByProductID"
         )
 }
 

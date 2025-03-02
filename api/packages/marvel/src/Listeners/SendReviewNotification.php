@@ -6,9 +6,9 @@ use App\Events\ReviewCreated;
 use App\Notifications\NewReviewCreated;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
-use Marvel\Database\Models\Shop;
-use Marvel\Enums\EventType;
-use Marvel\Traits\SmsTrait;
+use oglab\Database\Models\Shop;
+use oglab\Enums\EventType;
+use oglab\Traits\SmsTrait;
 
 class SendReviewNotification implements ShouldQueue
 {

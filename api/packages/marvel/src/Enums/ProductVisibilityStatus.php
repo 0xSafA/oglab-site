@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Marvel\Enums;
+namespace oglab\Enums;
 
 use BenSampo\Enum\Enum;
 

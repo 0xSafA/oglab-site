@@ -1,6 +1,6 @@
 <?php
 
-namespace Marvel\Providers;
+namespace oglab\Providers;
 
 use GraphQL\Language\AST\InputObjectTypeDefinitionNode;
 use Illuminate\Contracts\Events\Dispatcher;

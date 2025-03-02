@@ -5,7 +5,7 @@ extend type Query {
         recall_gateway: Boolean!
     ): PaymentIntent
         @field(
-            resolver: "Marvel\\GraphQL\\Queries\\PaymentIntentQuery@getPaymentIntent"
+            resolver: "oglab\\GraphQL\\Queries\\PaymentIntentQuery@getPaymentIntent"
         )
 }
 

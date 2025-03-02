@@ -1,12 +1,12 @@
 <?php
 
-namespace Marvel\Database\Models;
+namespace oglab\Database\Models;
 
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Marvel\Traits\TranslationTrait;
+use oglab\Traits\TranslationTrait;
 
 class Author extends Model
 {

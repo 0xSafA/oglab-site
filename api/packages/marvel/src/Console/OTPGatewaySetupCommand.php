@@ -1,10 +1,10 @@
 <?php
 
-namespace Marvel\Console;
+namespace oglab\Console;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
-use Marvel\Traits\ENVSetupTrait;
+use oglab\Traits\ENVSetupTrait;
 
 use function Laravel\Prompts\{text, table, confirm, info, select};
 
@@ -16,7 +16,7 @@ class OTPGatewaySetupCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'marvel:otp-gateway-setup';
+    protected $signature = 'oglab:otp-gateway-setup';
 
     /**
      * The console command description.

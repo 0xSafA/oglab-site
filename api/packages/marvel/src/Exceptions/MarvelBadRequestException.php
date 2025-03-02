@@ -1,12 +1,12 @@
 <?php
 
-namespace Marvel\Exceptions;
+namespace oglab\Exceptions;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Throwable;
 
-class MarvelBadRequestException extends HttpException
+class oglabBadRequestException extends HttpException
 {
     /**
      * Create a new "Bad Request" exception instance for REST Client.

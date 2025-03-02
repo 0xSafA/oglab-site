@@ -1,14 +1,14 @@
 <?php
 
 
-namespace Marvel\Database\Repositories;
+namespace oglab\Database\Repositories;
 
 use Exception;
-use Marvel\Database\Models\Faqs;
+use oglab\Database\Models\Faqs;
 use Prettus\Repository\Criteria\RequestCriteria;
 use Prettus\Repository\Exceptions\RepositoryException;
 use Illuminate\Http\Request;
-use Marvel\Database\Models\Shop;
+use oglab\Database\Models\Shop;
 
 class FaqsRepository extends BaseRepository
 {

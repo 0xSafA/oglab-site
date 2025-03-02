@@ -1,16 +1,16 @@
 <?php
 
 
-namespace Marvel\Http\Controllers;
+namespace oglab\Http\Controllers;
 
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Marvel\Database\Models\AbusiveReport;
-use Marvel\Database\Repositories\AbusiveReportRepository;
-use Marvel\Exceptions\MarvelException;
-use Marvel\Http\Requests\AbusiveReportAcceptOrRejectRequest;
-use Marvel\Http\Requests\AbusiveReportCreateRequest;
+use oglab\Database\Models\AbusiveReport;
+use oglab\Database\Repositories\AbusiveReportRepository;
+use oglab\Exceptions\oglabException;
+use oglab\Http\Requests\AbusiveReportAcceptOrRejectRequest;
+use oglab\Http\Requests\AbusiveReportCreateRequest;
 use Prettus\Validator\Exceptions\ValidatorException;
 
 
@@ -48,12 +48,12 @@ class AbusiveReportController extends CoreController
         try {
             $model_id = $request['model_id'];
             $model_type = $request['model_type'];
-            $model_name = "Marvel\\Database\\Models\\{$model_type}";
+            $model_name = "oglab\\Database\\Models\\{$model_type}";
             $model = $model_name::findOrFail($model_id);
             $request['user_id'] = $request->user()->id;
             return $this->repository->storeAbusiveReport($request, $model);
-        } catch (MarvelException $e) {
-            throw new MarvelException(COULD_NOT_CREATE_THE_RESOURCE);
+        } catch (oglabException $e) {
+            throw new oglabException(COULD_NOT_CREATE_THE_RESOURCE);
         }
     }
 
@@ -61,8 +61,8 @@ class AbusiveReportController extends CoreController
     {
         try {
             return $this->repository->findOrFail($id);
-        } catch (MarvelException $e) {
-            throw new MarvelException(NOT_FOUND);
+        } catch (oglabException $e) {
+            throw new oglabException(NOT_FOUND);
         }
     }
 
@@ -76,8 +76,8 @@ class AbusiveReportController extends CoreController
     {
         try {
             return $this->repository->findOrFail($id)->delete();
-        } catch (MarvelException $e) {
-            throw new MarvelException(NOT_FOUND);
+        } catch (oglabException $e) {
+            throw new oglabException(NOT_FOUND);
         }
     }
 
@@ -88,8 +88,8 @@ class AbusiveReportController extends CoreController
             $model_type = $request['model_type'];
             $model = $model_type::findOrFail($model_id);
             return $model->delete();
-        } catch (MarvelException $e) {
-            throw new MarvelException(NOT_FOUND);
+        } catch (oglabException $e) {
+            throw new oglabException(NOT_FOUND);
         }
     }
 
@@ -103,8 +103,8 @@ class AbusiveReportController extends CoreController
                 'model_type'    => $model_type
             ]);
             return $model_type::findOrFail($model_id);
-        } catch (MarvelException $e) {
-            throw new MarvelException(NOT_FOUND);
+        } catch (oglabException $e) {
+            throw new oglabException(NOT_FOUND);
         }
     }
 

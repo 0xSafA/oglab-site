@@ -1,6 +1,6 @@
 <?php
 
-namespace Marvel\Http\Controllers;
+namespace oglab\Http\Controllers;
 
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -8,12 +8,12 @@ use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
-use Marvel\Exceptions\MarvelException;
-use Marvel\Http\Requests\AttributeRequest;
+use oglab\Exceptions\oglabException;
+use oglab\Http\Requests\AttributeRequest;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Marvel\Database\Repositories\AttributeRepository;
-use Marvel\Http\Resources\AttributeResource;
+use oglab\Database\Repositories\AttributeRepository;
+use oglab\Http\Resources\AttributeResource;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class AttributeController extends CoreController
@@ -53,8 +53,8 @@ class AttributeController extends CoreController
                 return $this->repository->storeAttribute($request);
             }
             throw new AuthorizationException(NOT_AUTHORIZED);
-        } catch (MarvelException $e) {
-            throw new MarvelException(NOT_FOUND);
+        } catch (oglabException $e) {
+            throw new oglabException(NOT_FOUND);
         }
     }
 
@@ -76,8 +76,8 @@ class AttributeController extends CoreController
             }
             $attribute = $this->repository->with('values')->where('slug', $params)->where('language', $language)->firstOrFail();
             return new AttributeResource($attribute);
-        } catch (MarvelException $e) {
-            throw new MarvelException(NOT_FOUND);
+        } catch (oglabException $e) {
+            throw new oglabException(NOT_FOUND);
         }
     }
 
@@ -93,8 +93,8 @@ class AttributeController extends CoreController
         try {
             $request->id = $id;
             return $this->updateAttribute($request);
-        } catch (MarvelException $e) {
-            throw new MarvelException(COULD_NOT_DELETE_THE_RESOURCE);
+        } catch (oglabException $e) {
+            throw new oglabException(COULD_NOT_DELETE_THE_RESOURCE);
         }
     }
 
@@ -123,8 +123,8 @@ class AttributeController extends CoreController
         try {
             $request->id = $id;
             return $this->deleteAttribute($request);
-        } catch (MarvelException $e) {
-            throw new MarvelException(COULD_NOT_DELETE_THE_RESOURCE);
+        } catch (oglabException $e) {
+            throw new oglabException(COULD_NOT_DELETE_THE_RESOURCE);
         }
     }
 
@@ -201,7 +201,7 @@ class AttributeController extends CoreController
         }
 
         if (!$this->repository->hasPermission($user, $shop_id)) {
-            throw new MarvelException(NOT_AUTHORIZED);
+            throw new oglabException(NOT_AUTHORIZED);
         }
         if (isset($shop_id)) {
             $file = $uploadedCsv->storePubliclyAs('csv-files', 'attributes-' . $shop_id . '.' . $uploadedCsv->getClientOriginalExtension(), 'public');
@@ -210,7 +210,7 @@ class AttributeController extends CoreController
 
             foreach ($attributes as $key => $attribute) {
                 if (!isset($attribute['name'])) {
-                    throw new MarvelException("MARVEL_ERROR.WRONG_CSV");
+                    throw new oglabException("oglab_ERROR.WRONG_CSV");
                 }
                 unset($attribute['id']);
                 $attribute['shop_id'] = $shop_id;

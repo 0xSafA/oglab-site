@@ -1,14 +1,14 @@
 <?php
 
-namespace Marvel\Listeners;
+namespace oglab\Listeners;
 
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Marvel\Database\Models\User;
-use Marvel\Enums\EventType;
-use Marvel\Events\OrderStatusChanged;
-use Marvel\Notifications\OrderStatusChangedNotification;
-use Marvel\Traits\OrderSmsTrait;
-use Marvel\Traits\SmsTrait;
+use oglab\Database\Models\User;
+use oglab\Enums\EventType;
+use oglab\Events\OrderStatusChanged;
+use oglab\Notifications\OrderStatusChangedNotification;
+use oglab\Traits\OrderSmsTrait;
+use oglab\Traits\SmsTrait;
 
 class SendOrderStatusChangedNotification implements ShouldQueue
 {

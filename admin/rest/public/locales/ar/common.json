@@ -274,7 +274,7 @@
   "text-yearly": "سنوي",
   "text-order-details": "تفاصيل الطلب",
   "text-no-image-found": "لم يتم العثور على صورة",
-  "MARVEL_ERROR.ALREADY_REFUNDED": "تم ردها بالفعل",
+  "oglab_ERROR.ALREADY_REFUNDED": "تم ردها بالفعل",
   "text-item": "غرض",
   "text-add": "يضيف",
   "text-cart": "عربة التسوق",

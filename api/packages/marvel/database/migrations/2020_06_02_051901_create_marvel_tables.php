@@ -3,14 +3,14 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use Marvel\Enums\CouponType;
-use Marvel\Enums\OrderStatus;
-use Marvel\Enums\PaymentStatus;
-use Marvel\Enums\ProductStatus;
-use Marvel\Enums\ProductType;
-use Marvel\Enums\ShippingType;
+use oglab\Enums\CouponType;
+use oglab\Enums\OrderStatus;
+use oglab\Enums\PaymentStatus;
+use oglab\Enums\ProductStatus;
+use oglab\Enums\ProductType;
+use oglab\Enums\ShippingType;
 
-class CreateMarvelTables extends Migration
+class CreateoglabTables extends Migration
 {
     /**
      * Run the migrations.

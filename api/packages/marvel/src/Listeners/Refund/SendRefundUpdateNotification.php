@@ -1,12 +1,12 @@
 <?php
 
-namespace Marvel\Listeners\Refund;
+namespace oglab\Listeners\Refund;
 
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Marvel\Enums\EventType;
-use Marvel\Events\RefundUpdate;
-use Marvel\Traits\OrderSmsTrait;
-use Marvel\Traits\SmsTrait;
+use oglab\Enums\EventType;
+use oglab\Events\RefundUpdate;
+use oglab\Traits\OrderSmsTrait;
+use oglab\Traits\SmsTrait;
 
 class SendRefundUpdateNotification implements ShouldQueue
 {

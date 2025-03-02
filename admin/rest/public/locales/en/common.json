@@ -276,7 +276,7 @@
   "text-yearly": "Yearly",
   "text-order-details": "Order Details",
   "text-no-image-found": "No image found",
-  "MARVEL_ERROR.ALREADY_REFUNDED": "Already Refunded",
+  "oglab_ERROR.ALREADY_REFUNDED": "Already Refunded",
   "text-item": "Item",
   "text-add": "Add",
   "text-cart": "Cart",

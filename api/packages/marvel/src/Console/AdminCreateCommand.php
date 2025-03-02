@@ -1,13 +1,13 @@
 <?php
 
-namespace Marvel\Console;
+namespace oglab\Console;
 
 use Illuminate\Console\Command;
-use Marvel\Database\Models\User;
+use oglab\Database\Models\User;
 use Illuminate\Support\Facades\Hash;
-use Marvel\Enums\Permission as UserPermission;
+use oglab\Enums\Permission as UserPermission;
 use Illuminate\Support\Facades\Validator;
-use Marvel\Enums\Role as UserRole;
+use oglab\Enums\Role as UserRole;
 use function Laravel\Prompts\{text, confirm, info, password, error};
 
 
@@ -15,7 +15,7 @@ use function Laravel\Prompts\{text, confirm, info, password, error};
 
 class AdminCreateCommand extends Command
 {
-    protected $signature = 'marvel:create-admin';
+    protected $signature = 'oglab:create-admin';
 
     protected $description = 'Create an admin user.';
     public function handle()

@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Marvel\Http\Resources;
+namespace oglab\Http\Resources;
 
 
 use Illuminate\Http\Request;

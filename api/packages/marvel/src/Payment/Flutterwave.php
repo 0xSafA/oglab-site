@@ -1,21 +1,21 @@
 <?php
 
-namespace Marvel\Payments;
+namespace oglab\Payments;
 
 
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
-use Marvel\Exceptions\MarvelException;
-use Marvel\Payments\PaymentInterface;
-use Marvel\Enums\OrderStatus;
-use Marvel\Database\Models\Order;
-use Marvel\Enums\PaymentStatus;
-use Marvel\Traits\PaymentTrait;
-use Marvel\Payments\Base;
+use oglab\Exceptions\oglabException;
+use oglab\Payments\PaymentInterface;
+use oglab\Enums\OrderStatus;
+use oglab\Database\Models\Order;
+use oglab\Enums\PaymentStatus;
+use oglab\Traits\PaymentTrait;
+use oglab\Payments\Base;
 use Razorpay\Api\Errors\SignatureVerificationError;
 use KingFlamez\Rave\Facades\Rave as FlutterwaveFacade;
-use Marvel\Database\Models\PaymentIntent;
+use oglab\Database\Models\PaymentIntent;
 
 class Flutterwave extends Base implements PaymentInterface
 {
@@ -61,7 +61,7 @@ class Flutterwave extends Base implements PaymentInterface
                 'redirect_url' => $order['data']['link'],
             ];
         } catch (Exception $e) {
-            throw new MarvelException(SOMETHING_WENT_WRONG_WITH_PAYMENT);
+            throw new oglabException(SOMETHING_WENT_WRONG_WITH_PAYMENT);
         }
     }
 
@@ -89,7 +89,7 @@ class Flutterwave extends Base implements PaymentInterface
 
             return redirect(config("shop.shop_url") . "/orders/{$tracking_number}/thank-you");
         } catch (Exception $e) {
-            throw new MarvelException(SOMETHING_WENT_WRONG_WITH_PAYMENT);
+            throw new oglabException(SOMETHING_WENT_WRONG_WITH_PAYMENT);
         }
     }
 
@@ -102,7 +102,7 @@ class Flutterwave extends Base implements PaymentInterface
             $result = FlutterwaveFacade::verifyTransaction($transaction);
             return isset($result['data']['status']) ? $result['data']['status'] : false;
         } catch (Exception $e) {
-            throw new MarvelException(SOMETHING_WENT_WRONG_WITH_PAYMENT);
+            throw new oglabException(SOMETHING_WENT_WRONG_WITH_PAYMENT);
         }
     }
 
@@ -125,7 +125,7 @@ class Flutterwave extends Base implements PaymentInterface
                 }
             }
         } catch (Exception $e) {
-            throw new MarvelException(SOMETHING_WENT_WRONG_WITH_PAYMENT);
+            throw new oglabException(SOMETHING_WENT_WRONG_WITH_PAYMENT);
         }
     }
 

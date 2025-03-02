@@ -1,11 +1,11 @@
 <?php
 
-namespace Marvel\Traits;
+namespace oglab\Traits;
 
-use Marvel\Database\Models\Product;
-use Marvel\Database\Models\Variation;
-use Marvel\Enums\CouponType;
-use Marvel\Exceptions\MarvelException;
+use oglab\Database\Models\Product;
+use oglab\Database\Models\Variation;
+use oglab\Enums\CouponType;
+use oglab\Exceptions\oglabException;
 
 
 trait CalculatePaymentTrait
@@ -15,7 +15,7 @@ trait CalculatePaymentTrait
     public function calculateSubtotal($cartItems)
     {
         if (!is_array($cartItems)) {
-            throw new MarvelException(CART_ITEMS_NOT_FOUND);
+            throw new oglabException(CART_ITEMS_NOT_FOUND);
         }
         $subtotal = 0;
         try {
@@ -30,7 +30,7 @@ trait CalculatePaymentTrait
             }
             return $subtotal;
         } catch (\Throwable $th) {
-            throw new MarvelException(NOT_FOUND);
+            throw new oglabException(NOT_FOUND);
         }
     }
 

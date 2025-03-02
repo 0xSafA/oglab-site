@@ -1,15 +1,15 @@
 <?php
 
-namespace Marvel\Listeners;
+namespace oglab\Listeners;
 
 use Exception;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Marvel\Database\Models\User;
-use Marvel\Enums\EventType;
-use Marvel\Events\OrderDelivered;
-use Marvel\Notifications\OrderDeliveredNotification;
-use Marvel\Traits\OrderSmsTrait;
-use Marvel\Traits\SmsTrait;
+use oglab\Database\Models\User;
+use oglab\Enums\EventType;
+use oglab\Events\OrderDelivered;
+use oglab\Notifications\OrderDeliveredNotification;
+use oglab\Traits\OrderSmsTrait;
+use oglab\Traits\SmsTrait;
 
 class SendOrderDeliveredNotification implements ShouldQueue
 {

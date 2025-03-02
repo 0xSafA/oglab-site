@@ -1,13 +1,13 @@
 <?php
 
-namespace Marvel\Notifications;
+namespace oglab\Notifications;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use Marvel\Database\Models\Order;
-use Marvel\Traits\SmsTrait;
+use oglab\Database\Models\Order;
+use oglab\Traits\SmsTrait;
 
 class OrderDeliveredNotification extends Notification implements ShouldQueue
 {

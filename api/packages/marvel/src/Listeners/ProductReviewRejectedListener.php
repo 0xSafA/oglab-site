@@ -1,10 +1,10 @@
 <?php
 
-namespace Marvel\Listeners;
+namespace oglab\Listeners;
 
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Marvel\Events\ProductReviewRejected;
-use Marvel\Notifications\ProductRejectedNotification;
+use oglab\Events\ProductReviewRejected;
+use oglab\Notifications\ProductRejectedNotification;
 
 class ProductReviewRejectedListener implements ShouldQueue
 {   

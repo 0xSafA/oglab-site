@@ -1,6 +1,6 @@
 <?php
 
-namespace Marvel\Http\Controllers;
+namespace oglab\Http\Controllers;
 
 use Carbon\Carbon;
 use Exception;
@@ -19,30 +19,30 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Laravel\Socialite\Facades\Socialite;
-use Marvel\Console\MarvelVerification;
-use Marvel\Database\Models\DownloadToken;
-use Marvel\Database\Models\OrderedFile;
-use Marvel\Database\Models\Product;
-use Marvel\Database\Models\Profile;
-use Marvel\Database\Models\Settings;
-use Marvel\Database\Models\Shop;
-use Marvel\Database\Models\User;
-use Marvel\Database\Models\Wallet;
-use Marvel\Database\Repositories\UserRepository;
-use Marvel\Enums\Permission;
-use Marvel\Enums\Role;
-use Marvel\Events\ProcessUserData;
-use Marvel\Exceptions\MarvelException;
-use Marvel\Exceptions\MarvelNotFoundException;
-use Marvel\Http\Requests\ChangePasswordRequest;
-use Marvel\Http\Requests\LicenseRequest;
-use Marvel\Http\Requests\UserCreateRequest;
-use Marvel\Http\Requests\UserUpdateRequest;
-use Marvel\Http\Resources\UserResource;
-use Marvel\Mail\ContactAdmin;
-use Marvel\Otp\Gateways\OtpGateway;
-use Marvel\Traits\UsersTrait;
-use Marvel\Traits\WalletsTrait;
+use oglab\Console\oglabVerification;
+use oglab\Database\Models\DownloadToken;
+use oglab\Database\Models\OrderedFile;
+use oglab\Database\Models\Product;
+use oglab\Database\Models\Profile;
+use oglab\Database\Models\Settings;
+use oglab\Database\Models\Shop;
+use oglab\Database\Models\User;
+use oglab\Database\Models\Wallet;
+use oglab\Database\Repositories\UserRepository;
+use oglab\Enums\Permission;
+use oglab\Enums\Role;
+use oglab\Events\ProcessUserData;
+use oglab\Exceptions\oglabException;
+use oglab\Exceptions\oglabNotFoundException;
+use oglab\Http\Requests\ChangePasswordRequest;
+use oglab\Http\Requests\LicenseRequest;
+use oglab\Http\Requests\UserCreateRequest;
+use oglab\Http\Requests\UserUpdateRequest;
+use oglab\Http\Resources\UserResource;
+use oglab\Mail\ContactAdmin;
+use oglab\Otp\Gateways\OtpGateway;
+use oglab\Traits\UsersTrait;
+use oglab\Traits\WalletsTrait;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\Newsletter\Facades\Newsletter;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -184,8 +184,8 @@ class UserController extends CoreController
     {
         try {
             return $this->repository->storeUser($request);
-        } catch (MarvelException $e) {
-            throw new MarvelException(NOT_FOUND);
+        } catch (oglabException $e) {
+            throw new oglabException(NOT_FOUND);
         }
     }
 
@@ -199,8 +199,8 @@ class UserController extends CoreController
     {
         try {
             return $this->repository->with(['profile', 'address', 'shops', 'managed_shop'])->findOrFail($id);
-        } catch (MarvelException $e) {
-            throw new MarvelException(NOT_FOUND);
+        } catch (oglabException $e) {
+            throw new oglabException(NOT_FOUND);
         }
     }
 
@@ -232,8 +232,8 @@ class UserController extends CoreController
     {
         try {
             return $this->repository->findOrFail($id)->delete();
-        } catch (MarvelException $e) {
-            throw new MarvelException(NOT_FOUND);
+        } catch (oglabException $e) {
+            throw new oglabException(NOT_FOUND);
         }
     }
 
@@ -248,8 +248,8 @@ class UserController extends CoreController
                     ->loadLastOrder();
             }
             throw new AuthorizationException(NOT_AUTHORIZED);
-        } catch (MarvelException $e) {
-            throw new MarvelException(NOT_AUTHORIZED);
+        } catch (oglabException $e) {
+            throw new oglabException(NOT_AUTHORIZED);
         }
     }
 
@@ -330,8 +330,8 @@ class UserController extends CoreController
                 return $banUser;
             }
             throw new AuthorizationException(NOT_AUTHORIZED);
-        } catch (MarvelException $th) {
-            throw new MarvelException(SOMETHING_WENT_WRONG);
+        } catch (oglabException $th) {
+            throw new oglabException(SOMETHING_WENT_WRONG);
         }
     }
     function inactiveUserShops($userId)
@@ -355,8 +355,8 @@ class UserController extends CoreController
                 return $activeUser;
             }
             throw new AuthorizationException(NOT_AUTHORIZED);
-        } catch (MarvelException $th) {
-            throw new MarvelException(SOMETHING_WENT_WRONG);
+        } catch (oglabException $th) {
+            throw new oglabException(SOMETHING_WENT_WRONG);
         }
     }
 
@@ -441,7 +441,7 @@ class UserController extends CoreController
                 return ['message' => OLD_PASSWORD_INCORRECT, 'success' => false];
             }
         } catch (\Exception $th) {
-            throw new MarvelException(SOMETHING_WENT_WRONG);
+            throw new oglabException(SOMETHING_WENT_WRONG);
         }
     }
     public function contactAdmin(Request $request)
@@ -460,7 +460,7 @@ class UserController extends CoreController
             Mail::to($emailTo)->send(new ContactAdmin($details));
             return ['message' => EMAIL_SENT_SUCCESSFUL, 'success' => true];
         } catch (\Exception $e) {
-            throw new MarvelException(SOMETHING_WENT_WRONG);
+            throw new oglabException(SOMETHING_WENT_WRONG);
         }
     }
 
@@ -474,8 +474,8 @@ class UserController extends CoreController
                 return $this->repository->with(['profile'])->where('shop_id', '=', $request->shop_id);
             }
             throw new AuthorizationException(NOT_AUTHORIZED);
-        } catch (MarvelException $e) {
-            throw new MarvelException(SOMETHING_WENT_WRONG);
+        } catch (oglabException $e) {
+            throw new oglabException(SOMETHING_WENT_WRONG);
         }
     }
 
@@ -539,21 +539,21 @@ class UserController extends CoreController
                 "role" => $userCreated->getRoleNames()->first()
             ];
         } catch (\Exception $e) {
-            throw new MarvelException(INVALID_CREDENTIALS);
+            throw new oglabException(INVALID_CREDENTIALS);
         }
     }
 
     protected function validateProvider($provider)
     {
         if (!in_array($provider, ['facebook', 'google'])) {
-            throw new MarvelException(PLEASE_LOGIN_USING_FACEBOOK_OR_GOOGLE);
+            throw new oglabException(PLEASE_LOGIN_USING_FACEBOOK_OR_GOOGLE);
         }
     }
 
     protected function getOtpGateway()
     {
         $gateway = config('auth.active_otp_gateway');
-        $gateWayClass = "Marvel\\Otp\\Gateways\\" . ucfirst($gateway) . 'Gateway';
+        $gateWayClass = "oglab\\Otp\\Gateways\\" . ucfirst($gateway) . 'Gateway';
         return new OtpGateway(new $gateWayClass());
     }
 
@@ -592,8 +592,8 @@ class UserController extends CoreController
                 'phone_number' => $phoneNumber,
                 'is_contact_exist' => $profile ? true : false
             ];
-        } catch (MarvelException $e) {
-            throw new MarvelException(INVALID_GATEWAY);
+        } catch (oglabException $e) {
+            throw new oglabException(INVALID_GATEWAY);
         }
     }
 
@@ -606,9 +606,9 @@ class UserController extends CoreController
                     "success" => true,
                 ];
             }
-            throw new MarvelException(OTP_VERIFICATION_FAILED);
+            throw new oglabException(OTP_VERIFICATION_FAILED);
         } catch (\Throwable $e) {
-            throw new MarvelException(OTP_VERIFICATION_FAILED);
+            throw new oglabException(OTP_VERIFICATION_FAILED);
         }
     }
 
@@ -692,7 +692,7 @@ class UserController extends CoreController
     {
         $request->validate([
             'points' => 'required|numeric',
-            'customer_id' => ['required', 'exists:Marvel\Database\Models\User,id']
+            'customer_id' => ['required', 'exists:oglab\Database\Models\User,id']
         ]);
         $points = $request->points;
         $customer_id = $request->customer_id;
@@ -716,7 +716,7 @@ class UserController extends CoreController
                     return true;
                 }
             } catch (Exception $e) {
-                throw new MarvelException(USER_NOT_FOUND);
+                throw new oglabException(USER_NOT_FOUND);
             }
             $newUser->givePermissionTo(Permission::SUPER_ADMIN);
             $newUser->assignRole(Role::SUPER_ADMIN);
@@ -724,7 +724,7 @@ class UserController extends CoreController
             return true;
         }
 
-        throw new MarvelException(NOT_AUTHORIZED);
+        throw new oglabException(NOT_AUTHORIZED);
     }
     public function subscribeToNewsletter(Request $request)
     {
@@ -732,8 +732,8 @@ class UserController extends CoreController
             $email = $request->email;
             Newsletter::subscribeOrUpdate($email);
             return true;
-        } catch (MarvelException $th) {
-            throw new MarvelException(SOMETHING_WENT_WRONG);
+        } catch (oglabException $th) {
+            throw new oglabException(SOMETHING_WENT_WRONG);
         }
     }
     public function updateUserEmail(Request $request)
@@ -742,7 +742,7 @@ class UserController extends CoreController
             'email' => 'required|email|unique:users,email',
         ]);
         if ($validator->fails()) {
-            throw new MarvelException($validator->errors()->first());
+            throw new oglabException($validator->errors()->first());
         }
         return $this->repository->updateEmail($request);
     }
@@ -772,18 +772,18 @@ class UserController extends CoreController
     }
 
 
-    public function verifyLicenseKey(LicenseRequest $request, MarvelVerification $verification)
+    public function verifyLicenseKey(LicenseRequest $request, oglabVerification $verification)
     {
         try {
             $licenseKey = $request->license_key;
             $language = $request['language'] ?? DEFAULT_LANGUAGE;
-            $marvel = $verification->verify($licenseKey);
-            if (!$marvel->getTrust()) {
-                throw new MarvelNotFoundException(INVALID_LICENSE_KEY);
+            $oglab = $verification->verify($licenseKey);
+            if (!$oglab->getTrust()) {
+                throw new oglabNotFoundException(INVALID_LICENSE_KEY);
             }
-            return $marvel->modifySettingsData($language);
-        } catch (MarvelException $th) {
-            throw new MarvelException(INVALID_LICENSE_KEY);
+            return $oglab->modifySettingsData($language);
+        } catch (oglabException $th) {
+            throw new oglabException(INVALID_LICENSE_KEY);
         }
     }
     public function fetchUsersByPermission(Request $request)
@@ -827,7 +827,7 @@ class UserController extends CoreController
      *
      * @param mixed $request
      * @return void
-     * @throws MarvelException
+     * @throws oglabException
      */
     public function generateDownloadableUrl(Request $request)
     {
@@ -844,8 +844,8 @@ class UserController extends CoreController
                 return route('download_url.token', ['token' => $newToken->token]);
             }
             throw new AuthorizationException(NOT_AUTHORIZED);
-        } catch (MarvelException $e) {
-            throw new MarvelException(NOT_AUTHORIZED);
+        } catch (oglabException $e) {
+            throw new oglabException(NOT_AUTHORIZED);
         }
     }
 
@@ -854,7 +854,7 @@ class UserController extends CoreController
      *
      * @param mixed $token
      * @return void
-     * @throws MarvelException
+     * @throws oglabException
      */
     public function downloadFile($token)
     {
@@ -875,8 +875,8 @@ class UserController extends CoreController
                 return ['message' => NOT_FOUND];
             }
             return $mediaItem;
-        } catch (MarvelException $e) {
-            throw new MarvelException(NOT_FOUND);
+        } catch (oglabException $e) {
+            throw new oglabException(NOT_FOUND);
         }
     }
 }

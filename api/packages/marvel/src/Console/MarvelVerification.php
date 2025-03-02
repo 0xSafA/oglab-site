@@ -1,6 +1,6 @@
 <?php
 
-namespace Marvel\Console;
+namespace oglab\Console;
 
 use Exception;
 use Illuminate\Support\Carbon;
@@ -10,9 +10,9 @@ use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Http;
 use JsonSerializable;
-use Marvel\Database\Models\Settings;
+use oglab\Database\Models\Settings;
 
-class MarvelVerification implements JsonSerializable
+class oglabVerification implements JsonSerializable
 {
     private string $pkey;
     private bool $trust;
@@ -64,7 +64,7 @@ class MarvelVerification implements JsonSerializable
         ];
     }
 
-    public function verify(string $code): MarvelVerification
+    public function verify(string $code): oglabVerification
     {
         $url = "https://customer.redq.io/api/sale/verify";
 
@@ -126,7 +126,7 @@ class MarvelVerification implements JsonSerializable
         }
     }
 
-    private function mapConfigToProperties($config): MarvelVerification
+    private function mapConfigToProperties($config): oglabVerification
     {
         $this->pkey = $config['p_key'] ?? '';
         $this->trust = $config['trust'] ?? false;

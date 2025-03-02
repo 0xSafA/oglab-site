@@ -1,16 +1,16 @@
 <?php
 
-namespace Marvel\Listeners;
+namespace oglab\Listeners;
 
 
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Notification;
-use Marvel\Database\Models\Product;
-use Marvel\Database\Models\Shop;
-use Marvel\Database\Models\User;
-use Marvel\Events\OwnershipTransferStatusControl;
-use Marvel\Notifications\TransferredShopOwnershipStatus;
-use Marvel\Traits\UsersTrait;
+use oglab\Database\Models\Product;
+use oglab\Database\Models\Shop;
+use oglab\Database\Models\User;
+use oglab\Events\OwnershipTransferStatusControl;
+use oglab\Notifications\TransferredShopOwnershipStatus;
+use oglab\Traits\UsersTrait;
 
 
 class OwnershipTransferStatusControlListener implements ShouldQueue

@@ -7,12 +7,12 @@ extend type Query {
         hasUsers: _ @whereHasConditions(columns: ["name"])
     ): [Shop]
         @paginate(
-            builder: "Marvel\\GraphQL\\Queries\\ShopQuery@fetchShops"
+            builder: "oglab\\GraphQL\\Queries\\ShopQuery@fetchShops"
             defaultCount: 15
         )
     staffs(shop_id: ID!, orderBy: String, sortedBy: String): [User]
         @paginate(
-            builder: "Marvel\\GraphQL\\Queries\\UserQuery@fetchStaff"
+            builder: "oglab\\GraphQL\\Queries\\UserQuery@fetchStaff"
             defaultCount: 15
         )
     shop(id: ID @eq, slug: String @eq): Shop @find

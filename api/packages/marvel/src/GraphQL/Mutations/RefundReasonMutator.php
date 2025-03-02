@@ -1,24 +1,24 @@
 <?php
 
 
-namespace Marvel\GraphQL\Mutation;
+namespace oglab\GraphQL\Mutation;
 
 
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
-use Marvel\Facades\Shop;
+use oglab\Facades\Shop;
 
 class RefundReasonMutator
 {
     public function storeRefundReason($rootValue, array $args, GraphQLContext $context)
     {
-        return Shop::call('Marvel\Http\Controllers\RefundReasonController@store', $args);
+        return Shop::call('oglab\Http\Controllers\RefundReasonController@store', $args);
     }
     public function updateRefundReason($rootValue, array $args, GraphQLContext $context)
     {
-        return Shop::call('Marvel\Http\Controllers\RefundReasonController@refundReasonUpdate', $args);
+        return Shop::call('oglab\Http\Controllers\RefundReasonController@refundReasonUpdate', $args);
     }
     public function deleteRefundReason($rootValue, array $args, GraphQLContext $context)
     {
-        return Shop::call('Marvel\Http\Controllers\RefundReasonController@deleteRefundReason', $args);
+        return Shop::call('oglab\Http\Controllers\RefundReasonController@deleteRefundReason', $args);
     }
 }

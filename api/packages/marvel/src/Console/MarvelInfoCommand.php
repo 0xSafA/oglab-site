@@ -1,14 +1,14 @@
 <?php
 
-namespace Marvel\Console;
+namespace oglab\Console;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
-use Marvel\Traits\ENVSetupTrait;
+use oglab\Traits\ENVSetupTrait;
 
 use function Laravel\Prompts\{text, table, confirm, info};
 
-class MarvelInfoCommand extends Command
+class oglabInfoCommand extends Command
 {
     use ENVSetupTrait;
     /**
@@ -16,14 +16,14 @@ class MarvelInfoCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'marvel:help';
+    protected $signature = 'oglab:help';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Marvel command information';
+    protected $description = 'oglab command information';
 
     /**
      * Execute the console command.
@@ -41,28 +41,28 @@ class MarvelInfoCommand extends Command
                 $this->existingKeyValueInENV($targetKeys, $envContent);
 
 
-                info('Available Marvel Command');
+                info('Available oglab Command');
 
                 table(['Command', 'Details'], [
-                    ['marvel:install', 'Installing Marvel application'],
-                    ['marvel:env-setup', 'Setup necessary config in .env file'],
-                    ['marvel:database-setup', 'Setup MySQL database in .env file'],
-                    ['marvel:mail-setup', 'Mail server setup (mailtrap, mailgun, gmail)'],
-                    ['marvel:mailchimp-newsletter', 'Mailchimp newsletter setup in .env file'],
-                    ['marvel:frontend-setup', 'Frontend URL setup (admin & shop)'],
-                    ['marvel:aws-setup', 'AWS (bucket) setup'],
-                    ['marvel:create-admin', 'Create an admin user'],
-                    ['marvel:default-language-setup', 'Setup default language in .env file'],
-                    ['marvel:open-ai-setup', 'Setup OpenAI in .env file'],
-                    ['marvel:otp-gateway-setup', 'OTP SMS gateway (Twilio or MessageBird) setup in .env file'],
-                    ['marvel:queue-setup', 'Setup queue connection in .env file. (e.g. database or sync)'],
-                    ['marvel:seed', 'Import Demo Data'],
-                    ['marvel:settings-seed', 'Import Settings Data'],
-                    ['marvel:translation-enable', 'Enable translation settings in .env file (true/false)'],
-                    ['marvel:test-mail-send', 'Send an email for credentials check'],
+                    ['oglab:install', 'Installing oglab application'],
+                    ['oglab:env-setup', 'Setup necessary config in .env file'],
+                    ['oglab:database-setup', 'Setup MySQL database in .env file'],
+                    ['oglab:mail-setup', 'Mail server setup (mailtrap, mailgun, gmail)'],
+                    ['oglab:mailchimp-newsletter', 'Mailchimp newsletter setup in .env file'],
+                    ['oglab:frontend-setup', 'Frontend URL setup (admin & shop)'],
+                    ['oglab:aws-setup', 'AWS (bucket) setup'],
+                    ['oglab:create-admin', 'Create an admin user'],
+                    ['oglab:default-language-setup', 'Setup default language in .env file'],
+                    ['oglab:open-ai-setup', 'Setup OpenAI in .env file'],
+                    ['oglab:otp-gateway-setup', 'OTP SMS gateway (Twilio or MessageBird) setup in .env file'],
+                    ['oglab:queue-setup', 'Setup queue connection in .env file. (e.g. database or sync)'],
+                    ['oglab:seed', 'Import Demo Data'],
+                    ['oglab:settings-seed', 'Import Settings Data'],
+                    ['oglab:translation-enable', 'Enable translation settings in .env file (true/false)'],
+                    ['oglab:test-mail-send', 'Send an email for credentials check'],
                 ]);
 
-                $this->info("'marvel:env-setup' command has some Quick Access Key");
+                $this->info("'oglab:env-setup' command has some Quick Access Key");
 
                 table(['Quick Access Key', 'Details'], [
                     ['mail', 'Mail server setup (mailtrap, mailgun, gmail)'],
@@ -80,7 +80,7 @@ class MarvelInfoCommand extends Command
 
 
                 table(['The command looks like:'], [
-                    ['marvel:env-setup mail'],
+                    ['oglab:env-setup mail'],
                 ]);
 
         } catch (\Exception $e) {

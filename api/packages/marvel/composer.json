@@ -1,5 +1,5 @@
 {
-    "name": "marvel/shop",
+    "name": "oglab/shop",
     "description": ":package_description",
     "license": "license",
     "authors": [
@@ -9,7 +9,7 @@
             "homepage": "https://redq.io"
         }
     ],
-    "homepage": "https://github.com/marvel/gateway",
+    "homepage": "https://github.com/oglab/gateway",
     "keywords": [
         "Laravel",
         "Shop"
@@ -61,16 +61,16 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Marvel\\Tests\\": "tests"
+            "oglab\\Tests\\": "tests"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "Marvel\\ShopServiceProvider"
+                "oglab\\ShopServiceProvider"
             ],
             "aliases": {
-                "Shop": "Marvel\\Facades\\Shop"
+                "Shop": "oglab\\Facades\\Shop"
             }
         }
     }

@@ -1,12 +1,12 @@
 <?php
 
-namespace Marvel\Database\Models;
+namespace oglab\Database\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Marvel\Database\Models\Order;
-use Marvel\Traits\TranslationTrait;
+use oglab\Database\Models\Order;
+use oglab\Traits\TranslationTrait;
 
 class PaymentIntent extends Model
 {

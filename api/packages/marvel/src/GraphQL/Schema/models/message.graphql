@@ -5,7 +5,7 @@ extend type Query {
         conversation_id: ID!
     ): [Message]
     @paginate(
-        builder: "Marvel\\GraphQL\\Queries\\MessageQuery@fetchMessages"
+        builder: "oglab\\GraphQL\\Queries\\MessageQuery@fetchMessages"
         defaultCount: 15
     )
 }

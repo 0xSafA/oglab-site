@@ -1,16 +1,16 @@
 <?php
 
 
-namespace Marvel\GraphQL\Mutation;
+namespace oglab\GraphQL\Mutation;
 
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
-use Marvel\Facades\Shop;
+use oglab\Facades\Shop;
 
 class CheckoutMutator
 {
 
     public function verify($rootValue, array $args, GraphQLContext $context)
     {
-        return Shop::call('Marvel\Http\Controllers\CheckoutController@verify', $args);
+        return Shop::call('oglab\Http\Controllers\CheckoutController@verify', $args);
     }
 }

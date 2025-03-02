@@ -1,14 +1,14 @@
 <?php
 
 
-namespace Marvel\Database\Repositories;
+namespace oglab\Database\Repositories;
 
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Marvel\Database\Models\Attribute;
-use Marvel\Database\Models\AttributeValue;
-use Marvel\Exceptions\MarvelException;
+use oglab\Database\Models\Attribute;
+use oglab\Database\Models\AttributeValue;
+use oglab\Exceptions\oglabException;
 use Prettus\Repository\Criteria\RequestCriteria;
 use Prettus\Repository\Exceptions\RepositoryException;
 use Symfony\Component\HttpKernel\Exception\HttpException;

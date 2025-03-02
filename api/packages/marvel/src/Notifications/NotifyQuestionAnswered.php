@@ -7,8 +7,8 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Log;
-use Marvel\Database\Models\Product;
-use Marvel\Database\Models\Question;
+use oglab\Database\Models\Product;
+use oglab\Database\Models\Question;
 
 class NotifyQuestionAnswered extends Notification implements ShouldQueue
 {

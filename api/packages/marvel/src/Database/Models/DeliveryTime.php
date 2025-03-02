@@ -1,10 +1,10 @@
 <?php
 
-namespace Marvel\Database\Models;
+namespace oglab\Database\Models;
 
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Model;
-use Marvel\Traits\TranslationTrait;
+use oglab\Traits\TranslationTrait;
 use Illuminate\Database\Eloquent\Builder;
 
 

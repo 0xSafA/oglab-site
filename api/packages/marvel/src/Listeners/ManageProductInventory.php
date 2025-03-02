@@ -1,12 +1,12 @@
 <?php
 
-namespace Marvel\Listeners;
+namespace oglab\Listeners;
 
 use Exception;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Marvel\Database\Models\Product;
-use Marvel\Database\Models\Variation;
-use Marvel\Events\OrderCreated;
+use oglab\Database\Models\Product;
+use oglab\Database\Models\Variation;
+use oglab\Events\OrderCreated;
 
 class ManageProductInventory implements ShouldQueue
 {

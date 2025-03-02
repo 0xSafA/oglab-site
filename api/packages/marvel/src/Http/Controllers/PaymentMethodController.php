@@ -1,15 +1,15 @@
 <?php
 
-namespace Marvel\Http\Controllers;
+namespace oglab\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Marvel\Database\Models\PaymentMethod;
-use Marvel\Database\Repositories\PaymentMethodRepository;
-use Marvel\Database\Models\Settings;
-use Marvel\Exceptions\MarvelException;
-use Marvel\Facades\Payment;
-use Marvel\Http\Requests\PaymentMethodCreateRequest;
-use Marvel\Traits\PaymentTrait;
+use oglab\Database\Models\PaymentMethod;
+use oglab\Database\Repositories\PaymentMethodRepository;
+use oglab\Database\Models\Settings;
+use oglab\Exceptions\oglabException;
+use oglab\Facades\Payment;
+use oglab\Http\Requests\PaymentMethodCreateRequest;
+use oglab\Traits\PaymentTrait;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class PaymentMethodController extends CoreController
@@ -64,8 +64,8 @@ class PaymentMethodController extends CoreController
     {
         try {
             return $this->repository->storeCards($request, $this->settings);
-        } catch (MarvelException $e) {
-            throw new MarvelException(COULD_NOT_CREATE_THE_RESOURCE);
+        } catch (oglabException $e) {
+            throw new oglabException(COULD_NOT_CREATE_THE_RESOURCE);
         }
     }
 
@@ -96,8 +96,8 @@ class PaymentMethodController extends CoreController
             } catch (\Exception $e) {
                 throw new HttpException(409, COULD_NOT_DELETE_THE_RESOURCE);
             }
-        } catch (MarvelException $e) {
-            throw new MarvelException(COULD_NOT_DELETE_THE_RESOURCE, $e->getMessage());
+        } catch (oglabException $e) {
+            throw new oglabException(COULD_NOT_DELETE_THE_RESOURCE, $e->getMessage());
         }
     }
 
@@ -150,8 +150,8 @@ class PaymentMethodController extends CoreController
     {
         try {
             return $this->repository->setDefaultPaymentMethod($request);
-        } catch (MarvelException $e) {
-            throw new MarvelException(COULD_NOT_CREATE_THE_RESOURCE);
+        } catch (oglabException $e) {
+            throw new oglabException(COULD_NOT_CREATE_THE_RESOURCE);
         }
         // if system varies from payment-gateway to payment-gateway, then use this.
         // switch ($this->settings->options['paymentGateway']) {

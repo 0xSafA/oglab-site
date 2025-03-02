@@ -3,8 +3,8 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use Marvel\Enums\RefundPolicyStatus;
-use Marvel\Enums\RefundPolicyTarget;
+use oglab\Enums\RefundPolicyStatus;
+use oglab\Enums\RefundPolicyTarget;
 
 return new class extends Migration
 {

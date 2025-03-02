@@ -1,6 +1,6 @@
 extend type Query {
     attributeValues(shop_id: ID @eq): [AttributeValue!]!
-        @field(resolver: "Marvel\\GraphQL\\Queries\\AttributesValueQuery@fetchAttributesValue")
+        @field(resolver: "oglab\\GraphQL\\Queries\\AttributesValueQuery@fetchAttributesValue")
     attributeValue(id: ID! @eq): AttributeValue @find
 }
 

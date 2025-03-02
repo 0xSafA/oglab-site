@@ -1,6 +1,6 @@
 <?php
 
-namespace Marvel;
+namespace oglab;
 
 use Illuminate\Support\Facades\App;
 

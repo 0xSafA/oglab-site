@@ -1,13 +1,13 @@
 <?php
 
-namespace Marvel\Database\Repositories;
+namespace oglab\Database\Repositories;
 
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Collection;
-use Marvel\Database\Models\AbusiveReport;
-use Marvel\Database\Models\Conversation;
-use Marvel\Exceptions\MarvelException;
+use oglab\Database\Models\AbusiveReport;
+use oglab\Database\Models\Conversation;
+use oglab\Exceptions\oglabException;
 use Prettus\Repository\Criteria\RequestCriteria;
 use Prettus\Repository\Exceptions\RepositoryException;
 
