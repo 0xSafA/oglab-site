@@ -37,6 +37,7 @@ const RAW_RUNTIME_STATE =
       [null, {\
         "packageLocation": "./",\
         "packageDependencies": [\
+          ["i18next", "virtual:2ade7c5dbb7cfb6bb14f55d65b6b818d272dec8c4162e99a926f06433865addb383ca2096c9a154a9bc60a178451dd30f201f10196ead08f7d51897a32a6aab6#npm:24.2.2"],\
           ["lint-staged", "npm:11.2.6"],\
           ["prettier", "npm:2.8.8"],\
           ["react", "npm:19.0.0"],\
@@ -5050,6 +5051,7 @@ const RAW_RUNTIME_STATE =
           ["prettier", "npm:3.3.3"],\
           ["prettier-plugin-tailwindcss", "virtual:3a8c1b830f7d3eb7ba8802cb7bbf6c2ac5d4cc8e3b52d83c7096cce02364df20a6635f8b729ead43b09bdbd669aad85bccc64b6b2bf130001f8f7478cd2eadc9#npm:0.5.6"],\
           ["pusher-js", "npm:8.4.0-rc2"],\
+          ["quill", "npm:2.0.3"],\
           ["quill-color-picker-enhance", "virtual:3a8c1b830f7d3eb7ba8802cb7bbf6c2ac5d4cc8e3b52d83c7096cce02364df20a6635f8b729ead43b09bdbd669aad85bccc64b6b2bf130001f8f7478cd2eadc9#npm:1.1.5"],\
           ["rc-pagination", "virtual:3a8c1b830f7d3eb7ba8802cb7bbf6c2ac5d4cc8e3b52d83c7096cce02364df20a6635f8b729ead43b09bdbd669aad85bccc64b6b2bf130001f8f7478cd2eadc9#npm:3.7.0"],\
           ["rc-progress", "virtual:3a8c1b830f7d3eb7ba8802cb7bbf6c2ac5d4cc8e3b52d83c7096cce02364df20a6635f8b729ead43b09bdbd669aad85bccc64b6b2bf130001f8f7478cd2eadc9#npm:3.5.1"],\
@@ -9802,6 +9804,13 @@ const RAW_RUNTIME_STATE =
           ["fast-diff", "npm:1.1.2"]\
         ],\
         "linkType": "HARD"\
+      }],\
+      ["npm:1.3.0", {\
+        "packageLocation": "../../../root/.yarn/berry/cache/fast-diff-npm-1.3.0-9f19e3b743-10c0.zip/node_modules/fast-diff/",\
+        "packageDependencies": [\
+          ["fast-diff", "npm:1.3.0"]\
+        ],\
+        "linkType": "HARD"\
       }]\
     ]],\
     ["fast-fifo", [\
@@ -10957,6 +10966,27 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["i18next", "npm:23.16.4"],\
           ["@babel/runtime", "npm:7.26.9"]\
+        ],\
+        "linkType": "HARD"\
+      }],\
+      ["npm:24.2.2", {\
+        "packageLocation": "../../../root/.yarn/berry/cache/i18next-npm-24.2.2-77e939b2d8-10c0.zip/node_modules/i18next/",\
+        "packageDependencies": [\
+          ["i18next", "npm:24.2.2"]\
+        ],\
+        "linkType": "SOFT"\
+      }],\
+      ["virtual:2ade7c5dbb7cfb6bb14f55d65b6b818d272dec8c4162e99a926f06433865addb383ca2096c9a154a9bc60a178451dd30f201f10196ead08f7d51897a32a6aab6#npm:24.2.2", {\
+        "packageLocation": "./.yarn/__virtual__/i18next-virtual-db77a89d99/4/root/.yarn/berry/cache/i18next-npm-24.2.2-77e939b2d8-10c0.zip/node_modules/i18next/",\
+        "packageDependencies": [\
+          ["i18next", "virtual:2ade7c5dbb7cfb6bb14f55d65b6b818d272dec8c4162e99a926f06433865addb383ca2096c9a154a9bc60a178451dd30f201f10196ead08f7d51897a32a6aab6#npm:24.2.2"],\
+          ["@babel/runtime", "npm:7.26.9"],\
+          ["@types/typescript", null],\
+          ["typescript", null]\
+        ],\
+        "packagePeers": [\
+          "@types/typescript",\
+          "typescript"\
         ],\
         "linkType": "HARD"\
       }]\
@@ -12396,6 +12426,15 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["lodash-es", [\
+      ["npm:4.17.21", {\
+        "packageLocation": "../../../root/.yarn/berry/cache/lodash-es-npm-4.17.21-b45832dfce-10c0.zip/node_modules/lodash-es/",\
+        "packageDependencies": [\
+          ["lodash-es", "npm:4.17.21"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["lodash.castarray", [\
       ["npm:4.4.0", {\
         "packageLocation": "../../../root/.yarn/berry/cache/lodash.castarray-npm-4.4.0-f3706198e9-10c0.zip/node_modules/lodash.castarray/",\
@@ -12405,11 +12444,29 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["lodash.clonedeep", [\
+      ["npm:4.5.0", {\
+        "packageLocation": "../../../root/.yarn/berry/cache/lodash.clonedeep-npm-4.5.0-fbc3cda4e5-10c0.zip/node_modules/lodash.clonedeep/",\
+        "packageDependencies": [\
+          ["lodash.clonedeep", "npm:4.5.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["lodash.debounce", [\
       ["npm:4.0.8", {\
         "packageLocation": "../../../root/.yarn/berry/cache/lodash.debounce-npm-4.0.8-f1d6e09799-10c0.zip/node_modules/lodash.debounce/",\
         "packageDependencies": [\
           ["lodash.debounce", "npm:4.0.8"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["lodash.isequal", [\
+      ["npm:4.5.0", {\
+        "packageLocation": "../../../root/.yarn/berry/cache/lodash.isequal-npm-4.5.0-f8b0f64d63-10c0.zip/node_modules/lodash.isequal/",\
+        "packageDependencies": [\
+          ["lodash.isequal", "npm:4.5.0"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -13872,6 +13929,13 @@ const RAW_RUNTIME_STATE =
           ["parchment", "npm:1.1.4"]\
         ],\
         "linkType": "HARD"\
+      }],\
+      ["npm:3.0.0", {\
+        "packageLocation": "../../../root/.yarn/berry/cache/parchment-npm-3.0.0-8af750d9d9-10c0.zip/node_modules/parchment/",\
+        "packageDependencies": [\
+          ["parchment", "npm:3.0.0"]\
+        ],\
+        "linkType": "HARD"\
       }]\
     ]],\
     ["parent-module", [\
@@ -14036,6 +14100,7 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./",\
         "packageDependencies": [\
           ["pick-bazar", "workspace:."],\
+          ["i18next", "virtual:2ade7c5dbb7cfb6bb14f55d65b6b818d272dec8c4162e99a926f06433865addb383ca2096c9a154a9bc60a178451dd30f201f10196ead08f7d51897a32a6aab6#npm:24.2.2"],\
           ["lint-staged", "npm:11.2.6"],\
           ["prettier", "npm:2.8.8"],\
           ["react", "npm:19.0.0"],\
@@ -14612,6 +14677,17 @@ const RAW_RUNTIME_STATE =
           ["quill-delta", "npm:3.6.3"]\
         ],\
         "linkType": "HARD"\
+      }],\
+      ["npm:2.0.3", {\
+        "packageLocation": "../../../root/.yarn/berry/cache/quill-npm-2.0.3-15cb4b4fc0-10c0.zip/node_modules/quill/",\
+        "packageDependencies": [\
+          ["quill", "npm:2.0.3"],\
+          ["eventemitter3", "npm:5.0.1"],\
+          ["lodash-es", "npm:4.17.21"],\
+          ["parchment", "npm:3.0.0"],\
+          ["quill-delta", "npm:5.1.0"]\
+        ],\
+        "linkType": "HARD"\
       }]\
     ]],\
     ["quill-color-picker-enhance", [\
@@ -14628,10 +14704,11 @@ const RAW_RUNTIME_STATE =
           ["quill-color-picker-enhance", "virtual:3a8c1b830f7d3eb7ba8802cb7bbf6c2ac5d4cc8e3b52d83c7096cce02364df20a6635f8b729ead43b09bdbd669aad85bccc64b6b2bf130001f8f7478cd2eadc9#npm:1.1.5"],\
           ["@types/quill", null],\
           ["extend", "npm:3.0.2"],\
-          ["quill", "npm:1.3.7"]\
+          ["quill", "npm:2.0.3"]\
         ],\
         "packagePeers": [\
-          "@types/quill"\
+          "@types/quill",\
+          "quill"\
         ],\
         "linkType": "HARD"\
       }]\
@@ -14644,6 +14721,16 @@ const RAW_RUNTIME_STATE =
           ["deep-equal", "npm:1.1.2"],\
           ["extend", "npm:3.0.2"],\
           ["fast-diff", "npm:1.1.2"]\
+        ],\
+        "linkType": "HARD"\
+      }],\
+      ["npm:5.1.0", {\
+        "packageLocation": "../../../root/.yarn/berry/cache/quill-delta-npm-5.1.0-885ccecbe2-10c0.zip/node_modules/quill-delta/",\
+        "packageDependencies": [\
+          ["quill-delta", "npm:5.1.0"],\
+          ["fast-diff", "npm:1.3.0"],\
+          ["lodash.clonedeep", "npm:4.5.0"],\
+          ["lodash.isequal", "npm:4.5.0"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -15237,7 +15324,7 @@ const RAW_RUNTIME_STATE =
           ["@types/react-dom", null],\
           ["@types/react-native", null],\
           ["html-parse-stringify", "npm:3.0.1"],\
-          ["i18next", null],\
+          ["i18next", "virtual:2ade7c5dbb7cfb6bb14f55d65b6b818d272dec8c4162e99a926f06433865addb383ca2096c9a154a9bc60a178451dd30f201f10196ead08f7d51897a32a6aab6#npm:24.2.2"],\
           ["react", "npm:19.0.0"],\
           ["react-dom", "virtual:2ade7c5dbb7cfb6bb14f55d65b6b818d272dec8c4162e99a926f06433865addb383ca2096c9a154a9bc60a178451dd30f201f10196ead08f7d51897a32a6aab6#npm:19.0.0"],\
           ["react-native", null]\
@@ -15568,7 +15655,7 @@ const RAW_RUNTIME_STATE =
           ["@types/quill", null],\
           ["emoji-data-css", "npm:1.0.1"],\
           ["fuse.js", "npm:3.6.1"],\
-          ["quill", null]\
+          ["quill", "npm:2.0.3"]\
         ],\
         "packagePeers": [\
           "@types/quill",\

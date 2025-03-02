@@ -9,7 +9,8 @@
     "graphql"
   ],
   "scripts": {
-    "clean": "yarn workspaces run rimraf -g \"{.next,node_modules,__generated__,.cache,src/graphql/*.d.ts,src/framework/graphql/**/*.d.ts}\" && rimraf node_modules",    "dev:rest": "yarn workspace @marvel/admin-rest dev",
+    "clean": "yarn workspaces run rimraf -g \"{.next,node_modules,__generated__,.cache,src/graphql/*.d.ts,src/framework/graphql/**/*.d.ts}\" && rimraf node_modules",
+    "dev:rest": "yarn workspace @marvel/admin-rest dev",
     "build:rest": "yarn workspace @marvel/admin-rest build",
     "start:rest": "yarn workspace @marvel/admin-rest start"
   },
