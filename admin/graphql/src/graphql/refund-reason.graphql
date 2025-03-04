@@ -1,0 +1,58 @@
+# import PaginatorParts from './paginator.fragment.graphql'
+fragment RefundReasonPart on RefundReason {
+  id
+  name
+  slug
+  language
+  translated_languages
+}
+
+query RefundReasons(
+  $search: String
+  $language: String
+  $orderBy: String
+  $sortedBy: String
+  $searchJoin: String = "AND"
+  $first: Int = 15
+  $page: Int
+) {
+  refundReasons(
+    search: $search
+    language: $language
+    orderBy: $orderBy
+    sortedBy: $sortedBy
+    searchJoin: $searchJoin
+    first: $first
+    page: $page
+  ) {
+    data {
+      ...RefundReasonPart
+    }
+    paginatorInfo {
+      ...PaginatorParts
+    }
+  }
+}
+
+query RefundReason($id: ID, $slug: String, $language: String) {
+  refundReason(id: $id, slug: $slug, language: $language) {
+    ...RefundReasonPart
+  }
+}
+
+mutation CreateRefundReason($input: CreateRefundReasonInput!) {
+  createRefundReason(input: $input) {
+    ...RefundReasonPart
+  }
+}
+
+mutation UpdateRefundReason($input: UpdateRefundReasonInput!) {
+  updateRefundReason(input: $input) {
+    ...RefundReasonPart
+  }
+}
+mutation DeleteRefundReason($id: ID!) {
+  deleteRefundReason(id: $id) {
+    ...RefundReasonPart
+  }
+}

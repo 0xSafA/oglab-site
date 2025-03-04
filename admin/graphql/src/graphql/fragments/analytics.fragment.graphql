@@ -1,0 +1,44 @@
+fragment OrderByStatusParts on OrderByStatus {
+  pending
+  processing
+  complete
+  cancelled
+  refunded
+  failed
+  localFacility
+  outForDelivery
+}
+
+fragment CategoryWiseProductParts on CategoryWiseProduct {
+  category_id
+  category_name
+  shop_name
+  product_count
+}
+fragment CategoryWiseProductSaleParts on CategoryWiseProductSale {
+  category_id
+  category_name
+  shop_name
+  total_sales
+}
+fragment TopRatedProductParts on TopRatedProduct {
+  id
+  name
+  slug
+  regular_price
+  sale_price
+  min_price
+  max_price
+  product_type
+  description
+  type_id
+  type_slug
+  total_rating
+  rating_count
+  actual_rating
+  image {
+    id
+    original
+    thumbnail
+  }
+}

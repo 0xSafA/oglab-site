@@ -1,0 +1,109 @@
+# import PaginatorParts from './paginator.fragment.graphql'
+
+fragment CouponParts on Coupon {
+  id
+  description
+  code
+  image {
+    id
+    original
+    thumbnail
+  }
+  type
+  amount
+  minimum_cart_amount
+  expire_at
+  active_from
+  target
+  is_valid
+  is_approve
+  language
+  translated_languages
+  shop_id
+  user_id
+  message
+  sub_total
+}
+
+query Coupons(
+  $search: String
+  $orderBy: String
+  $sortedBy: String
+  $language: String
+  $searchJoin: String
+  $type: String
+  $is_approve: Boolean
+  $first: Int = 15
+  $page: Int
+  $shop_id: ID
+) {
+  coupons(
+    search: $search
+    orderBy: $orderBy
+    sortedBy: $sortedBy
+    language: $language
+    searchJoin: $searchJoin
+    type: $type
+    first: $first
+    is_approve: $is_approve
+    page: $page
+    shop_id: $shop_id
+  ) {
+    data {
+      ...CouponParts
+    }
+    paginatorInfo {
+      ...PaginatorParts
+    }
+  }
+}
+
+query Coupon($id: ID, $code: String, $language: String) {
+  coupon(id: $id, code: $code, language: $language) {
+    ...CouponParts
+  }
+}
+
+mutation CreateCoupon($input: CreateCouponInput!) {
+  createCoupon(input: $input) {
+    ...CouponParts
+  }
+}
+
+mutation UpdateCoupon($input: UpdateCouponInput!) {
+  updateCoupon(input: $input) {
+    id
+    ...CouponParts
+  }
+}
+
+mutation ApproveCoupon($id: ID!) {
+  approveCoupon(id: $id) {
+    ...CouponParts
+  }
+}
+mutation DisapproveCoupon($id: ID!) {
+  disapproveCoupon(id: $id) {
+    ...CouponParts
+  }
+}
+
+mutation DeleteCoupon($id: ID!) {
+  deleteCoupon(id: $id) {
+    ...CouponParts
+  }
+}
+
+mutation VerifyCoupon($input: VerifyCouponInput!) {
+  verifyCoupon(input: $input) {
+    is_valid
+    coupon {
+      id
+      code
+      type
+      amount
+      is_valid
+    }
+    message
+  }
+}
