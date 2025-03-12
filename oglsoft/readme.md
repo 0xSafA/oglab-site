@@ -1,1 +1,19 @@
-php artisan oglab:install - здесь можно и почтовый сервер видимо настроить, а может вся система слетит. Я пропустил настройку почтового сервере в этой команде
+php artisan cache:clear
+php artisan config:clear
+php artisan route:clear
+php artisan view:clear
+
+sudo systemctl restart php8.1-fpm
+php -v
+
+sudo systemctl restart nginx
+
+de,en,fr,he,ru,th,zh
+
+
+/oglab_site/
+yarn build:shop-rest
+yarn build:admin-rest
+pm2 restart 'all'
+
+en,de,ar
