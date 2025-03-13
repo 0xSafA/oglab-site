@@ -2,11 +2,11 @@ import { Routes } from '@/config/routes';
 import { PaymentGateway } from '@/types';
 
 export const siteSettings = {
-  name: 'PickBazar',
+  name: 'OGLab',
   description: '',
   logo: {
     url: '/logo.svg',
-    alt: 'PickBazar',
+    alt: 'OGLab',
     href: '/grocery',
     width: 128,
     height: 40,

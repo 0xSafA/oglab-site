@@ -23,3 +23,7 @@ Let's work, learn and relax together!
   "heading": "OG Lab Menu",
   "subheading": "Farmers and Dispesnaries b2b Partner Network"
 }
+
+
+
+https://pickbazar-doc.vercel.app/multilingual
