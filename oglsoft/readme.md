@@ -1,12 +1,9 @@
-php artisan cache:clear
-php artisan config:clear
-php artisan route:clear
-php artisan view:clear
-
-sudo systemctl restart php8.1-fpm
+cd sudo systemctl restart php8.1-fpm
 php -v
 
 sudo systemctl restart nginx
+
+php artisan optimize:clear
 
 de,en,fr,he,ru,th,zh
 
