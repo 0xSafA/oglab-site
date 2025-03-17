@@ -7,6 +7,9 @@ php artisan optimize:clear
 
 de,en,fr,he,ru,th,zh
 
+php artisan optimize:clear
+
+
 
 
 /oglab_site/
