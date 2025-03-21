@@ -25,5 +25,11 @@ Let's work, learn and relax together!
 }
 
 
+openssl rand -hex 32
+OR
+uuidgen | tr -d '-' | sha256sum | cut -c1-64
+
+SECRET generate 
+
 
 https://pickbazar-doc.vercel.app/multilingual
