@@ -2,6 +2,8 @@ cd sudo systemctl restart php8.1-fpm
 php -v
 
 sudo systemctl restart nginx
+sudo systemctl reload php8.3-fpm
+
 
 php artisan optimize:clear
 
