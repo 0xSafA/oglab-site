@@ -3,14 +3,8 @@ import type { GetStaticProps, NextPage } from 'next';
 import Image from 'next/image';
 import clsx from 'clsx';
 
-import { fetchMenu, MenuRow } from '../lib/google.ts';
+import { fetchMenu, MenuRow } from '../lib/google';
 import { columnsPerCategory, groupRows, layoutOrder } from '../lib/menu-helpers';
-
-import {
-  columnsPerCategory,
-  groupRows,
-  layoutOrder,
-} from '@/lib/menu-helpers';
 
 interface MenuProps {
   rows: MenuRow[];
