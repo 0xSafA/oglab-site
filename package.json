@@ -17,7 +17,6 @@
     "start:admin-rest": "yarn workspace @marvel/admin-rest start"
   },
   "devDependencies": {
-    "husky": "^7.0.1",
     "lint-staged": "^11.1.2",
     "prettier": "^2.3.2",
     "rimraf": "^3.0.2"
