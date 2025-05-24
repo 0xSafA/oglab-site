@@ -3,7 +3,9 @@ import type { GetStaticProps, NextPage } from 'next';
 import Image from 'next/image';
 import clsx from 'clsx';
 
-import { fetchMenu, MenuRow } from '@/lib/google';
+import { fetchMenu, MenuRow } from '../lib/google.ts';
+import { columnsPerCategory, groupRows, layoutOrder } from '../lib/menu-helpers';
+
 import {
   columnsPerCategory,
   groupRows,

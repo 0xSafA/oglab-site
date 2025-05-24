@@ -25,5 +25,8 @@
     "*.{js,ts,tsx,md,css}": [
       "prettier --write"
     ]
+  },
+  "dependencies": {
+    "googleapis": "^149.0.0"
   }
 }
