@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /index.html
+Disallow: /cgi-bin/
+Disallow: /tmp/
+Disallow: /junk/
