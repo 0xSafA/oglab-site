@@ -1,0 +1,2 @@
+INSERT INTO `tax_classes` (`id`, `country`, `state`, `zip`, `city`, `rate`, `name`, `is_global`, `priority`, `on_shipping`, `created_at`, `updated_at`) VALUES
+(1, NULL, NULL, NULL, NULL, 2, 'Global', NULL, NULL, 1, '2021-03-25 13:26:57', '2021-03-25 16:07:18');

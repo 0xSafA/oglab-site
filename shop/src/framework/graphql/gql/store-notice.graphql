@@ -1,0 +1,77 @@
+# import PaginatorParts from '../fragments/paginator.fragment.graphql'
+
+fragment StoreNoticeParts on StoreNotice {
+  id
+  priority
+  notice
+  description
+  effective_from
+  expired_at
+  type
+  created_by
+  updated_by
+  created_at
+  updated_at
+  is_read
+  creator_role
+  creator {
+    id
+    name
+    permissions {
+      id
+      name
+    }
+  }
+  users {
+    id
+    name
+    email
+  }
+  shops {
+    id
+    owner_id
+    name
+    slug
+  }
+  read_status {
+    id
+    name
+    email
+    pivot {
+      store_notice_id
+      user_id
+      is_read
+    }
+  }
+}
+
+query StoreNotices(
+  $text: String
+  $shop_id: ID
+  $id: ID
+  $language: String
+  $orderBy: String
+  $sortedBy: String
+  $first: Int!
+  $page: Int
+  $search: String
+) {
+  storeNotices(
+    text: $text
+    shop_id: $shop_id
+    id: $id
+    sortedBy: $sortedBy
+    language: $language
+    orderBy: $orderBy
+    first: $first
+    page: $page
+    search: $search
+  ) {
+    data {
+      ...StoreNoticeParts
+    }
+    paginatorInfo {
+      ...PaginatorParts
+    }
+  }
+}

@@ -1,0 +1,21 @@
+# import PaymentIntentParts from '../fragments/payment_intent.fragment.graphql'
+
+query GetPaymentIntent(
+  $tracking_number: ID!
+  $payment_gateway: String!
+  $recall_gateway: Boolean!
+) {
+  getPaymentIntent(
+    tracking_number: $tracking_number
+    payment_gateway: $payment_gateway
+    recall_gateway: $recall_gateway
+  ) {
+    ...PaymentIntentParts
+  }
+}
+
+mutation SavePaymentMethod($input: SavePaymentMethodInput!) {
+  savePaymentMethod(input: $input) {
+    method_key
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "name": "pick-bazar",
+  "version": "11.14.0",
+  "private": true,
+  "author": "REDQ",
+  "workspaces": [
+    "admin/*",
+    "shop"
+  ],
+  "scripts": {
+    "clean": "yarn workspaces run rimraf \"{.next,node_modules,__generated__,.cache,src/graphql/*.d.ts,src/framework/graphql/**/*.d.ts}\" && rimraf node_modules",
+    "dev:shop-rest": "yarn workspace @pick-bazar/shop dev:rest",
+    "build:shop-rest": "yarn workspace @pick-bazar/shop build:rest",
+    "start:shop-rest": "yarn workspace @pick-bazar/shop start",
+    "dev:admin-rest": "yarn workspace @marvel/admin-rest dev",
+    "build:admin-rest": "yarn workspace @marvel/admin-rest build",
+    "start:admin-rest": "yarn workspace @marvel/admin-rest start"
+  },
+  "devDependencies": {
+    "lint-staged": "^11.1.2",
+    "prettier": "^2.3.2",
+    "rimraf": "^3.0.2"
+  },
+  "lint-staged": {
+    "*.{js,ts,tsx,md,css}": [
+      "prettier --write"
+    ]
+  },
+  "dependencies": {
+    "googleapis": "^149.0.0"
+  }
+}

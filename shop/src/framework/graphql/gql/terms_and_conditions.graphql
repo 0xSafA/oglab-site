@@ -1,0 +1,48 @@
+# import PaginatorParts from '../fragments/paginator.fragment.graphql'
+
+fragment TermsAndConditionsParts on TermsAndConditions {
+  id
+  title
+  slug
+  description
+  type
+  issued_by
+  is_approved
+  language
+  translated_languages
+  shop_id
+}
+query TermsAndConditions(
+  $search: String
+  $orderBy: String
+  $sortedBy: String
+  $language: String
+  $searchJoin: String
+  $type: String
+  $issued_by: String
+  $is_approved: Boolean
+  $first: Int = 15
+  $page: Int
+  $shop_id: ID
+) {
+  termsConditions(
+    search: $search
+    orderBy: $orderBy
+    sortedBy: $sortedBy
+    language: $language
+    searchJoin: $searchJoin
+    type: $type
+    issued_by: $issued_by
+    shop_id: $shop_id
+    first: $first
+    is_approved: $is_approved
+    page: $page
+  ) {
+    data {
+      ...TermsAndConditionsParts
+    }
+    paginatorInfo {
+      ...PaginatorParts
+    }
+  }
+}

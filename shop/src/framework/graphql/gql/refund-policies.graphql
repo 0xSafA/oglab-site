@@ -1,0 +1,40 @@
+# import PaginatorParts from '../fragments/paginator.fragment.graphql'
+
+fragment RefundPolicyParts on RefundPolicy {
+  id
+  title
+  slug
+  description
+  target
+  language
+  status
+  shop_id
+  translated_languages
+}
+
+query RefundPolicies(
+  $search: String
+  $orderBy: String
+  $sortedBy: String
+  $language: String
+  $searchJoin: String = "and"
+  $first: Int = 15
+  $page: Int
+) {
+  refundPolicies(
+    search: $search
+    orderBy: $orderBy
+    sortedBy: $sortedBy
+    language: $language
+    searchJoin: $searchJoin
+    first: $first
+    page: $page
+  ) {
+    data {
+      ...RefundPolicyParts
+    }
+    paginatorInfo {
+      ...PaginatorParts
+    }
+  }
+}
