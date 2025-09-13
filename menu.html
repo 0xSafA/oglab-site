@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="OG Lab Cannabis Menu - Fresh products from our farm on Koh Samui">
+    <title>OG Lab - Menu</title>
+    <link rel="stylesheet" href="css/menu-styles.css">
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+</head>
+<body>
+    <div class="background"></div>
+    
+    <main class="menu-container">
+        <!-- Header -->
+        <header class="menu-header">
+            <div class="header-spacer"></div>
+            
+            <div class="header-center">
+                <img src="assets/images/oglab_logo_round.svg" alt="OG Lab Logo" class="menu-logo">
+                <h1 class="menu-title">MENU</h1>
+            </div>
+            
+            <div class="header-time">
+                <div id="current-time"></div>
+            </div>
+        </header>
+
+        <!-- Menu Grid -->
+        <section class="menu-grid" id="menu-grid">
+            <div class="menu-column" id="column1"></div>
+            <div class="menu-column" id="column2"></div>
+            <div class="menu-column menu-column-last" id="column3">
+                <div class="column-line"></div>
+            </div>
+        </section>
+
+        <!-- Separator Line -->
+        <div class="menu-separator"></div>
+
+        <!-- Legend -->
+        <footer class="menu-legend">
+            <div class="legend-item">
+                <span class="legend-dot hybrid"></span>
+                <span>Hybrid</span>
+            </div>
+            <div class="legend-item">
+                <span class="legend-dot sativa"></span>
+                <span>Dominant Sativa</span>
+            </div>
+            <div class="legend-item">
+                <span class="legend-dot indica"></span>
+                <span>Dominant Indica</span>
+            </div>
+            <div class="legend-item">
+                <svg class="legend-leaf" width="12" height="12" viewBox="0 0 24 24" fill="#536C4A">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                </svg>
+                <span>Our farm-grown</span>
+            </div>
+            <div class="legend-right">
+                <span>Weed (with batches from 5g)</span>
+                <div class="legend-item">
+                    <svg class="legend-bong" width="20" height="20" viewBox="0 0 24 24" fill="#536C4A">
+                        <path d="m19.293 8.293l-2.069 2.069A7 7 0 0 0 15 8.681V4h1V2H8v2h1v4.681A7.01 7.01 0 0 0 5 15c0 3.859 3.141 7 7 7s7-3.141 7-7a7 7 0 0 0-.652-2.934l2.359-2.359zm-8.959 1.998l.666-.235V4h2v6.056l.666.235A5 5 0 0 1 16.886 14H7.114a5 5 0 0 1 3.22-3.709M12 20a5.01 5.01 0 0 1-4.898-4h9.797A5.01 5.01 0 0 1 12 20"/>
+                    </svg>
+                    <span>Ask your budtender about a Dab Session</span>
+                </div>
+            </div>
+        </footer>
+
+        <!-- Back to Main Site -->
+        <div class="back-link">
+            <a href="index.html" class="back-button">← Back to OG Lab</a>
+        </div>
+    </main>
+
+    <!-- Pacman Animation -->
+    <canvas id="pacman-trail" class="pacman-canvas"></canvas>
+    <div id="pacman" class="pacman">
+        <div class="pacman-body">
+            <div class="pacman-mouth"></div>
+            <div class="pacman-eye"></div>
+        </div>
+    </div>
+
+    <!-- Loading Indicator -->
+    <div id="loading" class="loading">
+        <div class="loading-spinner"></div>
+        <p>Loading fresh menu from our farm...</p>
+    </div>
+
+    <script src="js/menu.js"></script>
+</body>
+</html>
