@@ -1,0 +1,519 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-primary: #536C4A;
+  --color-primary-light: #B0BF93;
+  --color-hybrid: #4f7bff;
+  --color-sativa: #ff6633;
+  --color-indica: #38b24f;
+}
+
+@layer utilities {
+  .animate-fade-in-up {
+    animation: fadeInUp 0.8s ease-out;
+  }
+  
+  .animate-pulse-slow {
+    animation: pulse 3s infinite;
+  }
+  
+  .animate-shimmer {
+    animation: shimmer 3s infinite;
+  }
+  
+  .animate-glitch {
+    animation: glitch 8s infinite;
+  }
+  
+  .animate-blink {
+    animation: blink 1s infinite;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% { 
+    transform: scale(1); 
+  }
+  50% { 
+    transform: scale(1.05); 
+  }
+}
+
+@keyframes shimmer {
+  0% { 
+    transform: translateX(-100%); 
+  }
+  100% { 
+    transform: translateX(100%); 
+  }
+}
+
+@keyframes glitch {
+  0%, 90%, 100% { 
+    transform: translateX(0); 
+  }
+  91% { 
+    transform: translateX(-2px); 
+  }
+  92% { 
+    transform: translateX(2px); 
+  }
+  93% { 
+    transform: translateX(-1px); 
+  }
+  94% { 
+    transform: translateX(1px); 
+  }
+  95% { 
+    transform: translateX(0); 
+  }
+}
+
+@keyframes blink {
+  0%, 50% { 
+    opacity: 1; 
+  }
+  51%, 100% { 
+    opacity: 0; 
+  }
+}
+
+@keyframes spin {
+  0% { 
+    transform: rotate(0deg); 
+  }
+  100% { 
+    transform: rotate(360deg); 
+  }
+}
+
+@keyframes chomp {
+  0%, 100% { 
+    transform: translateY(-50%) rotate(0deg); 
+  }
+  50% { 
+    transform: translateY(-50%) rotate(45deg); 
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-primary-light);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-primary);
+}
+
+/* Menu specific styles */
+.menu-container {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Compact line height for menu item names on all devices */
+.menu-category-item span {
+  line-height: 1.3;
+}
+
+.type-dot {
+  width: 8px;
+  height: 8px;
+  min-width: 8px;
+  min-height: 8px;
+  max-width: 8px;
+  max-height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 6px;
+  flex-shrink: 0;
+  vertical-align: middle;
+}
+
+.type-dot.hybrid {
+  background-color: var(--color-hybrid);
+}
+
+.type-dot.sativa {
+  background-color: var(--color-sativa);
+}
+
+.type-dot.indica {
+  background-color: var(--color-indica);
+}
+
+/* Mobile-specific fixes for type dots and menu items */
+@media (max-width: 768px) {
+  .type-dot {
+    width: 10px;
+    height: 10px;
+    min-width: 10px;
+    min-height: 10px;
+    max-width: 10px;
+    max-height: 10px;
+    margin-right: 8px;
+    border-radius: 50% !important;
+    aspect-ratio: 1 / 1;
+  }
+  
+  .menu-category-item span {
+    font-size: 15px !important;
+  }
+}
+
+/* Marker highlight effect */
+.marker-highlight {
+  background: linear-gradient(120deg, transparent 0%, transparent 40%, #B0BF93 40%, #B0BF93 60%, transparent 60%);
+  background-size: 100% 0.8em;
+  background-repeat: no-repeat;
+  background-position: 0 0.6em;
+  padding: 0 2px;
+  position: relative;
+}
+
+/* Multi-color dashed marker effect */
+.marker-dashed {
+  position: relative;
+  padding: 0 2px;
+}
+
+.marker-dashed::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  right: 0;
+  height: 1.4em;
+  z-index: -1;
+  background: repeating-linear-gradient(
+    90deg,
+    #B0BF93 0px,
+    #B0BF93 20px,
+    transparent 20px,
+    transparent 30px,
+    #F4A261 30px,
+    #F4A261 50px,
+    transparent 50px,
+    transparent 60px,
+    #B0BF93 60px,
+    #B0BF93 80px,
+    transparent 80px,
+    transparent 90px
+  );
+  border-radius: 3px;
+}
+
+/* Additional fixes for very small screens */
+@media (max-width: 480px) {
+  .type-dot {
+    width: 12px;
+    height: 12px;
+    min-width: 12px;
+    min-height: 12px;
+    max-width: 12px;
+    max-height: 12px;
+    margin-right: 10px;
+  }
+  
+  .farm-leaf {
+    width: 14px;
+    height: 14px;
+    min-width: 14px;
+    min-height: 14px;
+    max-width: 14px;
+    max-height: 14px;
+    margin-right: 6px;
+  }
+}
+
+/* Tablet-specific optimizations (768px - 1024px) - Ultra compact */
+@media (min-width: 768px) and (max-width: 1024px) {
+  /* Reduce outer container padding (green background area) */
+  main.relative {
+    padding-left: 0.25rem !important;
+    padding-right: 0.25rem !important;
+    padding-top: 0.5rem !important;
+    padding-bottom: 0.5rem !important;
+  }
+  
+  /* Ultra compact main container for tablets */
+  .menu-main-container {
+    padding: 0.25rem !important;
+  }
+  
+  /* Footer width control for tablets */
+  footer {
+    width: 60% !important; /* Slightly less than 2/3 width */
+    padding: 0.375rem !important;
+    font-size: 10px !important;
+  }
+  
+  /* Compact footer grid spacing */
+  footer .grid {
+    gap: 0.5rem !important;
+  }
+  
+  /* Ultra compact menu grid */
+  .menu-grid {
+    gap: 0.25rem !important;
+    margin-bottom: 0.5rem !important;
+    margin-top: 0.25rem !important;
+  }
+  
+  /* Compact category spacing */
+  .space-y-3 > * + *, .space-y-2 > * + * {
+    margin-top: 0.25rem !important;
+  }
+  
+  /* Ultra compact category blocks */
+  .menu-category {
+    margin-bottom: 0.25rem !important;
+  }
+  
+  /* Compact category headers */
+  .menu-category-header {
+    font-size: 9px !important;
+    padding: 0.25rem 0.5rem !important;
+    line-height: 1.1 !important;
+  }
+  
+  /* Ultra compact menu items */
+  .menu-category-item {
+    padding: 0.25rem 0.5rem !important;
+  }
+  
+  /* Menu item names - ultra small on tablets */
+  .menu-category-item span {
+    font-size: 9px !important;
+    line-height: 1.1 !important;
+  }
+  
+  /* Price and THC/CBG text - ultra small on tablets */
+  .menu-category-item .w-12 {
+    font-size: 9px !important;
+    line-height: 1.1 !important;
+  }
+  
+  /* Compact indicators */
+  .w-3.h-3 {
+    width: 10px !important;
+    height: 10px !important;
+  }
+  
+  .w-2.h-2 {
+    width: 8px !important;
+    height: 8px !important;
+  }
+  
+  /* Compact footer elements */
+  footer .w-4, footer .w-3 {
+    width: 10px !important;
+    height: 10px !important;
+  }
+  
+  footer .w-6, footer .w-5 {
+    width: 16px !important;
+    height: 16px !important;
+  }
+}
+
+/* Tablet landscape optimization (1280x768) */
+@media (min-width: 768px) and (max-width: 1400px), (max-height: 800px) and (min-width: 768px) {
+  .menu-container {
+    font-size: 14px;
+    line-height: 1.4;
+  }
+  
+  .menu-main-container {
+    padding: 1rem !important;
+  }
+  
+  /* Compact header for tablets */
+  .menu-header {
+    margin-bottom: 0.75rem !important;
+    padding-bottom: 0.75rem !important;
+  }
+  
+  .menu-header h1 {
+    font-size: 1.5rem !important;
+  }
+  
+  .menu-header img {
+    width: 36px !important;
+    height: 36px !important;
+  }
+  
+  /* Readable categories */
+  .menu-category {
+    margin-bottom: 0.75rem !important;
+  }
+  
+  .menu-category-header {
+    padding: 0.5rem 0.75rem !important;
+  }
+  
+  .menu-category-item {
+    padding: 0.375rem 0.75rem !important;
+  }
+  
+  /* Compact grid */
+  .menu-grid {
+    gap: 0.5rem !important;
+    margin-bottom: 0.5rem !important;
+  }
+  
+  /* Readable footer */
+  .menu-footer {
+    font-size: 0.75rem !important;
+    margin-bottom: 0.5rem !important;
+  }
+  
+  /* Only affect logo section on tablets */
+  .footer-logo-section img {
+    width: 34px !important;
+    height: 34px !important;
+  }
+
+  /* Hide separator line on tablets to save space */
+  .menu-separator {
+    display: none !important;
+  }
+  
+  /* Make legend even more compact */
+  .menu-legend-item {
+    font-size: 0.5rem !important;
+  }
+}
+
+/* Extra compact mode for very constrained heights */
+@media (max-height: 768px) and (min-width: 768px) {
+  .menu-main-container {
+    padding: 0.5rem !important;
+  }
+  
+  .menu-header {
+    margin-bottom: 0.25rem !important;
+    padding-bottom: 0.25rem !important;
+  }
+  
+  .menu-grid {
+    gap: 0.25rem !important;
+    margin-bottom: 0.25rem !important;
+  }
+  
+  .menu-category {
+    margin-bottom: 0.25rem !important;
+  }
+  
+  .menu-footer {
+    margin-bottom: 0.25rem !important;
+  }
+}
+
+/* Large screen TV optimizations */
+@media (min-width: 1400px) {
+  .menu-container {
+    font-size: 16px;
+  }
+  
+  .menu-main-container {
+    padding: 1.5rem !important;
+  }
+}
+
+.farm-leaf {
+  width: 12px;
+  height: 12px;
+  min-width: 12px;
+  min-height: 12px;
+  max-width: 12px;
+  max-height: 12px;
+  fill: var(--color-primary);
+  margin-right: 4px;
+  flex-shrink: 0;
+  vertical-align: middle;
+}
+
+/* Pacman styles */
+.pacman-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 998;
+}
+
+.pacman {
+  position: fixed;
+  width: 48px;
+  height: 48px;
+  pointer-events: none;
+  z-index: 1000;
+  transition: transform 0.1s linear;
+}
+
+.pacman-body {
+  width: 100%;
+  height: 100%;
+  background: var(--color-primary-light);
+  border-radius: 50%;
+  position: relative;
+  overflow: hidden;
+}
+
+.pacman-mouth {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  width: 0;
+  height: 0;
+  border-top: 24px solid transparent;
+  border-bottom: 24px solid transparent;
+  border-right: 30px solid rgba(255, 255, 255, 0.1);
+  transform-origin: left center;
+  animation: chomp 0.6s infinite;
+}
+
+.pacman-eye {
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  width: 8px;
+  height: 8px;
+  background: var(--color-primary);
+  border-radius: 50%;
+}
+
+/* Loading styles */
+.loading-spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid rgba(176, 191, 147, 0.3);
+  border-top: 4px solid var(--color-primary-light);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
