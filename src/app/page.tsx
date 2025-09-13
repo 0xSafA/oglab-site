@@ -55,7 +55,7 @@ export default function HomePage() {
           {/* Why Choose Section */}
           <Section title="Why Choose OG Lab?">
             <p className="text-gray-700 leading-relaxed">
-              <span className="font-semibold bg-gradient-to-r from-[#536C4A] to-[#B0BF93] bg-clip-text text-transparent">Koh Samui's largest cannabis dispensary</span> – where quality meets culture. Discover live cultivation, explore our scientific area, and enjoy products made with passion and precision. OG Lab is the destination for every cannabis lover.
+              <span className="font-semibold bg-gradient-to-r from-[#536C4A] to-[#B0BF93] bg-clip-text text-transparent">Koh Samui&apos;s largest cannabis dispensary</span> – where quality meets culture. Discover live cultivation, explore our scientific area, and enjoy products made with passion and precision. OG Lab is the destination for every cannabis lover.
             </p>
           </Section>
 
@@ -86,7 +86,7 @@ export default function HomePage() {
           <div className="relative overflow-hidden bg-gradient-to-br from-[#536C4A] to-[#B0BF93] rounded-3xl p-8 mb-6 text-center text-white">
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent animate-shimmer"></div>
             <h3 className="text-xl md:text-2xl font-bold mb-4 uppercase tracking-wide">
-              Discover Thailand's Hidden Pearl
+              Discover Thailand&apos;s Hidden Pearl
             </h3>
             <p className="text-lg md:text-xl leading-relaxed mb-4">
               We invite you to discover the hidden pearl of Thailand and enjoy products crafted with passion and precision!
