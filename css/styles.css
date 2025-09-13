@@ -209,10 +209,25 @@ h1 {
     stroke: #B0BF93;
 }
 
+.social-icons a:hover svg path,
+.social-icons a:hover svg circle {
+    fill: #B0BF93;
+}
+
 .social-icons img {
     width: 40px;
     height: 40px;
     transition: all 0.3s ease;
+}
+
+/* Делаем все SVG иконки одного цвета */
+.social-icons svg {
+    stroke: #536C4A;
+}
+
+.social-icons svg path,
+.social-icons svg circle {
+    fill: #536C4A;
 }
 
 .social-icons a[href*="tripadvisor"] img {
