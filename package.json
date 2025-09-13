@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "NODE_OPTIONS='--no-deprecation' next dev",
+    "dev": "NODE_OPTIONS='--no-deprecation' next dev -p 3001",
     "build": "NODE_OPTIONS='--no-deprecation' next build",
-    "start": "NODE_OPTIONS='--no-deprecation' next start",
+    "start": "NODE_OPTIONS='--no-deprecation' next start -p 3001",
     "lint": "eslint"
   },
   "dependencies": {
