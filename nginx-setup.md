@@ -23,7 +23,7 @@ sudo apt update
 sudo apt install certbot python3-certbot-nginx
 
 # Получить сертификат
-sudo certbot --nginx -d oglab.co -d www.oglab.co
+sudo certbot --nginx -d oglab.com -d www.oglab.com
 
 # Автообновление сертификатов
 sudo crontab -e
@@ -129,7 +129,7 @@ pm2 monit
 ## Настройки для продакшена
 
 ### Перед запуском замените:
-1. `oglab.co` на ваш реальный домен
+1. `oglab.com` уже настроен как основной домен
 2. Пути к SSL сертификатам
 3. Путь к директории сайта (`/var/www/oglab-site`)
 4. Настройки upstream серверов при необходимости
