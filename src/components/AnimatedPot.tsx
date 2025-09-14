@@ -170,12 +170,10 @@ export default function AnimatedPot({ pot, onEaten }: AnimatedPotProps) {
         </defs>
       </svg>
 
-      {/* Индикатор роста (опционально, для отладки) */}
-      {process.env.NODE_ENV === 'development' && (
-        <div className="absolute -bottom-6 left-1/2 transform -translate-x-1/2 text-xs text-white px-1 rounded" style={{ backgroundColor: '#B0BF93' }}>
-          {Math.round(growthStage)}%
-        </div>
-      )}
+      {/* Индикатор роста - часть геймификации */}
+      <div className="absolute -bottom-6 left-1/2 transform -translate-x-1/2 text-xs text-white px-1 py-0.5 rounded-lg font-medium shadow-md" style={{ backgroundColor: '#B0BF93', fontSize: '10px', maxWidth: '30px' }}>
+        {Math.round(growthStage)}%
+      </div>
     </div>
   );
 }
