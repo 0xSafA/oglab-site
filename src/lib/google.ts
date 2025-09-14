@@ -282,8 +282,8 @@ async function fetchRows(): Promise<MenuRow[]> {
       console.error('Failed to fetch from Google Sheets:', error);
       console.log('Falling back to mock data due to network/API error');
       
-      // Fallback to mock data if Google Sheets is unreachable
-      return getMockRows();
+      // Fallback to empty array if Google Sheets is unreachable
+      return [];
     }
 
     const values = data.values;
