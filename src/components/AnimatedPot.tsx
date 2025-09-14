@@ -72,6 +72,15 @@ export default function AnimatedPot({ pot, onEaten }: AnimatedPotProps) {
           strokeWidth="1"
         />
         
+        {/* Логотип OGLab на горшочке */}
+        {growthStage > 20 && (
+          <g opacity={Math.min((growthStage - 20) / 30, 1)}>
+            <circle cx="30" cy="62" r="8" fill="#536C4A" stroke="#3d5037" strokeWidth="0.5"/>
+            <text x="30" y="63" textAnchor="middle" fill="white" fontSize="6" fontFamily="Arial, sans-serif" fontWeight="bold">OG</text>
+            <text x="30" y="68" textAnchor="middle" fill="white" fontSize="4" fontFamily="Arial, sans-serif" fontWeight="normal">lab</text>
+          </g>
+        )}
+        
         {/* Земля в горшке */}
         <ellipse
           cx="30"
