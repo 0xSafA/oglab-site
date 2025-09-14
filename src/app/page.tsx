@@ -61,7 +61,7 @@ export default function HomePage() {
 
           {/* Features Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-            <FeatureCard title="Farm Tours" description="Cannabis tours to our farm with scientific area with indoor grow and outdoor nice garden. See the growing process with your own eyes!" />
+            <FeatureCard title="Farm Tours" description="Cannabis tours to our farm with scientific area with indoor grow and outdoor cannabis garden. See the growing process with your own eyes!" />
             <FeatureCard title="Events & Parties" description="Every 3 weeks we organize amazing parties for our community. Join us for unforgettable experiences!" />
             <FeatureCard title="Award Winners" description="We participate in Cannabis Cup competitions and other prestigious contests. Quality confirmed by awards!" />
             <FeatureCard title="Best Prices" description="Best prices directly from the producer! Maximum quality, freshest cannabis straight from the farm." />
