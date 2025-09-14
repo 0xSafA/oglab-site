@@ -517,3 +517,41 @@
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
+
+/* Breathing animation for colored dots */
+@keyframes breathe {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.4);
+    opacity: 0.8;
+  }
+}
+
+/* Breathing classes for each cannabis type - using CSS classes to avoid conflicts */
+body.breathing-hybrid .dot-hybrid {
+  animation: breathe 3s ease-in-out infinite;
+}
+
+body.breathing-sativa .dot-sativa {
+  animation: breathe 3s ease-in-out infinite;
+}
+
+body.breathing-indica .dot-indica {
+  animation: breathe 3s ease-in-out infinite;
+}
+
+/* Fallback using data attributes */
+body[data-breathing-type="hybrid"] .dot-hybrid {
+  animation: breathe 3s ease-in-out infinite;
+}
+
+body[data-breathing-type="sativa"] .dot-sativa {
+  animation: breathe 3s ease-in-out infinite;
+}
+
+body[data-breathing-type="indica"] .dot-indica {
+  animation: breathe 3s ease-in-out infinite;
+}

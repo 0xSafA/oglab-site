@@ -3,6 +3,7 @@ import { fetchMenuWithOptions, type MenuRow } from '@/lib/google';
 import { groupRows, columnsPerCategory } from '@/lib/menu-helpers';
 import PacmanTrail from '@/components/PacmanTrail';
 import AutoRefresh from '@/components/AutoRefresh';
+import BreathingController from '@/components/BreathingController';
 
 
 // Type colors mapping
@@ -110,6 +111,9 @@ export default async function MenuPage() {
         
         {/* Auto Refresh Component */}
         <AutoRefresh />
+        
+        {/* Breathing Animation Controller */}
+        <BreathingController />
       </main>
     </div>
   );
@@ -173,11 +177,14 @@ function CombinedIndicator({ typeKey, isOur }: { typeKey: KnownType | null; isOu
   const baseColor = typeKey ? typeColor[typeKey] : '#536C4A';
   const hasCheckmark = !!isOur;
   
+  // Добавляем CSS класс для анимации дыхания
+  const breathingClass = typeKey ? `dot-${typeKey}` : '';
+  
   return (
     <div className="relative flex items-center justify-center w-3 h-3">
       {/* Main circle */}
       <div
-        className="w-3 h-3 rounded-full"
+        className={`w-3 h-3 rounded-full ${breathingClass}`}
         style={{ backgroundColor: baseColor }}
       />
       
@@ -197,10 +204,20 @@ function CombinedIndicator({ typeKey, isOur }: { typeKey: KnownType | null; isOu
 
 // Legend Dot Component
 function LegendDot({ color, label }: { color: string; label: string }) {
+  // Определяем CSS класс для анимации дыхания на основе цвета
+  const getBreathingClass = (color: string) => {
+    if (color === typeColor.hybrid) return 'dot-hybrid';
+    if (color === typeColor.sativa) return 'dot-sativa';
+    if (color === typeColor.indica) return 'dot-indica';
+    return '';
+  };
+  
+  const breathingClass = getBreathingClass(color);
+  
   return (
     <div className="flex items-center gap-2">
       <span
-        className="w-2 h-2 rounded-full"
+        className={`w-2 h-2 rounded-full ${breathingClass}`}
         style={{ backgroundColor: color }}
       />
       <span>{label}</span>
