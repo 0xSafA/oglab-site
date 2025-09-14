@@ -4,6 +4,8 @@ import { groupRows, columnsPerCategory } from '@/lib/menu-helpers';
 import PacmanTrail from '@/components/PacmanTrail';
 import AutoRefresh from '@/components/AutoRefresh';
 import BreathingController from '@/components/BreathingController';
+import PotController from '@/components/PotController';
+import PotManager from '@/components/PotManager';
 
 
 // Type colors mapping
@@ -114,6 +116,10 @@ export default async function MenuPage() {
         
         {/* Breathing Animation Controller */}
         <BreathingController />
+        
+        {/* Cannabis Pot System */}
+        <PotController />
+        <PotManager />
       </main>
     </div>
   );

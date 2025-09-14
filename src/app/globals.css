@@ -450,7 +450,7 @@
   min-height: 12px;
   max-width: 12px;
   max-height: 12px;
-  fill: var(--color-primary);
+  fill: #536C4A;
   margin-right: 4px;
   flex-shrink: 0;
   vertical-align: middle;
@@ -554,4 +554,18 @@ body[data-breathing-type="sativa"] .dot-sativa {
 
 body[data-breathing-type="indica"] .dot-indica {
   animation: breathe 3s ease-in-out infinite;
+}
+
+/* Cannabis pot animations */
+@keyframes bounce-gentle {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
+}
+
+.animate-bounce-gentle {
+  animation: bounce-gentle 3s ease-in-out infinite;
 }
