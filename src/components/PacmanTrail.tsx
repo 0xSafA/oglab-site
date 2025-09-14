@@ -206,8 +206,17 @@ export default function PacmanTrail() {
       setPosition({ x, y });
       setAngle(localAngle);
 
-      // Add new trail point (centered on Pacman)
-      trailRef.current.push({ x: x, y: y, id: lastId++ });
+      // Add new trail point (offset 15px behind Pacman based on direction)
+      let trailX = x;
+      let trailY = y;
+      
+      // Offset trail 15px in opposite direction of movement
+      if (localAngle === 0) trailX -= 15;      // Moving right, trail goes left
+      else if (localAngle === 180) trailX += 15; // Moving left, trail goes right  
+      else if (localAngle === 90) trailY -= 15;  // Moving down, trail goes up
+      else if (localAngle === -90) trailY += 15; // Moving up, trail goes down
+      
+      trailRef.current.push({ x: trailX, y: trailY, id: lastId++ });
       if (trailRef.current.length > 370) {
         trailRef.current.shift();
       }

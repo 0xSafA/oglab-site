@@ -270,11 +270,21 @@ async function fetchRows(): Promise<MenuRow[]> {
       throw new Error('Google Sheets ID not configured');
     }
 
-    const { data } = await sheets.spreadsheets.values.get({
-      spreadsheetId: process.env.GS_SHEET_ID,
-      range: 'A1:Z',
-      valueRenderOption: 'UNFORMATTED_VALUE',
-    });
+    let data;
+    try {
+      const response = await sheets.spreadsheets.values.get({
+        spreadsheetId: process.env.GS_SHEET_ID,
+        range: 'A1:Z',
+        valueRenderOption: 'UNFORMATTED_VALUE',
+      });
+      data = response.data;
+    } catch (error) {
+      console.error('Failed to fetch from Google Sheets:', error);
+      console.log('Falling back to mock data due to network/API error');
+      
+      // Fallback to mock data if Google Sheets is unreachable
+      return getMockRows();
+    }
 
     const values = data.values;
     if (!values || !Array.isArray(values)) return [];
