@@ -2,6 +2,7 @@ import Image from 'next/image';
 import { fetchMenuWithOptions, type MenuRow } from '@/lib/google';
 import { groupRows, columnsPerCategory } from '@/lib/menu-helpers';
 import PacmanTrail from '@/components/PacmanTrail';
+import AutoRefresh from '@/components/AutoRefresh';
 
 
 // Type colors mapping
@@ -106,6 +107,9 @@ export default async function MenuPage() {
 
         {/* Pacman Animation */}
         <PacmanTrail />
+        
+        {/* Auto Refresh Component */}
+        <AutoRefresh />
       </main>
     </div>
   );
