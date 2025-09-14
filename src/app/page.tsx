@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#536C4A] to-[#B0BF93] flex items-start justify-center py-5">
+    <div className="min-h-screen bg-gradient-to-br from-[#536C4A] to-[#B0BF93] flex items-start justify-center pt-7 pb-5 md:pt-6 md:pb-5">
       {/* Background Effects */}
       <div className="fixed inset-0 opacity-10 z-0">
         <div className="absolute inset-0 bg-gradient-to-br from-[#536C4A] via-[#B0BF93] to-[#536C4A]"></div>
@@ -11,10 +11,10 @@ export default function HomePage() {
       </div>
 
       <div className="relative z-10 w-full max-w-4xl mx-4">
-        <div className="bg-white/95 backdrop-blur-lg rounded-3xl shadow-2xl border border-[#B0BF93]/30 p-8 animate-fade-in-up">
+        <div className="bg-white/95 backdrop-blur-lg rounded-3xl shadow-2xl border-[3px] md:border-2 border-[#B0BF93]/45 md:border-[#B0BF93]/40 p-8 animate-fade-in-up">
           
           {/* Social Icons */}
-          <div className="flex justify-center gap-5 mb-6">
+          <div className="flex justify-center gap-4 mb-6">
             <SocialLink href="https://www.instagram.com/oglabco/" icon="/assets/images/instagram.svg" alt="Instagram" />
             <SocialLink href="https://t.me/Oglabco" icon="/assets/images/telegram.svg" alt="Telegram" />
             <SocialLink href="https://api.whatsapp.com/send?phone=+66982040757" icon="/assets/images/whatsapp.svg" alt="WhatsApp" />
@@ -66,7 +66,7 @@ export default function HomePage() {
             <FeatureCard title="Award Winners" description="We participate in Cannabis Cup competitions and other prestigious contests. Quality confirmed by awards!" />
             <FeatureCard title="Best Prices" description="Best prices directly from the producer! Maximum quality, freshest cannabis straight from the farm." />
             <FeatureCard title="Scientific Approach" description="Scientific area with big observation window. Innovative growing methods and quality control systems." />
-            <FeatureCard title="TripAdvisor Featured" description="Competing for the best location title on Samui in TripAdvisor. Must visit place on the island!" />
+            <FeatureCard title="Must Visit Place" description="Competing for the best location title on Samui in TripAdvisor. Must visit place on the island!" />
           </div>
 
           {/* Products Section */}
@@ -85,11 +85,11 @@ export default function HomePage() {
           {/* Call to Action Section */}
           <div className="relative overflow-hidden bg-gradient-to-br from-[#536C4A] to-[#B0BF93] rounded-3xl p-8 mb-6 text-center text-white">
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent animate-shimmer"></div>
-            <h3 className="text-xl md:text-2xl font-bold mb-4 uppercase tracking-wide">
-              Discover Thailand&apos;s Hidden Pearl
+            <h3 className="text-xl md:text-2xl font-bold mb-4  tracking-wide">
+              Discover Hidden Gem of Thailand
             </h3>
             <p className="text-lg md:text-xl leading-relaxed mb-4">
-              We invite you to discover the hidden pearl of Thailand and enjoy products crafted with passion and precision!
+              We invite you to discover the best-kept secret of Thailand and enjoy products crafted with passion and precision!
             </p>
             <p className="text-lg font-semibold mb-6">
               More than a dispensary – a destination for true enthusiasts.
