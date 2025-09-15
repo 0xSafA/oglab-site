@@ -146,18 +146,18 @@ export default function PacmanTrail() {
       ctx.fillStyle = 'white';
       
       // Batch операции для лучшей производительности
-      const opacityStep = 0.2 / trailLength;
-      
+      // Правильная логика: новые точки (конец массива) плотные, старые (начало) прозрачные
       for (let i = 0; i < trailLength; i++) {
         const point = trail[i];
-        const opacity = Math.max(0, 0.2 - i * opacityStep);
+        // i=0 - самая старая точка (должна быть прозрачной)
+        // i=trailLength-1 - самая новая точка (должна быть плотной)
+        const normalizedAge = i / (trailLength - 1); // От 0 (старая) до 1 (новая)
+        const opacity = Math.max(0.05, normalizedAge * 1.0); // От 0.05 (старая) до 1.0 (новая)
         
-        if (opacity > 0.01) { // Не рисуем совсем прозрачные точки
-          ctx.globalAlpha = opacity;
-          ctx.beginPath();
-          ctx.arc(point.x + 24, point.y + 24, 24, 0, Math.PI * 2);
-          ctx.fill();
-        }
+        ctx.globalAlpha = opacity;
+        ctx.beginPath();
+        ctx.arc(point.x + 24, point.y + 24, 24, 0, Math.PI * 2);
+        ctx.fill();
       }
       
       // Restore opacity
