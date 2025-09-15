@@ -10,31 +10,32 @@
   --color-indica: #38b24f;
 }
 
-/* Safe area for TV and tablet overscan */
-@supports (padding: env(safe-area-inset-bottom)) {
-  .menu-safe-area {
-    padding-bottom: max(2rem, env(safe-area-inset-bottom));
-  }
+/* Полноэкранный режим - меню занимает весь экран */
+.menu-safe-area {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
 }
 
-/* Compact layout for TV screens */
-@media (min-width: 1920px) and (min-height: 1080px) {
-  .menu-category {
-    margin-bottom: 0.25rem !important;
+.menu-main-container {
+  width: 100% !important;
+  max-width: none !important;
+}
+
+/* Десктопные экраны - стандартные размеры */
+@media (min-width: 1024px) {
+  .menu-grid {
+    gap: 0.5rem;
   }
   
   .menu-category-header {
-    padding: 0.25rem 0.5rem !important;
-    font-size: 0.65rem !important;
+    font-size: 0.75rem;
   }
   
   .menu-category-item {
-    padding: 0.25rem 0.5rem !important;
-    font-size: 0.75rem !important;
-  }
-  
-  .menu-grid {
-    gap: 0.25rem !important;
+    font-size: 0.875rem;
   }
 }
 
@@ -367,8 +368,8 @@
   }
 }
 
-/* Tablet landscape optimization (1280x768) */
-@media (min-width: 768px) and (max-width: 1400px), (max-height: 800px) and (min-width: 768px) {
+/* Планшетные экраны - простые правила */
+@media (min-width: 768px) and (max-width: 1023px) {
   .menu-container {
     font-size: 14px;
     line-height: 1.4;

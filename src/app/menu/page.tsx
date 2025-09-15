@@ -30,19 +30,19 @@ export default async function MenuPage() {
   const grouped = groupRows(rows);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#536C4A] to-[#B0BF93] py-1 md:py-1 pb-4 md:pb-6 menu-safe-area">
+    <div className="min-h-screen bg-gradient-to-br from-[#536C4A] to-[#B0BF93] menu-safe-area">
       {/* Background Effects */}
       <div className="absolute inset-0 opacity-10 z-0">
         <div className="absolute inset-0 bg-gradient-to-br from-[#536C4A] via-[#B0BF93] to-[#536C4A]"></div>
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(176,191,147,0.3)_0%,transparent_50%),radial-gradient(circle_at_80%_80%,rgba(83,108,74,0.3)_0%,transparent_50%),radial-gradient(circle_at_40%_60%,rgba(176,191,147,0.2)_0%,transparent_50%)]"></div>
       </div>
 
-      <main className="relative max-w-[1570px] mx-auto px-2 md:px-4 z-10">
-        <div className="menu-main-container menu-container bg-white/95 backdrop-blur-lg rounded-2xl md:rounded-3xl shadow-2xl border border-[#B0BF93]/30 p-2 md:p-4 lg:p-6 animate-fade-in-up">
+      <main className="relative w-full h-full z-10">
+        <div className="menu-main-container menu-container bg-white/95 backdrop-blur-lg shadow-2xl border-2 border-[#B0BF93]/30 p-3 md:p-4 lg:p-5 h-full w-full animate-fade-in-up">
           
 
           {/* Menu Grid */}
-          <section className="menu-grid grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-1 mb-2 md:mb-1 mt-1 md:mt-0">
+          <section className="menu-grid grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-1 lg:gap-2 mb-2 md:mb-1 mt-1 md:mt-0 w-full">
             {/* Column 1 */}
             <div className="space-y-2 md:space-y-0.5">
               {layout.column1.map((category) => (
@@ -66,7 +66,7 @@ export default async function MenuPage() {
           </section>
 
           {/* Legend footer - positioned for optimal space usage with safe area for TV/tablets */}
-          <footer className="mt-2 md:fixed md:bottom-2 md:left-2 lg:bottom-3 lg:left-3 bg-white/95 backdrop-blur-sm rounded-xl p-2 md:p-3 text-xs text-gray-700 shadow-2xl border border-[#B0BF93]/30 md:z-20 lg:z-20 w-full md:w-2/3 lg:w-auto lg:max-w-[calc(33.333%-1rem)]">
+          <footer className="mt-2 md:fixed md:bottom-0 md:left-0 lg:bottom-0 lg:left-0 bg-white/95 backdrop-blur-sm rounded-tr-xl p-2 md:p-3 text-xs text-gray-700 shadow-2xl border-t border-r border-[#B0BF93]/30 md:z-20 lg:z-20 w-full md:w-2/3 lg:w-auto lg:max-w-[calc(33.333%-1rem)]">
             <div className="grid grid-cols-3 gap-2 md:gap-2 lg:gap-1 items-center">
               {/* Column 1 - Logo and Menu */}
               <div className="flex flex-col md:flex-row lg:flex-row items-center gap-1 md:gap-1 lg:gap-1">
