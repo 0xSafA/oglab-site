@@ -10,6 +10,13 @@
   --color-indica: #38b24f;
 }
 
+/* Safe area for TV and tablet overscan */
+@supports (padding: env(safe-area-inset-bottom)) {
+  .menu-safe-area {
+    padding-bottom: max(2rem, env(safe-area-inset-bottom));
+  }
+}
+
 @layer utilities {
   .animate-fade-in-up {
     animation: fadeInUp 0.8s ease-out;

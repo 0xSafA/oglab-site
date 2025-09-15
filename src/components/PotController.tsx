@@ -24,7 +24,7 @@ const POT_POSITIONS = [
 
 const POT_CONFIG = {
   spawnInterval: 45000,      // Появление каждые 45 секунд
-  lifeDuration: 25000,       // Горшочек живет 25 секунд
+  lifeDuration: 40000,       // Горшочек живет 40 секунд (больше времени для медленных устройств)
   maxActivePots: 1,          // Максимум 1 горшочек одновременно
 };
 
@@ -115,6 +115,17 @@ export default function PotController() {
     });
   };
 
+  // Экстренная очистка для медленных устройств
+  const emergencyCleanup = () => {
+    if (activePots.length > POT_CONFIG.maxActivePots) {
+      console.log(`🚨 Emergency cleanup: too many pots (${activePots.length}), removing all`);
+      setActivePots([]);
+      if (typeof document !== 'undefined') {
+        document.body.dataset.activePot = '';
+      }
+    }
+  };
+
   // Основной цикл появления горшочков
   useEffect(() => {
     // Первый горшочек через 10 секунд после загрузки
@@ -127,6 +138,9 @@ export default function PotController() {
 
     // Принудительная очистка каждые 20 секунд
     const cleanupInterval = setInterval(forceCleanup, 20000);
+    
+    // Экстренная очистка каждые 10 секунд для медленных устройств
+    const emergencyInterval = setInterval(emergencyCleanup, 10000);
 
     // Слушаем события от пакмана
     const handlePotEaten = (event: CustomEvent) => {
@@ -143,6 +157,7 @@ export default function PotController() {
       clearTimeout(initialTimeout);
       clearInterval(spawnInterval);
       clearInterval(cleanupInterval);
+      clearInterval(emergencyInterval);
       if (typeof window !== 'undefined') {
         window.removeEventListener('potEaten', handlePotEaten as EventListener);
       }

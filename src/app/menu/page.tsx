@@ -30,7 +30,7 @@ export default async function MenuPage() {
   const grouped = groupRows(rows);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#536C4A] to-[#B0BF93] py-5 md:py-2">
+    <div className="min-h-screen bg-gradient-to-br from-[#536C4A] to-[#B0BF93] py-5 md:py-2 pb-32 md:pb-40 menu-safe-area">
       {/* Background Effects */}
       <div className="absolute inset-0 opacity-10 z-0">
         <div className="absolute inset-0 bg-gradient-to-br from-[#536C4A] via-[#B0BF93] to-[#536C4A]"></div>
@@ -38,7 +38,7 @@ export default async function MenuPage() {
       </div>
 
       <main className="relative max-w-[1570px] mx-auto px-4 z-10">
-        <div className="menu-main-container menu-container bg-white/95 backdrop-blur-lg rounded-3xl shadow-2xl border border-[#B0BF93]/30 p-8 md:p-1 md:pb-24 lg:p-8 animate-fade-in-up">
+        <div className="menu-main-container menu-container bg-white/95 backdrop-blur-lg rounded-3xl shadow-2xl border border-[#B0BF93]/30 p-8 md:p-1 md:pb-32 lg:p-8 animate-fade-in-up">
           
 
           {/* Menu Grid */}
@@ -65,8 +65,8 @@ export default async function MenuPage() {
             </div>
           </section>
 
-          {/* Legend footer - positioned for optimal space usage */}
-          <footer className="mt-4 md:fixed md:bottom-4 md:left-4 lg:bottom-6 lg:left-4 bg-white/95 backdrop-blur-sm rounded-2xl p-4 text-xs text-gray-700 shadow-2xl border border-[#B0BF93]/30 md:z-20 lg:z-20 w-full md:w-2/3 lg:w-auto lg:max-w-[calc(33.333%-1rem)]">
+          {/* Legend footer - positioned for optimal space usage with safe area for TV/tablets */}
+          <footer className="mt-8 md:fixed md:bottom-8 md:left-4 lg:bottom-10 lg:left-4 bg-white/95 backdrop-blur-sm rounded-2xl p-4 text-xs text-gray-700 shadow-2xl border border-[#B0BF93]/30 md:z-20 lg:z-20 w-full md:w-2/3 lg:w-auto lg:max-w-[calc(33.333%-1rem)]">
             <div className="grid grid-cols-3 gap-4 md:gap-3 lg:gap-2 items-center">
               {/* Column 1 - Logo and Menu */}
               <div className="flex flex-col md:flex-row lg:flex-row items-center gap-2 md:gap-2 lg:gap-2">

@@ -106,9 +106,13 @@ export default function PacmanTrail() {
 
     let pathIndex = 1;
     let target = path[pathIndex];
-    const normalSpeed = 0.274; // Обычная скорость
-    const huntingSpeed = 0.56; // Скорость при охоте
-
+    
+    // Фиксированная скорость в пикселях за секунду (независимо от FPS)
+    const normalSpeed = 25; // пикселей в секунду (очень спокойное движение)
+    const huntingSpeed = 50; // пикселей в секунду (быстрее при охоте, но не слишком)
+    
+    // Для синхронизации времени
+    let lastTime = performance.now();
     let animationFrame: number;
 
     // Оптимизированная функция проверки столкновения (squared distance)
@@ -164,11 +168,19 @@ export default function PacmanTrail() {
       ctx.globalAlpha = 1;
     };
 
-    const animate = () => {
+    const animate = (currentTime: number) => {
+      // Вычисляем deltaTime для независимости от FPS
+      const deltaTime = (currentTime - lastTime) / 1000; // в секундах
+      lastTime = currentTime;
+      
+      // Ограничиваем deltaTime для стабильности на очень медленных устройствах
+      const clampedDeltaTime = Math.min(deltaTime, 0.05); // максимум 50ms
+      
       frameCountRef.current++;
       
-      // Определяем скорость в зависимости от режима
+      // Определяем скорость в зависимости от режима (пиксели в секунду)
       const currentSpeed = isHuntingRef.current ? huntingSpeed : normalSpeed;
+      const frameSpeed = currentSpeed * clampedDeltaTime; // пиксели за этот кадр
       
       // Определяем цель движения на основе refs
       if (isHuntingRef.current && targetPotRef.current) {
@@ -193,7 +205,7 @@ export default function PacmanTrail() {
         const absDx = Math.abs(dx);
         const absDy = Math.abs(dy);
 
-        if (absDx < currentSpeed && absDy < currentSpeed) {
+        if (absDx < frameSpeed && absDy < frameSpeed) {
           x = target.x;
           y = target.y;
           pathIndex = (pathIndex + 1) % path.length;
@@ -212,13 +224,13 @@ export default function PacmanTrail() {
       const absDx = Math.abs(dx);
       const absDy = Math.abs(dy);
       
-      if (absDx > currentSpeed || absDy > currentSpeed) {
+      if (absDx > frameSpeed || absDy > frameSpeed) {
         // Сначала двигаемся по горизонтали, потом по вертикали
-        if (absDx > currentSpeed) {
-          x += currentSpeed * Math.sign(dx);
+        if (absDx > frameSpeed) {
+          x += frameSpeed * Math.sign(dx);
           localAngle = dx > 0 ? 0 : 180;
-        } else if (absDy > currentSpeed) {
-          y += currentSpeed * Math.sign(dy);
+        } else if (absDy > frameSpeed) {
+          y += frameSpeed * Math.sign(dy);
           localAngle = dy > 0 ? 90 : -90;
         }
       }
@@ -237,20 +249,22 @@ export default function PacmanTrail() {
         setAngle(localAngle);
       }
 
-      // Add new trail point (offset 15px behind Pacman based on direction)
-      let trailX = x;
-      let trailY = y;
-      
-      // Offset trail 15px in opposite direction of movement
-      if (localAngle === 0) trailX -= 15;      // Moving right, trail goes left
-      else if (localAngle === 180) trailX += 15; // Moving left, trail goes right  
-      else if (localAngle === 90) trailY -= 15;  // Moving down, trail goes up
-      else if (localAngle === -90) trailY += 15; // Moving up, trail goes down
-      
-      trailRef.current.push({ x: trailX, y: trailY, id: lastId++ });
-      // Возвращаем нормальную длину trail
-      if (trailRef.current.length > 370) {
-        trailRef.current.shift();
+      // Add new trail point (offset 15px behind Pacman based on direction) - только каждый 2-й кадр для оптимизации
+      if (frameCountRef.current % 2 === 0) {
+        let trailX = x;
+        let trailY = y;
+        
+        // Offset trail 15px in opposite direction of movement
+        if (localAngle === 0) trailX -= 15;      // Moving right, trail goes left
+        else if (localAngle === 180) trailX += 15; // Moving left, trail goes right  
+        else if (localAngle === 90) trailY -= 15;  // Moving down, trail goes up
+        else if (localAngle === -90) trailY += 15; // Moving up, trail goes down
+        
+        trailRef.current.push({ x: trailX, y: trailY, id: lastId++ });
+        // Возвращаем нормальную длину trail
+        if (trailRef.current.length > 370) {
+          trailRef.current.shift();
+        }
       }
 
       // Draw trail on canvas
@@ -259,7 +273,11 @@ export default function PacmanTrail() {
       animationFrame = requestAnimationFrame(animate);
     };
 
-    animationFrame = requestAnimationFrame(animate);
+    // Инициализируем анимацию с первым timestamp
+    animationFrame = requestAnimationFrame((time) => {
+      lastTime = time;
+      animate(time);
+    });
     return () => cancelAnimationFrame(animationFrame);
   }, []);
 
