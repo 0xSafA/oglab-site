@@ -17,6 +17,27 @@
   }
 }
 
+/* Compact layout for TV screens */
+@media (min-width: 1920px) and (min-height: 1080px) {
+  .menu-category {
+    margin-bottom: 0.25rem !important;
+  }
+  
+  .menu-category-header {
+    padding: 0.25rem 0.5rem !important;
+    font-size: 0.65rem !important;
+  }
+  
+  .menu-category-item {
+    padding: 0.25rem 0.5rem !important;
+    font-size: 0.75rem !important;
+  }
+  
+  .menu-grid {
+    gap: 0.25rem !important;
+  }
+}
+
 @layer utilities {
   .animate-fade-in-up {
     animation: fadeInUp 0.8s ease-out;

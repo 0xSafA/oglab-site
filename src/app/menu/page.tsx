@@ -30,35 +30,35 @@ export default async function MenuPage() {
   const grouped = groupRows(rows);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#536C4A] to-[#B0BF93] py-5 md:py-2 pb-32 md:pb-40 menu-safe-area">
+    <div className="min-h-screen bg-gradient-to-br from-[#536C4A] to-[#B0BF93] py-1 md:py-1 pb-4 md:pb-6 menu-safe-area">
       {/* Background Effects */}
       <div className="absolute inset-0 opacity-10 z-0">
         <div className="absolute inset-0 bg-gradient-to-br from-[#536C4A] via-[#B0BF93] to-[#536C4A]"></div>
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(176,191,147,0.3)_0%,transparent_50%),radial-gradient(circle_at_80%_80%,rgba(83,108,74,0.3)_0%,transparent_50%),radial-gradient(circle_at_40%_60%,rgba(176,191,147,0.2)_0%,transparent_50%)]"></div>
       </div>
 
-      <main className="relative max-w-[1570px] mx-auto px-4 z-10">
-        <div className="menu-main-container menu-container bg-white/95 backdrop-blur-lg rounded-3xl shadow-2xl border border-[#B0BF93]/30 p-8 md:p-1 md:pb-32 lg:p-8 animate-fade-in-up">
+      <main className="relative max-w-[1570px] mx-auto px-2 md:px-4 z-10">
+        <div className="menu-main-container menu-container bg-white/95 backdrop-blur-lg rounded-2xl md:rounded-3xl shadow-2xl border border-[#B0BF93]/30 p-2 md:p-4 lg:p-6 animate-fade-in-up">
           
 
           {/* Menu Grid */}
-          <section className="menu-grid grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-1 mb-4 md:mb-2 mt-2 md:mt-1">
+          <section className="menu-grid grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-1 mb-2 md:mb-1 mt-1 md:mt-0">
             {/* Column 1 */}
-            <div className="space-y-3 md:space-y-1">
+            <div className="space-y-2 md:space-y-0.5">
               {layout.column1.map((category) => (
                 <CategoryBlock key={category} name={category} rows={grouped[category] ?? []} />
               ))}
             </div>
 
             {/* Column 2 */}
-            <div className="space-y-3 md:space-y-1">
+            <div className="space-y-2 md:space-y-0.5">
               {layout.column2.map((category) => (
                 <CategoryBlock key={category} name={category} rows={grouped[category] ?? []} />
               ))}
             </div>
 
             {/* Column 3 */}
-            <div className="space-y-3 md:space-y-1">
+            <div className="space-y-2 md:space-y-0.5">
               {layout.column3.map((category) => (
                 <CategoryBlock key={category} name={category} rows={grouped[category] ?? []} />
               ))}
@@ -66,26 +66,26 @@ export default async function MenuPage() {
           </section>
 
           {/* Legend footer - positioned for optimal space usage with safe area for TV/tablets */}
-          <footer className="mt-8 md:fixed md:bottom-8 md:left-4 lg:bottom-10 lg:left-4 bg-white/95 backdrop-blur-sm rounded-2xl p-4 text-xs text-gray-700 shadow-2xl border border-[#B0BF93]/30 md:z-20 lg:z-20 w-full md:w-2/3 lg:w-auto lg:max-w-[calc(33.333%-1rem)]">
-            <div className="grid grid-cols-3 gap-4 md:gap-3 lg:gap-2 items-center">
+          <footer className="mt-2 md:fixed md:bottom-2 md:left-2 lg:bottom-3 lg:left-3 bg-white/95 backdrop-blur-sm rounded-xl p-2 md:p-3 text-xs text-gray-700 shadow-2xl border border-[#B0BF93]/30 md:z-20 lg:z-20 w-full md:w-2/3 lg:w-auto lg:max-w-[calc(33.333%-1rem)]">
+            <div className="grid grid-cols-3 gap-2 md:gap-2 lg:gap-1 items-center">
               {/* Column 1 - Logo and Menu */}
-              <div className="flex flex-col md:flex-row lg:flex-row items-center gap-2 md:gap-2 lg:gap-2">
+              <div className="flex flex-col md:flex-row lg:flex-row items-center gap-1 md:gap-1 lg:gap-1">
                 <div className="relative">
                   <Image
                     src="/assets/images/oglab_logo_round.svg"
                     alt="OG Lab Logo"
-                    width={24}
-                    height={24}
-                    className="animate-pulse-slow rounded-full shadow-md md:w-6 md:h-6 lg:w-5 lg:h-5"
+                    width={28}
+                    height={28}
+                    className="animate-pulse-slow rounded-full shadow-md md:w-7 md:h-7 lg:w-6 lg:h-6"
                   />
                 </div>
-                <span className="font-bold tracking-wide uppercase text-[#536C4A] text-sm md:text-sm lg:text-xs">
+                <span className="font-bold tracking-wide uppercase text-[#536C4A] text-xs md:text-xs lg:text-xs">
                   Menu
                 </span>
               </div>
               
               {/* Column 2 - Legend */}
-              <div className="space-y-1 md:space-y-0.5 lg:space-y-0.5 text-sm md:text-xs lg:text-xs">
+              <div className="space-y-0.5 md:space-y-0 lg:space-y-0 text-xs md:text-xs lg:text-xs">
                 <LegendDot color={typeColor.hybrid} label="Hybrid" />
                 <LegendDot color={typeColor.sativa} label="Sativa" />
                 <LegendDot color={typeColor.indica} label="Indica" />
@@ -136,13 +136,13 @@ function CategoryBlock({ name, rows }: { name: string; rows: MenuRow[] }) {
   const priceKeys = conf.keys.filter((k) => k !== 'THC' && k !== 'CBG');
 
   return (
-    <div className="menu-category bg-white rounded-2xl shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden">
+    <div className="menu-category bg-white rounded-xl shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 overflow-hidden">
       {/* Category Header */}
-      <div className="menu-category-header bg-[#536C4A] text-white font-bold px-3 py-2 flex items-center justify-between text-xs uppercase tracking-wide">
+      <div className="menu-category-header bg-[#536C4A] text-white font-bold px-2 py-1 flex items-center justify-between text-xs uppercase tracking-wide">
         <span className="flex-1">{name}</span>
-        {showTHC && <span className="w-12 text-right text-sm">THC</span>}
+        {showTHC && <span className="w-10 text-right text-xs">THC</span>}
         {priceKeys.map((k) => (
-          <span key={k} className="w-12 text-right text-sm">
+          <span key={k} className="w-10 text-right text-xs">
             {headerLabel(k)}
           </span>
         ))}
@@ -153,20 +153,20 @@ function CategoryBlock({ name, rows }: { name: string; rows: MenuRow[] }) {
         {rows.map((row) => {
           const typeKey = getTypeKey(row);
           return (
-            <div key={row.Name} className="menu-category-item flex items-center px-3 py-2 hover:bg-gray-50 transition-colors">
-              <div className="flex-1 flex items-center gap-2 min-w-0">
+            <div key={row.Name} className="menu-category-item flex items-center px-2 py-1 hover:bg-gray-50 transition-colors">
+              <div className="flex-1 flex items-center gap-1.5 min-w-0">
                 {(typeKey || row.Our) && <CombinedIndicator typeKey={typeKey} isOur={!!row.Our} />}
-                <span className="font-medium text-gray-800 text-base">{row.Name}</span>
+                <span className="font-medium text-gray-800 text-sm">{row.Name}</span>
               </div>
               
               {showTHC && (
-                <div className="w-12 text-right text-sm text-gray-600">
+                <div className="w-10 text-right text-xs text-gray-600">
                   {row.THC ? `${row.THC}%` : row.CBG ? `${row.CBG}%` : '-'}
                 </div>
               )}
               
               {priceKeys.map((k) => (
-                 <div key={k} className="w-12 text-right text-sm text-gray-700">
+                <div key={k} className="w-10 text-right text-xs text-gray-700">
                   {row[k] ? `${row[k]}฿` : '-'}
                 </div>
               ))}
@@ -187,17 +187,17 @@ function CombinedIndicator({ typeKey, isOur }: { typeKey: KnownType | null; isOu
   const breathingClass = typeKey ? `dot-${typeKey}` : '';
   
   return (
-    <div className="relative flex items-center justify-center w-3 h-3">
+    <div className="relative flex items-center justify-center w-2.5 h-2.5">
       {/* Main circle */}
       <div
-        className={`w-3 h-3 rounded-full ${breathingClass}`}
+        className={`w-2.5 h-2.5 rounded-full ${breathingClass}`}
         style={{ backgroundColor: baseColor }}
       />
       
       {/* Checkmark for "our" products */}
       {hasCheckmark && (
         <svg 
-          className="absolute w-2 h-2 text-white" 
+          className="absolute w-1.5 h-1.5 text-white" 
           viewBox="0 0 24 24" 
           fill="currentColor"
         >
@@ -221,12 +221,12 @@ function LegendDot({ color, label }: { color: string; label: string }) {
   const breathingClass = getBreathingClass(color);
   
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-1.5">
       <span
-        className={`w-2 h-2 rounded-full ${breathingClass}`}
+        className={`w-2.5 h-2.5 rounded-full ${breathingClass}`}
         style={{ backgroundColor: color }}
       />
-      <span>{label}</span>
+      <span className="text-xs">{label}</span>
     </div>
   );
 }
