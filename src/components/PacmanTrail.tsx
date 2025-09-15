@@ -21,7 +21,6 @@ export default function PacmanTrail() {
   // Оптимизация: кэшируем вычисления и состояние
   const lastPositionRef = useRef({ x: 68, y: 68 });
   const lastAngleRef = useRef(0);
-  const dirtyRegionRef = useRef({ minX: 0, minY: 0, maxX: 0, maxY: 0, isDirty: false });
   const frameCountRef = useRef(0);
 
   // Оптимизированные event handlers с useCallback
@@ -134,22 +133,15 @@ export default function PacmanTrail() {
       }
     };
 
-    // Оптимизированная функция отрисовки trail с dirty rectangles
+    // Оптимизированная функция отрисовки trail
     const drawTrail = () => {
       const trail = trailRef.current;
       const trailLength = trail.length;
       
-      if (trailLength === 0) return;
+      // Всегда очищаем весь canvas для корректной работы trail
+      ctx.clearRect(0, 0, w, h);
       
-      // Оптимизация: очищаем только dirty region, если она есть
-      const dirty = dirtyRegionRef.current;
-      if (dirty.isDirty) {
-        ctx.clearRect(dirty.minX - 25, dirty.minY - 25, dirty.maxX - dirty.minX + 50, dirty.maxY - dirty.minY + 50);
-        dirty.isDirty = false;
-      } else {
-        // Полная очистка только при первом кадре
-        ctx.clearRect(0, 0, w, h);
-      }
+      if (trailLength === 0) return;
       
       ctx.fillStyle = 'white';
       
@@ -170,21 +162,6 @@ export default function PacmanTrail() {
       
       // Restore opacity
       ctx.globalAlpha = 1;
-    };
-    
-    // Функция для обновления dirty region
-    const updateDirtyRegion = (x: number, y: number) => {
-      const dirty = dirtyRegionRef.current;
-      if (!dirty.isDirty) {
-        dirty.minX = dirty.maxX = x;
-        dirty.minY = dirty.maxY = y;
-        dirty.isDirty = true;
-      } else {
-        dirty.minX = Math.min(dirty.minX, x);
-        dirty.maxX = Math.max(dirty.maxX, x);
-        dirty.minY = Math.min(dirty.minY, y);
-        dirty.maxY = Math.max(dirty.maxY, y);
-      }
     };
 
     const animate = () => {
@@ -245,9 +222,6 @@ export default function PacmanTrail() {
           localAngle = dy > 0 ? 90 : -90;
         }
       }
-
-      // Обновляем dirty region для новой позиции
-      updateDirtyRegion(x, y);
 
       // Оптимизация: обновляем React state только при изменении
       const positionChanged = lastPositionRef.current.x !== x || lastPositionRef.current.y !== y;
