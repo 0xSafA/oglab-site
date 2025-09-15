@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import type { PotPosition } from './PotController';
 
 export default function PacmanTrail() {
@@ -14,34 +14,45 @@ export default function PacmanTrail() {
   const [isHunting, setIsHunting] = useState(false);
   const [targetPot, setTargetPot] = useState<PotPosition | null>(null);
   
-  
   // Refs для доступа к состоянию внутри анимации
   const isHuntingRef = useRef(false);
   const targetPotRef = useRef<PotPosition | null>(null);
+  
+  // Оптимизация: кэшируем вычисления и состояние
+  const lastPositionRef = useRef({ x: 68, y: 68 });
+  const lastAngleRef = useRef(0);
+  const dirtyRegionRef = useRef({ minX: 0, minY: 0, maxX: 0, maxY: 0, isDirty: false });
+  const frameCountRef = useRef(0);
+
+  // Оптимизированные event handlers с useCallback
+  const handlePotSpawned = useCallback((event: CustomEvent) => {
+    const newPot = event.detail as PotPosition;
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`🎯 Pacman noticed new pot ${newPot.id} at (${newPot.x}, ${newPot.y})`);
+    }
+    
+    // Сразу начинаем охоту
+    setIsHunting(true);
+    setTargetPot(newPot);
+    isHuntingRef.current = true;
+    targetPotRef.current = newPot;
+  }, []);
+
+  const handlePotEaten = useCallback((event: CustomEvent) => {
+    const { potId } = event.detail;
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`🍽️ Pacman finished eating pot ${potId}, returning to normal path`);
+    }
+    
+    // Возвращаемся к обычному поведению
+    setIsHunting(false);
+    setTargetPot(null);
+    isHuntingRef.current = false;
+    targetPotRef.current = null;
+  }, []);
 
   // Слушаем события появления горшочков
   useEffect(() => {
-    const handlePotSpawned = (event: CustomEvent) => {
-      const newPot = event.detail as PotPosition;
-      console.log(`🎯 Pacman noticed new pot ${newPot.id} at (${newPot.x}, ${newPot.y})`);
-      
-      // Сразу начинаем охоту
-      setIsHunting(true);
-      setTargetPot(newPot);
-      isHuntingRef.current = true;
-      targetPotRef.current = newPot;
-    };
-
-    const handlePotEaten = (event: CustomEvent) => {
-      const { potId } = event.detail;
-      console.log(`🍽️ Pacman finished eating pot ${potId}, returning to normal path`);
-      
-      // Возвращаемся к обычному поведению
-      setIsHunting(false);
-      setTargetPot(null);
-      isHuntingRef.current = false;
-      targetPotRef.current = null;
-    };
 
     if (typeof window !== 'undefined') {
       window.addEventListener('potSpawned', handlePotSpawned as EventListener);
@@ -54,7 +65,7 @@ export default function PacmanTrail() {
         window.removeEventListener('potEaten', handlePotEaten as EventListener);
       }
     };
-  }, []);
+  }, [handlePotSpawned, handlePotEaten]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -96,17 +107,17 @@ export default function PacmanTrail() {
 
     let pathIndex = 1;
     let target = path[pathIndex];
-    const normalSpeed = 0.274; // Обычная скорость (замедлено еще на 20%)
-    const huntingSpeed = 0.56; // Скорость при охоте (замедлено на 20%)
+    const normalSpeed = 0.274; // Обычная скорость
+    const huntingSpeed = 0.56; // Скорость при охоте
 
     let animationFrame: number;
 
-    // Функция проверки столкновения с горшочком
+    // Оптимизированная функция проверки столкновения (squared distance)
     const checkPotCollision = (pacX: number, pacY: number, pot: PotPosition) => {
-      const distance = Math.sqrt(
-        Math.pow(pacX + 24 - pot.x, 2) + Math.pow(pacY + 24 - pot.y, 2)
-      );
-      return distance < 40; // Радиус столкновения
+      const dx = pacX + 24 - pot.x;
+      const dy = pacY + 24 - pot.y;
+      const distanceSquared = dx * dx + dy * dy;
+      return distanceSquared < 1600; // 40 * 40 = 1600
     };
 
     // Функция получения активного горшочка
@@ -123,34 +134,62 @@ export default function PacmanTrail() {
       }
     };
 
+    // Оптимизированная функция отрисовки trail с dirty rectangles
     const drawTrail = () => {
-      // Clear canvas
-      ctx.clearRect(0, 0, w, h);
-      
-      // Draw trail with smooth fade
       const trail = trailRef.current;
       const trailLength = trail.length;
       
+      if (trailLength === 0) return;
+      
+      // Оптимизация: очищаем только dirty region, если она есть
+      const dirty = dirtyRegionRef.current;
+      if (dirty.isDirty) {
+        ctx.clearRect(dirty.minX - 25, dirty.minY - 25, dirty.maxX - dirty.minX + 50, dirty.maxY - dirty.minY + 50);
+        dirty.isDirty = false;
+      } else {
+        // Полная очистка только при первом кадре
+        ctx.clearRect(0, 0, w, h);
+      }
+      
       ctx.fillStyle = 'white';
       
-      trail.forEach((point, index) => {
-        // Calculate opacity from 0.2 (new points) to 0.0 (old points)
-        const age = trailLength - index;
-        const opacity = Math.max(0, 0.2 - (age / trailLength) * 0.2);
+      // Batch операции для лучшей производительности
+      const opacityStep = 0.2 / trailLength;
+      
+      for (let i = 0; i < trailLength; i++) {
+        const point = trail[i];
+        const opacity = Math.max(0, 0.2 - i * opacityStep);
         
-        if (opacity > 0) {
+        if (opacity > 0.01) { // Не рисуем совсем прозрачные точки
           ctx.globalAlpha = opacity;
           ctx.beginPath();
-          ctx.arc(point.x + 24, point.y + 24, 24, 0, Math.PI * 2); // Center trail on Pacman position
+          ctx.arc(point.x + 24, point.y + 24, 24, 0, Math.PI * 2);
           ctx.fill();
         }
-      });
+      }
       
       // Restore opacity
       ctx.globalAlpha = 1;
     };
+    
+    // Функция для обновления dirty region
+    const updateDirtyRegion = (x: number, y: number) => {
+      const dirty = dirtyRegionRef.current;
+      if (!dirty.isDirty) {
+        dirty.minX = dirty.maxX = x;
+        dirty.minY = dirty.maxY = y;
+        dirty.isDirty = true;
+      } else {
+        dirty.minX = Math.min(dirty.minX, x);
+        dirty.maxX = Math.max(dirty.maxX, x);
+        dirty.minY = Math.min(dirty.minY, y);
+        dirty.maxY = Math.max(dirty.maxY, y);
+      }
+    };
 
     const animate = () => {
+      frameCountRef.current++;
+      
       // Определяем скорость в зависимости от режима
       const currentSpeed = isHuntingRef.current ? huntingSpeed : normalSpeed;
       
@@ -162,7 +201,9 @@ export default function PacmanTrail() {
         // Проверяем столкновение
         if (checkPotCollision(x, y, targetPotRef.current)) {
           // Съели горшочек!
-          console.log(`🍽️ Pacman ate pot ${targetPotRef.current.id}!`);
+          if (process.env.NODE_ENV === 'development') {
+            console.log(`🍽️ Pacman ate pot ${targetPotRef.current.id}!`);
+          }
           
           window.dispatchEvent(new CustomEvent('potEaten', { 
             detail: { potId: targetPotRef.current.id } 
@@ -172,8 +213,10 @@ export default function PacmanTrail() {
         // Обычное поведение - следуем по маршруту
         const dx = target.x - x;
         const dy = target.y - y;
+        const absDx = Math.abs(dx);
+        const absDy = Math.abs(dy);
 
-        if (Math.abs(dx) < currentSpeed && Math.abs(dy) < currentSpeed) {
+        if (absDx < currentSpeed && absDy < currentSpeed) {
           x = target.x;
           y = target.y;
           pathIndex = (pathIndex + 1) % path.length;
@@ -189,22 +232,36 @@ export default function PacmanTrail() {
       // Движение к цели - только по горизонтали или вертикали
       const dx = target.x - x;
       const dy = target.y - y;
+      const absDx = Math.abs(dx);
+      const absDy = Math.abs(dy);
       
-      if (Math.abs(dx) > currentSpeed || Math.abs(dy) > currentSpeed) {
+      if (absDx > currentSpeed || absDy > currentSpeed) {
         // Сначала двигаемся по горизонтали, потом по вертикали
-        if (Math.abs(dx) > currentSpeed) {
+        if (absDx > currentSpeed) {
           x += currentSpeed * Math.sign(dx);
           localAngle = dx > 0 ? 0 : 180;
-        } else if (Math.abs(dy) > currentSpeed) {
+        } else if (absDy > currentSpeed) {
           y += currentSpeed * Math.sign(dy);
           localAngle = dy > 0 ? 90 : -90;
         }
       }
 
-      // Remove offset - Pacman position should match trail position
+      // Обновляем dirty region для новой позиции
+      updateDirtyRegion(x, y);
 
-      setPosition({ x, y });
-      setAngle(localAngle);
+      // Оптимизация: обновляем React state только при изменении
+      const positionChanged = lastPositionRef.current.x !== x || lastPositionRef.current.y !== y;
+      const angleChanged = lastAngleRef.current !== localAngle;
+      
+      if (positionChanged) {
+        lastPositionRef.current = { x, y };
+        setPosition({ x, y });
+      }
+      
+      if (angleChanged) {
+        lastAngleRef.current = localAngle;
+        setAngle(localAngle);
+      }
 
       // Add new trail point (offset 15px behind Pacman based on direction)
       let trailX = x;
@@ -217,6 +274,7 @@ export default function PacmanTrail() {
       else if (localAngle === -90) trailY += 15; // Moving up, trail goes down
       
       trailRef.current.push({ x: trailX, y: trailY, id: lastId++ });
+      // Возвращаем нормальную длину trail
       if (trailRef.current.length > 370) {
         trailRef.current.shift();
       }
@@ -240,6 +298,8 @@ export default function PacmanTrail() {
         style={{
           width: '100%',
           height: '100%',
+          willChange: 'contents',
+          transform: 'translateZ(0)', // GPU acceleration
         }}
       />
 
@@ -252,6 +312,8 @@ export default function PacmanTrail() {
         style={{
           left: `${position.x}px`,
           top: `${position.y}px`,
+          willChange: 'transform',
+          transform: 'translateZ(0)', // GPU acceleration
         }}
       >
         <g transform={`rotate(${angle}, 50, 50)`}>

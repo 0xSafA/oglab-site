@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import type { PotPosition } from './PotController';
 
 interface AnimatedPotProps {
@@ -12,29 +12,46 @@ export default function AnimatedPot({ pot, onEaten }: AnimatedPotProps) {
   const [growthStage, setGrowthStage] = useState(0); // 0-100%
   const [isEaten, setIsEaten] = useState(false);
 
-  // Анимация роста растения
+  // Оптимизированная анимация роста растения с requestAnimationFrame
   useEffect(() => {
-    const growthInterval = setInterval(() => {
-      setGrowthStage(prev => {
-        const newStage = prev + 2; // Увеличиваем на 2% каждые 160мс
-        return newStage > 100 ? 100 : newStage;
-      });
-    }, 160); // 8 секунд до полного роста (100 * 160мс / 2)
+    let animationFrame: number;
+    let lastTime = 0;
+    const growthDuration = 8000; // 8 секунд до полного роста
+    const startTime = Date.now();
 
-    return () => clearInterval(growthInterval);
-  }, []);
-
-  // Слушаем события поедания
-  useEffect(() => {
-    const handlePotEaten = (event: CustomEvent) => {
-      const { potId } = event.detail;
-      if (potId === pot.id) {
-        setIsEaten(true);
-        // Через короткое время вызываем onEaten для удаления компонента
-        setTimeout(() => onEaten(pot.id), 500);
+    const animate = (currentTime: number) => {
+      if (currentTime - lastTime >= 16) { // ~60fps
+        const elapsed = Date.now() - startTime;
+        const progress = Math.min(elapsed / growthDuration, 1);
+        const newStage = progress * 100;
+        
+        setGrowthStage(newStage);
+        lastTime = currentTime;
+        
+        if (progress < 1) {
+          animationFrame = requestAnimationFrame(animate);
+        }
+      } else {
+        animationFrame = requestAnimationFrame(animate);
       }
     };
 
+    animationFrame = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(animationFrame);
+  }, []);
+
+  // Оптимизированный event handler с useCallback
+  const handlePotEaten = useCallback((event: CustomEvent) => {
+    const { potId } = event.detail;
+    if (potId === pot.id) {
+      setIsEaten(true);
+      // Через короткое время вызываем onEaten для удаления компонента
+      setTimeout(() => onEaten(pot.id), 500);
+    }
+  }, [pot.id, onEaten]);
+
+  // Слушаем события поедания
+  useEffect(() => {
     if (typeof window !== 'undefined') {
       window.addEventListener('potEaten', handlePotEaten as EventListener);
     }
@@ -44,7 +61,7 @@ export default function AnimatedPot({ pot, onEaten }: AnimatedPotProps) {
         window.removeEventListener('potEaten', handlePotEaten as EventListener);
       }
     };
-  }, [pot.id, onEaten]);
+  }, [handlePotEaten]);
 
   return (
     <div
@@ -55,7 +72,8 @@ export default function AnimatedPot({ pot, onEaten }: AnimatedPotProps) {
       style={{
         left: `${pot.x}px`,
         top: `${pot.y}px`,
-        transform: 'translate(-50%, -50%)',
+        transform: 'translate(-50%, -50%) translateZ(0)', // GPU acceleration
+        willChange: 'transform, opacity',
       }}
     >
       <svg

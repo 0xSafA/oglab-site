@@ -184,78 +184,15 @@ export async function fetchMenuWithOptions(): Promise<{
 
 /* ───────────── Fallback data function ───────────── */
 function getFallbackData() {
+  console.log('🚨 Using empty fallback data - no Google Sheets connection');
   return {
-    rows: [
-      {
-        Category: 'TOP SHELF',
-        Name: 'OG Kush',
-        THC: 25,
-        Price_5g: 1500,
-        Price_20g: 5000,
-        Type: 'hybrid',
-        Our: true,
-      },
-      {
-        Category: 'TOP SHELF',
-        Name: 'White Widow',
-        THC: 23,
-        Price_5g: 1400,
-        Price_20g: 4800,
-        Type: 'sativa',
-        Our: false,
-      },
-      {
-        Category: 'MID SHELF',
-        Name: 'Blue Dream',
-        THC: 20,
-        Price_5g: 1200,
-        Price_20g: 4000,
-        Type: 'hybrid',
-        Our: true,
-      },
-      {
-        Category: 'PREMIUM',
-        Name: 'Gorilla Glue',
-        THC: 28,
-        Price_5g: 1800,
-        Price_20g: 6000,
-        Type: 'indica',
-        Our: false,
-      },
-      {
-        Category: 'SMALLS',
-        Name: 'Purple Haze',
-        THC: 18,
-        Price_5g: 1000,
-        Price_20g: 3500,
-        Type: 'sativa',
-        Our: true,
-      },
-      {
-        Category: 'FRESH FROZEN HASH',
-        Name: 'Bubble Hash Special',
-        THC: 45,
-        Price_1g: 800,
-        Price_5g: 3500,
-        Type: 'hybrid',
-        Our: true,
-      },
-      {
-        Category: 'LIVE HASH ROSIN',
-        Name: 'Premium Rosin',
-        THC: 65,
-        Price_1g: 1200,
-        Price_5g: 5000,
-        Type: 'indica',
-        Our: true,
-      }
-    ] as MenuRow[],
+    rows: [] as MenuRow[], // Пустой массив вместо mock данных
     layout: {
-      column1: ['TOP SHELF', 'MID SHELF'],
-      column2: ['PREMIUM', 'SMALLS', 'CBG', 'PRE ROLLS'],
-      column3: ['FRESH FROZEN HASH', 'LIVE HASH ROSIN', 'DRY SIFT HASH', 'ICE BUBBLE HASH'],
+      column1: [],
+      column2: [],
+      column3: []
     },
-    packmanText: 'Welcome to OG Lab Menu! 🌿 (Demo Mode - Configure Google Sheets for live data)'
+    packmanText: 'Menu temporarily unavailable'
   };
 }
 

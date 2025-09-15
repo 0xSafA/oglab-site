@@ -32,7 +32,7 @@ export default async function MenuPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#536C4A] to-[#B0BF93] py-5 md:py-2">
       {/* Background Effects */}
-      <div className="fixed inset-0 opacity-10 z-0">
+      <div className="absolute inset-0 opacity-10 z-0">
         <div className="absolute inset-0 bg-gradient-to-br from-[#536C4A] via-[#B0BF93] to-[#536C4A]"></div>
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(176,191,147,0.3)_0%,transparent_50%),radial-gradient(circle_at_80%_80%,rgba(83,108,74,0.3)_0%,transparent_50%),radial-gradient(circle_at_40%_60%,rgba(176,191,147,0.2)_0%,transparent_50%)]"></div>
       </div>
