@@ -261,8 +261,8 @@ export default function PacmanTrail() {
         else if (localAngle === -90) trailY += 15; // Moving up, trail goes down
         
         trailRef.current.push({ x: trailX, y: trailY, id: lastId++ });
-        // Возвращаем нормальную длину trail
-        if (trailRef.current.length > 370) {
+        // Укороченная длина trail на 30% (370 * 0.7 = 259)
+        if (trailRef.current.length > 259) {
           trailRef.current.shift();
         }
       }
