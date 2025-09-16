@@ -37,8 +37,8 @@ export default async function MenuPage() {
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(176,191,147,0.3)_0%,transparent_50%),radial-gradient(circle_at_80%_80%,rgba(83,108,74,0.3)_0%,transparent_50%),radial-gradient(circle_at_40%_60%,rgba(176,191,147,0.2)_0%,transparent_50%)]"></div>
       </div>
 
-      <main className="relative w-full h-full z-10">
-        <div className="menu-main-container menu-container bg-white/95 backdrop-blur-lg shadow-2xl border-2 border-[#B0BF93]/30 p-3 md:p-4 lg:p-5 w-full animate-fade-in-up" style={{height: '115%', minHeight: '115vh'}}>
+      <main className="relative w-full z-10">
+        <div className="menu-main-container menu-container bg-white/95 backdrop-blur-lg shadow-2xl border-2 border-[#B0BF93]/30 p-3 md:p-4 lg:p-5 w-full animate-fade-in-up">
           
 
           {/* Menu Grid */}
@@ -65,8 +65,8 @@ export default async function MenuPage() {
             </div>
           </section>
 
-          {/* Legend footer - positioned for optimal space usage with safe area for TV/tablets */}
-          <footer className="mt-2 md:fixed md:bottom-0 md:left-0 lg:bottom-0 lg:left-0 bg-white/95 backdrop-blur-sm rounded-tr-xl p-2 md:p-3 text-xs text-gray-700 shadow-2xl border-t border-r border-[#B0BF93]/30 md:z-20 lg:z-20 w-full md:w-2/3 lg:w-auto lg:max-w-[calc(33.333%-1rem)]">
+          {/* Legend footer - positioned relative to content, not screen */}
+          <footer className="mt-4 md:mt-6 lg:mt-8 bg-white/95 backdrop-blur-sm rounded-xl p-3 md:p-4 text-xs text-gray-700 shadow-2xl border border-[#B0BF93]/30 w-full md:w-2/3 lg:w-auto lg:max-w-[calc(50%-1rem)]">
             <div className="grid grid-cols-3 gap-2 md:gap-2 lg:gap-1 items-center">
               {/* Column 1 - Logo and Menu */}
               <div className="flex flex-col md:flex-row lg:flex-row items-center gap-1 md:gap-1 lg:gap-1">

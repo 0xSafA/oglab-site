@@ -10,12 +10,10 @@
   --color-indica: #38b24f;
 }
 
-/* Полноэкранный режим - меню занимает весь экран */
+/* Адаптивный режим - меню подстраивается под контент */
 .menu-safe-area {
-  height: 100vh;
+  min-height: 100vh;
   width: 100vw;
-  display: flex;
-  flex-direction: column;
   padding: 0;
 }
 
@@ -28,6 +26,7 @@
 @media (min-width: 1024px) {
   .menu-grid {
     gap: 0.625rem;
+    margin-bottom: 2rem;
   }
   
   .menu-category-header {
@@ -42,6 +41,13 @@
   
   .menu-category {
     margin-bottom: 0.625rem;
+  }
+  
+  /* Для больших экранов (включая Windows планшеты) увеличиваем футер */
+  footer {
+    margin-top: 3rem;
+    padding: 1.5rem;
+    max-width: 60%;
   }
 }
 
@@ -59,10 +65,18 @@
   
   .menu-grid {
     gap: 0.625rem;
+    margin-bottom: 2rem;
   }
   
   .menu-category {
     margin-bottom: 0.625rem;
+  }
+  
+  /* Увеличиваем футер на планшетах для заполнения пространства */
+  footer {
+    margin-top: 3rem !important;
+    padding: 1.5rem !important;
+    font-size: 0.875rem !important;
   }
 }
 
