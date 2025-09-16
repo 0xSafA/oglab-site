@@ -38,27 +38,27 @@ export default async function MenuPage() {
       </div>
 
       <main className="relative w-full h-full z-10">
-        <div className="menu-main-container menu-container bg-white/95 backdrop-blur-lg shadow-2xl border-2 border-[#B0BF93]/30 p-3 md:p-4 lg:p-5 h-full w-full animate-fade-in-up">
+        <div className="menu-main-container menu-container bg-white/95 backdrop-blur-lg shadow-2xl border-2 border-[#B0BF93]/30 p-3 md:p-4 lg:p-5 w-full animate-fade-in-up" style={{height: '115%', minHeight: '115vh'}}>
           
 
           {/* Menu Grid */}
-          <section className="menu-grid grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-1 lg:gap-2 mb-2 md:mb-1 mt-1 md:mt-0 w-full">
+          <section className="menu-grid grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-2 lg:gap-3 mb-3 md:mb-2 mt-2 md:mt-1 w-full">
             {/* Column 1 */}
-            <div className="space-y-2 md:space-y-0.5">
+            <div className="space-y-3 md:space-y-2 lg:space-y-2">
               {layout.column1.map((category) => (
                 <CategoryBlock key={category} name={category} rows={grouped[category] ?? []} />
               ))}
             </div>
 
             {/* Column 2 */}
-            <div className="space-y-2 md:space-y-0.5">
+            <div className="space-y-3 md:space-y-2 lg:space-y-2">
               {layout.column2.map((category) => (
                 <CategoryBlock key={category} name={category} rows={grouped[category] ?? []} />
               ))}
             </div>
 
             {/* Column 3 */}
-            <div className="space-y-2 md:space-y-0.5">
+            <div className="space-y-3 md:space-y-2 lg:space-y-2">
               {layout.column3.map((category) => (
                 <CategoryBlock key={category} name={category} rows={grouped[category] ?? []} />
               ))}
