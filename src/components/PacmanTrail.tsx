@@ -145,46 +145,65 @@ export default function PacmanTrail() {
       }
     };
 
-    // Оптимизированная функция отрисовки trail
-    const drawTrail = () => {
-      const trail = trailRef.current;
-      const trailLength = trail.length;
-      
-      // Всегда очищаем весь canvas для корректной работы trail
-      ctx.clearRect(0, 0, w, h);
-      
-      if (trailLength === 0) return;
-      
-      ctx.fillStyle = 'white';
-      
-      // Batch операции для лучшей производительности
-      // Правильная логика: новые точки (конец массива) плотные, старые (начало) прозрачные
-      // Отключаем фильтры (дорогая операция) — прозрачность достаточна визуально
-      ctx.filter = 'none';
+    // Fade-layer отрисовка: O(1) на кадр
+    const drawTrail = (cx: number, cy: number) => {
+      const radius = pacmanRadius;
 
-      for (let i = 0; i < trailLength; i++) {
-        const point = trail[i];
-        // i=0 - самая старая точка (должна быть прозрачной)
-        // i=trailLength-1 - самая новая точка (должна быть плотной)
-        const normalizedAge = i / (trailLength - 1); // 0 (старая) → 1 (новая)
-        // Бóльшая прозрачность у рта и длиннее зона у переднего и заднего краёв
-        const minAlpha = 0.08; // у рта и дальнего края
-        const maxAlpha = 0.55; // в середине хвоста
-        const centered = 1 - Math.pow(2 * normalizedAge - 1, 2); // 0 на краях, 1 в середине
-        const tailStretch = Math.min(1, normalizedAge / 0.35); // держим дальний край бледным до ~35% длины
-        const headStretch = Math.min(1, (1 - normalizedAge) / 0.30); // зона бледности у рта ~30% длины
-        const opacity = minAlpha + (maxAlpha - minAlpha) * centered * tailStretch * headStretch;
-        
-        ctx.globalAlpha = opacity;
-        ctx.beginPath();
-        // Рисуем трейл в сохранённых координатах центра
-        ctx.arc(point.x, point.y, pacmanRadius, 0, Math.PI * 2);
-        ctx.fill();
+      // Периодическая полная очистка, чтобы не было постоянного серого налёта
+      if (frameCountRef.current % 216 === 0) { // ~20% реже очищаем → хвост длиннее
+        ctx.clearRect(0, 0, w, h);
       }
-      
-      // Restore opacity
-      ctx.globalAlpha = 1;
-      ctx.filter = 'none';
+
+      // 1) Плавное затухание предыдущих кадров (fade layer)
+      ctx.save();
+      ctx.globalCompositeOperation = 'destination-out';
+      ctx.globalAlpha = 0.05; // чуть меньше стираем → хвост длиннее (~+20%)
+      ctx.fillRect(0, 0, w, h);
+      ctx.restore();
+
+      // 2) Рисуем новую голову хвоста (рядом с пакманом)
+      ctx.save();
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.globalAlpha = 0.1; // ещё прозрачнее у рта (~50% от прежнего)
+      ctx.fillStyle = 'white';
+      ctx.beginPath();
+      ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+
+      // 3) Усиление средней части хвоста профилем альфы:
+      //    первые и последние 10% полупрозрачны, середина — непрозрачна
+      const trail = trailRef.current;
+      const n = trail.length;
+      if (n > 1) {
+        // Ограничим сложность: используем не более 216 последних точек (~+20%)
+        const maxSamples = 216;
+        const startIndex = Math.max(0, n - maxSamples);
+        const count = n - startIndex;
+        const inv = count > 1 ? 1 / (count - 1) : 0;
+        ctx.save();
+        ctx.fillStyle = 'white';
+        ctx.globalCompositeOperation = 'source-over';
+        for (let k = 0; k < count; k++) {
+          const i = startIndex + k;
+          const p = trail[i];
+          const t = k * inv; // 0..1 (старый→новый) в пределах окна
+          let alpha: number;
+          if (t < 0.1) {
+            alpha = 0.175 * (t / 0.1); // 0 → 0.175 (на 50% прозрачнее у рта)
+          } else if (t > 0.8) {
+            alpha = 0.35 * ((1 - t) / 0.2); // 0.35 → 0 на последних 20%
+          } else {
+            alpha = 1.0; // середина полностью непрозрачная
+          }
+          if (alpha <= 0) continue;
+          ctx.globalAlpha = alpha;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, radius, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        ctx.restore();
+      }
     };
 
     const animate = (currentTime: number) => {
@@ -272,19 +291,19 @@ export default function PacmanTrail() {
         lastTrailCenterRef.current = { cx: x + pacmanRadius, cy: y + pacmanRadius };
         
         // Нормализуем длину хвоста по времени, чтобы она была одинаковой на любых FPS
-        const TRAIL_WINDOW_MS = 2200; // окно времени хвоста ~2.2s
+        const TRAIL_WINDOW_MS = 2400; // ~20% длиннее окно по времени
         const cutoff = currentTime - TRAIL_WINDOW_MS;
         while (trailRef.current.length && trailRef.current[0].t < cutoff) {
           trailRef.current.shift();
         }
         // Защитный лимит по количеству точек (вдобавок к окну времени)
-        if (trailRef.current.length > 480) {
-          trailRef.current.splice(0, trailRef.current.length - 480);
+        if (trailRef.current.length > 624) {
+          trailRef.current.splice(0, trailRef.current.length - 624);
         }
       }
 
-      // Draw trail on canvas
-      drawTrail();
+      // Draw trail on canvas using fade-layer
+      drawTrail(x + pacmanRadius, y + pacmanRadius);
       
       animationFrame = requestAnimationFrame(animate);
     };

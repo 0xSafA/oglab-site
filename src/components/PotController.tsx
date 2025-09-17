@@ -57,7 +57,9 @@ export default function PotController() {
 
     setActivePots(prev => [...prev, newPot]);
     
-    console.log(`🌱 New pot spawned at (${newPot.x}, ${newPot.y})`);
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`🌱 New pot spawned at (${newPot.x}, ${newPot.y})`);
+    }
 
     // Устанавливаем глобальное состояние для пакмана
     if (typeof document !== 'undefined') {
@@ -89,12 +91,16 @@ export default function PotController() {
       return updatedPots;
     });
     
-    console.log(`🍽️ Pot ${potId} removed`);
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`🍽️ Pot ${potId} removed`);
+    }
   }, []);
 
   // Функция для "поедания" горшочка пакманом
   const eatPot = useCallback((potId: string) => {
-    console.log(`🎮 Pacman ate pot ${potId}!`);
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`🎮 Pacman ate pot ${potId}!`);
+    }
     removePot(potId);
     
     // Диспатчим событие что горшочек съеден
@@ -128,6 +134,22 @@ export default function PotController() {
 
   // Основной цикл появления горшочков
   useEffect(() => {
+    // Pause timers when page hidden (TV/low-power)
+    const handleVisibility = () => {
+      if (document.hidden) {
+        clearTimeout(initialTimeout);
+        clearInterval(spawnInterval);
+        clearInterval(cleanupInterval);
+        clearInterval(emergencyInterval);
+      } else {
+        // restart light timers when visible again
+        spawnPot();
+      }
+    };
+
+    if (typeof document !== 'undefined') {
+      document.addEventListener('visibilitychange', handleVisibility);
+    }
     // Первый горшочек через 10 секунд после загрузки
     const initialTimeout = setTimeout(spawnPot, 10000);
 
@@ -158,6 +180,9 @@ export default function PotController() {
       clearInterval(spawnInterval);
       clearInterval(cleanupInterval);
       clearInterval(emergencyInterval);
+      if (typeof document !== 'undefined') {
+        document.removeEventListener('visibilitychange', handleVisibility);
+      }
       if (typeof window !== 'undefined') {
         window.removeEventListener('potEaten', handlePotEaten as EventListener);
       }

@@ -35,8 +35,10 @@ export default function BreathingController() {
           const type = BREATHING_SEQUENCE[currentIndex];
           setActiveType(type);
           
-          console.log(`🫁 Breathing: ${type} for ${BREATH_DURATION} seconds`);
-          console.log(`📊 Animation: 3s per breath cycle, ${BREATH_DURATION / 3} cycles total`);
+          if (process.env.NODE_ENV === 'development') {
+            console.log(`🫁 Breathing: ${type} for ${BREATH_DURATION} seconds`);
+            console.log(`📊 Animation: 3s per breath cycle, ${BREATH_DURATION / 3} cycles total`);
+          }
           
           // Устанавливаем CSS переменную для активного типа
           if (typeof document !== 'undefined') {
@@ -58,7 +60,9 @@ export default function BreathingController() {
             
             if (currentIndex < BREATHING_SEQUENCE.length) {
               // Пауза между группами
-              console.log(`⏸️ Pause between groups: ${GROUP_PAUSE} seconds`);
+              if (process.env.NODE_ENV === 'development') {
+                console.log(`⏸️ Pause between groups: ${GROUP_PAUSE} seconds`);
+              }
               breathingTimeout = setTimeout(breatheNextType, GROUP_PAUSE * 1000);
             } else {
               // Переходим к завершению цикла
@@ -76,7 +80,9 @@ export default function BreathingController() {
             document.body.classList.remove('breathing-hybrid', 'breathing-sativa', 'breathing-indica');
           }
           
-          console.log(`😴 Breathing cycle complete. Pausing for ${CYCLE_PAUSE}s...`);
+          if (process.env.NODE_ENV === 'development') {
+            console.log(`😴 Breathing cycle complete. Pausing for ${CYCLE_PAUSE}s...`);
+          }
           
           // Пауза перед следующим циклом
           pauseTimeout = setTimeout(startBreathingCycle, CYCLE_PAUSE * 1000);

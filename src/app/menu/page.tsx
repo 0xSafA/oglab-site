@@ -31,7 +31,7 @@ export default async function MenuPage() {
 
   return (
     <div className="viewport-page bg-gradient-to-br from-[#536C4A] to-[#B0BF93]">
-      <div className="viewport-container viewport-menu bg-white/95 backdrop-blur-lg shadow-2xl border-2 border-[#B0BF93]/30">
+      <div className="viewport-container viewport-menu bg-white/95 shadow-2xl border-2 border-[#B0BF93]/30">
           
           {/* Menu Flex Layout */}
           <section className="viewport-menu-layout">
@@ -42,7 +42,7 @@ export default async function MenuPage() {
               ))}
 
               {/* Legend footer - compact and responsive, flows with column 1 */}
-              <footer className="viewport-footer bg-white/95 backdrop-blur-sm shadow-2xl border border-[#B0BF93]/30">
+              <footer className="viewport-footer bg-white/95 shadow-2xl border border-[#B0BF93]/30">
                 <div className="grid grid-cols-3 items-center">
                   {/* Column 1 - Logo and Menu */}
                   <div className="flex flex-col md:flex-row lg:flex-row items-center gap-1 md:gap-1 lg:gap-1">

@@ -11,7 +11,7 @@ export default function HomePage() {
       </div>
 
       <div className="relative z-10 w-full max-w-4xl mx-4">
-        <div className="bg-white/95 backdrop-blur-lg rounded-3xl shadow-2xl border-[3px] md:border-2 border-[#B0BF93]/45 md:border-[#B0BF93]/40 p-8 animate-fade-in-up">
+        <div className="bg-white/95 rounded-3xl shadow-2xl border-[3px] md:border-2 border-[#B0BF93]/45 md:border-[#B0BF93]/40 p-8 animate-fade-in-up">
           
           {/* Social Icons */}
           <div className="flex justify-center gap-4 mb-6">
