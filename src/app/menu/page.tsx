@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import { fetchMenuWithOptions, type MenuRow } from '@/lib/google';
 import { groupRows, columnsPerCategory } from '@/lib/menu-helpers';
 import PacmanTrail from '@/components/PacmanTrail';
@@ -47,13 +48,15 @@ export default async function MenuPage() {
                   {/* Column 1 - Logo and Menu */}
                   <div className="flex flex-col md:flex-row lg:flex-row items-center gap-1 md:gap-1 lg:gap-1">
                     <div className="relative">
-                      <Image
-                        src="/assets/images/oglab_logo_round.svg"
-                        alt="OG Lab Logo"
-                        width={32}
-                        height={32}
-                        className="footer-logo animate-pulse-slow rounded-full shadow-md"
-                      />
+                      <Link href="/" aria-label="Go to home">
+                        <Image
+                          src="/assets/images/oglab_logo_round.svg"
+                          alt="OG Lab Logo"
+                          width={32}
+                          height={32}
+                          className="footer-logo animate-pulse-slow rounded-full shadow-md"
+                        />
+                      </Link>
                     </div>
                     <span className="font-bold tracking-wide uppercase text-[#536C4A] text-xs md:text-xs lg:text-xs">
                       Menu
