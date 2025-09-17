@@ -10,12 +10,135 @@
   --color-indica: #38b24f;
 }
 
-/* Адаптивный режим - меню подстраивается под контент */
-.menu-safe-area {
+/* Viewport-responsive menu system */
+.viewport-page {
+  --menu-gap: clamp(0.5rem, 1.5vw, 1.5rem);
+  --menu-gap-small: clamp(0.25rem, 1vw, 1rem);
+  /* make vertical padding smaller than horizontal */
+  --vp-pad-x: clamp(0.75rem, 2vw, 1.25rem);
+  --vp-pad-y: clamp(0.25rem, 0.8vh, 0.6rem);
   min-height: 100vh;
-  width: 100vw;
-  padding: 0;
+  padding: var(--vp-pad-y) var(--vp-pad-x);
 }
+
+.viewport-container {
+  width: 100%;
+  /* allow page to grow if content overflows, but keep a soft cap */
+  height: auto;
+  max-height: none;
+  overflow: visible;
+  display: flex;
+  flex-direction: column;
+  /* 50% vertical padding vs previous, keep horizontal the same */
+  padding: clamp(0.25rem, 1vw, 1rem) clamp(0.5rem, 2vw, 2rem);
+  /* Slightly rounded outer edges, close to card radius */
+  border-radius: clamp(0.75rem, 1vw, 1rem);
+  /* center only horizontally */
+  margin: 0 auto;
+}
+
+.viewport-menu-layout {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  overflow: hidden;
+  gap: var(--menu-gap);
+}
+
+@media (min-width: 768px) {
+  .viewport-menu-layout {
+    flex-direction: row;
+  }
+}
+
+.viewport-column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--menu-gap-small);
+}
+
+.viewport-menu {
+  /* Overall base font size a bit larger for distant screens */
+  font-size: clamp(0.85rem, 1.8vw, 1.4rem);
+}
+
+.viewport-menu .menu-category {
+  border-radius: clamp(0.5rem, 1vw, 1rem);
+  margin-bottom: 0; /* rely on column gap */
+}
+
+.viewport-menu .menu-category-header {
+  font-size: clamp(0.7rem, 1.4vw, 1.1rem);
+  padding: clamp(0.3rem, 1.1vw, 0.85rem) clamp(0.6rem, 1.7vw, 1.1rem);
+  line-height: 1.1; /* ~8-10% tighter */
+}
+
+.viewport-menu .menu-category-item {
+  /* unified base size; reduced ~10% */
+  font-size: clamp(0.7rem, 1.3vw, 0.95rem);
+  padding: clamp(0.3rem, 0.9vw, 0.6rem) clamp(0.6rem, 1.6vw, 1.1rem);
+  line-height: 1.1;
+}
+
+.viewport-menu .menu-category-item span {
+  font-size: inherit;
+  line-height: inherit;
+}
+
+/* Fine tune: slightly smaller item names, larger prices */
+/* make all parts inherit the same size */
+.viewport-menu .menu-category-item .item-name,
+.viewport-menu .menu-category-item .item-price {
+  font-size: inherit;
+}
+
+/* slightly smaller prices and THC/CBG than names */
+.viewport-menu .menu-category-item .item-price,
+.viewport-menu .menu-category-item .item-thc {
+  font-size: 0.83em; /* ~10% smaller than previous 0.92em */
+}
+
+/* Responsive indicators */
+.viewport-menu .type-dot,
+.viewport-menu .combined-indicator {
+  width: clamp(10px, 1.4vw, 18px);
+  height: clamp(10px, 1.4vw, 18px);
+  min-width: clamp(10px, 1.4vw, 18px);
+  min-height: clamp(10px, 1.4vw, 18px);
+}
+
+/* Dot colors */
+.dot-default { background-color: var(--color-primary); }
+.dot-hybrid { background-color: var(--color-hybrid); }
+.dot-sativa { background-color: var(--color-sativa); }
+.dot-indica { background-color: var(--color-indica); }
+
+/* Viewport footer */
+.viewport-footer {
+  flex-shrink: 0;
+  margin-top: var(--menu-gap); /* same as between cards */
+  padding: clamp(0.6rem, 1.6vw, 1.1rem);
+  font-size: clamp(0.7rem, 1.4vw, 1rem);
+  border-radius: clamp(0.5rem, 1vw, 1rem);
+}
+
+.viewport-footer .footer-logo {
+  width: clamp(20px, 3vw, 40px);
+  height: clamp(20px, 3vw, 40px);
+}
+
+.viewport-footer .farm-leaf {
+  width: clamp(10px, 1.5vw, 20px);
+  height: clamp(10px, 1.5vw, 20px);
+}
+
+.viewport-footer .grid {
+  gap: clamp(0.5rem, 1vw, 1rem);
+}
+
+/* Адаптивный режим - меню подстраивается под контент */
 
 .menu-main-container {
   width: 100% !important;
@@ -45,9 +168,7 @@
   
   /* Для больших экранов (включая Windows планшеты) увеличиваем футер */
   footer {
-    margin-top: 3rem;
     padding: 1.5rem;
-    max-width: 60%;
   }
 }
 
@@ -74,7 +195,6 @@
   
   /* Увеличиваем футер на планшетах для заполнения пространства */
   footer {
-    margin-top: 3rem !important;
     padding: 1.5rem !important;
     font-size: 0.875rem !important;
   }
@@ -205,7 +325,7 @@
 
 /* Compact line height for menu item names on all devices */
 .menu-category-item span {
-  line-height: 1.3;
+  line-height: 1.1;
 }
 
 .type-dot {
@@ -335,7 +455,6 @@
   
   /* Footer width control for tablets */
   footer {
-    width: 60% !important; /* Slightly less than 2/3 width */
     padding: 0.375rem !important;
     font-size: 10px !important;
   }

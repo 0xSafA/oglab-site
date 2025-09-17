@@ -1,14 +1,13 @@
 'use client';
 
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { useEffect, useRef, useCallback, useState } from 'react';
 import type { PotPosition } from './PotController';
 
 export default function PacmanTrail() {
   const pacmanRef = useRef<SVGSVGElement>(null);
+  const pacmanGroupRef = useRef<SVGGElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const trailRef = useRef<{ x: number; y: number; id: number }[]>([]);
-  const [angle, setAngle] = useState(0);
-  const [position, setPosition] = useState({ x: 68, y: 68 }); // pacmanSize + 20
   
   // Состояние для охоты на горшочки
   const [isHunting, setIsHunting] = useState(false);
@@ -18,9 +17,7 @@ export default function PacmanTrail() {
   const isHuntingRef = useRef(false);
   const targetPotRef = useRef<PotPosition | null>(null);
   
-  // Оптимизация: кэшируем вычисления и состояние
-  const lastPositionRef = useRef({ x: 68, y: 68 });
-  const lastAngleRef = useRef(0);
+  // Оптимизация: кэшируем вычисления
   const frameCountRef = useRef(0);
 
   // Оптимизированные event handlers с useCallback
@@ -160,7 +157,8 @@ export default function PacmanTrail() {
         
         ctx.globalAlpha = opacity;
         ctx.beginPath();
-        ctx.arc(point.x + 24, point.y + 24, 24, 0, Math.PI * 2);
+        // Рисуем трейл строго по текущей позиции пакмана (центр совпадает)
+        ctx.arc(point.x + 24, point.y + 24, 22, 0, Math.PI * 2);
         ctx.fill();
       }
       
@@ -235,34 +233,21 @@ export default function PacmanTrail() {
         }
       }
 
-      // Оптимизация: обновляем React state только при изменении
-      const positionChanged = lastPositionRef.current.x !== x || lastPositionRef.current.y !== y;
-      const angleChanged = lastAngleRef.current !== localAngle;
-      
-      if (positionChanged) {
-        lastPositionRef.current = { x, y };
-        setPosition({ x, y });
+      // Синхронно обновляем позицию и поворот SVG без React state
+      if (pacmanRef.current) {
+        pacmanRef.current.style.left = `${x}px`;
+        pacmanRef.current.style.top = `${y}px`;
       }
-      
-      if (angleChanged) {
-        lastAngleRef.current = localAngle;
-        setAngle(localAngle);
+      if (pacmanGroupRef.current) {
+        pacmanGroupRef.current.setAttribute('transform', `rotate(${localAngle}, 50, 50)`);
       }
 
-      // Add new trail point (offset 15px behind Pacman based on direction) - только каждый 2-й кадр для оптимизации
-      if (frameCountRef.current % 2 === 0) {
-        let trailX = x;
-        let trailY = y;
-        
-        // Offset trail 15px in opposite direction of movement
-        if (localAngle === 0) trailX -= 15;      // Moving right, trail goes left
-        else if (localAngle === 180) trailX += 15; // Moving left, trail goes right  
-        else if (localAngle === 90) trailY -= 15;  // Moving down, trail goes up
-        else if (localAngle === -90) trailY += 15; // Moving up, trail goes down
-        
-        trailRef.current.push({ x: trailX, y: trailY, id: lastId++ });
-        // Укороченная длина trail на 30% (370 * 0.7 = 259)
-        if (trailRef.current.length > 259) {
+      // Добавляем точку следа после обновления позиции — каждый кадр,
+      // чтобы исключить рассинхрон и опережение
+      {
+        trailRef.current.push({ x, y, id: lastId++ });
+        // Ограничиваем длину следа
+        if (trailRef.current.length > 200) {
           trailRef.current.shift();
         }
       }
@@ -302,13 +287,13 @@ export default function PacmanTrail() {
         viewBox="0 0 100 100"
         xmlns="http://www.w3.org/2000/svg"
         style={{
-          left: `${position.x}px`,
-          top: `${position.y}px`,
+          left: `0px`,
+          top: `0px`,
           willChange: 'transform',
           transform: 'translateZ(0)', // GPU acceleration
         }}
       >
-        <g transform={`rotate(${angle}, 50, 50)`}>
+        <g ref={pacmanGroupRef} transform={`rotate(0, 50, 50)`}>
           <defs>
             <mask id="mouth">
               <rect width="100" height="100" fill="white" />
