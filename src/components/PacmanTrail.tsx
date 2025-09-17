@@ -11,7 +11,6 @@ export default function PacmanTrail() {
   
   // Состояние для охоты на горшочки
   const [isHunting, setIsHunting] = useState(false);
-  const [targetPot, setTargetPot] = useState<PotPosition | null>(null);
   
   // Refs для доступа к состоянию внутри анимации
   const isHuntingRef = useRef(false);
@@ -30,7 +29,6 @@ export default function PacmanTrail() {
     
     // Сразу начинаем охоту
     setIsHunting(true);
-    setTargetPot(newPot);
     isHuntingRef.current = true;
     targetPotRef.current = newPot;
   }, []);
@@ -43,7 +41,6 @@ export default function PacmanTrail() {
     
     // Возвращаемся к обычному поведению
     setIsHunting(false);
-    setTargetPot(null);
     isHuntingRef.current = false;
     targetPotRef.current = null;
   }, []);
@@ -128,19 +125,7 @@ export default function PacmanTrail() {
       return distanceSquared < 1600; // 40 * 40 = 1600
     };
 
-    // Функция получения активного горшочка
-    const getActivePot = (): PotPosition | null => {
-      if (typeof document === 'undefined') return null;
-      
-      const potData = document.body.dataset.activePot;
-      if (!potData) return null;
-      
-      try {
-        return JSON.parse(potData);
-      } catch {
-        return null;
-      }
-    };
+    // (removed unused getActivePot)
 
     // Оптимизированная функция отрисовки trail
     const drawTrail = () => {
@@ -157,7 +142,7 @@ export default function PacmanTrail() {
       // Batch операции для лучшей производительности
       // Правильная логика: новые точки (конец массива) плотные, старые (начало) прозрачные
       // Отключаем фильтры (дорогая операция) — прозрачность достаточна визуально
-      (ctx as any).filter = 'none';
+      ctx.filter = 'none';
 
       for (let i = 0; i < trailLength; i++) {
         const point = trail[i];
@@ -181,7 +166,7 @@ export default function PacmanTrail() {
       
       // Restore opacity
       ctx.globalAlpha = 1;
-      (ctx as any).filter = 'none';
+      ctx.filter = 'none';
     };
 
     const animate = (currentTime: number) => {
