@@ -19,6 +19,7 @@ export default function PacmanTrail() {
   
   // Оптимизация: кэшируем вычисления
   const frameCountRef = useRef(0);
+  const lastTrailCenterRef = useRef({ cx: 68 + 24, cy: 68 + 24 });
 
   // Оптимизированные event handlers с useCallback
   const handlePotSpawned = useCallback((event: CustomEvent) => {
@@ -72,16 +73,23 @@ export default function PacmanTrail() {
 
     const w = window.innerWidth;
     const h = window.innerHeight;
+    const dpr = Math.max(1, Math.floor(window.devicePixelRatio || 1));
 
-    // Set canvas size
-    canvas.width = w;
-    canvas.height = h;
+    // Set canvas size with HiDPI support
+    canvas.width = w * dpr;
+    canvas.height = h * dpr;
+    canvas.style.width = `${w}px`;
+    canvas.style.height = `${h}px`;
+    ctx.scale(dpr, dpr);
 
     const pacmanSize = 48;
+    const pacmanRadius = pacmanSize / 2; // 24
     const margin = pacmanSize + 20; // Add margin to keep Pacman visible
     
     let x = margin;
     let y = margin;
+    // Синхронизируем стартовую позицию центра трейла с пакманом
+    lastTrailCenterRef.current = { cx: x + pacmanRadius, cy: y + pacmanRadius };
     let localAngle = 0;
     let lastId = 0;
     const path = [
@@ -148,22 +156,32 @@ export default function PacmanTrail() {
       
       // Batch операции для лучшей производительности
       // Правильная логика: новые точки (конец массива) плотные, старые (начало) прозрачные
+      // Отключаем фильтры (дорогая операция) — прозрачность достаточна визуально
+      (ctx as any).filter = 'none';
+
       for (let i = 0; i < trailLength; i++) {
         const point = trail[i];
         // i=0 - самая старая точка (должна быть прозрачной)
         // i=trailLength-1 - самая новая точка (должна быть плотной)
-        const normalizedAge = i / (trailLength - 1); // От 0 (старая) до 1 (новая)
-        const opacity = Math.max(0.05, normalizedAge * 1.0); // От 0.05 (старая) до 1.0 (новая)
+        const normalizedAge = i / (trailLength - 1); // 0 (старая) → 1 (новая)
+        // Бóльшая прозрачность у рта и длиннее зона у переднего и заднего краёв
+        const minAlpha = 0.08; // у рта и дальнего края
+        const maxAlpha = 0.55; // в середине хвоста
+        const centered = 1 - Math.pow(2 * normalizedAge - 1, 2); // 0 на краях, 1 в середине
+        const tailStretch = Math.min(1, normalizedAge / 0.35); // держим дальний край бледным до ~35% длины
+        const headStretch = Math.min(1, (1 - normalizedAge) / 0.30); // зона бледности у рта ~30% длины
+        const opacity = minAlpha + (maxAlpha - minAlpha) * centered * tailStretch * headStretch;
         
         ctx.globalAlpha = opacity;
         ctx.beginPath();
-        // Рисуем трейл строго по текущей позиции пакмана (центр совпадает)
-        ctx.arc(point.x + 24, point.y + 24, 22, 0, Math.PI * 2);
+        // Рисуем трейл в сохранённых координатах центра
+        ctx.arc(point.x, point.y, pacmanRadius, 0, Math.PI * 2);
         ctx.fill();
       }
       
       // Restore opacity
       ctx.globalAlpha = 1;
+      (ctx as any).filter = 'none';
     };
 
     const animate = (currentTime: number) => {
@@ -242,12 +260,15 @@ export default function PacmanTrail() {
         pacmanGroupRef.current.setAttribute('transform', `rotate(${localAngle}, 50, 50)`);
       }
 
-      // Добавляем точку следа после обновления позиции — каждый кадр,
-      // чтобы исключить рассинхрон и опережение
+      // Добавляем точку следа из предыдущей позиции центра пакмана (лаг 1 кадр),
+      // чтобы хвост гарантированно не опережал при вертикальном движении
       {
-        trailRef.current.push({ x, y, id: lastId++ });
-        // Ограничиваем длину следа
-        if (trailRef.current.length > 200) {
+        const tx = lastTrailCenterRef.current.cx;
+        const ty = lastTrailCenterRef.current.cy;
+        trailRef.current.push({ x: tx, y: ty, id: lastId++ });
+        lastTrailCenterRef.current = { cx: x + pacmanRadius, cy: y + pacmanRadius };
+        // Ограничиваем длину следа (увеличено на ~20%)
+        if (trailRef.current.length > 240) {
           trailRef.current.shift();
         }
       }
@@ -287,8 +308,8 @@ export default function PacmanTrail() {
         viewBox="0 0 100 100"
         xmlns="http://www.w3.org/2000/svg"
         style={{
-          left: `0px`,
-          top: `0px`,
+          left: `68px`,
+          top: `68px`,
           willChange: 'transform',
           transform: 'translateZ(0)', // GPU acceleration
         }}
