@@ -7,6 +7,7 @@ import AutoRefresh from '@/components/AutoRefresh';
 import BreathingController from '@/components/BreathingController';
 import PotController from '@/components/PotController';
 import PotManager from '@/components/PotManager';
+import FitToViewport from '@/components/FitToViewport';
 
 
 // Type colors mapping
@@ -32,7 +33,7 @@ export default async function MenuPage() {
 
   return (
     <div className="viewport-page bg-gradient-to-br from-[#536C4A] to-[#B0BF93]">
-      <div className="viewport-container viewport-menu bg-white/95 shadow-2xl border-2 border-[#B0BF93]/30">
+      <div id="menu-viewport-container" className="viewport-container viewport-menu bg-white/95 shadow-2xl border-2 border-[#B0BF93]/30">
           
           {/* Menu Flex Layout */}
           <section className="viewport-menu-layout">
@@ -111,6 +112,9 @@ export default async function MenuPage() {
         {/* Breathing Animation Controller */}
         <BreathingController />
         
+        {/* TV fit helper (scale down slightly if needed) */}
+        <FitToViewport targetId="menu-viewport-container" minScale={0.82} bottomSafePx={24} />
+
         {/* Cannabis Pot System */}
         <PotController />
         <PotManager />
