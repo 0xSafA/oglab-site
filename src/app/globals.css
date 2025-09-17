@@ -10,6 +10,11 @@
   --color-indica: #38b24f;
 }
 
+/* Prevent horizontal overscroll revealing white gutters */
+html, body {
+  overflow-x: hidden;
+}
+
 /* Viewport-responsive menu system */
 .viewport-page {
   --menu-gap: clamp(0.5rem, 1.5vw, 1.5rem);
