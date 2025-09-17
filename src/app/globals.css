@@ -70,17 +70,17 @@
 }
 
 .viewport-menu .menu-category-header {
-  /* ~10% smaller than before */
-  font-size: clamp(0.63rem, 1.26vw, 0.99rem);
-  padding: clamp(0.3rem, 1.1vw, 0.85rem) clamp(0.6rem, 1.7vw, 1.1rem);
-  line-height: 1.1; /* ~8-10% tighter */
+  /* ~15% smaller total height: reduce font and vertical padding */
+  font-size: clamp(0.54rem, 1.071vw, 0.84rem);
+  padding: clamp(0.255rem, 0.935vw, 0.72rem) clamp(0.6rem, 1.7vw, 1.1rem);
+  line-height: 1.05;
 }
 
 .viewport-menu .menu-category-item {
-  /* unified base size; reduced ~10% */
+  /* keep font; tighten line-height further for TV fit (~20%) */
   font-size: clamp(0.7rem, 1.3vw, 0.95rem);
   padding: clamp(0.3rem, 0.9vw, 0.6rem) clamp(0.6rem, 1.6vw, 1.1rem);
-  line-height: 1.1;
+  line-height: 0.88;
 }
 
 .viewport-menu .menu-category-item span {
