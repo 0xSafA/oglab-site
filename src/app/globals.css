@@ -70,7 +70,8 @@
 }
 
 .viewport-menu .menu-category-header {
-  font-size: clamp(0.7rem, 1.4vw, 1.1rem);
+  /* ~10% smaller than before */
+  font-size: clamp(0.63rem, 1.26vw, 0.99rem);
   padding: clamp(0.3rem, 1.1vw, 0.85rem) clamp(0.6rem, 1.7vw, 1.1rem);
   line-height: 1.1; /* ~8-10% tighter */
 }
