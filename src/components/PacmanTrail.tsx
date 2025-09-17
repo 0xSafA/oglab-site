@@ -7,7 +7,7 @@ export default function PacmanTrail() {
   const pacmanRef = useRef<SVGSVGElement>(null);
   const pacmanGroupRef = useRef<SVGGElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const trailRef = useRef<{ x: number; y: number; id: number }[]>([]);
+  const trailRef = useRef<{ x: number; y: number; t: number; id: number }[]>([]);
   
   // Состояние для охоты на горшочки
   const [isHunting, setIsHunting] = useState(false);
@@ -268,11 +268,18 @@ export default function PacmanTrail() {
       {
         const tx = lastTrailCenterRef.current.cx;
         const ty = lastTrailCenterRef.current.cy;
-        trailRef.current.push({ x: tx, y: ty, id: lastId++ });
+        trailRef.current.push({ x: tx, y: ty, t: currentTime, id: lastId++ });
         lastTrailCenterRef.current = { cx: x + pacmanRadius, cy: y + pacmanRadius };
-        // Ограничиваем длину следа (увеличено на ~20%)
-        if (trailRef.current.length > 240) {
+        
+        // Нормализуем длину хвоста по времени, чтобы она была одинаковой на любых FPS
+        const TRAIL_WINDOW_MS = 2200; // окно времени хвоста ~2.2s
+        const cutoff = currentTime - TRAIL_WINDOW_MS;
+        while (trailRef.current.length && trailRef.current[0].t < cutoff) {
           trailRef.current.shift();
+        }
+        // Защитный лимит по количеству точек (вдобавок к окну времени)
+        if (trailRef.current.length > 480) {
+          trailRef.current.splice(0, trailRef.current.length - 480);
         }
       }
 

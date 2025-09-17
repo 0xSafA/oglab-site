@@ -103,7 +103,7 @@ export default function HomePage() {
           {/* Final Section */}
           <Section>
             <p className="text-center font-semibold text-gray-800 mb-2">Let&apos;s work, learn and relax together!</p>
-            <p className="text-center text-gray-600">Next party is coming 19 September at 18:00! Stay tuned!</p>
+            <p className="text-center text-gray-600">Next party is coming 26 September at 18:00! Stay tuned!</p>
           </Section>
 
           {/* Promo Block - Moved to bottom */}
