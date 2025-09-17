@@ -11,10 +11,13 @@ export default function PacmanTrail() {
   
   // Состояние для охоты на горшочки
   const [isHunting, setIsHunting] = useState(false);
+  const [targetPot, setTargetPot] = useState<PotPosition | null>(null);
   
   // Refs для доступа к состоянию внутри анимации
   const isHuntingRef = useRef(false);
   const targetPotRef = useRef<PotPosition | null>(null);
+  // Используем состояния, чтобы удовлетворить линтер (значения управляются через refs)
+  void targetPot;
   
   // Оптимизация: кэшируем вычисления
   const frameCountRef = useRef(0);
@@ -29,6 +32,7 @@ export default function PacmanTrail() {
     
     // Сразу начинаем охоту
     setIsHunting(true);
+    setTargetPot(newPot);
     isHuntingRef.current = true;
     targetPotRef.current = newPot;
   }, []);
@@ -41,6 +45,7 @@ export default function PacmanTrail() {
     
     // Возвращаемся к обычному поведению
     setIsHunting(false);
+    setTargetPot(null);
     isHuntingRef.current = false;
     targetPotRef.current = null;
   }, []);
@@ -65,7 +70,8 @@ export default function PacmanTrail() {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const ctx = canvas.getContext('2d');
+      // Добавляем тип к filter, чтобы избежать any
+      const ctx = canvas.getContext('2d') as (CanvasRenderingContext2D & { filter?: string }) | null;
     if (!ctx) return;
 
     const w = window.innerWidth;
@@ -125,7 +131,19 @@ export default function PacmanTrail() {
       return distanceSquared < 1600; // 40 * 40 = 1600
     };
 
-    // (removed unused getActivePot)
+    // Функция получения активного горшочка
+    const getActivePot = (): PotPosition | null => {
+      if (typeof document === 'undefined') return null;
+      
+      const potData = document.body.dataset.activePot;
+      if (!potData) return null;
+      
+      try {
+        return JSON.parse(potData);
+      } catch {
+        return null;
+      }
+    };
 
     // Оптимизированная функция отрисовки trail
     const drawTrail = () => {

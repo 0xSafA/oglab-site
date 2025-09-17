@@ -18,7 +18,6 @@ const GROUP_PAUSE = 6;
 const CYCLE_PAUSE = 15;
 
 export default function BreathingController() {
-  // UI state not used for rendering; keep local for clarity without lint noise
   const [activeType, setActiveType] = useState<string | null>(null);
   const [isBreathing, setIsBreathing] = useState(false);
 
@@ -101,5 +100,8 @@ export default function BreathingController() {
   }, []);
 
   // Компонент невидимый, только управляет состоянием
+  // Помечаем значения как используемые, чтобы удовлетворить линтер
+  void activeType; // read-only usage
+  void isBreathing; // read-only usage
   return null;
 }

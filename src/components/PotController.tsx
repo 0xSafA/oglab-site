@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 export interface PotPosition {
   id: string;
@@ -32,7 +32,7 @@ export default function PotController() {
   const [activePots, setActivePots] = useState<PotPosition[]>([]);
 
   // Функция создания нового горшочка
-  const spawnPot = () => {
+  const spawnPot = useCallback(() => {
     if (activePots.length >= POT_CONFIG.maxActivePots) {
       return; // Не создаем если уже максимум
     }
@@ -70,10 +70,10 @@ export default function PotController() {
     setTimeout(() => {
       removePot(newPot.id);
     }, POT_CONFIG.lifeDuration);
-  };
+  }, [activePots]);
 
   // Функция удаления горшочка
-  const removePot = (potId: string) => {
+  const removePot = useCallback((potId: string) => {
     setActivePots(prev => {
       const updatedPots = prev.filter(pot => pot.id !== potId);
       
@@ -90,10 +90,10 @@ export default function PotController() {
     });
     
     console.log(`🍽️ Pot ${potId} removed`);
-  };
+  }, []);
 
   // Функция для "поедания" горшочка пакманом
-  const eatPot = (potId: string) => {
+  const eatPot = useCallback((potId: string) => {
     console.log(`🎮 Pacman ate pot ${potId}!`);
     removePot(potId);
     
@@ -101,10 +101,10 @@ export default function PotController() {
     if (typeof document !== 'undefined') {
       window.dispatchEvent(new CustomEvent('potEaten', { detail: { potId } }));
     }
-  };
+  }, [removePot]);
 
   // Принудительная очистка старых горшочков
-  const forceCleanup = () => {
+  const forceCleanup = useCallback(() => {
     const now = Date.now();
     setActivePots(prev => {
       const cleaned = prev.filter(pot => now - pot.createdAt < POT_CONFIG.lifeDuration + 5000);
@@ -113,10 +113,10 @@ export default function PotController() {
       }
       return cleaned;
     });
-  };
+  }, []);
 
   // Экстренная очистка для медленных устройств
-  const emergencyCleanup = () => {
+  const emergencyCleanup = useCallback(() => {
     if (activePots.length > POT_CONFIG.maxActivePots) {
       console.log(`🚨 Emergency cleanup: too many pots (${activePots.length}), removing all`);
       setActivePots([]);
@@ -124,7 +124,7 @@ export default function PotController() {
         document.body.dataset.activePot = '';
       }
     }
-  };
+  }, [activePots]);
 
   // Основной цикл появления горшочков
   useEffect(() => {
@@ -165,7 +165,7 @@ export default function PotController() {
         document.body.dataset.activePot = '';
       }
     };
-  }, []);
+  }, [spawnPot, forceCleanup, emergencyCleanup, eatPot]);
 
   // Обновляем глобальное состояние при изменении активных горшочков
   useEffect(() => {
