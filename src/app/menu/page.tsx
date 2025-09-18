@@ -165,7 +165,7 @@ function CategoryBlock({ name, rows }: { name: string; rows: MenuRow[] }) {
               
               {priceKeys.map((k) => (
                 <div key={k} className="item-price w-10 text-right text-gray-700">
-                  {row[k] ? `${row[k]}฿` : '-'}
+                  {row[k] ? `${row[k]}` : '-'}
                 </div>
               ))}
             </div>
