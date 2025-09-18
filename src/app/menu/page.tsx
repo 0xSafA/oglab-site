@@ -182,13 +182,15 @@ function CombinedIndicator({ typeKey, isOur }: { typeKey: KnownType | null; isOu
   const colorClass = typeKey ? `dot-${typeKey}` : 'dot-default';
 
   return (
-    <div className="relative flex items-center justify-center w-2.5 h-2.5">
-      <div className={`w-2.5 h-2.5 rounded-full ${colorClass}`} />
+    <div className="relative flex items-center justify-center w-3 h-3">
+      <div className={`w-3 h-3 rounded-full ${colorClass}`} />
       {hasCheckmark && (
         <svg
-          className="absolute w-1.5 h-1.5 text-white"
+          className="absolute w-2 h-2 text-white"
           viewBox="0 0 24 24"
           fill="currentColor"
+          stroke="currentColor"
+          strokeWidth="2.5"
         >
           <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
         </svg>
@@ -203,7 +205,7 @@ function LegendDot({ type, label }: { type: KnownType; label: string }) {
 
   return (
     <div className="flex items-center gap-1.5">
-      <span className={`w-2.5 h-2.5 rounded-full ${dotClass}`} />
+      <span className={`w-3 h-3 rounded-full ${dotClass}`} />
       <span className="text-xs">{label}</span>
     </div>
   );

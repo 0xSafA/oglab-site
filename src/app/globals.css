@@ -83,7 +83,7 @@ html, body {
 
 .viewport-menu .menu-category-item {
   /* keep font; tighten line-height further for TV fit (~20%) */
-  font-size: clamp(0.7rem, 1.3vw, 0.95rem);
+  font-size: clamp(0.77rem, 1.43vw, 1.045rem);
   padding: clamp(0.3rem, 0.9vw, 0.6rem) clamp(0.6rem, 1.6vw, 1.1rem);
   line-height: 0.88;
 }
@@ -109,10 +109,10 @@ html, body {
 /* Responsive indicators */
 .viewport-menu .type-dot,
 .viewport-menu .combined-indicator {
-  width: clamp(10px, 1.4vw, 18px);
-  height: clamp(10px, 1.4vw, 18px);
-  min-width: clamp(10px, 1.4vw, 18px);
-  min-height: clamp(10px, 1.4vw, 18px);
+  width: clamp(12px, 1.68vw, 21.6px);
+  height: clamp(12px, 1.68vw, 21.6px);
+  min-width: clamp(12px, 1.68vw, 21.6px);
+  min-height: clamp(12px, 1.68vw, 21.6px);
 }
 
 /* Dot colors */
@@ -136,8 +136,8 @@ html, body {
 }
 
 .viewport-footer .farm-leaf {
-  width: clamp(10px, 1.5vw, 20px);
-  height: clamp(10px, 1.5vw, 20px);
+  width: clamp(12px, 1.8vw, 24px);
+  height: clamp(12px, 1.8vw, 24px);
 }
 
 .viewport-footer .grid {
@@ -164,7 +164,7 @@ html, body {
   }
   
   .menu-category-item {
-    font-size: 1rem;
+    font-size: 1.1rem;
     padding: 0.375rem 0.625rem;
   }
   
@@ -186,7 +186,7 @@ html, body {
   }
   
   .menu-category-item {
-    font-size: 0.9375rem;
+    font-size: 1.03125rem;
     padding: 0.5rem 0.875rem;
   }
   
@@ -335,15 +335,15 @@ html, body {
 }
 
 .type-dot {
-  width: 8px;
-  height: 8px;
-  min-width: 8px;
-  min-height: 8px;
-  max-width: 8px;
-  max-height: 8px;
+  width: 9.6px;
+  height: 9.6px;
+  min-width: 9.6px;
+  min-height: 9.6px;
+  max-width: 9.6px;
+  max-height: 9.6px;
   border-radius: 50%;
   display: inline-block;
-  margin-right: 6px;
+  margin-right: 7.2px;
   flex-shrink: 0;
   vertical-align: middle;
 }
@@ -363,19 +363,19 @@ html, body {
 /* Mobile-specific fixes for type dots and menu items */
 @media (max-width: 768px) {
   .type-dot {
-    width: 10px;
-    height: 10px;
-    min-width: 10px;
-    min-height: 10px;
-    max-width: 10px;
-    max-height: 10px;
-    margin-right: 8px;
+    width: 12px;
+    height: 12px;
+    min-width: 12px;
+    min-height: 12px;
+    max-width: 12px;
+    max-height: 12px;
+    margin-right: 9.6px;
     border-radius: 50% !important;
     aspect-ratio: 1 / 1;
   }
   
   .menu-category-item span {
-    font-size: 15px !important;
+    font-size: 16.5px !important;
   }
 }
 
@@ -424,23 +424,23 @@ html, body {
 /* Additional fixes for very small screens */
 @media (max-width: 480px) {
   .type-dot {
-    width: 12px;
-    height: 12px;
-    min-width: 12px;
-    min-height: 12px;
-    max-width: 12px;
-    max-height: 12px;
-    margin-right: 10px;
+    width: 14.4px;
+    height: 14.4px;
+    min-width: 14.4px;
+    min-height: 14.4px;
+    max-width: 14.4px;
+    max-height: 14.4px;
+    margin-right: 12px;
   }
   
   .farm-leaf {
-    width: 14px;
-    height: 14px;
-    min-width: 14px;
-    min-height: 14px;
-    max-width: 14px;
-    max-height: 14px;
-    margin-right: 6px;
+    width: 16.8px;
+    height: 16.8px;
+    min-width: 16.8px;
+    min-height: 16.8px;
+    max-width: 16.8px;
+    max-height: 16.8px;
+    margin-right: 7.2px;
   }
 }
 
@@ -639,14 +639,14 @@ html, body {
 }
 
 .farm-leaf {
-  width: 12px;
-  height: 12px;
-  min-width: 12px;
-  min-height: 12px;
-  max-width: 12px;
-  max-height: 12px;
+  width: 14.4px;
+  height: 14.4px;
+  min-width: 14.4px;
+  min-height: 14.4px;
+  max-width: 14.4px;
+  max-height: 14.4px;
   fill: #536C4A;
-  margin-right: 4px;
+  margin-right: 4.8px;
   flex-shrink: 0;
   vertical-align: middle;
 }
