@@ -161,10 +161,19 @@ export default function PacmanTrail() {
       ctx.fillRect(0, 0, w, h);
       ctx.restore();
 
+      // 1.1) Пробиваем отверстие под телом пакмана, чтобы хвост не просвечивал внутри рта
+      ctx.save();
+      ctx.globalCompositeOperation = 'destination-out';
+      ctx.beginPath();
+      ctx.arc(cx, cy, radius + 1, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+
       // 2) Рисуем новую голову хвоста (рядом с пакманом)
       ctx.save();
       ctx.globalCompositeOperation = 'source-over';
-      ctx.globalAlpha = 0.1; // ещё прозрачнее у рта (~50% от прежнего)
+      // Полностью прозрачная у рта — не рисуем "комок" вовсе
+      ctx.globalAlpha = 0.0;
       ctx.fillStyle = 'white';
       ctx.beginPath();
       ctx.arc(cx, cy, radius, 0, Math.PI * 2);
@@ -172,7 +181,7 @@ export default function PacmanTrail() {
       ctx.restore();
 
       // 3) Усиление средней части хвоста профилем альфы:
-      //    первые и последние 10% полупрозрачны, середина — непрозрачна
+      //    дальний край бледный, середина плотная, у рта — полностью прозрачный
       const trail = trailRef.current;
       const n = trail.length;
       if (n > 1) {
@@ -189,10 +198,13 @@ export default function PacmanTrail() {
           const p = trail[i];
           const t = k * inv; // 0..1 (старый→новый) в пределах окна
           let alpha: number;
-          if (t < 0.1) {
-            alpha = 0.175 * (t / 0.1); // 0 → 0.175 (на 50% прозрачнее у рта)
-          } else if (t > 0.8) {
-            alpha = 0.35 * ((1 - t) / 0.2); // 0.35 → 0 на последних 20%
+          // t: 0 (самый старый хвост) → 1 (у рта пакмана)
+          // Дальний край (старые 20%): плавное появление до 0.35
+          if (t < 0.2) {
+            alpha = 0.35 * (t / 0.2); // 0 → 0.35
+          // Голова (последние 30% рядом с ртом): от 0.0 (у рта) до 1.0 к 70%
+          } else if (t > 0.7) {
+            alpha = Math.max(0, (1 - t) / 0.3); // 0 → 1.0 по мере удаления от рта
           } else {
             alpha = 1.0; // середина полностью непрозрачная
           }
