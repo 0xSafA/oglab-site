@@ -1,3 +1,112 @@
+# Architecture Decision Records (ADR)
+
+## ADR-002: Admin panel for Menu pricing and Design theme
+
+Status: Proposed
+
+Date: 2025-09-19
+
+Context
+
+We need an authenticated admin UI to:
+- edit Menu items/prices directly in a table-like interface
+- optionally adjust design theme (brand colors) used by the site
+- remain compatible with our current stack and deployment model
+
+Current stack
+- Next.js App Router (15.x), TypeScript, React Server/Client components
+- Tailwind CSS for styling
+- Data source for menu: Google Sheets via custom fetchers (`src/lib/google.ts`)
+- Hosting: Next.js build (static prerender of pages with ISR), Nginx in front
+- Auth: none in public site yet
+
+Forces
+- Keep content owners workflow simple (table editing)
+- Minimize operational overhead; reuse Google Sheets as source of truth where possible
+- Preserve static performance for public pages (ISR) while supporting timely updates
+- Security: protect admin behind authentication and restrict access
+
+Options considered
+1) Build admin on top of Google Sheets only (no backend):
+   - Pros: fastest; Sheets already store data
+   - Cons: auth/sharing model of Sheets is separate; editing UI not branded; hard to constrain edits; no theme controls
+
+2) Lightweight admin inside Next.js with Google Sheets read/write API
+   - Pros: single app; keeps Sheets as source-of-truth; custom UI/validation; can add theme controls; compatible with ISR (trigger revalidate)
+   - Cons: need service credentials with write scope; must secure admin routes
+
+3) Migrate data to DB (e.g., SQLite/Postgres) and build full CRUD
+   - Pros: strong control, migrations, versioning
+   - Cons: more infra; diverges from current sheet-driven flow; time-to-value higher
+
+Decision
+
+UPDATE: We will use Supabase (Postgres + Auth) for admin authentication and as the primary data store for menu items. Google Sheets remains optional as an import/export source, but not the source of truth.
+
+Rationale:
+- Unified place for auth and data (roles, RLS, auditing) without standing up our own DB
+- Stable writes/reads and simple revalidation flow for ISR
+- Still can provide import/export with Sheets for convenience
+
+High-level design
+- Routes: `/admin` (protected)
+- Auth: Supabase Auth. Users stored in Supabase; introduce custom role `menu-user` for admins of menu. Client uses Supabase JS with anon key; server uses service role for privileged operations.
+- Permissions: role `admin` only (MVP)
+- Data editing:
+  - Table view привязан к таблицам Supabase (см. схема ниже)
+  - Server Actions с использованием `SUPABASE_SERVICE_ROLE_KEY` выполняют валидированные записи/транзакции
+  - Optimistic UI, дифф превью, валидация типов/цен
+  - После успешной записи — on-demand revalidate для `/menu`
+- Theme editing:
+  - Form for primary/secondary colors
+  - Persist to `src/app/theme.json` equivalent (or `process.env` via env editor is out of scope). MVP: write a small JSON file in `/public/theme.json` and have `globals.css` read CSS variables at build or client-side fetch (client sets `:root` vars). For no rebuild: client-side inject CSS vars from fetched JSON and persist in file via server action.
+- Security:
+  - Admin pages are client components wrapped with session check (NextAuth)
+  - API routes / server actions check session/role
+  - Google service account key remains in env; server-only access
+
+Impact on current site
+- Public pages remain static/ISR. После правок в Supabase вызываем revalidate для `/menu` — обновления за секунды.
+- Добавляется Supabase как управляемый Postgres с Auth; Sheets опционально как импорт/экспорт.
+
+Open questions
+- Hosting constraints for writing to file (theme.json) in read-only containers: If FS is read-only, store theme in Google Sheets (separate tab) and load CSS vars from there.
+- User management: for MVP keep a single admin account via env. Later add a small users sheet.
+
+Plan (MVP)
+1) Интегрировать Supabase Auth; доступ к `/admin` только авторизованным пользователям с ролью `menu-user`.
+2) Build `/admin/menu` page: fetch rows from Supabase, editable grid (per cell), validation, save via server action to Supabase, then revalidate.
+3) Build `/admin/theme` page: preview + save primary/secondary; persist to theme sheet or JSON; apply on client via CSS vars.
+4) Hardening: rate limit admin APIs, audit log basic (who changed what) appended to a sheet tab.
+
+Logo upload (SVG)
+- Storage: UploadThing
+- Auth: server-side use of `UPLOADTHING_TOKEN` from environment; calls only from authenticated admin session
+- UI: in `/admin/theme` добавить поле загрузки SVG; после успешного аплоада сохраняем URL в theme‑storage (theme sheet/json)
+- Validation: принимать только `image/svg+xml`, ограничить размер (например, ≤ 200KB), прогонять basic sanitization (strip script/foreignObject)
+- Caching/CDN: использовать предоставляемый UploadThing CDN URL; в публичном UI подменять `src` логотипа на новый URL; для ISR страниц — ревалидировать
+- Rollback: хранить предыдущее значение URL в audit (лист) для отката
+
+Supabase integration
+- Env vars:
+  - `NEXT_PUBLIC_SUPABASE_URL`
+  - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+  - `SUPABASE_SERVICE_ROLE_KEY` (server-only)
+- Auth & Roles:
+  - Используем Supabase Auth; для админов вводим custom role `menu-user` (через claims/metadata)
+  - Доступ к admin routes проверяется на сервере (user has `menu-user`)
+- Schema (минимум):
+  - `menu_items` (id, category, name, type, thc, cbg, price_1g, price_5g, price_20g, our, updated_at, updated_by)
+  - `menu_layout` (id, column1 text[], column2 text[], column3 text[])
+  - `theme` (id, primary, secondary, logo_url)
+- RLS:
+  - Public (anon) — read-only select на `menu_items`, `menu_layout`, `theme`
+  - `menu-user` — insert/update/delete на таблицах меню/темы
+  - Service role — для серверных batch‑операций
+
+Status tracking
+- Target: land behind feature flag `ENABLE_ADMIN=true`.
+
 # OG Lab Site - Техническая спецификация
 
 ## 🛠️ Технический стек
