@@ -21,6 +21,8 @@ export default function PacmanTrail() {
   
   // Оптимизация: кэшируем вычисления
   const frameCountRef = useRef(0);
+  const lastDrawTimeRef = useRef(0);
+  const minFrameMsRef = useRef(22); // ~45 FPS cap for drawing trail (movement stays smooth)
   const lastTrailCenterRef = useRef({ cx: 68 + 24, cy: 68 + 24 });
 
   // Оптимизированные event handlers с useCallback
@@ -76,7 +78,9 @@ export default function PacmanTrail() {
 
     const w = window.innerWidth;
     const h = window.innerHeight;
-    const dpr = Math.max(1, Math.floor(window.devicePixelRatio || 1));
+    const rawDpr = window.devicePixelRatio || 1;
+    // Cap DPR on large screens/TVs to reduce fill cost
+    const dpr = (w >= 1200) ? 1 : Math.min(2, Math.max(1, Math.floor(rawDpr)));
 
     // Set canvas size with HiDPI support
     canvas.width = w * dpr;
@@ -202,9 +206,13 @@ export default function PacmanTrail() {
           // Дальний край (старые 20%): плавное появление до 0.35
           if (t < 0.2) {
             alpha = 0.35 * (t / 0.2); // 0 → 0.35
-          // Голова (последние 30% рядом с ртом): от 0.0 (у рта) до 1.0 к 70%
+          // Голова: последние 20% всегда 95% прозрачные (alpha 0.05)
+          } else if (t > 0.8) {
+            alpha = 0.05;
+          // Переходная зона 0.7–0.8: линейно от 1.0 к 0.05
           } else if (t > 0.7) {
-            alpha = Math.max(0, (1 - t) / 0.3); // 0 → 1.0 по мере удаления от рта
+            const k = (t - 0.7) / 0.1; // 0..1
+            alpha = 1 - 0.95 * k; // 1.0 → 0.05
           } else {
             alpha = 1.0; // середина полностью непрозрачная
           }
@@ -314,8 +322,11 @@ export default function PacmanTrail() {
         }
       }
 
-      // Draw trail on canvas using fade-layer
-      drawTrail(x + pacmanRadius, y + pacmanRadius);
+      // Draw trail on canvas using fade-layer with lightweight FPS cap
+      if (currentTime - lastDrawTimeRef.current >= minFrameMsRef.current) {
+        drawTrail(x + pacmanRadius, y + pacmanRadius);
+        lastDrawTimeRef.current = currentTime;
+      }
       
       animationFrame = requestAnimationFrame(animate);
     };

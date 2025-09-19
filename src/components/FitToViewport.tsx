@@ -19,7 +19,6 @@ export default function FitToViewport({ targetId, minScale = 0.85, bottomSafePx 
     const apply = () => {
       // Reset to natural to measure correctly
       el.style.transform = 'none';
-      el.style.width = '';
       el.style.margin = '0 auto';
 
       // Disable scaling on phones to avoid layout issues
@@ -28,28 +27,31 @@ export default function FitToViewport({ targetId, minScale = 0.85, bottomSafePx 
         return;
       }
 
-      const avail = window.innerHeight - bottomSafePx;
+      // Use visual viewport if available (mobile/tablets with OS UI)
+      const vh = (window.visualViewport?.height ?? window.innerHeight);
+      const avail = vh - bottomSafePx;
       const total = el.scrollHeight;
       const scale = Math.max(minScale, Math.min(1, avail / total));
 
       if (scale < 1) {
         el.style.transform = `scale(${scale})`;
         el.style.transformOrigin = 'top center';
-        // Compensate width shrink so it remains centered and fills horizontally
-        el.style.width = `${100 / scale}%`;
       } else {
         el.style.transform = 'none';
-        el.style.width = '';
       }
     };
 
     apply();
     const onResize = () => apply();
     window.addEventListener('resize', onResize);
-    const id = window.setInterval(apply, 1000); // guard for TV browsers with delayed fonts/layout
+
+    // React to content size changes without polling
+    const ro = new ResizeObserver(() => apply());
+    ro.observe(el);
+
     return () => {
       window.removeEventListener('resize', onResize);
-      window.clearInterval(id);
+      ro.disconnect();
     };
   }, [targetId, minScale, bottomSafePx]);
 

@@ -23,7 +23,14 @@ html, body {
   --vp-pad-x: clamp(0.75rem, 2vw, 1.25rem);
   --vp-pad-y: clamp(0.25rem, 0.8vh, 0.6rem);
   min-height: 100vh;
-  padding: var(--vp-pad-y) var(--vp-pad-x);
+  padding: var(--vp-pad-y) max(var(--vp-pad-x), env(safe-area-inset-left)) var(--vp-pad-y) max(var(--vp-pad-x), env(safe-area-inset-right));
+}
+
+/* Large TV screens: remove horizontal padding to avoid green gutters */
+@media (min-width: 1600px) {
+  .viewport-page {
+    --vp-pad-x: 0px;
+  }
 }
 
 .viewport-container {

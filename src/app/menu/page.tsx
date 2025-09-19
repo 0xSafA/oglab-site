@@ -113,7 +113,7 @@ export default async function MenuPage() {
         <BreathingController />
         
         {/* TV fit helper (scale down slightly if needed) */}
-        <FitToViewport targetId="menu-viewport-container" minScale={0.82} bottomSafePx={24} />
+        <FitToViewport targetId="menu-viewport-container" minScale={0.86} bottomSafePx={32} />
 
         {/* Cannabis Pot System */}
         <PotController />
