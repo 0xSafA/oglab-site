@@ -20,7 +20,8 @@ html, body {
   --menu-gap: clamp(0.5rem, 1.5vw, 1.5rem);
   --menu-gap-small: clamp(0.25rem, 1vw, 1rem);
   /* make vertical padding smaller than horizontal */
-  --vp-pad-x: clamp(0.75rem, 2vw, 1.25rem);
+  /* reduce side padding by ~15% */
+  --vp-pad-x: clamp(0.64rem, 1.7vw, 1.06rem);
   --vp-pad-y: clamp(0.25rem, 0.8vh, 0.6rem);
   min-height: 100vh;
   padding: var(--vp-pad-y) max(var(--vp-pad-x), env(safe-area-inset-left)) var(--vp-pad-y) max(var(--vp-pad-x), env(safe-area-inset-right));
@@ -29,7 +30,7 @@ html, body {
 /* Large TV screens: remove horizontal padding to avoid green gutters */
 @media (min-width: 1600px) {
   .viewport-page {
-    --vp-pad-x: 0px;
+    --vp-pad-x: clamp(0rem, 1vw, 12px);
   }
 }
 
@@ -41,8 +42,10 @@ html, body {
   overflow: visible;
   display: flex;
   flex-direction: column;
-  /* 50% vertical padding vs previous, keep horizontal the same */
-  padding: clamp(0.25rem, 1vw, 1rem) clamp(0.5rem, 2vw, 2rem);
+  /* reduce horizontal padding by ~15% */
+  padding: clamp(0.25rem, 1vw, 1rem) clamp(0.425rem, 1.7vw, 1.7rem);
+  /* reduce top white space by additional ~20% */
+  padding-top: clamp(0.18rem, 0.72vw, 0.72rem);
   /* Slightly rounded outer edges, close to card radius */
   border-radius: clamp(0.75rem, 1vw, 1rem);
   /* center only horizontally */
@@ -84,14 +87,16 @@ html, body {
 .viewport-menu .menu-category-header {
   /* ~15% smaller total height: reduce font and vertical padding */
   font-size: clamp(0.54rem, 1.071vw, 0.84rem);
-  padding: clamp(0.255rem, 0.935vw, 0.72rem) clamp(0.6rem, 1.7vw, 1.1rem);
+  /* reduce horizontal padding ~5% to make cards visually wider */
+  padding: clamp(0.255rem, 0.935vw, 0.72rem) clamp(0.57rem, 1.615vw, 1.045rem);
   line-height: 1.05;
 }
 
 .viewport-menu .menu-category-item {
   /* keep font; tighten line-height further for TV fit (~20%) */
   font-size: clamp(0.77rem, 1.43vw, 1.045rem);
-  padding: clamp(0.3rem, 0.9vw, 0.6rem) clamp(0.6rem, 1.6vw, 1.1rem);
+  /* reduce horizontal padding ~5% to make cards visually wider */
+  padding: clamp(0.3rem, 0.9vw, 0.6rem) clamp(0.57rem, 1.52vw, 1.045rem);
   line-height: 0.88;
 }
 
@@ -131,7 +136,8 @@ html, body {
 /* Viewport footer */
 .viewport-footer {
   flex-shrink: 0;
-  margin-top: var(--menu-gap); /* same as between cards */
+  /* tighter spacing above footer: ~40% less than default */
+  margin-top: calc(var(--menu-gap-small) * 0.6);
   padding: clamp(0.6rem, 1.6vw, 1.1rem);
   font-size: clamp(0.7rem, 1.4vw, 1rem);
   border-radius: clamp(0.5rem, 1vw, 1rem);
@@ -148,7 +154,13 @@ html, body {
 }
 
 .viewport-footer .grid {
-  gap: clamp(0.5rem, 1vw, 1rem);
+  /* further reduce spacing to avoid wrapping in 3rd column */
+  gap: clamp(0.25rem, 0.6vw, 0.6rem);
+}
+
+/* utility to prevent wrapping for short labels (e.g., "Batches from 5g") */
+.viewport-footer .no-wrap {
+  white-space: nowrap;
 }
 
 /* Адаптивный режим - меню подстраивается под контент */

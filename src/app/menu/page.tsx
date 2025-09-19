@@ -7,7 +7,6 @@ import AutoRefresh from '@/components/AutoRefresh';
 import BreathingController from '@/components/BreathingController';
 import PotController from '@/components/PotController';
 import PotManager from '@/components/PotManager';
-import FitToViewport from '@/components/FitToViewport';
 
 
 // Type colors mapping
@@ -72,7 +71,7 @@ export default async function MenuPage() {
                   </div>
                   
                   {/* Column 3 - Farm-grown and Batches info */}
-                  <div className="space-y-1 md:space-y-0.5 lg:space-y-0.5">
+                  <div className="space-y-1 md:space-y-0.5 lg:space-y-0.5 no-wrap">
                     <div className="flex items-center gap-2 md:gap-1 lg:gap-1">
                       <svg className="farm-leaf" viewBox="0 0 24 24" fill="#536C4A">
                         <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
@@ -112,9 +111,6 @@ export default async function MenuPage() {
         {/* Breathing Animation Controller */}
         <BreathingController />
         
-        {/* TV fit helper (scale down slightly if needed) */}
-        <FitToViewport targetId="menu-viewport-container" minScale={0.86} bottomSafePx={32} />
-
         {/* Cannabis Pot System */}
         <PotController />
         <PotManager />
