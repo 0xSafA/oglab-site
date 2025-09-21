@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { fetchMenuWithOptions, type MenuRow } from '@/lib/google';
+import { fetchMenuWithOptions, type MenuRow } from '@/lib/supabase-data';
+import { fetchTheme } from '@/lib/supabase-data';
 import { groupRows, columnsPerCategory } from '@/lib/menu-helpers';
 import PacmanTrail from '@/components/PacmanTrail';
 import AutoRefresh from '@/components/AutoRefresh';
@@ -10,36 +11,65 @@ import PotManager from '@/components/PotManager';
 
 
 // Type colors mapping
-const typeColor = {
-  hybrid: '#4f7bff',
-  hybride: '#4f7bff',
-  sativa: '#ff6633',
-  indica: '#38b24f',
-} as const;
+const typeColor = (theme?: any) => ({
+  hybrid: theme?.legend_hybrid_color || '#4f7bff',
+  hybride: theme?.legend_hybrid_color || '#4f7bff',
+  sativa: theme?.legend_sativa_color || '#ff6633',
+  indica: theme?.legend_indica_color || '#38b24f',
+} as const);
 
-type KnownType = keyof typeof typeColor;
+type KnownType = 'hybrid' | 'sativa' | 'indica';
 
 const getTypeKey = (row: MenuRow): KnownType | null => {
   const raw = row.Type?.toLowerCase();
   if (!raw) return null;
   if (raw === 'hybride') return 'hybrid';
-  return (Object.keys(typeColor) as KnownType[]).includes(raw as KnownType) ? (raw as KnownType) : null;
+  return (['hybrid','sativa','indica'] as KnownType[]).includes(raw as KnownType) ? (raw as KnownType) : null;
 };
 
 export default async function MenuPage() {
-  const { rows, layout } = await fetchMenuWithOptions();
+  const [{ rows, layout }, theme] = await Promise.all([
+    fetchMenuWithOptions(),
+    fetchTheme()
+  ]);
   const grouped = groupRows(rows);
 
+  // Use theme colors or fallback to defaults
+  const primaryColor = theme?.primary_color || '#536C4A';
+  const secondaryColor = theme?.secondary_color || '#B0BF93';
+  const logoUrl = theme?.logo_url || '/assets/images/oglab_logo_round.svg';
+  const itemTextColor = theme?.item_text_color || '#1f2937'; // gray-800
+  const categoryTextColor = theme?.category_text_color || '#ffffff';
+  const cardBgColor = theme?.card_bg_color || '#ffffff';
+  const colors = typeColor(theme);
+
+  // Build dynamic tier labels from theme (with fallbacks)
+  const tierLabels: Record<string, string> = {
+    Price_1pc: theme?.tier0_label || '1PC',
+    Price_1g: theme?.tier1_label || '1G',
+    Price_5g: theme?.tier2_label || '5G+',
+    Price_20g: theme?.tier3_label || '20G+',
+  };
+
   return (
-    <div className="viewport-page bg-gradient-to-br from-[#536C4A] to-[#B0BF93]">
-      <div id="menu-viewport-container" className="viewport-container viewport-menu bg-white/95 shadow-2xl border-2 border-[#B0BF93]/30">
+    <div 
+      className="viewport-page bg-gradient-to-br"
+      style={{ 
+        background: `linear-gradient(to bottom right, ${primaryColor}, ${secondaryColor})` 
+      }}
+    >
+      <div
+        id="menu-viewport-container"
+        className="viewport-container viewport-menu shadow-2xl border-2 border-[#B0BF93]/30"
+        style={{ ['--menu-card-bg' as any]: cardBgColor }}
+      >
           
           {/* Menu Flex Layout */}
           <section className="viewport-menu-layout">
             {/* Column 1 */}
             <div className="viewport-column">
               {layout.column1.map((category) => (
-                <CategoryBlock key={category} name={category} rows={grouped[category] ?? []} />
+                <CategoryBlock key={category} name={category} rows={grouped[category] ?? []} primaryColor={primaryColor} tierLabels={tierLabels} itemTextColor={itemTextColor} categoryTextColor={categoryTextColor} cardBgColor={cardBgColor} typeColors={colors} />
               ))}
 
               {/* Legend footer - compact and responsive, flows with column 1 */}
@@ -50,7 +80,7 @@ export default async function MenuPage() {
                     <div className="relative">
                       <Link href="/" aria-label="Go to home">
                         <Image
-                          src="/assets/images/oglab_logo_round.svg"
+                          src={logoUrl}
                           alt="OG Lab Logo"
                           width={32}
                           height={32}
@@ -58,7 +88,10 @@ export default async function MenuPage() {
                         />
                       </Link>
                     </div>
-                    <span className="font-bold tracking-wide uppercase text-[#536C4A] text-xs md:text-xs lg:text-xs">
+                    <span 
+                      className="font-bold tracking-wide uppercase text-xs md:text-xs lg:text-xs"
+                      style={{ color: primaryColor }}
+                    >
                       Menu
                     </span>
                   </div>
@@ -79,7 +112,7 @@ export default async function MenuPage() {
                       <span className="text-gray-700 text-sm md:text-xs lg:text-xs">Farm-grown</span>
                     </div>
                     <div>
-                      <span className="text-gray-700 text-sm md:text-xs lg:text-xs">Batches from <span className="text-[#536C4A] marker-dashed font-medium">5g</span></span>
+                      <span className="text-gray-700 text-sm md:text-xs lg:text-xs">Batches from <span className="marker-dashed font-medium" style={{ color: primaryColor }}>5g</span></span>
                     </div>
                   </div>
                 </div>
@@ -89,14 +122,14 @@ export default async function MenuPage() {
             {/* Column 2 */}
             <div className="viewport-column">
               {layout.column2.map((category) => (
-                <CategoryBlock key={category} name={category} rows={grouped[category] ?? []} />
+                <CategoryBlock key={category} name={category} rows={grouped[category] ?? []} primaryColor={primaryColor} tierLabels={tierLabels} itemTextColor={itemTextColor} categoryTextColor={categoryTextColor} cardBgColor={cardBgColor} typeColors={colors} />
               ))}
             </div>
 
             {/* Column 3 */}
             <div className="viewport-column">
               {layout.column3.map((category) => (
-                <CategoryBlock key={category} name={category} rows={grouped[category] ?? []} />
+                <CategoryBlock key={category} name={category} rows={grouped[category] ?? []} primaryColor={primaryColor} tierLabels={tierLabels} itemTextColor={itemTextColor} categoryTextColor={categoryTextColor} cardBgColor={cardBgColor} typeColors={colors} />
               ))}
             </div>
           </section>
@@ -120,7 +153,7 @@ export default async function MenuPage() {
 }
 
 // Category Block Component
-function CategoryBlock({ name, rows }: { name: string; rows: MenuRow[] }) {
+function CategoryBlock({ name, rows, primaryColor, tierLabels, itemTextColor, categoryTextColor, cardBgColor, typeColors }: { name: string; rows: MenuRow[]; primaryColor?: string; tierLabels: Record<string, string>; itemTextColor: string; categoryTextColor: string; cardBgColor: string; typeColors: Record<string,string> }) {
   const conf = columnsPerCategory[name] ?? 
     (name.toUpperCase().includes('HASH')
       ? { label: '', keys: ['Price_1g', 'Price_5g'] }
@@ -130,14 +163,17 @@ function CategoryBlock({ name, rows }: { name: string; rows: MenuRow[] }) {
   const priceKeys = conf.keys.filter((k) => k !== 'THC' && k !== 'CBG');
 
   return (
-    <div className="menu-category bg-white rounded-xl shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300">
+    <div className="menu-category rounded-xl shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300" style={{ backgroundColor: cardBgColor }}>
       {/* Category Header */}
-      <div className="menu-category-header bg-[#536C4A] text-white font-bold px-2 py-1 flex items-center justify-between text-xs uppercase tracking-wide rounded-t-xl">
+      <div 
+        className="menu-category-header font-bold px-2 py-1 flex items-center justify-between text-xs uppercase tracking-wide rounded-t-xl"
+        style={{ backgroundColor: primaryColor || '#536C4A', color: categoryTextColor }}
+      >
         <span className="flex-1">{name}</span>
         {showTHC && <span className="w-10 text-right text-xs">THC</span>}
         {priceKeys.map((k) => (
           <span key={k} className="w-10 text-right text-xs">
-            {headerLabel(k)}
+            {headerLabel(k, tierLabels)}
           </span>
         ))}
       </div>
@@ -149,8 +185,8 @@ function CategoryBlock({ name, rows }: { name: string; rows: MenuRow[] }) {
           return (
             <div key={row.Name} className="menu-category-item flex items-center px-2 py-1 hover:bg-gray-50 transition-colors">
               <div className="flex-1 flex items-center gap-1.5 min-w-0">
-                {(typeKey || row.Our) && <CombinedIndicator typeKey={typeKey} isOur={!!row.Our} />}
-                <span className="item-name font-medium text-gray-800">{row.Name}</span>
+                {(typeKey || row.Our) && <CombinedIndicator typeKey={typeKey} isOur={!!row.Our} colorMap={typeColors} />}
+                <span className="item-name font-medium" style={{ color: itemTextColor }}>{row.Name}</span>
               </div>
               
               {showTHC && (
@@ -161,7 +197,7 @@ function CategoryBlock({ name, rows }: { name: string; rows: MenuRow[] }) {
               
               {priceKeys.map((k) => (
                 <div key={k} className="item-price w-10 text-right text-gray-700">
-                  {row[k] ? `${row[k]}` : '-'}
+                  {row[k as keyof MenuRow] ? `${row[k as keyof MenuRow]}` : ''}
                 </div>
               ))}
             </div>
@@ -173,13 +209,13 @@ function CategoryBlock({ name, rows }: { name: string; rows: MenuRow[] }) {
   }
 
 // Combined Indicator Component
-function CombinedIndicator({ typeKey, isOur }: { typeKey: KnownType | null; isOur?: boolean }) {
+function CombinedIndicator({ typeKey, isOur, colorMap }: { typeKey: KnownType | null; isOur?: boolean; colorMap: Record<string,string> }) {
   const hasCheckmark = !!isOur;
-  const colorClass = typeKey ? `dot-${typeKey}` : 'dot-default';
+  const style = typeKey ? { backgroundColor: colorMap[typeKey] } : {};
 
   return (
     <div className="relative flex items-center justify-center w-3 h-3">
-      <div className={`w-3 h-3 rounded-full ${colorClass}`} />
+      <div className="w-3 h-3 rounded-full" style={style} />
       {hasCheckmark && (
         <svg
           className="absolute w-2 h-2 text-white"
@@ -208,12 +244,21 @@ function LegendDot({ type, label }: { type: KnownType; label: string }) {
 }
 
 // Header label helper
-const headerLabel = (k: string) => ({
-  Price_1pc: '1PC',
-  Price_1g: '1G+',
-  Price_5g: '5G+',
-  Price_20g: '20G+',
-}[k] ?? k);
+const headerLabel = (k: string, labels: Record<string, string>) => {
+  const map: Record<string, string | undefined> = {
+    Price_1pc: labels.Price_1pc,
+    Price_1g: labels.Price_1g,
+    Price_5g: labels.Price_5g,
+    Price_20g: labels.Price_20g,
+  }
+  const fallback: Record<string, string> = {
+    Price_1pc: '1PC',
+    Price_1g: '1G',
+    Price_5g: '5G+',
+    Price_20g: '20G+',
+  }
+  return map[k] || fallback[k] || k
+}
 
 // Enable ISR (Incremental Static Regeneration)
 export const revalidate = 900; // Revalidate every 15 minutes

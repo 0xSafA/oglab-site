@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Clear Supabase Cookies</title>
+</head>
+<body>
+    <h1>Clearing Supabase Cookies...</h1>
+    <div id="status">Clearing cookies...</div>
+    
+    <script>
+        // Clear all cookies for localhost:3001
+        function clearAllCookies() {
+            const cookies = document.cookie.split(";");
+            let cleared = 0;
+            
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i];
+                const eqPos = cookie.indexOf("=");
+                const name = eqPos > -1 ? cookie.substr(0, eqPos).trim() : cookie.trim();
+                
+                // Clear cookie for different paths
+                document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/";
+                document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;domain=localhost";
+                document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/auth";
+                cleared++;
+            }
+            
+            // Clear localStorage and sessionStorage
+            localStorage.clear();
+            sessionStorage.clear();
+            
+            document.getElementById('status').innerHTML = `
+                <p>✅ Cleared ${cleared} cookies</p>
+                <p>✅ Cleared localStorage</p>
+                <p>✅ Cleared sessionStorage</p>
+                <p><strong>Now go to: <a href="http://localhost:3001/admin">http://localhost:3001/admin</a></strong></p>
+            `;
+        }
+        
+        // Run immediately
+        clearAllCookies();
+    </script>
+</body>
+</html>

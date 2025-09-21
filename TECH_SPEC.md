@@ -2,9 +2,10 @@
 
 ## ADR-002: Admin panel for Menu pricing and Design theme
 
-Status: Proposed
+Status: Implemented
 
 Date: 2025-09-19
+Updated: 2025-09-20
 
 Context
 
@@ -12,100 +13,116 @@ We need an authenticated admin UI to:
 - edit Menu items/prices directly in a table-like interface
 - optionally adjust design theme (brand colors) used by the site
 - remain compatible with our current stack and deployment model
+- integrate with existing OGPx infrastructure to avoid additional costs
 
 Current stack
 - Next.js App Router (15.x), TypeScript, React Server/Client components
 - Tailwind CSS for styling
-- Data source for menu: Google Sheets via custom fetchers (`src/lib/google.ts`)
+- Data source for menu: migrating from Google Sheets to Supabase (OGPx database)
 - Hosting: Next.js build (static prerender of pages with ISR), Nginx in front
-- Auth: none in public site yet
+- Auth: existing OGPx Supabase Auth with role-based access control
 
 Forces
 - Keep content owners workflow simple (table editing)
-- Minimize operational overhead; reuse Google Sheets as source of truth where possible
+- Minimize operational overhead; reuse existing OGPx infrastructure
 - Preserve static performance for public pages (ISR) while supporting timely updates
 - Security: protect admin behind authentication and restrict access
+- Cost efficiency: avoid additional Supabase subscriptions by using existing OGPx database
 
 Options considered
 1) Build admin on top of Google Sheets only (no backend):
    - Pros: fastest; Sheets already store data
    - Cons: auth/sharing model of Sheets is separate; editing UI not branded; hard to constrain edits; no theme controls
 
-2) Lightweight admin inside Next.js with Google Sheets read/write API
-   - Pros: single app; keeps Sheets as source-of-truth; custom UI/validation; can add theme controls; compatible with ISR (trigger revalidate)
-   - Cons: need service credentials with write scope; must secure admin routes
+2) Create separate Supabase project for menu admin:
+   - Pros: isolated environment; full control over schema
+   - Cons: additional monthly costs; separate user management; data duplication
 
-3) Migrate data to DB (e.g., SQLite/Postgres) and build full CRUD
-   - Pros: strong control, migrations, versioning
-   - Cons: more infra; diverges from current sheet-driven flow; time-to-value higher
+3) Integrate with existing OGPx Supabase database:
+   - Pros: cost-effective; unified user management; existing audit system; proven security
+   - Cons: need to extend existing schema; coordinate with OGPx development
 
 Decision
 
-UPDATE: We will use Supabase (Postgres + Auth) for admin authentication and as the primary data store for menu items. Google Sheets remains optional as an import/export source, but not the source of truth.
+We will integrate with the existing OGPx Supabase database, extending it with menu management tables and using the existing authentication system with a new `weedmenu` role.
 
 Rationale:
-- Unified place for auth and data (roles, RLS, auditing) without standing up our own DB
-- Stable writes/reads and simple revalidation flow for ISR
-- Still can provide import/export with Sheets for convenience
+- Cost-effective: no additional Supabase subscription needed
+- Unified user management: leverage existing OGPx user base and role system
+- Proven security: use established authentication and RLS policies
+- Existing audit system: integrate with OGPx audit_logs table
+- Operational efficiency: single database to maintain
 
 High-level design
 - Routes: `/admin` (protected)
-- Auth: Supabase Auth. Users stored in Supabase; introduce custom role `menu-user` for admins of menu. Client uses Supabase JS with anon key; server uses service role for privileged operations.
-- Permissions: role `admin` only (MVP)
+- Auth: OGPx Supabase Auth with existing user management. New role `weedmenu` added for menu administrators. Client uses Supabase JS with anon key; server uses service role for privileged operations.
+- Permissions: roles `weedmenu` and `admin` have access to menu management
 - Data editing:
-  - Table view привязан к таблицам Supabase (см. схема ниже)
-  - Server Actions с использованием `SUPABASE_SERVICE_ROLE_KEY` выполняют валидированные записи/транзакции
-  - Optimistic UI, дифф превью, валидация типов/цен
-  - После успешной записи — on-demand revalidate для `/menu`
+  - Table view connected to new Supabase tables (menu_items, menu_layout, theme)
+  - Server Actions using `SUPABASE_SERVICE_ROLE_KEY` for validated writes/transactions
+  - Optimistic UI, validation of types/prices
+  - After successful write — on-demand revalidate for `/menu`
 - Theme editing:
-  - Form for primary/secondary colors
-  - Persist to `src/app/theme.json` equivalent (or `process.env` via env editor is out of scope). MVP: write a small JSON file in `/public/theme.json` and have `globals.css` read CSS variables at build or client-side fetch (client sets `:root` vars). For no rebuild: client-side inject CSS vars from fetched JSON and persist in file via server action.
+  - Form for primary/secondary colors and logo upload
+  - Persist to `theme` table in Supabase
+  - Dynamic CSS variables applied to public pages
 - Security:
-  - Admin pages are client components wrapped with session check (NextAuth)
-  - API routes / server actions check session/role
-  - Google service account key remains in env; server-only access
+  - Admin pages protected by middleware checking `weedmenu` or `admin` role
+  - API routes / server actions verify user role via profiles table
+  - Integration with existing OGPx audit system
 
 Impact on current site
-- Public pages remain static/ISR. После правок в Supabase вызываем revalidate для `/menu` — обновления за секунды.
-- Добавляется Supabase как управляемый Postgres с Auth; Sheets опционально как импорт/экспорт.
+- Public pages remain static/ISR. After changes in Supabase, trigger revalidate for `/menu` — updates within seconds.
+- Extends existing OGPx Supabase database with menu-specific tables
+- Google Sheets remains available for data migration/import only
 
-Open questions
-- Hosting constraints for writing to file (theme.json) in read-only containers: If FS is read-only, store theme in Google Sheets (separate tab) and load CSS vars from there.
-- User management: for MVP keep a single admin account via env. Later add a small users sheet.
+Integration with OGPx
+- Uses existing OGPx Supabase project (same URL, keys, users)
+- Extends existing `profiles.role` constraint to include `weedmenu`
+- Integrates with existing `audit_logs` table for change tracking
+- Leverages existing RLS policies and security model
 
-Plan (MVP)
-1) Интегрировать Supabase Auth; доступ к `/admin` только авторизованным пользователям с ролью `menu-user`.
-2) Build `/admin/menu` page: fetch rows from Supabase, editable grid (per cell), validation, save via server action to Supabase, then revalidate.
-3) Build `/admin/theme` page: preview + save primary/secondary; persist to theme sheet or JSON; apply on client via CSS vars.
-4) Hardening: rate limit admin APIs, audit log basic (who changed what) appended to a sheet tab.
+Plan (MVP) - COMPLETED
+1) ✅ Extend OGPx database with menu tables; access to `/admin` only for users with `weedmenu` or `admin` role.
+2) ✅ Build `/admin/menu` page: fetch rows from Supabase, editable grid, validation, save via server action, then revalidate.
+3) ✅ Build `/admin/theme` page: preview + save colors/logo; persist to theme table; apply dynamically on public pages.
+4) ✅ Security: middleware protection, RLS policies, integration with existing OGPx audit system.
 
-Logo upload (SVG)
-- Storage: UploadThing
-- Auth: server-side use of `UPLOADTHING_TOKEN` from environment; calls only from authenticated admin session
-- UI: in `/admin/theme` добавить поле загрузки SVG; после успешного аплоада сохраняем URL в theme‑storage (theme sheet/json)
-- Validation: принимать только `image/svg+xml`, ограничить размер (например, ≤ 200KB), прогонять basic sanitization (strip script/foreignObject)
-- Caching/CDN: использовать предоставляемый UploadThing CDN URL; в публичном UI подменять `src` логотипа на новый URL; для ISR страниц — ревалидировать
-- Rollback: хранить предыдущее значение URL в audit (лист) для отката
+Logo upload (SVG) - IMPLEMENTED
+- Storage: UploadThing CDN
+- Auth: server-side validation; calls only from authenticated `weedmenu`/`admin` sessions
+- UI: integrated in `/admin/theme` with drag-and-drop upload
+- Validation: accepts only `image/svg+xml`, max 200KB, basic sanitization
+- Caching/CDN: UploadThing CDN URL stored in theme table; applied dynamically on public pages
+- Rollback: previous URLs tracked in OGPx audit_logs for rollback capability
 
-Supabase integration
-- Env vars:
-  - `NEXT_PUBLIC_SUPABASE_URL`
-  - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-  - `SUPABASE_SERVICE_ROLE_KEY` (server-only)
+OGPx Database Integration - IMPLEMENTED
+- Env vars (from existing OGPx project):
+  - `NEXT_PUBLIC_SUPABASE_URL` (OGPx project URL)
+  - `NEXT_PUBLIC_SUPABASE_ANON_KEY` (OGPx anon key)
+  - `SUPABASE_SERVICE_ROLE_KEY` (OGPx service role key)
 - Auth & Roles:
-  - Используем Supabase Auth; для админов вводим custom role `menu-user` (через claims/metadata)
-  - Доступ к admin routes проверяется на сервере (user has `menu-user`)
-- Schema (минимум):
+  - Uses existing OGPx Supabase Auth and profiles table
+  - Extended `profiles.role` constraint to include `weedmenu` role
+  - Access to admin routes checked via existing profiles table
+- Schema additions to OGPx database:
   - `menu_items` (id, category, name, type, thc, cbg, price_1g, price_5g, price_20g, our, updated_at, updated_by)
   - `menu_layout` (id, column1 text[], column2 text[], column3 text[])
-  - `theme` (id, primary, secondary, logo_url)
-- RLS:
-  - Public (anon) — read-only select на `menu_items`, `menu_layout`, `theme`
-  - `menu-user` — insert/update/delete на таблицах меню/темы
-  - Service role — для серверных batch‑операций
+  - `theme` (id, primary_color, secondary_color, logo_url)
+- RLS Policies:
+  - Public (anon) — read-only select on menu tables
+  - `weedmenu` and `admin` roles — full CRUD on menu tables
+  - Service role — for server-side batch operations
+- Audit Integration:
+  - All menu changes logged to existing `audit_logs` table
+  - Maintains consistency with OGPx audit trail
 
-Status tracking
-- Target: land behind feature flag `ENABLE_ADMIN=true`.
+Status tracking - COMPLETED
+- ✅ Feature implemented and ready for production
+- ✅ Integration with OGPx database completed
+- ✅ Role-based access control with `weedmenu` role
+- ✅ All security measures implemented
+- Target: deploy with feature flag `ENABLE_ADMIN=true`
 
 # OG Lab Site - Техническая спецификация
 
@@ -119,9 +136,10 @@ Status tracking
 - **PostCSS 8.5.6** - CSS процессор
 
 ### Backend & Data
-- **Google Sheets API** - источник данных для меню
-- **googleapis 159.0.0** - официальная библиотека Google API
-- **ISR (Incremental Static Regeneration)** - автообновление данных каждые 15 минут
+- **OGPx Supabase Database** - основной источник данных для меню (Postgres)
+- **Supabase Client 2.x** - клиент для работы с базой данных и аутентификацией
+- **Google Sheets API** - опциональный источник для миграции данных (legacy)
+- **ISR (Incremental Static Regeneration)** - автообновление данных + on-demand revalidation
 
 ### Deployment & Infrastructure
 - **PM2** - процесс-менеджер для продакшн
@@ -132,6 +150,10 @@ Status tracking
 - **ESLint 9** - линтер кода
 - **Autoprefixer** - автоматические CSS префиксы
 
+### Admin Panel & File Upload
+- **UploadThing** - сервис для загрузки SVG логотипов
+- **Role-based Access Control** - интеграция с ролевой системой OGPx
+
 ## 📁 Структура проекта
 
 ```
@@ -140,18 +162,39 @@ oglab-site/
 │   ├── app/                    # Next.js App Router
 │   │   ├── page.tsx           # Главная страница
 │   │   ├── menu/page.tsx      # Страница меню
+│   │   ├── admin/             # Админ панель
+│   │   │   ├── layout.tsx     # Layout для админки
+│   │   │   ├── page.tsx       # Dashboard
+│   │   │   ├── menu/page.tsx  # Управление меню
+│   │   │   └── theme/page.tsx # Управление темой
+│   │   ├── auth/              # Страницы аутентификации
+│   │   │   ├── login/page.tsx # Страница входа
+│   │   │   └── unauthorized/page.tsx # Ошибка доступа
+│   │   ├── api/               # API роуты
+│   │   │   ├── revalidate/    # On-demand revalidation
+│   │   │   ├── migrate/       # Миграция данных
+│   │   │   └── uploadthing/   # Загрузка файлов
 │   │   ├── layout.tsx         # Корневой layout
 │   │   └── globals.css        # Глобальные стили
 │   ├── components/            # React компоненты
+│   │   ├── AdminNav.tsx       # Навигация админки
 │   │   ├── AutoRefresh.tsx    # Автообновление страницы
 │   │   ├── BreathingController.tsx # Контроллер анимации дыхания
 │   │   ├── MenuTime.tsx       # Компонент времени
 │   │   └── PacmanTrail.tsx    # Анимация пакмана
 │   └── lib/                   # Утилиты и хелперы
-│       ├── google.ts          # Google Sheets API
+│       ├── supabase.ts        # Supabase конфигурация
+│       ├── supabase-data.ts   # Функции для работы с данными
+│       ├── migrate-data.ts    # Утилиты миграции
+│       ├── uploadthing.ts     # UploadThing конфигурация
+│       ├── google.ts          # Google Sheets API (legacy)
 │       └── menu-helpers.ts    # Хелперы для меню
 ├── public/                    # Статические файлы
 │   └── assets/images/         # Изображения и иконки
+├── middleware.ts              # Middleware для защиты админ роутов
+├── ogpx-migration.sql         # SQL скрипт для интеграции с OGPx
+├── add-weedmenu-users.sql     # Скрипт для добавления пользователей
+├── OGPX_INTEGRATION_GUIDE.md  # Руководство по интеграции
 ├── ecosystem.config.js        # Конфигурация PM2
 ├── nginx.conf                 # Конфигурация Nginx
 └── package.json              # Зависимости проекта
@@ -202,15 +245,17 @@ oglab-site/
 
 ## 🔧 Ключевые функции и решения
 
-### 1. Автоматическое обновление данных
-**Файлы**: `src/lib/google.ts`, `src/app/menu/page.tsx`
+### 1. Интеграция с OGPx Database
+**Файлы**: `src/lib/supabase.ts`, `src/lib/supabase-data.ts`, `src/app/menu/page.tsx`
 
-- **ISR**: `export const revalidate = 900` (15 минут)
-- **Fallback данные**: при ошибках API показываются mock данные
-- **Переменные окружения**: 
-  - `GS_CLIENT_EMAIL` - email сервисного аккаунта
-  - `GS_PRIVATE_KEY` - приватный ключ
-  - `GS_SHEET_ID` - ID Google таблицы
+- **База данных**: OGPx Supabase Postgres с расширенными таблицами для меню
+- **Аутентификация**: существующая система OGPx с ролью `weedmenu`
+- **ISR**: `export const revalidate = 900` (15 минут) + on-demand revalidation
+- **Fallback данные**: при ошибках API показываются пустые данные с уведомлением
+- **Переменные окружения** (из OGPx проекта): 
+  - `NEXT_PUBLIC_SUPABASE_URL` - URL проекта OGPx
+  - `NEXT_PUBLIC_SUPABASE_ANON_KEY` - анонимный ключ OGPx
+  - `SUPABASE_SERVICE_ROLE_KEY` - сервисный ключ OGPx
 
 ### 2. Автоматическое обновление страницы
 **Файл**: `src/components/AutoRefresh.tsx`
@@ -248,29 +293,39 @@ oglab-site/
 - **Маршрут**: предопределенный путь по экрану
 - **След**: плавное исчезновение с opacity
 
-### 5. Интеграция с Google Sheets
-**Файл**: `src/lib/google.ts`
+### 5. Админ панель для управления меню
+**Файлы**: `src/app/admin/`, `src/components/AdminNav.tsx`
 
-#### Структура данных:
+#### Функции админ панели:
+- **Dashboard** (`/admin`) - обзор системы и статистика
+- **Управление меню** (`/admin/menu`) - CRUD операции с товарами
+- **Управление темой** (`/admin/theme`) - изменение цветов и логотипа
+- **Безопасность**: middleware защита, проверка ролей, аудит логи
+
+#### Структура данных (Supabase):
 ```typescript
-interface MenuRow {
-  Category: string | null;
-  Name: string | null;
-  THC?: number | null;
-  CBG?: number | null;
-  Price_1pc?: number | null;
-  Price_1g?: number | null;
-  Price_5g?: number | null;
-  Price_20g?: number | null;
-  Type?: string | null;
-  Our?: boolean | null;
+interface MenuItem {
+  id: string;
+  category: string;
+  name: string;
+  type?: 'hybrid' | 'sativa' | 'indica' | null;
+  thc?: number | null;
+  cbg?: number | null;
+  price_1pc?: number | null;
+  price_1g?: number | null;
+  price_5g?: number | null;
+  price_20g?: number | null;
+  our?: boolean | null;
+  created_at: string;
+  updated_at: string;
+  updated_by?: string | null;
 }
 ```
 
-#### Обработка ошибок:
-- **Graceful degradation**: fallback на mock данные
-- **Детальное логирование**: для отладки API
-- **Валидация ключей**: проверка формата PEM
+#### Безопасность и аудит:
+- **RLS политики**: доступ только для ролей `weedmenu` и `admin`
+- **Аудит логи**: интеграция с существующей таблицей `audit_logs` OGPx
+- **Middleware защита**: проверка аутентификации на уровне роутов
 
 ## 🎯 UI/UX особенности
 
@@ -311,11 +366,25 @@ interface MenuRow {
 ```
 
 ### Переменные окружения
-Создать файл `.env.production` на сервере:
+Создать файл `.env.production` на сервере (используя переменные из OGPx проекта):
 ```bash
+# OGPx Supabase Configuration
+NEXT_PUBLIC_SUPABASE_URL=your-ogpx-supabase-url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-ogpx-anon-key
+SUPABASE_SERVICE_ROLE_KEY=your-ogpx-service-role-key
+
+# UploadThing для загрузки логотипов
+UPLOADTHING_SECRET=your-uploadthing-secret
+UPLOADTHING_APP_ID=your-uploadthing-app-id
+
+# Feature Flags
+ENABLE_ADMIN=true
+
+# Legacy Google Sheets (только для миграции данных)
 GS_CLIENT_EMAIL=your-service-account@project.iam.gserviceaccount.com
 GS_SHEET_ID=your-google-sheet-id
 GS_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----"
+
 NODE_ENV=production
 PORT=3001
 ```
@@ -343,16 +412,23 @@ pm2 logs oglab-site
 - **Мониторинг**: через console.log в браузере
 
 ### 2. Fallback данные
-- При отсутствии Google Sheets API показываются mock данные
-- **Индикаторы**: OG Kush, White Widow и др.
-- **Проверка**: логи в консоли браузера
+- При отсутствии подключения к OGPx Supabase показываются пустые данные
+- **Индикаторы**: уведомления об ошибках в админ панели
+- **Проверка**: логи в консоли браузера и Supabase Dashboard
 
-### 3. ISR кеширование
-- Данные обновляются максимум раз в 15 минут
+### 3. ISR кеширование + On-demand revalidation
+- Данные обновляются максимум раз в 15 минут (ISR)
+- **Мгновенное обновление**: через on-demand revalidation после изменений в админке
 - **Принудительное обновление**: через автообновление страницы
 - **Разработка**: используйте `npm run dev` для мгновенных обновлений
 
-### 4. CSS приоритеты и переопределения
+### 4. Интеграция с OGPx
+- **Общие пользователи**: используются существующие аккаунты OGPx
+- **Ролевая система**: расширена роль `weedmenu` для доступа к меню
+- **Аудит логи**: все изменения записываются в общую таблицу `audit_logs`
+- **База данных**: единая база данных для обоих проектов
+
+### 5. CSS приоритеты и переопределения
 - **Проблема**: CSS классы в `globals.css` могут переопределять inline стили
 - **Пример**: `.farm-leaf { fill: var(--color-primary) }` переопределяет `fill="#b0bf93"`
 - **Решение**: изменять CSS классы, а не только inline стили
@@ -383,12 +459,25 @@ pm2 logs oglab-site
 4. **Мониторинг**: проверка логов и работоспособности
 
 ### Обновление данных меню
-1. **Google Sheets**: изменения в таблице
-2. **Автоматически**: через 15 минут (ISR)
-3. **Принудительно**: перезапуск PM2 или ожидание автообновления
+1. **Админ панель**: изменения через `/admin/menu` интерфейс
+2. **Мгновенно**: on-demand revalidation после сохранения
+3. **Автоматически**: через 15 минут (ISR) как fallback
+4. **Принудительно**: перезапуск PM2 или ожидание автообновления
+
+### Управление пользователями с доступом к меню
+1. **Добавить пользователя**: 
+   ```sql
+   UPDATE public.profiles SET role = 'weedmenu' WHERE email = 'user@example.com';
+   ```
+2. **Убрать доступ**: 
+   ```sql
+   UPDATE public.profiles SET role = 'store' WHERE email = 'user@example.com';
+   ```
+3. **Проверить доступ**: через OGPx админ панель или SQL запросы
 
 ---
 
-*Документ создан: $(date)*
-*Версия проекта: 1.0.0*
-*Последнее обновление: декабрь 2024*
+*Документ создан: сентябрь 2024*
+*Версия проекта: 2.0.0 (с админ панелью и интеграцией OGPx)*
+*Последнее обновление: сентябрь 2025*
+*Интеграция с OGPx: реализована*

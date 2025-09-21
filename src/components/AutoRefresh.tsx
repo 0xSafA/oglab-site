@@ -41,6 +41,38 @@ export default function AutoRefresh() {
       calculateNextRefresh();
     }, 15 * 60 * 1000); // 15 минут в миллисекундах
 
+    // Слушаем серверные изменения (Supabase realtime) и обновляем немедленно
+    try {
+      // Динамический импорт чтобы не тянуть клиент, если не нужен
+      import('@supabase/supabase-js').then(({ createClient }) => {
+        const url = process.env.NEXT_PUBLIC_SUPABASE_URL as string
+        const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string
+        if (!url || !key) return
+        const sb = createClient(url, key)
+        // Слушаем любые изменения в таблице menu_items и theme
+        const sub = sb
+          .channel('realtime-menu')
+          .on('postgres_changes', { event: '*', schema: 'public', table: 'menu_items' }, () => {
+            console.log('🟢 Realtime: menu_items changed → hard reload')
+            window.location.reload()
+          })
+          .on('postgres_changes', { event: '*', schema: 'public', table: 'menu_layout' }, () => {
+            console.log('🟢 Realtime: menu_layout changed → hard reload')
+            window.location.reload()
+          })
+          .on('postgres_changes', { event: '*', schema: 'public', table: 'theme' }, () => {
+            console.log('🟢 Realtime: theme changed → hard reload')
+            window.location.reload()
+          })
+          .subscribe()
+
+        // Очистка подписки
+        window.addEventListener('beforeunload', () => {
+          try { sb.removeChannel(sub) } catch {}
+        })
+      })
+    } catch {}
+
     // Запрашиваем разрешение на уведомления (опционально)
     if ('Notification' in window && Notification.permission === 'default') {
       Notification.requestPermission();

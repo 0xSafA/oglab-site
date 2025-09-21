@@ -8,6 +8,7 @@
   --color-hybrid: #4f7bff;
   --color-sativa: #ff6633;
   --color-indica: #38b24f;
+  --menu-card-bg: #ffffff;
 }
 
 /* Prevent horizontal overscroll revealing white gutters */
@@ -50,6 +51,7 @@ html, body {
   border-radius: clamp(0.75rem, 1vw, 1rem);
   /* center only horizontally */
   margin: 0 auto;
+  background-color: var(--menu-card-bg);
 }
 
 .viewport-menu-layout {
@@ -82,6 +84,7 @@ html, body {
 .viewport-menu .menu-category {
   border-radius: clamp(0.5rem, 1vw, 1rem);
   margin-bottom: 0; /* rely on column gap */
+  background-color: var(--menu-card-bg);
 }
 
 .viewport-menu .menu-category-header {
@@ -141,6 +144,7 @@ html, body {
   padding: clamp(0.6rem, 1.6vw, 1.1rem);
   font-size: clamp(0.7rem, 1.4vw, 1rem);
   border-radius: clamp(0.5rem, 1vw, 1rem);
+  background-color: var(--menu-card-bg);
 }
 
 .viewport-footer .footer-logo {
@@ -782,4 +786,16 @@ body[data-breathing-type="indica"] .dot-indica {
 
 .animate-bounce-gentle {
   animation: bounce-gentle 3s ease-in-out infinite;
+}
+
+/* Contact link hover effects */
+.contact-link:hover {
+  background-color: var(--primary-color) !important;
+  color: white !important;
+}
+
+/* Admin logo sizing to ensure consistent display */
+.admin-logo {
+  width: 50px !important;
+  height: 50px !important;
 }

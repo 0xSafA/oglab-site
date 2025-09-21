@@ -1,9 +1,22 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import { fetchTheme } from '@/lib/supabase-data';
 
-export default function HomePage() {
+export default async function HomePage() {
+  const theme = await fetchTheme();
+  
+  // Use theme colors or fallback to defaults
+  const primaryColor = theme?.primary_color || '#536C4A';
+  const secondaryColor = theme?.secondary_color || '#B0BF93';
+  const logoUrl = theme?.logo_url || '/assets/images/oglab_logo_round.svg';
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#536C4A] to-[#B0BF93] flex items-start justify-center pt-7 pb-5 md:pt-6 md:pb-5">
+    <div 
+      className="min-h-screen bg-gradient-to-br flex items-start justify-center pt-7 pb-5 md:pt-6 md:pb-5"
+      style={{ 
+        background: `linear-gradient(to bottom right, ${primaryColor}, ${secondaryColor})` 
+      }}
+    >
       {/* Background Effects */}
       <div className="fixed inset-0 opacity-10 z-0">
         <div className="absolute inset-0 bg-gradient-to-br from-[#536C4A] via-[#B0BF93] to-[#536C4A]"></div>
@@ -24,32 +37,37 @@ export default function HomePage() {
 
           {/* Contact Info */}
           <div className="flex justify-center gap-4 mb-8 flex-wrap">
-            <ContactLink href="tel:+66982040757" text="+66 98 204 0757" />
-            <ContactLink href="https://maps.app.goo.gl/5UtovCjQXCQixxJy7" text="Google Map" />
+            <ContactLink href="tel:+66982040757" text="+66 98 204 0757" primaryColor={primaryColor} />
+            <ContactLink href="https://maps.app.goo.gl/5UtovCjQXCQixxJy7" text="Google Map" primaryColor={primaryColor} />
           </div>
 
           {/* Logo and Title */}
           <div className="text-center mb-8">
             <div className="relative inline-block mb-6">
               <Image
-                src="/assets/images/oglab_logo_round.svg"
+                src={logoUrl}
                 alt="OG Lab Logo"
                 width={120}
                 height={120}
                 className="rounded-full shadow-lg animate-pulse-slow"
               />
             </div>
-            <h1 className="text-3xl md:text-4xl font-bold mb-4 bg-gradient-to-r from-[#536C4A] to-[#B0BF93] bg-clip-text text-transparent">
+            <h1 
+              className="text-3xl md:text-4xl font-bold mb-4 bg-gradient-to-r bg-clip-text text-transparent"
+              style={{ 
+                backgroundImage: `linear-gradient(to right, ${primaryColor}, ${secondaryColor})` 
+              }}
+            >
               OG Lab - Perfect Cannabis
             </h1>
-            <p className="text-lg text-[#536C4A] font-medium">Growing Farm and Dispensary</p>
+            <p className="text-lg font-medium" style={{ color: primaryColor }}>Growing Farm and Dispensary</p>
           </div>
 
           {/* Badges */}
           <div className="flex justify-center gap-3 mb-8 flex-wrap">
-            <Badge text="Largest dispensary on Samui" />
-            <Badge text="Must Visit Location" />
-            <Badge text="Observe Live Cultivation" />
+            <Badge text="Largest dispensary on Samui" primaryColor={primaryColor} secondaryColor={secondaryColor} />
+            <Badge text="Must Visit Location" primaryColor={primaryColor} secondaryColor={secondaryColor} />
+            <Badge text="Observe Live Cultivation" primaryColor={primaryColor} secondaryColor={secondaryColor} />
           </div>
 
           {/* Why Choose Section */}
@@ -145,20 +163,30 @@ function SocialLink({ href, icon, alt, size = "normal" }: { href: string; icon: 
   );
 }
 
-function ContactLink({ href, text }: { href: string; text: string }) {
+function ContactLink({ href, text, primaryColor }: { href: string; text: string; primaryColor: string }) {
   return (
     <a 
       href={href} 
-      className="bg-[#536C4A]/10 text-[#536C4A] px-4 py-2 rounded-full font-semibold hover:bg-[#536C4A] hover:text-white transition-all duration-300 hover:-translate-y-1"
+      className="contact-link px-4 py-2 rounded-full font-semibold transition-all duration-300 hover:-translate-y-1"
+      style={{ 
+        backgroundColor: `${primaryColor}10`,
+        color: primaryColor,
+        '--primary-color': primaryColor
+      } as React.CSSProperties & { [key: string]: string }}
     >
       {text}
     </a>
   );
 }
 
-function Badge({ text }: { text: string }) {
+function Badge({ text, primaryColor, secondaryColor }: { text: string; primaryColor: string; secondaryColor: string }) {
   return (
-    <div className="bg-gradient-to-r from-[#536C4A] to-[#B0BF93] text-white px-4 py-2 rounded-full text-sm font-semibold shadow-lg animate-fade-in-up">
+    <div 
+      className="text-white px-4 py-2 rounded-full text-sm font-semibold shadow-lg animate-fade-in-up"
+      style={{ 
+        background: `linear-gradient(to right, ${primaryColor}, ${secondaryColor})` 
+      }}
+    >
       {text}
     </div>
   );

@@ -1,0 +1,25 @@
+=== Debug Log Started Sun Sep 21 09:42:52 +07 2025 ===
+[2025-09-21T06:10:09.625Z] Admin Layout - User check | {"user":"ceo@oglab.com","error":"None","userId":"a768350e-a297-4f91-960a-540f38933e15"}
+[2025-09-21T06:21:51.142Z] Admin Layout - User check | {"user":"ceo@oglab.com","error":"None","userId":"a768350e-a297-4f91-960a-540f38933e15"}
+[2025-09-21T06:21:52.661Z] Admin Layout - User check | {"user":"ceo@oglab.com","error":"None","userId":"a768350e-a297-4f91-960a-540f38933e15"}
+[2025-09-21T06:22:37.512Z] Admin Layout - User check | {"user":"ceo@oglab.com","error":"None","userId":"a768350e-a297-4f91-960a-540f38933e15"}
+[2025-09-21T06:23:41.991Z] Admin Layout - User check | {"user":"ceo@oglab.com","error":"None","userId":"a768350e-a297-4f91-960a-540f38933e15"}
+[2025-09-21T06:24:19.836Z] Admin Layout - User check | {"user":"ceo@oglab.com","error":"None","userId":"a768350e-a297-4f91-960a-540f38933e15"}
+[2025-09-21T06:24:23.912Z] Admin Layout - User check | {"user":"ceo@oglab.com","error":"None","userId":"a768350e-a297-4f91-960a-540f38933e15"}
+[2025-09-21T06:26:41.394Z] Admin Layout - User check | {"user":"ceo@oglab.com","error":"None","userId":"a768350e-a297-4f91-960a-540f38933e15"}
+[2025-09-21T06:28:26.211Z] Admin Layout - User check | {"user":"ceo@oglab.com","error":"None","userId":"a768350e-a297-4f91-960a-540f38933e15"}
+[2025-09-21T06:28:32.027Z] Admin Layout - User check | {"user":"ceo@oglab.com","error":"None","userId":"a768350e-a297-4f91-960a-540f38933e15"}
+[2025-09-21T06:28:37.242Z] Admin Layout - User check | {"user":"ceo@oglab.com","error":"None","userId":"a768350e-a297-4f91-960a-540f38933e15"}
+[2025-09-21T06:29:12.639Z] Admin Layout - User check | {"user":"ceo@oglab.com","error":"None","userId":"a768350e-a297-4f91-960a-540f38933e15"}
+[2025-09-21T06:29:37.730Z] Admin Layout - User check | {"user":"None","error":"Auth session missing!","userId":"None"}
+[2025-09-21T06:29:37.730Z] Admin Layout - No user, redirecting to login
+[2025-09-21T06:30:53.113Z] Admin Layout - User check | {"user":"ceo@oglab.com","error":"None","userId":"a768350e-a297-4f91-960a-540f38933e15"}
+[2025-09-21T06:31:15.561Z] Admin Layout - User check | {"user":"ceo@oglab.com","error":"None","userId":"a768350e-a297-4f91-960a-540f38933e15"}
+[2025-09-21T06:32:55.952Z] Admin Layout - User check | {"user":"ceo@oglab.com","error":"None","userId":"a768350e-a297-4f91-960a-540f38933e15"}
+[2025-09-21T06:35:57.018Z] Admin Layout - User check | {"user":"ceo@oglab.com","error":"None","userId":"a768350e-a297-4f91-960a-540f38933e15"}
+[2025-09-21T06:36:00.238Z] Admin Layout - User check | {"user":"ceo@oglab.com","error":"None","userId":"a768350e-a297-4f91-960a-540f38933e15"}
+[2025-09-21T06:37:59.332Z] Admin Layout - User check | {"user":"ceo@oglab.com","error":"None","userId":"a768350e-a297-4f91-960a-540f38933e15"}
+[2025-09-21T06:38:04.049Z] Admin Layout - User check | {"user":"ceo@oglab.com","error":"None","userId":"a768350e-a297-4f91-960a-540f38933e15"}
+[2025-09-21T06:39:56.199Z] Admin Layout - User check | {"user":"ceo@oglab.com","error":"None","userId":"a768350e-a297-4f91-960a-540f38933e15"}
+[2025-09-21T06:40:03.847Z] Admin Layout - User check | {"user":"ceo@oglab.com","error":"None","userId":"a768350e-a297-4f91-960a-540f38933e15"}
+[2025-09-21T06:40:11.127Z] Admin Layout - User check | {"user":"ceo@oglab.com","error":"None","userId":"a768350e-a297-4f91-960a-540f38933e15"}
