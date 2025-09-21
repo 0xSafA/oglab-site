@@ -44,13 +44,15 @@ export default async function HomePage() {
           {/* Logo and Title */}
           <div className="text-center mb-8">
             <div className="relative inline-block mb-6">
-              <Image
-                src={logoUrl}
-                alt="OG Lab Logo"
-                width={120}
-                height={120}
-                className="rounded-full shadow-lg animate-pulse-slow"
-              />
+              <Link href="/auth/login" aria-label="Login" className="inline-block">
+                <Image
+                  src={logoUrl}
+                  alt="OG Lab Logo"
+                  width={120}
+                  height={120}
+                  className="rounded-full shadow-lg animate-pulse-slow cursor-pointer hover:scale-105 transition-transform"
+                />
+              </Link>
             </div>
             <h1 
               className="text-3xl md:text-4xl font-bold mb-4 bg-gradient-to-r bg-clip-text text-transparent"
@@ -142,11 +144,6 @@ export default async function HomePage() {
             </a>
           </div>
 
-        </div>
-        <div className="mt-3 text-center">
-          <Link href="/auth/login" className="inline-block text-xs text-gray-500 hover:text-gray-700 px-2 py-1 rounded hover:bg-white/50 transition-colors">
-            Login
-          </Link>
         </div>
       </div>
     </div>
