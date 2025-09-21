@@ -72,7 +72,7 @@ function LoginForm() {
       if (error) {
         try {
           console.error('🔐 Login error:', error)
-        } catch (logError) {
+        } catch {
           // Fallback if console is blocked
           alert(`Login error: ${error.message}`)
         }

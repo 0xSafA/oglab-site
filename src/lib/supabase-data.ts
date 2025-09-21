@@ -1,6 +1,6 @@
 import { createClientComponentClient } from './supabase-client'
 import { createServerComponentClient } from './supabase-server'
-import type { MenuItem, MenuLayout, Theme } from './supabase-client'
+import type { Theme } from './supabase-client'
 
 // Legacy interface for compatibility with existing code
 export interface MenuRow {
@@ -134,11 +134,13 @@ export async function fetchMenuWithOptionsClient(): Promise<MenuData> {
       Our: item.our,
     }))
 
+    type MenuLayoutRow = { column1?: string[]; column2?: string[]; column3?: string[]; hidden?: string[] }
+
     const layout = {
       column1: menuLayoutResult.data?.column1 || [],
       column2: menuLayoutResult.data?.column2 || [],
       column3: menuLayoutResult.data?.column3 || [],
-      hidden: (menuLayoutResult.data as any)?.hidden || []
+      hidden: (menuLayoutResult.data as MenuLayoutRow)?.hidden || []
     }
 
     const packmanText = "Welcome to OG Lab - Premium Cannabis Experience"
