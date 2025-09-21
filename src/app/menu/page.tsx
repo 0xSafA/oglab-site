@@ -42,6 +42,7 @@ export default async function MenuPage() {
   const categoryTextColor = theme?.category_text_color || '#ffffff';
   const cardBgColor = theme?.card_bg_color || '#ffffff';
   const colors = typeColor(theme);
+  const featureColor = theme?.feature_color || '#536C4A'
 
   // Build dynamic tier labels from theme (with fallbacks)
   const tierLabels: Record<string, string> = {
@@ -50,6 +51,8 @@ export default async function MenuPage() {
     Price_5g: theme?.tier2_label || '5G+',
     Price_20g: theme?.tier3_label || '20G+',
   };
+
+  const hiddenSet = new Set((layout as any).hidden || [])
 
   return (
     <div 
@@ -68,8 +71,8 @@ export default async function MenuPage() {
           <section className="viewport-menu-layout">
             {/* Column 1 */}
             <div className="viewport-column">
-              {layout.column1.map((category) => (
-                <CategoryBlock key={category} name={category} rows={grouped[category] ?? []} primaryColor={primaryColor} tierLabels={tierLabels} itemTextColor={itemTextColor} categoryTextColor={categoryTextColor} cardBgColor={cardBgColor} typeColors={colors} />
+              {layout.column1.filter((c) => !hiddenSet.has(c)).map((category) => (
+                <CategoryBlock key={category} name={category} rows={grouped[category] ?? []} primaryColor={primaryColor} tierLabels={tierLabels} itemTextColor={itemTextColor} categoryTextColor={categoryTextColor} cardBgColor={cardBgColor} typeColors={colors} featureColor={featureColor} />
               ))}
 
               {/* Legend footer - compact and responsive, flows with column 1 */}
@@ -121,15 +124,15 @@ export default async function MenuPage() {
 
             {/* Column 2 */}
             <div className="viewport-column">
-              {layout.column2.map((category) => (
-                <CategoryBlock key={category} name={category} rows={grouped[category] ?? []} primaryColor={primaryColor} tierLabels={tierLabels} itemTextColor={itemTextColor} categoryTextColor={categoryTextColor} cardBgColor={cardBgColor} typeColors={colors} />
+              {layout.column2.filter((c) => !hiddenSet.has(c)).map((category) => (
+                <CategoryBlock key={category} name={category} rows={grouped[category] ?? []} primaryColor={primaryColor} tierLabels={tierLabels} itemTextColor={itemTextColor} categoryTextColor={categoryTextColor} cardBgColor={cardBgColor} typeColors={colors} featureColor={featureColor} />
               ))}
             </div>
 
             {/* Column 3 */}
             <div className="viewport-column">
-              {layout.column3.map((category) => (
-                <CategoryBlock key={category} name={category} rows={grouped[category] ?? []} primaryColor={primaryColor} tierLabels={tierLabels} itemTextColor={itemTextColor} categoryTextColor={categoryTextColor} cardBgColor={cardBgColor} typeColors={colors} />
+              {layout.column3.filter((c) => !hiddenSet.has(c)).map((category) => (
+                <CategoryBlock key={category} name={category} rows={grouped[category] ?? []} primaryColor={primaryColor} tierLabels={tierLabels} itemTextColor={itemTextColor} categoryTextColor={categoryTextColor} cardBgColor={cardBgColor} typeColors={colors} featureColor={featureColor} />
               ))}
             </div>
           </section>
@@ -153,7 +156,7 @@ export default async function MenuPage() {
 }
 
 // Category Block Component
-function CategoryBlock({ name, rows, primaryColor, tierLabels, itemTextColor, categoryTextColor, cardBgColor, typeColors }: { name: string; rows: MenuRow[]; primaryColor?: string; tierLabels: Record<string, string>; itemTextColor: string; categoryTextColor: string; cardBgColor: string; typeColors: Record<string,string> }) {
+function CategoryBlock({ name, rows, primaryColor, tierLabels, itemTextColor, categoryTextColor, cardBgColor, typeColors, featureColor }: { name: string; rows: MenuRow[]; primaryColor?: string; tierLabels: Record<string, string>; itemTextColor: string; categoryTextColor: string; cardBgColor: string; typeColors: Record<string,string>; featureColor: string }) {
   const conf = columnsPerCategory[name] ?? 
     (name.toUpperCase().includes('HASH')
       ? { label: '', keys: ['Price_1g', 'Price_5g'] }
@@ -185,7 +188,7 @@ function CategoryBlock({ name, rows, primaryColor, tierLabels, itemTextColor, ca
           return (
             <div key={row.Name} className="menu-category-item flex items-center px-2 py-1 hover:bg-gray-50 transition-colors">
               <div className="flex-1 flex items-center gap-1.5 min-w-0">
-                {(typeKey || row.Our) && <CombinedIndicator typeKey={typeKey} isOur={!!row.Our} colorMap={typeColors} />}
+                {(typeKey || row.Our) && <CombinedIndicator typeKey={typeKey} isOur={!!row.Our} colorMap={typeColors} featureColor={featureColor} />}
                 <span className="item-name font-medium" style={{ color: itemTextColor }}>{row.Name}</span>
               </div>
               
@@ -209,9 +212,10 @@ function CategoryBlock({ name, rows, primaryColor, tierLabels, itemTextColor, ca
   }
 
 // Combined Indicator Component
-function CombinedIndicator({ typeKey, isOur, colorMap }: { typeKey: KnownType | null; isOur?: boolean; colorMap: Record<string,string> }) {
+function CombinedIndicator({ typeKey, isOur, colorMap, featureColor }: { typeKey: KnownType | null; isOur?: boolean; colorMap: Record<string,string>; featureColor: string }) {
   const hasCheckmark = !!isOur;
-  const style = typeKey ? { backgroundColor: colorMap[typeKey] } : {};
+  const backgroundColor = typeKey ? colorMap[typeKey] : (hasCheckmark ? featureColor : '#536C4A');
+  const style = { backgroundColor } as React.CSSProperties;
 
   return (
     <div className="relative flex items-center justify-center w-3 h-3">

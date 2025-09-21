@@ -15,7 +15,7 @@ const f = createUploadthing({
 });
 
 export const ourFileRouter = {
-  logoUploader: f({ image: { maxFileSize: "2MB", maxFileCount: 1 } })
+  logoUploader: f({ image: { maxFileSize: "200KB", maxFileCount: 1 } })
     .middleware(async ({ req }) => {
       // Check authentication
       const supabase = await createServerComponentClient()

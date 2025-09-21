@@ -18,8 +18,6 @@ function LoginForm() {
   const supabase = createClientComponentClient()
 
   const handleLogin = async (e: React.FormEvent) => {
-    // Basic test - this should always work
-    alert('🔐 Form submitted! JavaScript is working.')
     
     e.preventDefault()
     setLoading(true)

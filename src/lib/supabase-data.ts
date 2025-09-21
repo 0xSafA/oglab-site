@@ -22,6 +22,7 @@ export interface MenuData {
     column1: string[]
     column2: string[]
     column3: string[]
+    hidden?: string[]
   }
   packmanText: string
 }
@@ -66,7 +67,8 @@ export async function fetchMenuWithOptions(): Promise<MenuData> {
     const layout = {
       column1: menuLayoutResult.data?.column1 || [],
       column2: menuLayoutResult.data?.column2 || [],
-      column3: menuLayoutResult.data?.column3 || []
+      column3: menuLayoutResult.data?.column3 || [],
+      hidden: menuLayoutResult.data?.hidden || []
     }
 
     // Get packman text from theme or use default
@@ -87,7 +89,8 @@ export async function fetchMenuWithOptions(): Promise<MenuData> {
       layout: {
         column1: ['TOP SHELF', 'MID SHELF', 'PREMIUM'],
         column2: ['SMALLS', 'CBG', 'PRE ROLLS'],
-        column3: ['FRESH FROZEN HASH', 'LIVE HASH ROSIN', 'DRY SIFT HASH', 'ICE BUBBLE HASH']
+        column3: ['FRESH FROZEN HASH', 'LIVE HASH ROSIN', 'DRY SIFT HASH', 'ICE BUBBLE HASH'],
+        hidden: []
       },
       packmanText: "Welcome to OG Lab - Premium Cannabis Experience"
     }
@@ -133,7 +136,8 @@ export async function fetchMenuWithOptionsClient(): Promise<MenuData> {
     const layout = {
       column1: menuLayoutResult.data?.column1 || [],
       column2: menuLayoutResult.data?.column2 || [],
-      column3: menuLayoutResult.data?.column3 || []
+      column3: menuLayoutResult.data?.column3 || [],
+      hidden: (menuLayoutResult.data as any)?.hidden || []
     }
 
     const packmanText = "Welcome to OG Lab - Premium Cannabis Experience"
@@ -153,7 +157,8 @@ export async function fetchMenuWithOptionsClient(): Promise<MenuData> {
       layout: {
         column1: ['TOP SHELF', 'MID SHELF', 'PREMIUM'],
         column2: ['SMALLS', 'CBG', 'PRE ROLLS'],
-        column3: ['FRESH FROZEN HASH', 'LIVE HASH ROSIN', 'DRY SIFT HASH', 'ICE BUBBLE HASH']
+        column3: ['FRESH FROZEN HASH', 'LIVE HASH ROSIN', 'DRY SIFT HASH', 'ICE BUBBLE HASH'],
+        hidden: []
       },
       packmanText: "Welcome to OG Lab - Premium Cannabis Experience"
     }
