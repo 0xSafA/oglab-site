@@ -35,7 +35,9 @@ ALTER TABLE public.theme
 ALTER TABLE public.theme
   ADD COLUMN IF NOT EXISTS item_text_color text DEFAULT '#1f2937',
   ADD COLUMN IF NOT EXISTS category_text_color text DEFAULT '#ffffff',
-  ADD COLUMN IF NOT EXISTS card_bg_color text DEFAULT '#ffffff';
+  ADD COLUMN IF NOT EXISTS card_bg_color text DEFAULT '#ffffff',
+  ADD COLUMN IF NOT EXISTS event_text text,
+  ADD COLUMN IF NOT EXISTS offer_text text;
 
 -- Updated_at trigger
 DO $$

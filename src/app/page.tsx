@@ -9,6 +9,8 @@ export default async function HomePage() {
   const primaryColor = theme?.primary_color || '#536C4A';
   const secondaryColor = theme?.secondary_color || '#B0BF93';
   const logoUrl = theme?.logo_url || '/assets/images/oglab_logo_round.svg';
+  const eventText = theme?.event_text || "Next party is coming 26 September at 19:00! Stay tuned!";
+  const offerText = theme?.offer_text || "Next party is coming 26 September at 19:00! Stay tuned!";
 
   return (
     <div 
@@ -72,12 +74,24 @@ export default async function HomePage() {
             <Badge text="Observe Live Cultivation" primaryColor={primaryColor} secondaryColor={secondaryColor} />
           </div>
 
+          {/* Offer Pill (harmonized with badges) */}
+          <div className="flex justify-center mb-8">
+            <div
+              className="text-white px-5 py-2.5 rounded-full font-semibold shadow-lg text-sm md:text-base"
+              style={{ background: `linear-gradient(to right, ${primaryColor}, ${secondaryColor})` }}
+            >
+              {offerText}
+            </div>
+          </div>
+
           {/* Why Choose Section */}
           <Section title="Why Choose OG Lab?">
             <p className="text-gray-700 leading-relaxed">
               <span className="font-semibold bg-gradient-to-r from-[#536C4A] to-[#B0BF93] bg-clip-text text-transparent">Koh Samui&apos;s largest cannabis dispensary</span> – where quality meets culture. Discover live cultivation, explore our scientific area, and enjoy products made with passion and precision. OG Lab is the destination for every cannabis lover.
             </p>
           </Section>
+
+
 
           {/* Features Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
@@ -123,7 +137,7 @@ export default async function HomePage() {
           {/* Final Section */}
           <Section>
             <p className="text-center font-semibold text-gray-800 mb-2">Let&apos;s work, learn and relax together!</p>
-            <p className="text-center text-gray-600">Next party is coming 26 September at 19:00! Stay tuned!</p>
+            <p className="text-center text-gray-600">{eventText}</p>
           </Section>
 
           {/* Promo Block - Moved to bottom */}

@@ -56,9 +56,7 @@ export default function AdminNav({ user }: AdminNavProps) {
           {/* Navigation links - visible on mobile, single row, scrollable if overflow */}
           <div className="flex items-center space-x-4 flex-nowrap overflow-x-auto no-scrollbar text-sm sm:text-base">
             {navItems.map((item) => {
-              const isActive = item.exact 
-                ? pathname === item.href 
-                : pathname.startsWith(item.href)
+              const isActive = pathname.startsWith(item.href)
               
               return (
                 <Link

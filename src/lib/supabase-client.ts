@@ -48,6 +48,8 @@ export interface Theme {
   item_text_color?: string | null
   category_text_color?: string | null
   card_bg_color?: string | null
+  event_text?: string | null
+  offer_text?: string | null
   updated_at: string
 }
 
@@ -78,7 +80,7 @@ export const createClientComponentClient = () => {
               return { name, value }
             })
           },
-          setAll(cookiesToSet: Array<{ name: string; value: string; options?: any }>) {
+          setAll(cookiesToSet: Array<{ name: string; value: string; options?: { path?: string; maxAge?: number; expires?: string | number | Date; domain?: string; sameSite?: 'lax' | 'strict' | 'none'; secure?: boolean } }>) {
             if (typeof document === 'undefined') return
             cookiesToSet.forEach(({ name, value, options }) => {
               let cookie = `${name}=${value}`

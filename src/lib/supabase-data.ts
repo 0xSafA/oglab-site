@@ -27,6 +27,8 @@ export interface MenuData {
   packmanText: string
 }
 
+export type { Theme }
+
 /**
  * Fetches menu data from Supabase (server-side)
  */
@@ -34,10 +36,9 @@ export async function fetchMenuWithOptions(): Promise<MenuData> {
   try {
     const supabase = await createServerComponentClient()
     
-    const [menuItemsResult, menuLayoutResult, themeResult] = await Promise.all([
+    const [menuItemsResult, menuLayoutResult] = await Promise.all([
       supabase.from('menu_items').select('*').order('category, name'),
       supabase.from('menu_layout').select('*').order('updated_at', { ascending: false }).limit(1).single(),
-      supabase.from('theme').select('*').order('updated_at', { ascending: false }).limit(1).single()
     ])
 
     if (menuItemsResult.error) {

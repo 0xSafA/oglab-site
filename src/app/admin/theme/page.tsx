@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { createClientComponentClient } from '@/lib/supabase-client'
 import { UploadDropzone } from '@/lib/uploadthing'
 import type { Theme } from '@/lib/supabase-client'
@@ -31,16 +31,14 @@ export default function ThemeAdminPage() {
     feature_color: '#536C4A',
     item_text_color: '#1f2937',
     category_text_color: '#ffffff',
-    card_bg_color: '#ffffff'
+    card_bg_color: '#ffffff',
+    event_text: '',
+    offer_text: ''
   })
   
   const supabase = createClientComponentClient()
 
-  useEffect(() => {
-    loadTheme()
-  }, [])
-
-  const loadTheme = async () => {
+  const loadTheme = useCallback(async () => {
     try {
       setLoading(true)
       const { data, error } = await supabase
@@ -75,7 +73,9 @@ export default function ThemeAdminPage() {
           feature_color: data.feature_color || '#536C4A',
           item_text_color: data.item_text_color || '#1f2937',
           category_text_color: data.category_text_color || '#ffffff',
-          card_bg_color: data.card_bg_color || '#ffffff'
+          card_bg_color: data.card_bg_color || '#ffffff',
+          event_text: data.event_text || '',
+          offer_text: data.offer_text || ''
         })
       }
     } catch (err) {
@@ -83,7 +83,11 @@ export default function ThemeAdminPage() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [supabase])
+
+  useEffect(() => {
+    loadTheme()
+  }, [loadTheme])
 
   const saveTheme = async () => {
     try {
@@ -91,12 +95,12 @@ export default function ThemeAdminPage() {
       setError(null)
       setSuccess(null)
 
-      if (theme && (theme as any).id) {
+      if (theme && theme.id) {
         // Update existing theme
         const { error } = await supabase
           .from('theme')
           .update(formData)
-          .eq('id', (theme as any).id)
+          .eq('id', theme.id)
         
         if (error) throw error
       } else {
@@ -147,7 +151,9 @@ export default function ThemeAdminPage() {
       feature_color: '#536C4A',
       item_text_color: '#1f2937',
       category_text_color: '#ffffff',
-      card_bg_color: '#ffffff'
+      card_bg_color: '#ffffff',
+      event_text: '',
+      offer_text: ''
     })
   }
 
@@ -333,11 +339,12 @@ export default function ThemeAdminPage() {
                 Current Logo
               </label>
               <div className="flex items-center space-x-4 p-4 border border-gray-200 rounded-lg">
-                <img 
-                  src={formData.logo_url} 
-                  alt="Current logo" 
-                  className="w-16 h-16 object-contain"
-                />
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img 
+                src={formData.logo_url} 
+                alt="Current logo" 
+                className="w-16 h-16 object-contain"
+              />
                 <div className="flex-1">
                   <p className="text-sm text-gray-600 break-all">
                     {formData.logo_url}
@@ -383,6 +390,38 @@ export default function ThemeAdminPage() {
               </ul>
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* Main Page settings */}
+      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+        <h2 className="text-xl font-semibold text-gray-900 mb-4">Main Page</h2>
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Offer text</label>
+          <input
+            type="text"
+            value={formData.offer_text}
+            onChange={(e) => setFormData({ ...formData, offer_text: e.target.value })}
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#536C4A] focus:border-transparent"
+          />
+        </div>
+        <div className="mt-6">
+          <label className="block text-sm font-medium text-gray-700 mb-2">Event text</label>
+          <input
+            type="text"
+            value={formData.event_text}
+            onChange={(e) => setFormData({ ...formData, event_text: e.target.value })}
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#536C4A] focus:border-transparent"
+          />
+        </div>
+        <div className="mt-4">
+          <button
+            onClick={saveTheme}
+            disabled={saving}
+            className="bg-[#536C4A] text-white px-4 py-2 rounded-lg hover:bg-[#536C4A]/90 disabled:opacity-50 transition-colors"
+          >
+            {saving ? 'Saving...' : 'Save'}
+          </button>
         </div>
       </div>
 
@@ -538,6 +577,7 @@ export default function ThemeAdminPage() {
         >
           <div className="flex items-center space-x-3 mb-4">
             {formData.logo_url && (
+              // eslint-disable-next-line @next/next/no-img-element
               <img 
                 src={formData.logo_url} 
                 alt="Logo preview" 

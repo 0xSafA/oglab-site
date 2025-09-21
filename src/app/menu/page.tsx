@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { fetchMenuWithOptions, type MenuRow } from '@/lib/supabase-data';
-import { fetchTheme } from '@/lib/supabase-data';
+import { fetchTheme, type Theme } from '@/lib/supabase-data';
 import { groupRows, columnsPerCategory } from '@/lib/menu-helpers';
 import PacmanTrail from '@/components/PacmanTrail';
 import AutoRefresh from '@/components/AutoRefresh';
@@ -11,7 +11,7 @@ import PotManager from '@/components/PotManager';
 
 
 // Type colors mapping
-const typeColor = (theme?: any) => ({
+const typeColor = (theme?: Pick<Theme, 'legend_hybrid_color' | 'legend_sativa_color' | 'legend_indica_color'> | null) => ({
   hybrid: theme?.legend_hybrid_color || '#4f7bff',
   hybride: theme?.legend_hybrid_color || '#4f7bff',
   sativa: theme?.legend_sativa_color || '#ff6633',
@@ -41,7 +41,7 @@ export default async function MenuPage() {
   const itemTextColor = theme?.item_text_color || '#1f2937'; // gray-800
   const categoryTextColor = theme?.category_text_color || '#ffffff';
   const cardBgColor = theme?.card_bg_color || '#ffffff';
-  const colors = typeColor(theme);
+  const colors = typeColor(theme ?? undefined);
   const featureColor = theme?.feature_color || '#536C4A'
 
   // Build dynamic tier labels from theme (with fallbacks)
@@ -52,7 +52,7 @@ export default async function MenuPage() {
     Price_20g: theme?.tier3_label || '20G+',
   };
 
-  const hiddenSet = new Set((layout as any).hidden || [])
+  const hiddenSet = new Set(layout.hidden || [])
 
   return (
     <div 
@@ -64,7 +64,7 @@ export default async function MenuPage() {
       <div
         id="menu-viewport-container"
         className="viewport-container viewport-menu shadow-2xl border-2 border-[#B0BF93]/30"
-        style={{ ['--menu-card-bg' as any]: cardBgColor }}
+        style={{ ['--menu-card-bg' as unknown as string]: cardBgColor }}
       >
           
           {/* Menu Flex Layout */}

@@ -3,7 +3,7 @@ import path from 'path'
 
 const logFile = path.join(process.cwd(), 'debug.log')
 
-export function debugLog(message: string, data?: any) {
+export function debugLog(message: string, data?: unknown) {
   const timestamp = new Date().toISOString()
   const logEntry = `[${timestamp}] ${message}${data ? ` | ${JSON.stringify(data)}` : ''}\n`
   

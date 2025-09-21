@@ -1,9 +1,8 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { createClientComponentClient } from '@/lib/supabase-client'
 import type { MenuItem } from '@/lib/supabase-client'
-import { revalidateTag } from 'next/cache'
 import { formatCurrencyTHB } from '@/lib/currency'
 import {
   DndContext,
@@ -12,6 +11,7 @@ import {
   useSensor,
   useSensors,
   useDroppable,
+  type DragEndEvent,
 } from '@dnd-kit/core'
 import {
   arrayMove,
@@ -49,13 +49,7 @@ export default function MenuAdminPage() {
   const supabase = createClientComponentClient()
 
   // Load menu items
-  useEffect(() => {
-    loadMenuItems()
-    loadThemeLabels()
-    loadMenuLayout()
-  }, [])
-
-  const loadMenuItems = async () => {
+  const loadMenuItems = useCallback(async () => {
     try {
       setLoading(true)
       const { data, error } = await supabase
@@ -71,9 +65,9 @@ export default function MenuAdminPage() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [supabase])
 
-  const loadThemeLabels = async () => {
+  const loadThemeLabels = useCallback(async () => {
     try {
       const { data, error } = await supabase
         .from('theme')
@@ -91,12 +85,12 @@ export default function MenuAdminPage() {
           tier3: data.tier3_label || '20G+',
         })
       }
-    } catch (e) {
+    } catch {
       // ignore, use defaults
     }
-  }
+  }, [supabase])
 
-  const loadMenuLayout = async () => {
+  const loadMenuLayout = useCallback(async () => {
     try {
       const { data, error } = await supabase
         .from('menu_layout')
@@ -110,7 +104,7 @@ export default function MenuAdminPage() {
       const uniqueCats = [...new Set(items.map(i => i.category))]
 
       if (data) {
-        setLayoutId((data as any).id || null)
+        setLayoutId((data as { id?: string }).id || null)
         // Use layout, but ensure only categories that exist in items unless user added custom
         setColumn1((data.column1 || []).filter(Boolean))
         setColumn2((data.column2 || []).filter(Boolean))
@@ -133,7 +127,18 @@ export default function MenuAdminPage() {
     } catch (e) {
       console.error('Failed to load menu layout', e)
     }
-  }
+  }, [supabase, items])
+
+  useEffect(() => {
+    loadMenuItems()
+    loadThemeLabels()
+  }, [loadMenuItems, loadThemeLabels])
+
+  useEffect(() => {
+    if (items.length >= 0) {
+      loadMenuLayout()
+    }
+  }, [items, loadMenuLayout])
 
   const startEditing = (id: string) => {
     setItems(items.map(item => 
@@ -276,12 +281,12 @@ export default function MenuAdminPage() {
   const saveLayout = async () => {
     try {
       setSaving(true)
-      const payload = {
+      const payload: { column1: string[]; column2: string[]; column3: string[]; hidden: string[] } = {
         column1,
         column2,
         column3,
         hidden: hiddenCats,
-      } as any
+      }
 
       if (layoutId) {
         const { error } = await supabase
@@ -296,7 +301,7 @@ export default function MenuAdminPage() {
           .select()
           .single()
         if (error) throw error
-        setLayoutId((data as any).id || null)
+        setLayoutId((data as { id?: string }).id || null)
       }
 
       // Revalidate public menu (Realtime also triggers a reload)
@@ -745,7 +750,7 @@ function ManageCategoriesModal({
   const [newCat, setNewCat] = useState('')
   const [dest, setDest] = useState<'col1'|'col2'|'col3'>('col1')
 
-  const getList = (l: 'col1'|'col2'|'col3'|'hidden') => l === 'col1' ? column1 : l === 'col2' ? column2 : l === 'col3' ? column3 : hiddenCats
+  const getList = (l: 'col1'|'col2'|'col3'|'hidden'): string[] => l === 'col1' ? column1 : l === 'col2' ? column2 : l === 'col3' ? column3 : hiddenCats
   const setList = (l: 'col1'|'col2'|'col3'|'hidden', v: string[]) => {
     if (l === 'col1') onChangeColumn1(v)
     else if (l === 'col2') onChangeColumn2(v)
@@ -761,7 +766,7 @@ function ManageCategoriesModal({
     return [null, -1]
   }
 
-  const onDragEndAll = (event: any) => {
+  const onDragEndAll = (event: DragEndEvent) => {
     const { active, over } = event
     if (!over) return
     const activeId = String(active.id)
@@ -833,7 +838,7 @@ function ManageCategoriesModal({
     onChangeHidden(hiddenCats.filter(c => c !== id))
   }
 
-  const ListBlock = ({ title, list, id, onReorder, showMove, allowDelete }: { title: string; list: string[]; id: 'col1'|'col2'|'col3'|'hidden'; onReorder: (v: string[]) => void; showMove?: boolean; allowDelete?: boolean }) => {
+  const ListBlock = ({ title, list, id, showMove, allowDelete }: { title: string; list: string[]; id: 'col1'|'col2'|'col3'|'hidden'; showMove?: boolean; allowDelete?: boolean }) => {
     const { setNodeRef } = useDroppable({ id })
     return (
     <div className="bg-white rounded-lg border border-gray-200 p-4" ref={setNodeRef}>
@@ -860,10 +865,10 @@ function ManageCategoriesModal({
         </div>
         <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEndAll}>
         <div className="p-4 grid grid-cols-1 md:grid-cols-4 gap-4">
-          <ListBlock title="Column 1" list={column1} id="col1" onReorder={onChangeColumn1} showMove />
-          <ListBlock title="Column 2" list={column2} id="col2" onReorder={onChangeColumn2} showMove />
-          <ListBlock title="Column 3" list={column3} id="col3" onReorder={onChangeColumn3} showMove />
-          <ListBlock title="Hidden" list={hiddenCats} id="hidden" onReorder={onChangeHidden} allowDelete showMove />
+          <ListBlock title="Column 1" list={column1} id="col1" showMove />
+          <ListBlock title="Column 2" list={column2} id="col2" showMove />
+          <ListBlock title="Column 3" list={column3} id="col3" showMove />
+          <ListBlock title="Hidden" list={hiddenCats} id="hidden" allowDelete showMove />
         </div>
         </DndContext>
 
@@ -882,7 +887,7 @@ function ManageCategoriesModal({
                 <option key={c} value={c} />
               ))}
             </datalist>
-            <select value={dest} onChange={(e) => setDest(e.target.value as any)} className="px-3 py-2 border border-gray-300 rounded-md">
+            <select value={dest} onChange={(e) => setDest(e.target.value as 'col1'|'col2'|'col3')} className="px-3 py-2 border border-gray-300 rounded-md">
               <option value="col1">Column 1</option>
               <option value="col2">Column 2</option>
               <option value="col3">Column 3</option>
