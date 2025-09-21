@@ -11,7 +11,7 @@ interface AdminNavProps {
   user?: User
 }
 
-export default function AdminNav({ user }: AdminNavProps) {
+export default function AdminNav({ user: _user }: AdminNavProps) {
   const [isLoggingOut, setIsLoggingOut] = useState(false)
   const pathname = usePathname()
   const router = useRouter()
