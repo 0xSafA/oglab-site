@@ -121,7 +121,20 @@ export async function fetchMenuWithOptionsClient(): Promise<MenuData> {
     }
 
     // Transform Supabase data to legacy format for compatibility
-    const rows: MenuRow[] = (menuItemsResult.data || []).map(item => ({
+    type SupabaseMenuItem = {
+      category: string
+      name: string
+      thc?: number | null
+      cbg?: number | null
+      price_1pc?: number | null
+      price_1g?: number | null
+      price_5g?: number | null
+      price_20g?: number | null
+      type?: string | null
+      our?: boolean | null
+    }
+
+    const rows: MenuRow[] = ((menuItemsResult.data as SupabaseMenuItem[]) || []).map((item: SupabaseMenuItem) => ({
       Category: item.category,
       Name: item.name,
       THC: item.thc,

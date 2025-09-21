@@ -1,4 +1,5 @@
 'use client'
+/* eslint-disable @next/next/no-img-element */
 
 import { useState, useEffect } from 'react'
 import { createClientComponentClient } from '@/lib/supabase-client'
@@ -37,9 +38,10 @@ export default function AdminTabs() {
     { id: 'settings', name: 'Settings', icon: '⚙️' }
   ]
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     loadData()
-  }, [/* eslint-disable-line react-hooks/exhaustive-deps */])
+  }, [])
 
   const loadData = async () => {
     try {
@@ -515,7 +517,6 @@ export default function AdminTabs() {
               >
                 <div className="flex items-center space-x-3 mb-4">
                   {formData.logo_url && (
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img 
                       src={formData.logo_url} 
                       alt="Logo preview" 
