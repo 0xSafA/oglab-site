@@ -77,7 +77,7 @@ export default async function HomePage() {
           {/* Offer Pill (harmonized with badges) */}
           <div className="flex justify-center mb-8">
             <div
-              className="text-white px-5 py-2.5 rounded-full font-semibold shadow-lg text-sm md:text-base"
+              className="text-white px-5 py-2.5 rounded-full font-semibold shadow-lg text-sm text-center"
               style={{ background: `linear-gradient(to right, ${primaryColor}, ${secondaryColor})` }}
             >
               {offerText}
