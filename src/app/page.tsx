@@ -143,6 +143,11 @@ export default async function HomePage() {
           </div>
 
         </div>
+        <div className="mt-3 text-center">
+          <Link href="/auth/login" className="inline-block text-xs text-gray-500 hover:text-gray-700 px-2 py-1 rounded hover:bg-white/50 transition-colors">
+            Login
+          </Link>
+        </div>
       </div>
     </div>
   );
