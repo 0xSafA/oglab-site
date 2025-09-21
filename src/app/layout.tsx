@@ -6,6 +6,7 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://oglab.com"),
   title: "OG Lab - Perfect Cannabis from Thailand",
   description: "OG Lab is the largest cannabis dispensary on Koh Samui with farm tours, scientific area, and premium products. Growing Farm and Dispensary with the best prices from producer.",
   keywords: "OG Lab, cannabis manufacturer Thailand, papirosa Andaman, cannabis cigarettes, cannabis clones, buy weed, canna shop, Sunset indica, Double Sativa, ganja classic blend, marihuana, buds wholesale Samui Thailand, шишки, бошки, трава, каннабис, марихуана, папиросы Андаман, ผู้ผลิตกัญชา, ซื้อกัญชาราคาส่ง",
@@ -20,11 +21,22 @@ export const metadata: Metadata = {
     siteName: "OG Lab",
     type: "website",
     locale: "en_US",
+    images: [
+      {
+        url: "/assets/images/oglab_logo.png",
+        width: 1200,
+        height: 630,
+        alt: "OG Lab - Perfect Cannabis",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "OG Lab - Perfect Cannabis from Thailand",
     description: "Growing Farm and Dispensary with scientific area and premium cannabis products on Koh Samui.",
+    images: [
+      "/assets/images/oglab_logo.png",
+    ],
   },
   icons: {
     icon: "/favicon.ico",
