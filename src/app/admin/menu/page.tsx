@@ -148,12 +148,22 @@ export default function MenuAdminPage() {
     ))
   }
 
-  const cancelEditing = (id: string) => {
-    setItems(items.map(item => 
-      item.id === id && item.originalData
-        ? { ...item.originalData, isEditing: false, originalData: undefined }
-        : item
-    ))
+  const cancelEditing = async (id: string) => {
+    const target = items.find(i => i.id === id)
+    if (!target) return
+
+    // If this is an existing item (has originalData), just revert changes
+    if (target.originalData) {
+      setItems(items.map(item => 
+        item.id === id && item.originalData
+          ? { ...item.originalData, isEditing: false, originalData: undefined }
+          : item
+      ))
+      return
+    }
+
+    // New item (no originalData): delete it from DB and remove from list
+    await deleteItem(id)
   }
 
   const updateField = (id: string, field: keyof MenuItem, value: string | number | boolean | null) => {

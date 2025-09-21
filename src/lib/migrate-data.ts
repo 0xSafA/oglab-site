@@ -1,6 +1,6 @@
 import { createServiceRoleClient } from './supabase-client'
 import { fetchMenuWithOptions } from './google'
-import type { MenuItem, MenuLayout } from './supabase-client'
+import type { MenuItem } from './supabase-client'
 
 /**
  * Migrates data from Google Sheets to Supabase

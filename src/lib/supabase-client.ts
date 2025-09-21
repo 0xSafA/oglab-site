@@ -80,7 +80,7 @@ export const createClientComponentClient = () => {
               return { name, value }
             })
           },
-          setAll(cookiesToSet: Array<{ name: string; value: string; options?: { path?: string; maxAge?: number; expires?: string | number | Date; domain?: string; sameSite?: 'lax' | 'strict' | 'none'; secure?: boolean } }>) {
+          setAll(cookiesToSet: Array<{ name: string; value: string; options?: { path?: string; maxAge?: number; expires?: string | number | Date; domain?: string; sameSite?: boolean | 'lax' | 'strict' | 'none'; secure?: boolean } }>) {
             if (typeof document === 'undefined') return
             cookiesToSet.forEach(({ name, value, options }) => {
               let cookie = `${name}=${value}`

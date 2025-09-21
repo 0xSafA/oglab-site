@@ -127,8 +127,8 @@ export const addRoleToUser = async (userId: string, newRole: string): Promise<bo
     
     return !updateError
     
-  } catch (error) {
-    console.error('Error adding role to user:', error)
+  } catch {
+    console.error('Error adding role to user')
     return false
   }
 }
@@ -147,8 +147,8 @@ export const removeRoleFromUser = async (userId: string, roleToRemove: string): 
     })
     
     return !error
-  } catch (error) {
-    console.error('Error removing role from user:', error)
+  } catch {
+    console.error('Error removing role from user')
     return false
   }
 }
@@ -167,7 +167,7 @@ export const isMultipleRolesEnabled = async (): Promise<boolean> => {
     })
     
     return !error
-  } catch (error) {
+  } catch {
     return false
   }
 }

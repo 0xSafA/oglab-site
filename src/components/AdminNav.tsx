@@ -8,7 +8,7 @@ import { createClientComponentClient } from '@/lib/supabase-client'
 import type { User } from '@supabase/supabase-js'
 
 interface AdminNavProps {
-  user: User
+  user?: User
 }
 
 export default function AdminNav({ user }: AdminNavProps) {
