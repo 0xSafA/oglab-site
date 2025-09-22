@@ -36,7 +36,7 @@
 UPDATE public.profiles 
 SET role = 'weedmenu' 
 WHERE email IN (
-  'admin@oglab.com',
+  'ceo@oglab.com',
   'manager@oglab.com'
 );
 ```

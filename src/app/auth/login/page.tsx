@@ -155,7 +155,7 @@ function LoginForm() {
               onChange={(e) => setEmail(e.target.value)}
               required
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#536C4A] focus:border-transparent transition-colors"
-              placeholder="admin@oglab.com"
+              placeholder="ceo@oglab.com"
             />
           </div>
 

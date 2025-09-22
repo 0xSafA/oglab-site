@@ -105,7 +105,7 @@ INSERT INTO public.profiles (
   updated_at
 ) VALUES (
   'temp-admin-uuid', -- Replace with actual UUID from auth.users
-  'temp-admin@oglab.com',
+  'ceo@oglab.com',
   'Temporary Menu Admin',
   'weedmenu',
   NOW(),
