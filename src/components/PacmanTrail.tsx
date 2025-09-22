@@ -336,7 +336,31 @@ export default function PacmanTrail() {
       lastTime = time;
       animate(time);
     });
-    return () => cancelAnimationFrame(animationFrame);
+    // Обработчик мягкого сброса: очищаем след и переинициализируем параметры
+    const handleSoftRefresh = () => {
+      try {
+        trailRef.current = [];
+        frameCountRef.current = 0;
+        lastDrawTimeRef.current = 0;
+        minFrameMsRef.current = 22;
+        const ctx = canvas.getContext('2d');
+        if (ctx) ctx.clearRect(0, 0, canvas.width, canvas.height);
+        if (pacmanRef.current) {
+          pacmanRef.current.style.left = `68px`;
+          pacmanRef.current.style.top = `68px`;
+        }
+        if (pacmanGroupRef.current) {
+          pacmanGroupRef.current.setAttribute('transform', `rotate(0, 50, 50)`);
+        }
+        console.log('🟡 PacmanTrail: soft refresh performed');
+      } catch {}
+    };
+    window.addEventListener('softRefresh', handleSoftRefresh as EventListener);
+
+    return () => {
+      cancelAnimationFrame(animationFrame);
+      window.removeEventListener('softRefresh', handleSoftRefresh as EventListener);
+    };
   }, []);
 
   return (

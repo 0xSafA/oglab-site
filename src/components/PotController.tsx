@@ -174,6 +174,18 @@ export default function PotController() {
       window.addEventListener('potEaten', handlePotEaten as EventListener);
     }
 
+    // Мягкий сброс: очищаем все горшочки и сбрасываем глобальное состояние
+    const handleSoftRefresh = () => {
+      try {
+        setActivePots([]);
+        if (typeof document !== 'undefined') {
+          document.body.dataset.activePot = '';
+        }
+        console.log('🟡 PotController: soft refresh performed');
+      } catch {}
+    };
+    window.addEventListener('softRefresh', handleSoftRefresh as EventListener);
+
     // Очистка при размонтировании
     return () => {
       clearTimeout(initialTimeout);
@@ -185,6 +197,7 @@ export default function PotController() {
       }
       if (typeof window !== 'undefined') {
         window.removeEventListener('potEaten', handlePotEaten as EventListener);
+        window.removeEventListener('softRefresh', handleSoftRefresh as EventListener);
       }
       if (typeof document !== 'undefined') {
         document.body.dataset.activePot = '';

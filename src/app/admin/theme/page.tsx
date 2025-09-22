@@ -602,6 +602,58 @@ export default function ThemeAdminPage() {
           </div>
         </div>
       </div>
+
+      {/* Screen controls (bottom of Settings) */}
+      <ScreenControlsFooter supabaseUrl={process.env.NEXT_PUBLIC_SUPABASE_URL as string} supabaseKey={process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string} />
+    </div>
+  )
+}
+
+function ScreenControlsFooter({ supabaseUrl, supabaseKey }: { supabaseUrl?: string; supabaseKey?: string }) {
+  const [busy, setBusy] = useState(false)
+  const canBroadcast = !!supabaseUrl && !!supabaseKey
+
+  const send = async (event: 'soft-refresh' | 'hard-refresh') => {
+    if (!canBroadcast) return
+    setBusy(true)
+    try {
+      const { createClient } = await import('@supabase/supabase-js')
+      const sb = createClient(supabaseUrl!, supabaseKey!)
+      const channel = sb.channel('realtime-menu')
+      await channel.subscribe()
+      await channel.send({ type: 'broadcast', event })
+      setTimeout(() => channel.unsubscribe(), 500)
+    } catch (e) {
+      console.error('Failed to send broadcast', e)
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  if (!canBroadcast) {
+    return null
+  }
+
+  return (
+    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+      <h2 className="text-xl font-semibold text-gray-900 mb-4">Screens control</h2>
+      <p className="text-gray-600 mb-4">Manage TV screens without leaving Settings.</p>
+      <div className="flex flex-wrap gap-2">
+        <button
+          onClick={() => send('soft-refresh')}
+          disabled={busy}
+          className="border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 disabled:opacity-50"
+        >
+          Soft refresh
+        </button>
+        <button
+          onClick={() => send('hard-refresh')}
+          disabled={busy}
+          className="border border-red-300 text-red-700 px-4 py-2 rounded-lg hover:bg-red-50 disabled:opacity-50"
+        >
+          Hard reload
+        </button>
+      </div>
     </div>
   )
 }

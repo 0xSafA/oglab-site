@@ -64,6 +64,15 @@ export default function AutoRefresh() {
             console.log('🟢 Realtime: theme changed → hard reload')
             window.location.reload()
           })
+          // Админские команды управления экранами
+          .on('broadcast', { event: 'soft-refresh' }, () => {
+            console.log('🟡 Admin broadcast: soft-refresh → dispatch softRefresh event')
+            try { window.dispatchEvent(new Event('softRefresh')) } catch {}
+          })
+          .on('broadcast', { event: 'hard-refresh' }, () => {
+            console.log('🔴 Admin broadcast: hard-refresh → hard reload')
+            window.location.reload()
+          })
           .subscribe()
 
         // Очистка подписки
@@ -78,9 +87,75 @@ export default function AutoRefresh() {
       Notification.requestPermission();
     }
 
-    // Очистка интервала при размонтировании компонента
+    // ------------------------------
+    // Watchdog: детект зависаний и авто-восстановление
+    // ------------------------------
+    let rafId = 0;
+    let watchdogInterval: ReturnType<typeof setInterval> | undefined;
+    let lastRafBeat = typeof performance !== 'undefined' ? performance.now() : Date.now();
+    let consecutiveStalls = 0;
+
+    const HEARTBEAT_TIMEOUT_MS = 15_000; // если rAF не тикает > 15с — считаем фризом
+    const CHECK_EVERY_MS = 5_000; // проверяем раз в 5с
+    const MAX_CONSECUTIVE_STALLS = 2; // 2 подряд проверки → перезагрузка
+
+    const rafBeat = () => {
+      lastRafBeat = typeof performance !== 'undefined' ? performance.now() : Date.now();
+      rafId = requestAnimationFrame(rafBeat);
+    };
+    // Запускаем пульс rAF
+    rafId = requestAnimationFrame(rafBeat);
+
+    // Периодическая проверка лага главного потока
+    watchdogInterval = setInterval(() => {
+      // Если страница скрыта — пропускаем (браузер может легитимно тормозить таймеры)
+      if (typeof document !== 'undefined' && document.visibilityState === 'hidden') {
+        consecutiveStalls = 0;
+        return;
+      }
+
+      const now = typeof performance !== 'undefined' ? performance.now() : Date.now();
+      const lag = now - lastRafBeat;
+
+      if (lag > HEARTBEAT_TIMEOUT_MS) {
+        consecutiveStalls += 1;
+        console.warn(`⚠️ Watchdog: main thread stall detected: ~${Math.round(lag)}ms (x${consecutiveStalls})`);
+        if (consecutiveStalls >= MAX_CONSECUTIVE_STALLS) {
+          console.warn('🔁 Watchdog: forcing reload due to repeated stalls');
+          try {
+            // Мягкая попытка отправить маяк (не критично)
+            navigator.sendBeacon?.('/api/revalidate');
+          } catch {}
+          window.location.reload();
+        }
+      } else {
+        consecutiveStalls = 0;
+      }
+    }, CHECK_EVERY_MS);
+
+    // Перезагрузка при фатальных ошибках рантайма
+    const onFatal = (e: unknown) => {
+      console.error('💥 Fatal error caught by watchdog:', e);
+      setTimeout(() => window.location.reload(), 1000);
+    };
+    window.addEventListener('error', onFatal);
+    window.addEventListener('unhandledrejection', onFatal as EventListener);
+
+    // Автопереподключение при потере/возврате сети
+    const onOnline = () => {
+      console.log('🌐 Online — refreshing to recover connections');
+      window.location.reload();
+    };
+    window.addEventListener('online', onOnline);
+
+    // Очистка интервалов/листенеров при размонтировании компонента
     return () => {
       clearInterval(refreshInterval);
+      if (watchdogInterval) clearInterval(watchdogInterval);
+      if (rafId) cancelAnimationFrame(rafId);
+      window.removeEventListener('error', onFatal);
+      window.removeEventListener('unhandledrejection', onFatal as EventListener);
+      window.removeEventListener('online', onOnline);
     };
   }, []);
 

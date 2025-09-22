@@ -505,6 +505,53 @@ export default function MenuAdminPage() {
   )
 }
 
+function ScreenControls({ supabaseUrl, supabaseKey }: { supabaseUrl?: string; supabaseKey?: string }) {
+  const [busy, setBusy] = useState(false)
+  const canBroadcast = !!supabaseUrl && !!supabaseKey
+
+  const send = async (event: 'soft-refresh' | 'hard-refresh') => {
+    if (!canBroadcast) return
+    setBusy(true)
+    try {
+      const { createClient } = await import('@supabase/supabase-js')
+      const sb = createClient(supabaseUrl!, supabaseKey!)
+      const channel = sb.channel('realtime-menu')
+      await channel.subscribe()
+      await channel.send({ type: 'broadcast', event })
+      setTimeout(() => channel.unsubscribe(), 500)
+    } catch (e) {
+      console.error('Failed to send broadcast', e)
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  if (!canBroadcast) {
+    return null
+  }
+
+  return (
+    <div className="flex gap-2">
+      <button
+        onClick={() => send('soft-refresh')}
+        disabled={busy}
+        className="border border-gray-300 text-gray-700 px-3 py-2 rounded-lg hover:bg-gray-50 disabled:opacity-50"
+        title="Soft refresh menu animations (no page reload)"
+      >
+        Soft refresh
+      </button>
+      <button
+        onClick={() => send('hard-refresh')}
+        disabled={busy}
+        className="border border-red-300 text-red-700 px-3 py-2 rounded-lg hover:bg-red-50 disabled:opacity-50"
+        title="Hard reload TVs"
+      >
+        Hard reload
+      </button>
+    </div>
+  )
+}
+
 // Individual row component
 interface MenuItemRowProps {
   item: EditableMenuItem
