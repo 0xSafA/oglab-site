@@ -65,13 +65,26 @@ export async function middleware(request: NextRequest) {
     }
   }
 
+  // Redirect authenticated admin away from login page directly to admin
+  if (request.nextUrl.pathname === '/auth/login' && user) {
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('role')
+      .eq('id', user.id)
+      .single()
+    if (profile?.role === 'admin') {
+      const redirectUrl = request.nextUrl.clone()
+      redirectUrl.pathname = '/admin/menu'
+      return NextResponse.redirect(redirectUrl)
+    }
+  }
+
   return response
 }
 
 export const config = {
   matcher: [
-    // Temporarily disabled - checking auth in Server Components instead
-    // '/admin/:path*',
-    // '/auth/login'
+    '/admin/:path*',
+    '/auth/login'
   ],
 }

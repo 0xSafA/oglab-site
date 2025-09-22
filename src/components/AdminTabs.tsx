@@ -463,10 +463,9 @@ export default function AdminTabs() {
                 <h3 className="text-lg font-medium text-gray-900">Logo</h3>
                 
                 {formData.logo_url && (
-                  <div className="mb-6">
+                <div className="mb-6">
                     <label className="block text-sm font-medium text-gray-700 mb-2">Current Logo</label>
                     <div className="flex items-center space-x-4 p-4 border border-gray-200 rounded-lg">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img 
                         src={formData.logo_url} 
                         alt="Current logo" 

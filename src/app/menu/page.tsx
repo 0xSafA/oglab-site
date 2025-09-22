@@ -2,6 +2,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { fetchMenuWithOptions, type MenuRow } from '@/lib/supabase-data';
 import { fetchTheme, type Theme } from '@/lib/supabase-data';
+
+export const dynamic = 'force-dynamic';
 import { groupRows, columnsPerCategory } from '@/lib/menu-helpers';
 import PacmanTrail from '@/components/PacmanTrail';
 import AutoRefresh from '@/components/AutoRefresh';
