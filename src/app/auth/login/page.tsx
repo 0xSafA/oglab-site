@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, Suspense } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { createClientComponentClient } from '@/lib/supabase-client'
 import Link from 'next/link'
@@ -13,9 +13,39 @@ function LoginForm() {
   
   // const router = useRouter()
   const searchParams = useSearchParams()
-  const redirectTo = searchParams.get('redirectTo') || '/admin'
+  const redirectTo = searchParams.get('redirectTo') || '/admin/menu'
   
   const supabase = createClientComponentClient()
+
+  // If already authenticated, prefill email and redirect to admin
+  useEffect(() => {
+    let mounted = true
+    ;(async () => {
+      try {
+        const { data: { user } } = await supabase.auth.getUser()
+        if (!mounted) return
+        if (user) {
+          if (user.email) setEmail(user.email)
+          const { data: profile } = await supabase
+            .from('profiles')
+            .select('role')
+            .eq('id', user.id)
+            .single()
+          if (profile?.role === 'admin') {
+            window.location.replace(redirectTo)
+            return
+          }
+        } else {
+          // Prefill last used email if available
+          try {
+            const last = localStorage.getItem('last_login_email')
+            if (last) setEmail(last)
+          } catch {}
+        }
+      } catch {}
+    })()
+    return () => { mounted = false }
+  }, [redirectTo, supabase])
 
   const handleLogin = async (e: React.FormEvent) => {
     
@@ -85,6 +115,7 @@ function LoginForm() {
         
         // Also log to file and check cookies
         if (typeof window !== 'undefined') {
+          try { localStorage.setItem('last_login_email', finalEmail) } catch {}
           localStorage.setItem('debug_login_success', JSON.stringify({
             timestamp: new Date().toISOString(),
             user: data.user.email,
