@@ -38,9 +38,10 @@ export default function AdminTabs() {
     { id: 'settings', name: 'Settings', icon: '⚙️' }
   ]
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     loadData()
+    // intentionally run once
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const loadData = async () => {

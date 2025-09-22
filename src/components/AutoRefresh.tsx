@@ -91,7 +91,6 @@ export default function AutoRefresh() {
     // Watchdog: детект зависаний и авто-восстановление
     // ------------------------------
     let rafId = 0;
-    let watchdogInterval: ReturnType<typeof setInterval> | undefined;
     let lastRafBeat = typeof performance !== 'undefined' ? performance.now() : Date.now();
     let consecutiveStalls = 0;
 
@@ -107,7 +106,7 @@ export default function AutoRefresh() {
     rafId = requestAnimationFrame(rafBeat);
 
     // Периодическая проверка лага главного потока
-    watchdogInterval = setInterval(() => {
+    const watchdogInterval = setInterval(() => {
       // Если страница скрыта — пропускаем (браузер может легитимно тормозить таймеры)
       if (typeof document !== 'undefined' && document.visibilityState === 'hidden') {
         consecutiveStalls = 0;

@@ -31,6 +31,28 @@ const POT_CONFIG = {
 export default function PotController() {
   const [activePots, setActivePots] = useState<PotPosition[]>([]);
 
+  // Функция удаления горшочка (объявлена раньше, т.к. используется в spawnPot)
+  const removePot = useCallback((potId: string) => {
+    setActivePots(prev => {
+      const updatedPots = prev.filter(pot => pot.id !== potId);
+      
+      // Обновляем глобальное состояние
+      if (typeof document !== 'undefined') {
+        if (updatedPots.length > 0) {
+          document.body.dataset.activePot = JSON.stringify(updatedPots[0]);
+        } else {
+          document.body.dataset.activePot = '';
+        }
+      }
+      
+      return updatedPots;
+    });
+    
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`🍽️ Pot ${potId} removed`);
+    }
+  }, []);
+
   // Функция создания нового горшочка
   const spawnPot = useCallback(() => {
     if (activePots.length >= POT_CONFIG.maxActivePots) {
@@ -72,29 +94,9 @@ export default function PotController() {
     setTimeout(() => {
       removePot(newPot.id);
     }, POT_CONFIG.lifeDuration);
-  }, [activePots]);
+  }, [activePots, removePot]);
 
-  // Функция удаления горшочка
-  const removePot = useCallback((potId: string) => {
-    setActivePots(prev => {
-      const updatedPots = prev.filter(pot => pot.id !== potId);
-      
-      // Обновляем глобальное состояние
-      if (typeof document !== 'undefined') {
-        if (updatedPots.length > 0) {
-          document.body.dataset.activePot = JSON.stringify(updatedPots[0]);
-        } else {
-          document.body.dataset.activePot = '';
-        }
-      }
-      
-      return updatedPots;
-    });
-    
-    if (process.env.NODE_ENV === 'development') {
-      console.log(`🍽️ Pot ${potId} removed`);
-    }
-  }, []);
+  // Функция удаления горшочка — объявлена выше
 
   // Функция для "поедания" горшочка пакманом
   const eatPot = useCallback((potId: string) => {

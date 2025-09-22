@@ -136,18 +136,16 @@ export default function PacmanTrail() {
     };
 
     // Функция получения активного горшочка
-    const getActivePot = (): PotPosition | null => {
-      if (typeof document === 'undefined') return null;
-      
-      const potData = document.body.dataset.activePot;
-      if (!potData) return null;
-      
-      try {
-        return JSON.parse(potData);
-      } catch {
-        return null;
-      }
-    };
+    // const getActivePot = (): PotPosition | null => {
+    //   if (typeof document === 'undefined') return null;
+    //   const potData = document.body.dataset.activePot;
+    //   if (!potData) return null;
+    //   try {
+    //     return JSON.parse(potData);
+    //   } catch {
+    //     return null;
+    //   }
+    // };
 
     // Fade-layer отрисовка: O(1) на кадр
     const drawTrail = (cx: number, cy: number) => {
