@@ -6,6 +6,23 @@ export default function AutoRefresh() {
   const [nextRefresh, setNextRefresh] = useState<Date | null>(null);
 
   useEffect(() => {
+    // Защита от слишком частых перезагрузок
+    const lastReloadKey = 'lastReloadTime';
+    const minReloadInterval = 5000; // Минимум 5 секунд между перезагрузками
+    
+    const safeReload = (source: string) => {
+      const now = Date.now();
+      const lastReload = parseInt(localStorage.getItem(lastReloadKey) || '0');
+      
+      if (now - lastReload < minReloadInterval) {
+        console.warn(`🚫 RELOAD BLOCKED: Too frequent reload attempt from ${source}. Last reload was ${now - lastReload}ms ago`);
+        return;
+      }
+      
+      localStorage.setItem(lastReloadKey, now.toString());
+      console.log(`🔄 RELOAD EXECUTING: ${source}`);
+      window.location.reload();
+    };
 
     // Вычисляем время следующего обновления (15 минут от текущего времени)
     const calculateNextRefresh = () => {
@@ -23,11 +40,11 @@ export default function AutoRefresh() {
     // Автоматическое обновление страницы каждые 15 минут (900 секунд)
     // Синхронизировано с ISR revalidate времени
     const refreshInterval = setInterval(() => {
-      console.log('🔄 Auto-refreshing page to sync with new data and reset Pacman...');
+      console.log('🔄 RELOAD SOURCE: 15-minute auto-refresh timer');
       
       // Небольшая задержка для плавности
       setTimeout(() => {
-        window.location.reload();
+        safeReload('15-minute timer');
       }, 1000);
       
       // Обновляем время следующего обновления
@@ -46,25 +63,26 @@ export default function AutoRefresh() {
         const sub = sb
           .channel('realtime-menu')
           .on('postgres_changes', { event: '*', schema: 'public', table: 'menu_items' }, () => {
-            console.log('🟢 Realtime: menu_items changed → hard reload')
-            window.location.reload()
+            console.log('🔄 RELOAD SOURCE: Supabase realtime - menu_items changed')
+            safeReload('Supabase realtime - menu_items')
           })
           .on('postgres_changes', { event: '*', schema: 'public', table: 'menu_layout' }, () => {
-            console.log('🟢 Realtime: menu_layout changed → hard reload')
-            window.location.reload()
+            console.log('🔄 RELOAD SOURCE: Supabase realtime - menu_layout changed')
+            safeReload('Supabase realtime - menu_layout')
           })
           .on('postgres_changes', { event: '*', schema: 'public', table: 'theme' }, () => {
-            console.log('🟢 Realtime: theme changed → hard reload')
-            window.location.reload()
+            console.log('🔄 RELOAD SOURCE: Supabase realtime - theme changed')
+            safeReload('Supabase realtime - theme')
           })
           // Админские команды управления экранами
           .on('broadcast', { event: 'soft-refresh' }, () => {
-            console.log('🟡 Admin broadcast: soft-refresh → dispatch softRefresh event')
-            try { window.dispatchEvent(new Event('softRefresh')) } catch {}
+            console.log('🟡 SOFT-REFRESH RECEIVED: Admin broadcast - BUT IGNORING IT (temporarily disabled)')
+            console.trace('🔍 SOFT-REFRESH STACK TRACE:')
+            // ВРЕМЕННО ОТКЛЮЧЕНО: try { window.dispatchEvent(new Event('softRefresh')) } catch {}
           })
           .on('broadcast', { event: 'hard-refresh' }, () => {
-            console.log('🔴 Admin broadcast: hard-refresh → hard reload')
-            window.location.reload()
+            console.log('🔄 RELOAD SOURCE: Admin broadcast - hard-refresh')
+            safeReload('Admin broadcast - hard-refresh')
           })
           .subscribe()
 
@@ -166,6 +184,7 @@ export default function AutoRefresh() {
     rafId = requestAnimationFrame(rafBeat);
 
     console.log(`🐕 Watchdog: TV=${isTV}, slow=${isSlowDevice}, disabled=${watchdogDisabled}, timeout=${HEARTBEAT_TIMEOUT_MS}ms, check=${CHECK_EVERY_MS}ms, maxStalls=${MAX_CONSECUTIVE_STALLS}`);
+    console.log(`🐕 Device info: UA=${navigator.userAgent.substring(0, 50)}..., screen=${window.innerWidth}x${window.innerHeight}, cores=${navigator.hardwareConcurrency}`);
 
     // Периодическая проверка лага главного потока (только если не отключен)
     const watchdogInterval = !watchdogDisabled ? setInterval(() => {
@@ -191,12 +210,12 @@ export default function AutoRefresh() {
         console.warn(`⚠️ Watchdog: main thread stall detected: ~${Math.round(lag)}ms (x${consecutiveStalls}) [TV: ${isTV}]`);
         
         if (consecutiveStalls >= MAX_CONSECUTIVE_STALLS) {
-          console.warn('🔁 Watchdog: forcing reload due to repeated stalls');
+          console.warn('🔄 RELOAD SOURCE: Watchdog - repeated main thread stalls detected');
           try {
             // Мягкая попытка отправить маяк (не критично)
             navigator.sendBeacon?.('/api/revalidate');
           } catch {}
-          window.location.reload();
+          safeReload('Watchdog - main thread stalls');
         }
       } else {
         // Сброс счетчика если все нормально или есть активные анимации
@@ -209,14 +228,14 @@ export default function AutoRefresh() {
 
     // Перезагрузка при фатальных ошибках рантайма (только если watchdog включен)
     const onFatal = (e: unknown) => {
-      console.error('💥 Fatal error caught by watchdog:', e);
-      setTimeout(() => window.location.reload(), 1000);
+      console.error('🔄 RELOAD SOURCE: Fatal error caught by watchdog:', e);
+      setTimeout(() => safeReload('Fatal error'), 1000);
     };
     
     // Автопереподключение при потере/возврате сети (только если watchdog включен)
     const onOnline = () => {
-      console.log('🌐 Online — refreshing to recover connections');
-      window.location.reload();
+      console.log('🔄 RELOAD SOURCE: Network reconnection detected');
+      safeReload('Network reconnection');
     };
 
     if (!watchdogDisabled) {

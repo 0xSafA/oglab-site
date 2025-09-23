@@ -337,6 +337,8 @@ export default function PacmanTrail() {
     // Обработчик мягкого сброса: очищаем след и переинициализируем параметры
     const handleSoftRefresh = () => {
       try {
+        console.log('🔄 PACMAN RESET: Soft refresh received - resetting Pacman to start position');
+        console.trace('🔍 PACMAN RESET STACK TRACE:');
         trailRef.current = [];
         frameCountRef.current = 0;
         lastDrawTimeRef.current = 0;
@@ -350,7 +352,7 @@ export default function PacmanTrail() {
         if (pacmanGroupRef.current) {
           pacmanGroupRef.current.setAttribute('transform', `rotate(0, 50, 50)`);
         }
-        console.log('🟡 PacmanTrail: soft refresh performed');
+        console.log('🟡 PacmanTrail: soft refresh completed - Pacman reset to start');
       } catch {}
     };
     window.addEventListener('softRefresh', handleSoftRefresh as EventListener);
