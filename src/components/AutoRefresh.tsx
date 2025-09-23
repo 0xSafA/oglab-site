@@ -94,9 +94,79 @@ export default function AutoRefresh() {
     let lastRafBeat = typeof performance !== 'undefined' ? performance.now() : Date.now();
     let consecutiveStalls = 0;
 
-    const HEARTBEAT_TIMEOUT_MS = 15_000; // если rAF не тикает > 15с — считаем фризом
-    const CHECK_EVERY_MS = 5_000; // проверяем раз в 5с
-    const MAX_CONSECUTIVE_STALLS = 2; // 2 подряд проверки → перезагрузка
+    // Улучшенная детекция ТВ и медленных устройств
+    const detectDeviceType = () => {
+      if (typeof navigator === 'undefined' || typeof window === 'undefined') return { isTV: false, isSlowDevice: false };
+
+      const ua = navigator.userAgent;
+      const screen = window.screen || {};
+      
+      // Детекция ТВ по User-Agent
+      const isTVByUA = ua.includes('TV') || ua.includes('WebOS') || ua.includes('Tizen') || 
+                       ua.includes('SmartTV') || ua.includes('BRAVIA') || ua.includes('NetCast');
+      
+      // Детекция ТВ по характеристикам экрана
+      const isTVByScreen = window.innerWidth >= 1920 && window.innerHeight >= 1080 && 
+                          (!('ontouchstart' in window)); // ТВ обычно без тач-скрина
+      
+      // Детекция медленного устройства
+      const isSlowDevice = (
+        // Старые браузеры или медленные устройства
+        !window.requestAnimationFrame ||
+        !window.performance ||
+        // Низкое разрешение при большом экране (растянутое изображение)
+        (window.innerWidth >= 1920 && window.devicePixelRatio < 1.5) ||
+        // Мало памяти (если доступно)
+        (navigator.deviceMemory && navigator.deviceMemory <= 2)
+      );
+
+      return {
+        isTV: isTVByUA || isTVByScreen,
+        isSlowDevice
+      };
+    };
+
+    const { isTV, isSlowDevice } = detectDeviceType();
+
+    // Адаптивные параметры в зависимости от типа устройства
+    const getWatchdogParams = () => {
+      if (isTV) {
+        // ТВ: очень мягкие параметры, отключаем только если это точно проблемное устройство
+        const hasGoodPerformance = window.performance && 
+                                  navigator.hardwareConcurrency && 
+                                  navigator.hardwareConcurrency >= 4;
+        return {
+          timeout: 120_000, // 2 минуты
+          checkInterval: 30_000, // 30 секунд
+          maxStalls: 6,
+          enabled: hasGoodPerformance // Включаем только для производительных ТВ
+        };
+      } else if (isSlowDevice) {
+        // Медленные устройства: мягкие параметры
+        return {
+          timeout: 60_000, // 1 минута
+          checkInterval: 20_000, // 20 секунд
+          maxStalls: 4,
+          enabled: true
+        };
+      } else {
+        // Обычные устройства: стандартные параметры
+        return {
+          timeout: 30_000, // 30 секунд
+          checkInterval: 10_000, // 10 секунд
+          maxStalls: 3,
+          enabled: true
+        };
+      }
+    };
+
+    const watchdogParams = getWatchdogParams();
+    const HEARTBEAT_TIMEOUT_MS = watchdogParams.timeout;
+    const CHECK_EVERY_MS = watchdogParams.checkInterval;
+    const MAX_CONSECUTIVE_STALLS = watchdogParams.maxStalls;
+
+    // Автоматическое отключение watchdog на основе детекции устройства
+    const watchdogDisabled = !watchdogParams.enabled || process.env.NEXT_PUBLIC_DISABLE_WATCHDOG === 'true';
 
     const rafBeat = () => {
       lastRafBeat = typeof performance !== 'undefined' ? performance.now() : Date.now();
@@ -105,20 +175,31 @@ export default function AutoRefresh() {
     // Запускаем пульс rAF
     rafId = requestAnimationFrame(rafBeat);
 
-    // Периодическая проверка лага главного потока
-    const watchdogInterval = setInterval(() => {
+    console.log(`🐕 Watchdog: TV=${isTV}, slow=${isSlowDevice}, disabled=${watchdogDisabled}, timeout=${HEARTBEAT_TIMEOUT_MS}ms, check=${CHECK_EVERY_MS}ms, maxStalls=${MAX_CONSECUTIVE_STALLS}`);
+
+    // Периодическая проверка лага главного потока (только если не отключен)
+    const watchdogInterval = !watchdogDisabled ? setInterval(() => {
       // Если страница скрыта — пропускаем (браузер может легитимно тормозить таймеры)
       if (typeof document !== 'undefined' && document.visibilityState === 'hidden') {
         consecutiveStalls = 0;
         return;
       }
 
+      // Дополнительные проверки для предотвращения ложных срабатываний
       const now = typeof performance !== 'undefined' ? performance.now() : Date.now();
       const lag = now - lastRafBeat;
 
-      if (lag > HEARTBEAT_TIMEOUT_MS) {
+      // Проверяем, не находимся ли мы в процессе загрузки или навигации
+      const isLoading = typeof document !== 'undefined' && document.readyState !== 'complete';
+      
+      // Проверяем активность пользователя (если есть анимации, то все работает)
+      const hasActiveAnimations = typeof document !== 'undefined' && 
+        document.getAnimations && document.getAnimations().length > 0;
+
+      if (lag > HEARTBEAT_TIMEOUT_MS && !isLoading && !hasActiveAnimations) {
         consecutiveStalls += 1;
-        console.warn(`⚠️ Watchdog: main thread stall detected: ~${Math.round(lag)}ms (x${consecutiveStalls})`);
+        console.warn(`⚠️ Watchdog: main thread stall detected: ~${Math.round(lag)}ms (x${consecutiveStalls}) [TV: ${isTV}]`);
+        
         if (consecutiveStalls >= MAX_CONSECUTIVE_STALLS) {
           console.warn('🔁 Watchdog: forcing reload due to repeated stalls');
           try {
@@ -128,33 +209,42 @@ export default function AutoRefresh() {
           window.location.reload();
         }
       } else {
+        // Сброс счетчика если все нормально или есть активные анимации
+        if (consecutiveStalls > 0 && (lag <= HEARTBEAT_TIMEOUT_MS || hasActiveAnimations)) {
+          console.log(`✅ Watchdog: lag recovered or animations active, resetting stall counter`);
+        }
         consecutiveStalls = 0;
       }
-    }, CHECK_EVERY_MS);
+    }, CHECK_EVERY_MS) : null;
 
-    // Перезагрузка при фатальных ошибках рантайма
+    // Перезагрузка при фатальных ошибках рантайма (только если watchdog включен)
     const onFatal = (e: unknown) => {
       console.error('💥 Fatal error caught by watchdog:', e);
       setTimeout(() => window.location.reload(), 1000);
     };
-    window.addEventListener('error', onFatal);
-    window.addEventListener('unhandledrejection', onFatal as EventListener);
-
-    // Автопереподключение при потере/возврате сети
+    
+    // Автопереподключение при потере/возврате сети (только если watchdog включен)
     const onOnline = () => {
       console.log('🌐 Online — refreshing to recover connections');
       window.location.reload();
     };
-    window.addEventListener('online', onOnline);
+
+    if (!watchdogDisabled) {
+      window.addEventListener('error', onFatal);
+      window.addEventListener('unhandledrejection', onFatal as EventListener);
+      window.addEventListener('online', onOnline);
+    }
 
     // Очистка интервалов/листенеров при размонтировании компонента
     return () => {
       clearInterval(refreshInterval);
       if (watchdogInterval) clearInterval(watchdogInterval);
       if (rafId) cancelAnimationFrame(rafId);
-      window.removeEventListener('error', onFatal);
-      window.removeEventListener('unhandledrejection', onFatal as EventListener);
-      window.removeEventListener('online', onOnline);
+      if (!watchdogDisabled) {
+        window.removeEventListener('error', onFatal);
+        window.removeEventListener('unhandledrejection', onFatal as EventListener);
+        window.removeEventListener('online', onOnline);
+      }
     };
   }, []);
 
