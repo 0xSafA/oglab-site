@@ -354,7 +354,7 @@ html, body {
 
 /* Compact line height for menu item names on all devices */
 .menu-category-item span {
-  line-height: 0.77; /* уменьшено на 30% с 1.1 */
+  line-height: 1.1; /* возвращено к исходному значению для читаемости внутри пункта */
 }
 
 .type-dot {
@@ -525,13 +525,13 @@ html, body {
   /* Menu item names - ultra small on tablets */
   .menu-category-item span {
     font-size: 9px !important;
-    line-height: 0.77 !important; /* уменьшено на 30% с 1.1 */
+    line-height: 1.1 !important; /* возвращено к исходному значению для читаемости внутри пункта */
   }
   
   /* Price and THC/CBG text - ultra small on tablets */
   .menu-category-item .w-12 {
     font-size: 9px !important;
-    line-height: 0.77 !important; /* уменьшено на 30% с 1.1 */
+    line-height: 1.1 !important; /* возвращено к исходному значению для читаемости внутри пункта */
   }
   
   /* Compact indicators */
