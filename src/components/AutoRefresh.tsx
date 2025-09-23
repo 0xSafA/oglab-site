@@ -6,6 +6,7 @@ export default function AutoRefresh() {
   const [nextRefresh, setNextRefresh] = useState<Date | null>(null);
 
   useEffect(() => {
+
     // Вычисляем время следующего обновления (15 минут от текущего времени)
     const calculateNextRefresh = () => {
       const now = new Date();
@@ -23,14 +24,6 @@ export default function AutoRefresh() {
     // Синхронизировано с ISR revalidate времени
     const refreshInterval = setInterval(() => {
       console.log('🔄 Auto-refreshing page to sync with new data and reset Pacman...');
-      
-      // Показываем уведомление перед обновлением (опционально)
-      if ('Notification' in window && Notification.permission === 'granted') {
-        new Notification('OG Lab Menu', {
-          body: 'Обновление меню и сброс анимации...',
-          icon: '/assets/images/oglab_logo_round.svg'
-        });
-      }
       
       // Небольшая задержка для плавности
       setTimeout(() => {
@@ -81,11 +74,6 @@ export default function AutoRefresh() {
         })
       })
     } catch {}
-
-    // Запрашиваем разрешение на уведомления (опционально)
-    if ('Notification' in window && Notification.permission === 'default') {
-      Notification.requestPermission();
-    }
 
     // ------------------------------
     // Watchdog: детект зависаний и авто-восстановление
