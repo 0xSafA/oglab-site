@@ -99,7 +99,6 @@ export default function AutoRefresh() {
       if (typeof navigator === 'undefined' || typeof window === 'undefined') return { isTV: false, isSlowDevice: false };
 
       const ua = navigator.userAgent;
-      const screen = window.screen || {};
       
       // Детекция ТВ по User-Agent
       const isTVByUA = ua.includes('TV') || ua.includes('WebOS') || ua.includes('Tizen') || 
@@ -116,8 +115,11 @@ export default function AutoRefresh() {
         !window.performance ||
         // Низкое разрешение при большом экране (растянутое изображение)
         (window.innerWidth >= 1920 && window.devicePixelRatio < 1.5) ||
-        // Мало памяти (если доступно)
-        (navigator.deviceMemory && navigator.deviceMemory <= 2)
+        // Мало памяти (если доступно) - проверяем наличие экспериментального API
+        (() => {
+          const nav = navigator as Navigator & { deviceMemory?: number };
+          return 'deviceMemory' in navigator && nav.deviceMemory && nav.deviceMemory <= 2;
+        })()
       );
 
       return {
