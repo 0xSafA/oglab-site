@@ -7,7 +7,6 @@
     "build": "NODE_OPTIONS='--no-deprecation' next build",
     "start": "NODE_OPTIONS='--no-deprecation' next start -p 3001",
     "lint": "eslint",
-    "optimize-svg": "node scripts/optimize-svg.js"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
