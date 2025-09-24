@@ -32,7 +32,7 @@ export default async function HomePage() {
           
           {/* Social Icons */}
           <div className="flex justify-center gap-4 mb-6">
-            <SocialLink href="https://www.instagram.com/oglabco/" icon="/assets/images/instagram.svg" alt="Instagram" />
+            <SocialLink href="https://www.instagram.com/oglab.co/" icon="/assets/images/instagram.svg" alt="Instagram" />
             <SocialLink href="https://t.me/Oglabco" icon="/assets/images/telegram.svg" alt="Telegram" />
             <SocialLink href="https://api.whatsapp.com/send?phone=+66982040757" icon="/assets/images/whatsapp.svg" alt="WhatsApp" />
             <SocialLink href="https://www.facebook.com/OGLabcom" icon="/assets/images/facebook.svg" alt="Facebook" />
