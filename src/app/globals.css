@@ -100,12 +100,12 @@ html, body {
   font-size: clamp(0.77rem, 1.43vw, 1.045rem);
   /* reduce horizontal padding ~5% to make cards visually wider */
   padding: clamp(0.3rem, 0.9vw, 0.6rem) clamp(0.57rem, 1.52vw, 1.045rem);
-  line-height: 0.88;
+  line-height: 0.616; /* уменьшено на 30% с 0.88 */
 }
 
 .viewport-menu .menu-category-item span {
   font-size: inherit;
-  line-height: inherit;
+  line-height: 1; /* нормальный интервал для переносов длинных названий */
 }
 
 /* Fine tune: slightly smaller item names, larger prices */
@@ -354,7 +354,7 @@ html, body {
 
 /* Compact line height for menu item names on all devices */
 .menu-category-item span {
-  line-height: 1.1;
+  line-height: 1; /* нормальный интервал для переносов длинных названий */
 }
 
 .type-dot {
@@ -399,6 +399,7 @@ html, body {
   
   .menu-category-item span {
     font-size: 16.5px !important;
+    line-height: 1 !important; /* нормальный интервал для переносов длинных названий */
   }
 }
 
@@ -525,13 +526,13 @@ html, body {
   /* Menu item names - ultra small on tablets */
   .menu-category-item span {
     font-size: 9px !important;
-    line-height: 1.1 !important;
+    line-height: 1 !important; /* нормальный интервал для переносов длинных названий */
   }
   
   /* Price and THC/CBG text - ultra small on tablets */
   .menu-category-item .w-12 {
     font-size: 9px !important;
-    line-height: 1.1 !important;
+    line-height: 1 !important; /* нормальный интервал для переносов длинных названий */
   }
   
   /* Compact indicators */

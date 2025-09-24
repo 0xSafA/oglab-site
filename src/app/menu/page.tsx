@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import { memo } from 'react';
 import { fetchMenuWithOptions, type MenuRow } from '@/lib/supabase-data';
 import { fetchTheme, type Theme } from '@/lib/supabase-data';
 
@@ -157,8 +158,8 @@ export default async function MenuPage() {
   );
 }
 
-// Category Block Component
-function CategoryBlock({ name, rows, primaryColor, tierLabels, itemTextColor, categoryTextColor, cardBgColor, typeColors, featureColor }: { name: string; rows: MenuRow[]; primaryColor?: string; tierLabels: Record<string, string>; itemTextColor: string; categoryTextColor: string; cardBgColor: string; typeColors: Record<string,string>; featureColor: string }) {
+// Category Block Component - мемоизирован для производительности на ТВ
+const CategoryBlock = memo(function CategoryBlock({ name, rows, primaryColor, tierLabels, itemTextColor, categoryTextColor, cardBgColor, typeColors, featureColor }: { name: string; rows: MenuRow[]; primaryColor?: string; tierLabels: Record<string, string>; itemTextColor: string; categoryTextColor: string; cardBgColor: string; typeColors: Record<string,string>; featureColor: string }) {
   const conf = columnsPerCategory[name] ?? 
     (name.toUpperCase().includes('HASH')
       ? { label: '', keys: ['Price_1g', 'Price_5g'] }
@@ -210,11 +211,11 @@ function CategoryBlock({ name, rows, primaryColor, tierLabels, itemTextColor, ca
         })}
       </div>
     </div>
-    );
-  }
+  );
+});
 
-// Combined Indicator Component
-function CombinedIndicator({ typeKey, isOur, colorMap, featureColor }: { typeKey: KnownType | null; isOur?: boolean; colorMap: Record<string,string>; featureColor: string }) {
+// Combined Indicator Component - мемоизирован для производительности
+const CombinedIndicator = memo(function CombinedIndicator({ typeKey, isOur, colorMap, featureColor }: { typeKey: KnownType | null; isOur?: boolean; colorMap: Record<string,string>; featureColor: string }) {
   const hasCheckmark = !!isOur;
   const backgroundColor = typeKey ? colorMap[typeKey] : (hasCheckmark ? featureColor : '#536C4A');
   const style = { backgroundColor } as React.CSSProperties;
@@ -235,10 +236,10 @@ function CombinedIndicator({ typeKey, isOur, colorMap, featureColor }: { typeKey
       )}
     </div>
   );
-}
+});
 
-// Legend Dot Component
-function LegendDot({ type, label }: { type: KnownType; label: string }) {
+// Legend Dot Component - мемоизирован для производительности
+const LegendDot = memo(function LegendDot({ type, label }: { type: KnownType; label: string }) {
   const dotClass = `dot-${type}`;
 
   return (
@@ -247,7 +248,7 @@ function LegendDot({ type, label }: { type: KnownType; label: string }) {
       <span className="text-xs">{label}</span>
     </div>
   );
-}
+});
 
 // Header label helper
 const headerLabel = (k: string, labels: Record<string, string>) => {
