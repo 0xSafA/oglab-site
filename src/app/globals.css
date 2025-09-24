@@ -99,7 +99,7 @@ html, body {
   /* keep font; tighten line-height further for TV fit (~20%) */
   font-size: clamp(0.77rem, 1.43vw, 1.045rem);
   /* reduce horizontal padding ~5% to make cards visually wider */
-  padding: clamp(0.3rem, 0.9vw, 0.6rem) clamp(0.57rem, 1.52vw, 1.045rem);
+  padding: clamp(0.19rem, 0.575vw, 0.38rem) clamp(0.57rem, 1.52vw, 1.045rem);
   line-height: 0.616; /* уменьшено на 30% с 0.88 */
 }
 
