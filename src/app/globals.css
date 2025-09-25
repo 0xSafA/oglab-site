@@ -813,8 +813,8 @@ body[data-breathing-type="indica"] .dot-indica {
 
 @media (max-width: 768px) {
   .youtube-icon {
-    width: 39px;
-    height: 39px;
+    width: 37px;
+    height: 37px;
     display: flex;
     align-items: center;
     justify-content: center;
