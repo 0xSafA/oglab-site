@@ -249,6 +249,34 @@ html, body {
   .animate-blink {
     animation: blink 1s infinite;
   }
+  
+  .animate-magic-glow {
+    animation: magicGlow 3s ease-in-out infinite;
+  }
+  
+  .animate-sparkle-trail {
+    animation: sparkleTrail 4s linear infinite;
+  }
+  
+  .animate-rainbow-border {
+    animation: rainbowBorder 5s linear infinite;
+  }
+  
+  .animate-floating {
+    animation: floating 6s ease-in-out infinite;
+  }
+  
+  .animate-cosmic-glow {
+    animation: cosmicGlow 4s ease-in-out infinite;
+  }
+  
+  .animate-magic-pulse {
+    animation: magicPulse 2s ease-in-out infinite;
+  }
+  
+  .animate-css-particle {
+    animation: cssParticleFloat 4s ease-in-out infinite, cssParticleGlow 3s ease-in-out infinite alternate;
+  }
 }
 
 @keyframes fadeInUp {
@@ -325,6 +353,135 @@ html, body {
   }
   50% { 
     transform: translateY(-50%) rotate(45deg); 
+  }
+}
+
+@keyframes magicGlow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(176, 191, 147, 0.5), 0 0 40px rgba(176, 191, 147, 0.3), 0 0 60px rgba(176, 191, 147, 0.1);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(255, 215, 0, 0.8), 0 0 60px rgba(255, 215, 0, 0.5), 0 0 90px rgba(255, 215, 0, 0.3);
+  }
+}
+
+@keyframes sparkleTrail {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 200% 50%;
+  }
+}
+
+@keyframes rainbowBorder {
+  0% {
+    border-color: #ff6b6b;
+    box-shadow: 0 0 15px rgba(255, 107, 107, 0.5);
+  }
+  16.66% {
+    border-color: #ffa500;
+    box-shadow: 0 0 15px rgba(255, 165, 0, 0.5);
+  }
+  33.33% {
+    border-color: #ffff00;
+    box-shadow: 0 0 15px rgba(255, 255, 0, 0.5);
+  }
+  50% {
+    border-color: #32cd32;
+    box-shadow: 0 0 15px rgba(50, 205, 50, 0.5);
+  }
+  66.66% {
+    border-color: #4169e1;
+    box-shadow: 0 0 15px rgba(65, 105, 225, 0.5);
+  }
+  83.33% {
+    border-color: #9370db;
+    box-shadow: 0 0 15px rgba(147, 112, 219, 0.5);
+  }
+  100% {
+    border-color: #ff6b6b;
+    box-shadow: 0 0 15px rgba(255, 107, 107, 0.5);
+  }
+}
+
+@keyframes floating {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  33% {
+    transform: translateY(-10px) rotate(1deg);
+  }
+  66% {
+    transform: translateY(-5px) rotate(-1deg);
+  }
+}
+
+@keyframes cosmicGlow {
+  0%, 100% {
+    box-shadow: 
+      0 0 20px rgba(255, 215, 0, 0.6),
+      0 0 40px rgba(255, 105, 180, 0.4),
+      0 0 60px rgba(0, 206, 209, 0.3),
+      inset 0 0 20px rgba(255, 255, 255, 0.1);
+  }
+  25% {
+    box-shadow: 
+      0 0 30px rgba(255, 105, 180, 0.8),
+      0 0 50px rgba(0, 206, 209, 0.5),
+      0 0 70px rgba(152, 251, 152, 0.4),
+      inset 0 0 30px rgba(255, 215, 0, 0.2);
+  }
+  50% {
+    box-shadow: 
+      0 0 25px rgba(0, 206, 209, 0.7),
+      0 0 45px rgba(152, 251, 152, 0.6),
+      0 0 65px rgba(221, 160, 221, 0.4),
+      inset 0 0 25px rgba(255, 105, 180, 0.15);
+  }
+  75% {
+    box-shadow: 
+      0 0 35px rgba(152, 251, 152, 0.9),
+      0 0 55px rgba(221, 160, 221, 0.6),
+      0 0 75px rgba(255, 215, 0, 0.4),
+      inset 0 0 35px rgba(0, 206, 209, 0.2);
+  }
+}
+
+@keyframes magicPulse {
+  0%, 100% {
+    transform: scale(1);
+    filter: brightness(1) saturate(1);
+  }
+  50% {
+    transform: scale(1.05);
+    filter: brightness(1.2) saturate(1.3);
+  }
+}
+
+@keyframes cssParticleFloat {
+  0%, 100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  25% {
+    transform: translate(10px, -15px) rotate(90deg);
+  }
+  50% {
+    transform: translate(-5px, -25px) rotate(180deg);
+  }
+  75% {
+    transform: translate(-15px, -10px) rotate(270deg);
+  }
+}
+
+@keyframes cssParticleGlow {
+  0% {
+    box-shadow: 0 0 5px currentColor, 0 0 10px currentColor;
+    opacity: 0.5;
+  }
+  100% {
+    box-shadow: 0 0 10px currentColor, 0 0 20px currentColor, 0 0 30px currentColor;
+    opacity: 0.9;
   }
 }
 
