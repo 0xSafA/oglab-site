@@ -29,7 +29,7 @@ export default function MagicRipple({
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const ripplesRef = useRef<Ripple[]>([]);
-  const animationRef = useRef<number>();
+  const animationRef = useRef<number>(0);
   const lastSpawnRef = useRef<number>(0);
 
   // Настройки скорости

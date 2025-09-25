@@ -33,7 +33,7 @@ export default function MagicParticles({
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const particlesRef = useRef<Particle[]>([]);
-  const animationRef = useRef<number>();
+  const animationRef = useRef<number>(0);
   const [isClient, setIsClient] = useState(false);
 
   // Проверяем, что мы на клиентской стороне

@@ -50,6 +50,11 @@ export interface Theme {
   card_bg_color?: string | null
   event_text?: string | null
   offer_text?: string | null
+  offer_enable_particles?: boolean | null
+  offer_enable_cosmic_glow?: boolean | null
+  offer_enable_floating?: boolean | null
+  offer_enable_pulse?: boolean | null
+  offer_enable_inner_light?: boolean | null
   updated_at: string
 }
 

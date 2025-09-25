@@ -33,7 +33,7 @@ export default function SparkleEffect({
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const sparklesRef = useRef<Sparkle[]>([]);
-  const animationRef = useRef<number>();
+  const animationRef = useRef<number>(0);
   const lastSpawnRef = useRef<number>(0);
   const sparkleIdRef = useRef<number>(0);
 
