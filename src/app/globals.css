@@ -800,3 +800,28 @@ body[data-breathing-type="indica"] .dot-indica {
   width: 50px !important;
   height: 50px !important;
 }
+
+/* Social icon stroke normalization */
+.youtube-icon {
+  width: 46px;
+  height: 46px;
+}
+
+.youtube-icon .youtube-stroke {
+  stroke-width: 3;
+}
+
+@media (max-width: 768px) {
+  .youtube-icon {
+    width: 39px;
+    height: 39px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  
+  .youtube-icon .youtube-stroke {
+    stroke-width: 2.8;
+  }
+}

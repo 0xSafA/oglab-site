@@ -31,7 +31,28 @@ export default async function HomePage() {
         <div className="bg-white/95 rounded-3xl shadow-2xl border-[3px] md:border-2 border-[#B0BF93]/45 md:border-[#B0BF93]/40 p-8 animate-fade-in-up">
           
           {/* Social Icons */}
-          <div className="flex justify-center gap-4 mb-6">
+          <div className="flex items-center justify-center gap-4 mb-6">
+            <a
+              href="https://www.youtube.com/@oglabco"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="YouTube"
+              className="transition-transform hover:scale-125"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width={40}
+                height={40}
+                viewBox="0 0 24 24"
+                fill="none"
+                className="lucide lucide-youtube-icon lucide-youtube youtube-icon"
+              >
+                <g className="youtube-stroke" fill="none" stroke="#536C4A" strokeLinecap="round" strokeLinejoin="round">
+                  <path vectorEffect="non-scaling-stroke" d="M2.5 17a24.1 24.1 0 0 1 0-10a2 2 0 0 1 1.4-1.4a49.6 49.6 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.1 24.1 0 0 1 0 10a2 2 0 0 1-1.4 1.4a49.6 49.6 0 0 1-16.2 0A2 2 0 0 1 2.5 17" />
+                  <path vectorEffect="non-scaling-stroke" d="m10 15l5-3l-5-3z" />
+                </g>
+              </svg>
+            </a>
             <SocialLink href="https://www.instagram.com/oglab.co/" icon="/assets/images/instagram.svg" alt="Instagram" />
             <SocialLink href="https://t.me/Oglabco" icon="/assets/images/telegram.svg" alt="Telegram" />
             <SocialLink href="https://api.whatsapp.com/send?phone=+66982040757" icon="/assets/images/whatsapp.svg" alt="WhatsApp" />
