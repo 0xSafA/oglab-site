@@ -120,7 +120,7 @@ export default async function HomePage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
             <FeatureCard title="Farm Tours" description="Cannabis tours to our farm with scientific area with indoor grow and outdoor cannabis garden. See the growing process with your own eyes!" />
             <FeatureCard title="Events & Parties" description="Every 3 weeks we organize amazing parties for our community. Join us for unforgettable experiences!" />
-            <FeatureCard title="Award Winners" description="We participate in Cannabis Cup competitions and other prestigious contests. Quality confirmed by awards!" />
+            <FeatureCard title="Recognized Quality" description="Our cannabis is recognized at national and international competitions. Every award is proof of our uncompromising quality." />
             <FeatureCard title="Best Prices" description="Best prices directly from the producer! Maximum quality, freshest cannabis straight from the farm." />
             <FeatureCard title="Scientific Approach" description="Scientific area with big observation window. Innovative growing methods and quality control systems." />
             <FeatureCard title="Must Visit Place" description="Competing for the best location title on Samui in TripAdvisor. Must visit place on the island!" />
