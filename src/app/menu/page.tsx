@@ -40,7 +40,7 @@ export default async function MenuPage() {
   // Use theme colors or fallback to defaults
   const primaryColor = theme?.primary_color || '#536C4A';
   const secondaryColor = theme?.secondary_color || '#B0BF93';
-  const logoUrl = theme?.logo_url || '/assets/images/oglab_logo_round.svg';
+  const logoUrl = '/assets/images/oglab_logo_round.svg';
   const itemTextColor = theme?.item_text_color || '#1f2937'; // gray-800
   const categoryTextColor = theme?.category_text_color || '#ffffff';
   const cardBgColor = theme?.card_bg_color || '#ffffff';

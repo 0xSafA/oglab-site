@@ -10,7 +10,7 @@ export default async function HomePage() {
   // Use theme colors or fallback to defaults
   const primaryColor = theme?.primary_color || '#536C4A';
   const secondaryColor = theme?.secondary_color || '#B0BF93';
-  const logoUrl = theme?.logo_url || '/assets/images/oglab_logo_round.svg';
+  const logoUrl = '/assets/images/oglab_logo_round.svg';
   const eventText = theme?.event_text ?? "Next party is coming 26 September at 19:00! Stay tuned!";
   const offerText = theme?.offer_text ?? "Next party is coming 26 September at 19:00! Stay tuned!";
   const offerHidden = theme?.offer_hide ?? false;

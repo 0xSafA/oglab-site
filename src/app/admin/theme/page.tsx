@@ -350,6 +350,12 @@ export default function ThemeAdminPage() {
         {/* Logo Upload */}
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
           <h2 className="text-xl font-semibold text-gray-900 mb-4">Logo Upload</h2>
+          <div className="mb-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+            <p className="text-sm text-blue-800">
+              <strong>Note:</strong> The website now uses a local logo from <code>/assets/images/oglab_logo_round.svg</code>. 
+              Logo uploads here are stored but not displayed on the site.
+            </p>
+          </div>
           
           {formData.logo_url && (
             <div className="mb-6">
