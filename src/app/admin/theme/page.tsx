@@ -34,6 +34,7 @@ export default function ThemeAdminPage() {
     card_bg_color: '#ffffff',
     event_text: '',
     offer_text: '',
+    offer_hide: false,
     offer_enable_particles: true,
     offer_enable_cosmic_glow: true,
     offer_enable_floating: true,
@@ -81,6 +82,7 @@ export default function ThemeAdminPage() {
           card_bg_color: data.card_bg_color || '#ffffff',
           event_text: data.event_text || '',
           offer_text: data.offer_text || '',
+          offer_hide: data.offer_hide ?? false,
           offer_enable_particles: data.offer_enable_particles ?? true,
           offer_enable_cosmic_glow: data.offer_enable_cosmic_glow ?? true,
           offer_enable_floating: data.offer_enable_floating ?? true,
@@ -164,6 +166,7 @@ export default function ThemeAdminPage() {
       card_bg_color: '#ffffff',
       event_text: '',
       offer_text: '',
+      offer_hide: false,
       offer_enable_particles: true,
       offer_enable_cosmic_glow: true,
       offer_enable_floating: true,
@@ -411,131 +414,134 @@ export default function ThemeAdminPage() {
       {/* Main Page settings */}
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
         <h2 className="text-xl font-semibold text-gray-900 mb-4">Main Page</h2>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Offer text</label>
-          <input
-            type="text"
-            value={formData.offer_text}
-            onChange={(e) => setFormData({ ...formData, offer_text: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#536C4A] focus:border-transparent"
-          />
-        </div>
-        <div className="mt-6">
-          <label className="block text-sm font-medium text-gray-700 mb-2">Event text</label>
-          <input
-            type="text"
-            value={formData.event_text}
-            onChange={(e) => setFormData({ ...formData, event_text: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#536C4A] focus:border-transparent"
-          />
-        </div>
-        <div className="mt-4">
+        <div className="space-y-6">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Offer text</label>
+            <input
+              type="text"
+              value={formData.offer_text}
+              onChange={(e) => setFormData({ ...formData, offer_text: e.target.value })}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#536C4A] focus:border-transparent"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Event text</label>
+            <input
+              type="text"
+              value={formData.event_text}
+              onChange={(e) => setFormData({ ...formData, event_text: e.target.value })}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#536C4A] focus:border-transparent"
+            />
+          </div>
+
+          <div>
+            <legend className="text-sm font-medium text-gray-700">Offer highlight</legend>
+            <div className="flex items-center mt-2">
+              <input
+                type="checkbox"
+                id="offer_hide"
+                checked={formData.offer_hide}
+                onChange={(e) => setFormData({ ...formData, offer_hide: e.target.checked })}
+                className="w-4 h-4 text-[#536C4A] bg-gray-100 border-gray-300 rounded focus:ring-[#536C4A] focus:ring-2"
+              />
+              <label htmlFor="offer_hide" className="ml-3 text-sm font-medium text-gray-700">
+                Hide offer highlight
+              </label>
+            </div>
+          </div>
+
+          <div>
+            <h3 className="text-sm font-semibold text-gray-700 mb-4">Offer highlight animations</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <div className="flex items-center">
+                  <input
+                    type="checkbox"
+                    id="offer_enable_particles"
+                    checked={formData.offer_enable_particles}
+                    onChange={(e) => setFormData({ ...formData, offer_enable_particles: e.target.checked })}
+                    className="w-4 h-4 text-[#536C4A] bg-gray-100 border-gray-300 rounded focus:ring-[#536C4A] focus:ring-2"
+                  />
+                  <label htmlFor="offer_enable_particles" className="ml-3 text-sm font-medium text-gray-700">
+                    Flying Particles
+                  </label>
+                </div>
+                <p className="ml-7 text-xs text-gray-500 mt-1">Colorful particles floating around the pill</p>
+              </div>
+
+              <div>
+                <div className="flex items-center">
+                  <input
+                    type="checkbox"
+                    id="offer_enable_cosmic_glow"
+                    checked={formData.offer_enable_cosmic_glow}
+                    onChange={(e) => setFormData({ ...formData, offer_enable_cosmic_glow: e.target.checked })}
+                    className="w-4 h-4 text-[#536C4A] bg-gray-100 border-gray-300 rounded focus:ring-[#536C4A] focus:ring-2"
+                  />
+                  <label htmlFor="offer_enable_cosmic_glow" className="ml-3 text-sm font-medium text-gray-700">
+                    Cosmic Glow
+                  </label>
+                </div>
+                <p className="ml-7 text-xs text-gray-500 mt-1">Multi-colored glowing border effect</p>
+              </div>
+
+              <div>
+                <div className="flex items-center">
+                  <input
+                    type="checkbox"
+                    id="offer_enable_floating"
+                    checked={formData.offer_enable_floating}
+                    onChange={(e) => setFormData({ ...formData, offer_enable_floating: e.target.checked })}
+                    className="w-4 h-4 text-[#536C4A] bg-gray-100 border-gray-300 rounded focus:ring-[#536C4A] focus:ring-2"
+                  />
+                  <label htmlFor="offer_enable_floating" className="ml-3 text-sm font-medium text-gray-700">
+                    Floating Movement
+                  </label>
+                </div>
+                <p className="ml-7 text-xs text-gray-500 mt-1">Gentle up and down movement</p>
+              </div>
+
+              <div>
+                <div className="flex items-center">
+                  <input
+                    type="checkbox"
+                    id="offer_enable_pulse"
+                    checked={formData.offer_enable_pulse}
+                    onChange={(e) => setFormData({ ...formData, offer_enable_pulse: e.target.checked })}
+                    className="w-4 h-4 text-[#536C4A] bg-gray-100 border-gray-300 rounded focus:ring-[#536C4A] focus:ring-2"
+                  />
+                  <label htmlFor="offer_enable_pulse" className="ml-3 text-sm font-medium text-gray-700">
+                    Magic Pulse
+                  </label>
+                </div>
+                <p className="ml-7 text-xs text-gray-500 mt-1">Rhythmic size pulsation</p>
+              </div>
+
+              <div>
+                <div className="flex items-center">
+                  <input
+                    type="checkbox"
+                    id="offer_enable_inner_light"
+                    checked={formData.offer_enable_inner_light}
+                    onChange={(e) => setFormData({ ...formData, offer_enable_inner_light: e.target.checked })}
+                    className="w-4 h-4 text-[#536C4A] bg-gray-100 border-gray-300 rounded focus:ring-[#536C4A] focus:ring-2"
+                  />
+                  <label htmlFor="offer_enable_inner_light" className="ml-3 text-sm font-medium text-gray-700">
+                    Inner Light
+                  </label>
+                </div>
+                <p className="ml-7 text-xs text-gray-500 mt-1">Golden glow from inside the pill</p>
+              </div>
+            </div>
+          </div>
+
           <button
             onClick={saveTheme}
             disabled={saving}
             className="bg-[#536C4A] text-white px-4 py-2 rounded-lg hover:bg-[#536C4A]/90 disabled:opacity-50 transition-colors"
           >
             {saving ? 'Saving...' : 'Save'}
-          </button>
-        </div>
-      </div>
-
-      {/* Offer Animations Settings */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-        <h2 className="text-xl font-semibold text-gray-900 mb-4">Offer Pill Animations</h2>
-        <p className="text-gray-600 mb-6">
-          Control the magical animations on the offer pill
-        </p>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <div className="flex items-center">
-              <input
-                type="checkbox"
-                id="offer_enable_particles"
-                checked={formData.offer_enable_particles}
-                onChange={(e) => setFormData({ ...formData, offer_enable_particles: e.target.checked })}
-                className="w-4 h-4 text-[#536C4A] bg-gray-100 border-gray-300 rounded focus:ring-[#536C4A] focus:ring-2"
-              />
-              <label htmlFor="offer_enable_particles" className="ml-3 text-sm font-medium text-gray-700">
-                Flying Particles
-              </label>
-            </div>
-            <p className="ml-7 text-xs text-gray-500 mt-1">Colorful particles floating around the pill</p>
-          </div>
-
-          <div>
-            <div className="flex items-center">
-              <input
-                type="checkbox"
-                id="offer_enable_cosmic_glow"
-                checked={formData.offer_enable_cosmic_glow}
-                onChange={(e) => setFormData({ ...formData, offer_enable_cosmic_glow: e.target.checked })}
-                className="w-4 h-4 text-[#536C4A] bg-gray-100 border-gray-300 rounded focus:ring-[#536C4A] focus:ring-2"
-              />
-              <label htmlFor="offer_enable_cosmic_glow" className="ml-3 text-sm font-medium text-gray-700">
-                Cosmic Glow
-              </label>
-            </div>
-            <p className="ml-7 text-xs text-gray-500 mt-1">Multi-colored glowing border effect</p>
-          </div>
-
-          <div>
-            <div className="flex items-center">
-              <input
-                type="checkbox"
-                id="offer_enable_floating"
-                checked={formData.offer_enable_floating}
-                onChange={(e) => setFormData({ ...formData, offer_enable_floating: e.target.checked })}
-                className="w-4 h-4 text-[#536C4A] bg-gray-100 border-gray-300 rounded focus:ring-[#536C4A] focus:ring-2"
-              />
-              <label htmlFor="offer_enable_floating" className="ml-3 text-sm font-medium text-gray-700">
-                Floating Movement
-              </label>
-            </div>
-            <p className="ml-7 text-xs text-gray-500 mt-1">Gentle up and down movement</p>
-          </div>
-
-          <div>
-            <div className="flex items-center">
-              <input
-                type="checkbox"
-                id="offer_enable_pulse"
-                checked={formData.offer_enable_pulse}
-                onChange={(e) => setFormData({ ...formData, offer_enable_pulse: e.target.checked })}
-                className="w-4 h-4 text-[#536C4A] bg-gray-100 border-gray-300 rounded focus:ring-[#536C4A] focus:ring-2"
-              />
-              <label htmlFor="offer_enable_pulse" className="ml-3 text-sm font-medium text-gray-700">
-                Magic Pulse
-              </label>
-            </div>
-            <p className="ml-7 text-xs text-gray-500 mt-1">Rhythmic size pulsation</p>
-          </div>
-
-          <div>
-            <div className="flex items-center">
-              <input
-                type="checkbox"
-                id="offer_enable_inner_light"
-                checked={formData.offer_enable_inner_light}
-                onChange={(e) => setFormData({ ...formData, offer_enable_inner_light: e.target.checked })}
-                className="w-4 h-4 text-[#536C4A] bg-gray-100 border-gray-300 rounded focus:ring-[#536C4A] focus:ring-2"
-              />
-              <label htmlFor="offer_enable_inner_light" className="ml-3 text-sm font-medium text-gray-700">
-                Inner Light
-              </label>
-            </div>
-            <p className="ml-7 text-xs text-gray-500 mt-1">Golden glow from inside the pill</p>
-          </div>
-        </div>
-
-        <div className="mt-6">
-          <button
-            onClick={saveTheme}
-            disabled={saving}
-            className="bg-[#536C4A] text-white px-4 py-2 rounded-lg hover:bg-[#536C4A]/90 disabled:opacity-50 transition-colors"
-          >
-            {saving ? 'Saving...' : 'Save Animations'}
           </button>
         </div>
       </div>

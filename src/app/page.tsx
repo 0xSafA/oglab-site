@@ -11,8 +11,9 @@ export default async function HomePage() {
   const primaryColor = theme?.primary_color || '#536C4A';
   const secondaryColor = theme?.secondary_color || '#B0BF93';
   const logoUrl = theme?.logo_url || '/assets/images/oglab_logo_round.svg';
-  const eventText = theme?.event_text || "Next party is coming 26 September at 19:00! Stay tuned!";
-  const offerText = theme?.offer_text || "Next party is coming 26 September at 19:00! Stay tuned!";
+  const eventText = theme?.event_text ?? "Next party is coming 26 September at 19:00! Stay tuned!";
+  const offerText = theme?.offer_text ?? "Next party is coming 26 September at 19:00! Stay tuned!";
+  const offerHidden = theme?.offer_hide ?? false;
   
   // Animation settings with defaults
   const enableParticles = theme?.offer_enable_particles ?? true;
@@ -104,54 +105,56 @@ export default async function HomePage() {
             <p className="text-lg font-medium" style={{ color: primaryColor }}>Growing Farm and Dispensary</p>
           </div>
 
+          {/* Offer Pill (harmonized with badges) with Configurable Magic Effects */}
+          {!offerHidden && (
+            <div className="flex justify-center mb-4">
+              <div className="relative inline-block">
+                {/* Магические частицы вокруг плашки - только если включены */}
+                {enableParticles && (
+                  <div className="absolute inset-0 pointer-events-none overflow-visible">
+                    {Array.from({ length: 6 }, (_, i) => (
+                      <div
+                        key={i}
+                        className="absolute w-2 h-2 rounded-full opacity-70 animate-css-particle"
+                        style={{
+                          background: `hsl(${(i * 60) % 360}, 70%, 60%)`,
+                          left: `${(i * 17 + 10) % 80}%`,
+                          top: `${(i * 23 + 15) % 70}%`,
+                          animationDelay: `${i * 0.5}s`,
+                        }}
+                      />
+                    ))}
+                  </div>
+                )}
+                
+                <div
+                  className="text-white px-5 py-2 rounded-full font-bold shadow-2xl text-sm text-center relative overflow-hidden"
+                  style={{ 
+                    background: `linear-gradient(135deg, ${primaryColor}, ${secondaryColor}, #FFD700, ${primaryColor})`,
+                    backgroundSize: '300% 300%',
+                    animation: animations || 'none',
+                  }}
+                >
+                  {/* Пульсирующий внутренний свет - только если включен */}
+                  {enableInnerLight && (
+                    <div 
+                      className="absolute inset-0 rounded-full opacity-20 animate-pulse"
+                      style={{
+                        background: 'radial-gradient(circle, rgba(255,215,0,0.8) 0%, transparent 70%)',
+                      }}
+                    />
+                  )}
+                  <span className="relative z-10 drop-shadow-lg">{offerText}</span>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Badges */}
           <div className="flex justify-center gap-3 mb-8 flex-wrap">
             <Badge text="Largest dispensary on Samui" primaryColor={primaryColor} secondaryColor={secondaryColor} />
             <Badge text="Must Visit Location" primaryColor={primaryColor} secondaryColor={secondaryColor} />
             <Badge text="Observe Live Cultivation" primaryColor={primaryColor} secondaryColor={secondaryColor} />
-          </div>
-
-          {/* Offer Pill (harmonized with badges) with Configurable Magic Effects */}
-          <div className="flex justify-center mb-8">
-            <div className="relative inline-block">
-              {/* Магические частицы вокруг плашки - только если включены */}
-              {enableParticles && (
-                <div className="absolute inset-0 pointer-events-none overflow-visible">
-                  {Array.from({ length: 6 }, (_, i) => (
-                    <div
-                      key={i}
-                      className="absolute w-2 h-2 rounded-full opacity-70 animate-css-particle"
-                      style={{
-                        background: `hsl(${(i * 60) % 360}, 70%, 60%)`,
-                        left: `${(i * 17 + 10) % 80}%`,
-                        top: `${(i * 23 + 15) % 70}%`,
-                        animationDelay: `${i * 0.5}s`,
-                      }}
-                    />
-                  ))}
-                </div>
-              )}
-              
-              <div
-                className="text-white px-6 py-3 rounded-full font-bold shadow-2xl text-sm text-center relative overflow-hidden"
-                style={{ 
-                  background: `linear-gradient(135deg, ${primaryColor}, ${secondaryColor}, #FFD700, ${primaryColor})`,
-                  backgroundSize: '300% 300%',
-                  animation: animations || 'none',
-                }}
-              >
-                {/* Пульсирующий внутренний свет - только если включен */}
-                {enableInnerLight && (
-                  <div 
-                    className="absolute inset-0 rounded-full opacity-20 animate-pulse"
-                    style={{
-                      background: 'radial-gradient(circle, rgba(255,215,0,0.8) 0%, transparent 70%)',
-                    }}
-                  />
-                )}
-                <span className="relative z-10 drop-shadow-lg">{offerText}</span>
-              </div>
-            </div>
           </div>
 
           {/* Why Choose Section */}
