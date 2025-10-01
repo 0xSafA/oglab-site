@@ -352,7 +352,7 @@ export default function ThemeAdminPage() {
           <h2 className="text-xl font-semibold text-gray-900 mb-4">Logo Upload</h2>
           <div className="mb-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
             <p className="text-sm text-blue-800">
-              <strong>Note:</strong> The website now uses a local logo from <code>/assets/images/oglab_logo_round.svg</code>. 
+              <strong>Note:</strong> The website now uses local logos: <code>/assets/images/oglab_logo_round.svg</code> on main page (better quality) and <code>/assets/images/oglab_logo.png</code> in menu (better compatibility). 
               Logo uploads here are stored but not displayed on the site.
             </p>
           </div>

@@ -463,7 +463,7 @@ export default function AdminTabs() {
                 <h3 className="text-lg font-medium text-gray-900">Logo</h3>
                 <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
                   <p className="text-sm text-blue-800">
-                    <strong>Note:</strong> The website now uses a local logo from <code>/assets/images/oglab_logo_round.svg</code>. 
+                    <strong>Note:</strong> The website now uses local logos: <code>/assets/images/oglab_logo_round.svg</code> on main page (better quality) and <code>/assets/images/oglab_logo.png</code> in menu (better compatibility). 
                     Logo uploads here are stored but not displayed on the site.
                   </p>
                 </div>
