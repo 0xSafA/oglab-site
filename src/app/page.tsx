@@ -3,6 +3,7 @@ import Link from 'next/link';
 import Script from 'next/script';
 import NewsLandingPreviewWrapper from '@/components/NewsLandingPreviewWrapper';
 import OGLabAgent from '@/components/OGLabAgent';
+import BehindTheScenes from '@/components/BehindTheScenes';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 import { fetchTheme } from '@/lib/supabase-data';
 
@@ -225,8 +226,6 @@ export default async function HomePage() {
             </p>
           </Section>
 
-
-
           {/* Features Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
             <FeatureCard title="Farm Tours" description="Cannabis tours to our farm with scientific area with indoor grow and outdoor cannabis garden. See the growing process with your own eyes!" />
@@ -237,16 +236,14 @@ export default async function HomePage() {
             <FeatureCard title="Must Visit Place" description="Competing for the best location title on Samui in TripAdvisor. Must visit place on the island!" />
           </div>
 
-          {/* Products Section */}
-          <Section title="Our Products">
-            <p className="text-gray-700 leading-relaxed">
-              From <span className="font-semibold bg-gradient-to-r from-[#536C4A] to-[#B0BF93] bg-clip-text text-transparent">Andaman cannabis papirosas</span> with cooling filter to premium buds, edibles, hash and plant clones. Each product is created with love and attention to detail.
-            </p>
-          </Section>
+          {/* OG Lab Agent */}
+          <div className="mb-8">
+            <OGLabAgent />
+          </div>
 
           {/* CTA Buttons */}
           <div className="flex justify-center gap-4 mb-8 flex-wrap">
-            <CTAButton href="/menu" text="Weed Menu" />
+            <CTAButton href="/menu" text="Explore Weed Menu" />
           </div>
 
 
@@ -289,10 +286,8 @@ export default async function HomePage() {
               
           </div>
 
-          {/* OG Lab Agent - placed above final section */}
-          <div className="mb-6">
-            <OGLabAgent />
-          </div>
+          {/* Behind The Scenes */}
+          <BehindTheScenes />
 
           {/* Final Section */}
           <Section>
