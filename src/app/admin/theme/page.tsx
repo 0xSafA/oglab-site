@@ -34,7 +34,7 @@ export default function ThemeAdminPage() {
               Theme settings have been moved to a new location
             </p>
           </div>
-
+          
           <div className="bg-white rounded-lg p-6 mb-6 border border-blue-100">
             <h2 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
               <span className="text-2xl">🎨</span>
@@ -53,7 +53,7 @@ export default function ThemeAdminPage() {
                 <span className="text-green-500 font-bold mt-1">✓</span>
                 <span><strong>Performance</strong> → 10x faster page loads!</span>
               </li>
-            </ul>
+              </ul>
           </div>
 
           <div className="flex flex-col sm:flex-row gap-4">

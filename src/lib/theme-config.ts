@@ -6,11 +6,6 @@
 export interface ThemeConfig {
   primary_color: string
   secondary_color: string
-  offer_enable_particles: boolean
-  offer_enable_cosmic_glow: boolean
-  offer_enable_floating: boolean
-  offer_enable_pulse: boolean
-  offer_enable_inner_light: boolean
 }
 
 export interface MenuThemeConfig extends ThemeConfig {
@@ -27,11 +22,6 @@ export function getThemeConfig(): ThemeConfig {
   return {
     primary_color: process.env.NEXT_PUBLIC_PRIMARY_COLOR || '#536C4A',
     secondary_color: process.env.NEXT_PUBLIC_SECONDARY_COLOR || '#B0BF93',
-    offer_enable_particles: process.env.NEXT_PUBLIC_OFFER_PARTICLES !== 'false',
-    offer_enable_cosmic_glow: process.env.NEXT_PUBLIC_OFFER_COSMIC_GLOW !== 'false',
-    offer_enable_floating: process.env.NEXT_PUBLIC_OFFER_FLOATING !== 'false',
-    offer_enable_pulse: process.env.NEXT_PUBLIC_OFFER_PULSE !== 'false',
-    offer_enable_inner_light: process.env.NEXT_PUBLIC_OFFER_INNER_LIGHT !== 'false',
   }
 }
 

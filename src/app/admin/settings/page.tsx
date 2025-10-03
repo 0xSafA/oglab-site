@@ -14,6 +14,11 @@ export default function DynamicSettingsPage() {
     event_text: '',
     offer_text: '',
     offer_hide: false,
+    offer_enable_particles: true,
+    offer_enable_cosmic_glow: true,
+    offer_enable_floating: true,
+    offer_enable_pulse: true,
+    offer_enable_inner_light: true,
     tier0_label: '1PC',
     tier1_label: '1G',
     tier2_label: '5G+',
@@ -33,18 +38,23 @@ export default function DynamicSettingsPage() {
       if (data) {
         setSettings(data)
         setFormData({
-          event_text: data.event_text,
-          offer_text: data.offer_text,
-          offer_hide: data.offer_hide,
-          tier0_label: data.tier0_label,
-          tier1_label: data.tier1_label,
-          tier2_label: data.tier2_label,
-          tier3_label: data.tier3_label,
-          legend_hybrid: data.legend_hybrid,
-          legend_sativa: data.legend_sativa,
-          legend_indica: data.legend_indica,
-          feature_label: data.feature_label,
-          tip_label: data.tip_label
+          event_text: data.event_text || '',
+          offer_text: data.offer_text || '',
+          offer_hide: data.offer_hide ?? false,
+          offer_enable_particles: data.offer_enable_particles ?? true,
+          offer_enable_cosmic_glow: data.offer_enable_cosmic_glow ?? true,
+          offer_enable_floating: data.offer_enable_floating ?? true,
+          offer_enable_pulse: data.offer_enable_pulse ?? true,
+          offer_enable_inner_light: data.offer_enable_inner_light ?? true,
+          tier0_label: data.tier0_label || '1PC',
+          tier1_label: data.tier1_label || '1G',
+          tier2_label: data.tier2_label || '5G+',
+          tier3_label: data.tier3_label || '20G+',
+          legend_hybrid: data.legend_hybrid || 'Hybrid',
+          legend_sativa: data.legend_sativa || 'Sativa',
+          legend_indica: data.legend_indica || 'Indica',
+          feature_label: data.feature_label || 'Farm-grown',
+          tip_label: data.tip_label || 'Batches from 5g'
         })
       }
     } catch (err) {
@@ -94,7 +104,14 @@ export default function DynamicSettingsPage() {
     <div className="space-y-8">
       {/* Header */}
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-        <h1 className="text-2xl font-bold text-gray-900">Settings</h1>
+        <h1 className="text-2xl font-bold text-gray-900 mb-2">Settings</h1>
+        {settings && (
+          settings.offer_enable_particles === undefined && (
+            <div className="mt-3 text-sm text-blue-600 bg-blue-50 border border-blue-200 rounded px-3 py-2">
+              ℹ️ New animation settings available! Run <code className="bg-blue-100 px-2 py-0.5 rounded">supabase/add-animation-settings.sql</code> migration to enable them.
+            </div>
+          )
+        )}
       </div>
 
       {error && (
@@ -124,8 +141,7 @@ export default function DynamicSettingsPage() {
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Main Page Section */}
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
-            <span className="text-2xl">🏠</span>
+          <h2 className="text-xl font-semibold text-gray-900 mb-4">
             Main Page Settings
           </h2>
 
@@ -170,13 +186,64 @@ export default function DynamicSettingsPage() {
               </label>
               <p className="text-xs text-gray-500 mt-1 ml-6">Check to temporarily hide the offer section</p>
             </div>
+
+            {/* Animation Settings */}
+            <div className="border-t pt-4 mt-4">
+              <h3 className="text-sm font-semibold text-gray-900 mb-3">Animation Settings</h3>
+              <div className="space-y-2">
+                <label className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    checked={formData.offer_enable_particles}
+                    onChange={(e) => setFormData({ ...formData, offer_enable_particles: e.target.checked })}
+                    className="rounded border-gray-300 text-[#536C4A] focus:ring-[#536C4A]"
+                  />
+                  <span className="text-sm text-gray-700">Enable Particles</span>
+                </label>
+                <label className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    checked={formData.offer_enable_cosmic_glow}
+                    onChange={(e) => setFormData({ ...formData, offer_enable_cosmic_glow: e.target.checked })}
+                    className="rounded border-gray-300 text-[#536C4A] focus:ring-[#536C4A]"
+                  />
+                  <span className="text-sm text-gray-700">Enable Cosmic Glow</span>
+                </label>
+                <label className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    checked={formData.offer_enable_floating}
+                    onChange={(e) => setFormData({ ...formData, offer_enable_floating: e.target.checked })}
+                    className="rounded border-gray-300 text-[#536C4A] focus:ring-[#536C4A]"
+                  />
+                  <span className="text-sm text-gray-700">Enable Floating Animation</span>
+                </label>
+                <label className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    checked={formData.offer_enable_pulse}
+                    onChange={(e) => setFormData({ ...formData, offer_enable_pulse: e.target.checked })}
+                    className="rounded border-gray-300 text-[#536C4A] focus:ring-[#536C4A]"
+                  />
+                  <span className="text-sm text-gray-700">Enable Pulse Animation</span>
+                </label>
+                <label className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    checked={formData.offer_enable_inner_light}
+                    onChange={(e) => setFormData({ ...formData, offer_enable_inner_light: e.target.checked })}
+                    className="rounded border-gray-300 text-[#536C4A] focus:ring-[#536C4A]"
+                  />
+                  <span className="text-sm text-gray-700">Enable Inner Light</span>
+                </label>
+              </div>
+            </div>
           </div>
         </div>
 
         {/* Labels Section */}
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
-            <span className="text-2xl">🏷️</span>
+          <h2 className="text-xl font-semibold text-gray-900 mb-4">
             Menu Labels
           </h2>
 
@@ -233,8 +300,7 @@ export default function DynamicSettingsPage() {
 
         {/* Legend Labels Section */}
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
-            <span className="text-2xl">📊</span>
+          <h2 className="text-xl font-semibold text-gray-900 mb-4">
             Legend Labels
           </h2>
 

@@ -8,6 +8,11 @@ export interface DynamicSettings {
   event_text: string
   offer_text: string
   offer_hide: boolean
+  offer_enable_particles: boolean
+  offer_enable_cosmic_glow: boolean
+  offer_enable_floating: boolean
+  offer_enable_pulse: boolean
+  offer_enable_inner_light: boolean
   tier0_label: string
   tier1_label: string
   tier2_label: string

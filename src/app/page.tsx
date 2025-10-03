@@ -6,6 +6,7 @@ import OGLabAgent from '@/components/OGLabAgent';
 import BehindTheScenes from '@/components/BehindTheScenes';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 import DynamicOfferBanner from '@/components/DynamicOfferBanner';
+import DynamicEventText from '@/components/DynamicEventText';
 import LazyGoogleMap from '@/components/LazyGoogleMap';
 import { getThemeConfig } from '@/lib/theme-config';
 
@@ -16,20 +17,6 @@ export default function HomePage() {
   const primaryColor = theme.primary_color;
   const secondaryColor = theme.secondary_color;
   const logoUrl = '/assets/images/oglab_logo_round.svg';
-  
-  // Animation settings (from .env)
-  const enableParticles = theme.offer_enable_particles;
-  const enableCosmicGlow = theme.offer_enable_cosmic_glow;
-  const enableFloating = theme.offer_enable_floating;
-  const enablePulse = theme.offer_enable_pulse;
-  const enableInnerLight = theme.offer_enable_inner_light;
-  
-  // Build animation string based on settings
-  const animations = [
-    enableCosmicGlow && 'cosmicGlow 4s ease-in-out infinite',
-    enableFloating && 'floating 6s ease-in-out infinite', 
-    enablePulse && 'magicPulse 4s ease-in-out infinite'
-  ].filter(Boolean).join(', ');
 
   // Schema.org LocalBusiness structured data
   const structuredData = {
@@ -160,15 +147,14 @@ export default function HomePage() {
           </div>
 
 
-          {/* Dynamic Offer Banner - loads text from database asynchronously */}
-          <div className="mb-4">
-            <DynamicOfferBanner
-              primaryColor={primaryColor}
-              secondaryColor={secondaryColor}
-              animations={animations}
-              enableParticles={enableParticles}
-              enableInnerLight={enableInnerLight}
-            />
+          {/* Dynamic Offer Banner - loads text and animations from database asynchronously */}
+          <div className="mb-4 flex justify-center">
+            <div className="w-full max-w-xl">
+              <DynamicOfferBanner
+                primaryColor={primaryColor}
+                secondaryColor={secondaryColor}
+              />
+            </div>
           </div>
 
           {/* Badges */}
@@ -250,7 +236,7 @@ export default function HomePage() {
           {/* Final Section */}
           <Section>
             <p className="text-center font-semibold text-gray-800 mb-2">Let&apos;s work, learn and relax together!</p>
-            <p className="text-center text-gray-600">Join us for an unforgettable experience!</p>
+            <DynamicEventText />
           </Section>
 
           {/* Promo Block - Moved to bottom */}
