@@ -69,13 +69,13 @@ export default function NewsLandingPreview() {
           </div>
           <p className="text-sm text-white/80">{featured.excerpt}</p>
           <Link
-            href="/news"
+            href="/feed"
             onMouseEnter={enableWaterfall}
             onMouseLeave={disableWaterfall}
             onFocus={enableWaterfall}
             onBlur={disableWaterfall}
             onTouchStart={enableWaterfall}
-            className="group relative inline-flex items-center justify-center self-start overflow-visible rounded-full bg-gradient-to-br from-[#FFCB52] via-[#D7492E] to-[#4A0610] px-6 py-2 text-sm font-semibold text-white shadow-[0_16px_34px_rgba(118,17,39,0.42)] transition-transform duration-300 hover:-translate-y-1 hover:shadow-[0_22px_44px_rgba(118,17,39,0.55)] animate-[rosinHover_4s_ease-in-out_infinite]"
+            className="group relative inline-flex items-center justify-center self-start overflow-visible rounded-full bg-gradient-to-br from-[#C8B568] via-[#8B9862] to-[#536C4A] px-6 py-2 text-sm font-semibold text-white shadow-[0_16px_34px_rgba(83,108,74,0.42)] transition-transform duration-300 hover:-translate-y-1 hover:shadow-[0_22px_44px_rgba(83,108,74,0.55)] animate-[rosinHover_4s_ease-in-out_infinite]"
           >
             <span
               className="pointer-events-none absolute inset-0 -z-10 rounded-full bg-gradient-to-br from-white/35 via-transparent to-transparent opacity-70 transition-opacity duration-500 group-hover:opacity-90 animate-[rosinGlow_3.6s_ease-in-out_infinite]"

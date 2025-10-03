@@ -21,8 +21,8 @@ export function NewsCard({ item, highlight }: Props) {
     <article
       className={`relative overflow-hidden rounded-3xl border border-[#B0BF93]/40 shadow-lg transition-all duration-500 hover:-translate-y-1 hover:shadow-2xl ${
         highlight
-          ? 'bg-gradient-to-br from-white via-white to-[#F4F8F0] md:col-span-2 md:grid md:grid-cols-[2fr,3fr]'
-          : 'bg-white'
+          ? 'bg-gradient-to-br from-[#F7FBF3] via-[#F4F8F0] to-[#EEF6E6] md:col-span-2 md:grid md:grid-cols-[2fr,3fr]'
+          : 'bg-gradient-to-br from-[#FAFCF7] to-[#F4F8F0]'
       }`}
     >
       <div className="relative h-56 md:h-full">
@@ -80,7 +80,7 @@ export function NewsCard({ item, highlight }: Props) {
 
         <div className="mt-auto flex items-center justify-between pt-2">
           <Link
-            href={`/news/${item.id}`}
+            href={`/feed/${item.id}`}
             className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-[#536C4A] to-[#B0BF93] px-5 py-2 text-sm font-semibold text-white shadow-lg transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl"
           >
             Читать полностью

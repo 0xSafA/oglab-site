@@ -4,7 +4,6 @@ import Script from 'next/script';
 import NewsLandingPreviewWrapper from '@/components/NewsLandingPreviewWrapper';
 import OGLabAgent from '@/components/OGLabAgent';
 import BehindTheScenes from '@/components/BehindTheScenes';
-import HeroVideo from '@/components/HeroVideo';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 import { fetchTheme } from '@/lib/supabase-data';
 
@@ -27,11 +26,6 @@ export default async function HomePage() {
   const enableFloating = theme?.offer_enable_floating ?? true;
   const enablePulse = theme?.offer_enable_pulse ?? true;
   const enableInnerLight = theme?.offer_enable_inner_light ?? true;
-  
-  // Homepage hero video (now used in Latest Drop card)
-  const heroVideoUrl = (theme as any)?.homepage_video_url || 'https://youtu.be/zsi0FT5zljo?si=qLbVvakUFMDsaDlb';
-  const heroVideoTitle = 'OG Lab — Secret Garden Aftermovie';
-  const heroVideoSubtitle = 'Lights, neon, vaporizers — welcome back to our secret garden.';
   
   // Build animation string based on settings
   const animations = [
@@ -105,7 +99,7 @@ export default async function HomePage() {
       </div>
 
       <div className="relative z-10 w-full max-w-4xl mx-auto">
-        <div className="bg-white/90 rounded-3xl shadow-xl border-2 border-[#B0BF93]/35 p-8 animate-fade-in-up">
+        <div className="bg-gradient-to-br from-[#FFFEF9] via-[#FFFCF0] to-[#FFF9E6] rounded-3xl shadow-xl border-2 border-[#B0BF93]/35 p-8 animate-fade-in-up">
           
           {/* Social Icons */}
           <div className="flex items-center justify-center gap-4 mb-6">
@@ -168,7 +162,6 @@ export default async function HomePage() {
             <p className="text-lg font-medium" style={{ color: primaryColor }}>Cannabis Dispensary and Farm on Koh Samui</p>
           </div>
 
-          {/* Hero Video removed from here (moved to Latest Drop card) */}
 
           {/* Offer Pill (harmonized with badges) with Configurable Magic Effects */}
           {!offerHidden && (  

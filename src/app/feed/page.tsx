@@ -1,22 +1,31 @@
+'use client';
+
 import Link from 'next/link';
 import Image from 'next/image';
 import Script from 'next/script';
+import { useState } from 'react';
 import VideoTile from '@/components/VideoTile';
 import OGLabAgent from '@/components/OGLabAgent';
 import AggregatedNewsMock from '@/components/AggregatedNewsMock';
 import SubscribeRSS from '@/components/SubscribeRSS';
-import { getFeaturedNews, getRecentNews } from '@/lib/news-data';
+import { getRecentNews } from '@/lib/news-data';
 import { NewsCard } from '@/components/NewsCard';
 
-export const metadata = {
-  title: 'OG Lab Stories — Cannabis News & Blog from Koh Samui',
-  description:
-    'OG Lab Stories: party aftermovies, cannabis education articles, farm photo galleries, and uncensored content from the best cannabis dispensary Samui.',
-};
-
 export default function NewsPage() {
-  const featured = getFeaturedNews();
   const recent = getRecentNews();
+  const [showAllVideos, setShowAllVideos] = useState(false);
+  const [showAllArticles, setShowAllArticles] = useState(false);
+  
+  const videos = [
+    { url: 'https://youtu.be/CGT-Dnvyl9I?si=nHdbcPFr60CWA3nx', title: 'OG Lab — farm vibes' },
+    { url: 'https://youtu.be/Uxk00Y6UeMk?si=HVP9VoYNmKOZccty', title: 'OG Lab — lifestyle teaser' },
+    { url: 'https://youtu.be/KAATrEtpai4?si=njD1boS47BC9M_Lf', title: 'OG Lab — party highlights' },
+    { url: 'https://youtu.be/jSbWDBR4SHQ?si=09SJy2864rMl9L72', title: 'OG Lab — chill session teaser' },
+    { url: 'https://youtu.be/ERj25Bqet94?si=ZSOTR7AOoYS55X0j', title: 'OG Lab — behind the scenes flash' },
+  ];
+  
+  const visibleVideos = showAllVideos ? videos : videos.slice(0, 3);
+  const visibleArticles = showAllArticles ? recent : recent.slice(0, 3);
 
   // Schema.org markup for Organization and ItemList
   const structuredData = {
@@ -24,7 +33,7 @@ export default function NewsPage() {
     '@type': 'CollectionPage',
     name: 'OG Lab Stories',
     description: 'Cannabis news, party aftermovies, and educational content from OG Lab – the best cannabis dispensary on Koh Samui.',
-    url: 'https://oglab.com/news',
+    url: 'https://oglab.com/feed',
     publisher: {
       '@type': 'Organization',
       name: 'OG Lab',
@@ -141,41 +150,46 @@ export default function NewsPage() {
           </div>
         </header>
 
-        {/* Video grid with first article */}
-        <section className="grid grid-cols-1 gap-4 md:grid-cols-3">
-          <VideoTile
-            url="https://youtu.be/CGT-Dnvyl9I?si=nHdbcPFr60CWA3nx"
-            title="OG Lab — farm vibes"
-          />
-          <VideoTile
-            url="https://youtu.be/Uxk00Y6UeMk?si=HVP9VoYNmKOZccty"
-            title="OG Lab — lifestyle teaser"
-          />
-          <VideoTile
-            url="https://youtu.be/KAATrEtpai4?si=njD1boS47BC9M_Lf"
-            title="OG Lab — party highlights"
-          />
-          <VideoTile
-            url="https://youtu.be/jSbWDBR4SHQ?si=09SJy2864rMl9L72"
-            title="OG Lab — chill session teaser"
-          />
-          <VideoTile
-            url="https://youtu.be/ERj25Bqet94?si=ZSOTR7AOoYS55X0j"
-            title="OG Lab — behind the scenes flash"
-          />
-          
-          {/* First article (CBD vs THC) placed in free slot after videos */}
-          <div className="md:col-span-1">
-            <NewsCard item={recent.find(item => item.id === 'cbd-education') || recent[1]} />
+        {/* Videos section */}
+        <section>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {visibleVideos.map((video, index) => (
+              <VideoTile key={index} url={video.url} title={video.title} />
+            ))}
           </div>
+          
+          {videos.length > 3 && (
+            <div className="mt-6 flex justify-center">
+              <button
+                onClick={() => setShowAllVideos(!showAllVideos)}
+                className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-[#536C4A] to-[#B0BF93] px-8 py-3 text-base font-semibold text-white shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+              >
+                {showAllVideos ? 'Скрыть видео' : `Показать ещё видео (${videos.length - 3})`}
+                <span className="text-lg">{showAllVideos ? '↑' : '↓'}</span>
+              </button>
+            </div>
+          )}
         </section>
 
-        <section className="grid grid-cols-1 gap-6 md:grid-cols-2">
-          {recent
-            .filter((item) => item.id !== 'cbd-education')
-            .map((item) => (
+        {/* Articles and galleries section */}
+        <section>
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {visibleArticles.map((item) => (
               <NewsCard key={item.id} item={item} />
             ))}
+          </div>
+          
+          {recent.length > 3 && (
+            <div className="mt-6 flex justify-center">
+              <button
+                onClick={() => setShowAllArticles(!showAllArticles)}
+                className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-[#536C4A] to-[#B0BF93] px-8 py-3 text-base font-semibold text-white shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+              >
+                {showAllArticles ? 'Скрыть статьи' : `Показать ещё статьи (${recent.length - 3})`}
+                <span className="text-lg">{showAllArticles ? '↑' : '↓'}</span>
+              </button>
+            </div>
+          )}
         </section>
 
         {/* OG Lab Agent */}
