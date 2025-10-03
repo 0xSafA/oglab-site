@@ -2,9 +2,9 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { memo } from 'react';
 import { fetchMenuWithOptions, type MenuRow } from '@/lib/supabase-data';
-import { fetchTheme, type Theme } from '@/lib/supabase-data';
+import { getMenuThemeConfig } from '@/lib/theme-config';
+import { fetchDynamicSettings } from '@/lib/dynamic-settings';
 
-export const dynamic = 'force-dynamic';
 import { groupRows, columnsPerCategory } from '@/lib/menu-helpers';
 import PacmanTrail from '@/components/PacmanTrail';
 import AutoRefresh from '@/components/AutoRefresh';
@@ -14,11 +14,11 @@ import PotManager from '@/components/PotManager';
 
 
 // Type colors mapping
-const typeColor = (theme?: Pick<Theme, 'legend_hybrid_color' | 'legend_sativa_color' | 'legend_indica_color'> | null) => ({
-  hybrid: theme?.legend_hybrid_color || '#4f7bff',
-  hybride: theme?.legend_hybrid_color || '#4f7bff',
-  sativa: theme?.legend_sativa_color || '#ff6633',
-  indica: theme?.legend_indica_color || '#38b24f',
+const typeColor = (theme: ReturnType<typeof getMenuThemeConfig>) => ({
+  hybrid: theme.legend_hybrid_color,
+  hybride: theme.legend_hybrid_color,
+  sativa: theme.legend_sativa_color,
+  indica: theme.legend_indica_color,
 } as const);
 
 type KnownType = 'hybrid' | 'sativa' | 'indica';
@@ -31,28 +31,30 @@ const getTypeKey = (row: MenuRow): KnownType | null => {
 };
 
 export default async function MenuPage() {
-  const [{ rows, layout }, theme] = await Promise.all([
+  const [{ rows, layout }, dynamicSettings] = await Promise.all([
     fetchMenuWithOptions(),
-    fetchTheme()
+    fetchDynamicSettings()
   ]);
   const grouped = groupRows(rows);
 
-  // Use theme colors or fallback to defaults
-  const primaryColor = theme?.primary_color || '#536C4A';
-  const secondaryColor = theme?.secondary_color || '#B0BF93';
+  // Get static theme from environment variables
+  const theme = getMenuThemeConfig();
+  
+  const primaryColor = theme.primary_color;
+  const secondaryColor = theme.secondary_color;
   const logoUrl = '/assets/images/oglab_logo.png';
-  const itemTextColor = theme?.item_text_color || '#1f2937'; // gray-800
-  const categoryTextColor = theme?.category_text_color || '#ffffff';
-  const cardBgColor = theme?.card_bg_color || '#ffffff';
-  const colors = typeColor(theme ?? undefined);
-  const featureColor = theme?.feature_color || '#536C4A'
+  const itemTextColor = theme.item_text_color;
+  const categoryTextColor = theme.category_text_color;
+  const cardBgColor = theme.card_bg_color;
+  const colors = typeColor(theme);
+  const featureColor = theme.feature_color;
 
-  // Build dynamic tier labels from theme (with fallbacks)
+  // Get dynamic labels from database (with fallbacks)
   const tierLabels: Record<string, string> = {
-    Price_1pc: theme?.tier0_label || '1PC',
-    Price_1g: theme?.tier1_label || '1G',
-    Price_5g: theme?.tier2_label || '5G+',
-    Price_20g: theme?.tier3_label || '20G+',
+    Price_1pc: dynamicSettings?.tier0_label || '1PC',
+    Price_1g: dynamicSettings?.tier1_label || '1G',
+    Price_5g: dynamicSettings?.tier2_label || '5G+',
+    Price_20g: dynamicSettings?.tier3_label || '20G+',
   };
 
   const hiddenSet = new Set(layout.hidden || [])

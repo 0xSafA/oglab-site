@@ -57,19 +57,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        {/* Preload критических ресурсов для быстрой загрузки на ТВ */}
+        {/* Preload только критических ресурсов для главной страницы */}
         <link rel="preload" href="/assets/images/oglab_logo_round.svg" as="image" type="image/svg+xml" />
-        <link rel="preload" href="/assets/images/oglab_logo.png" as="image" />
-        <link rel="preload" href="/assets/images/plant-line.svg" as="image" type="image/svg+xml" />
-        <link rel="preload" href="/assets/images/hand-coin-line.svg" as="image" type="image/svg+xml" />
-        <link rel="preload" href="/assets/images/building-3-line.svg" as="image" type="image/svg+xml" />
-        <link rel="preload" href="/assets/images/shake-hands-line.svg" as="image" type="image/svg+xml" />
-        <link rel="preload" href="/assets/images/compass-line.svg" as="image" type="image/svg+xml" />
-        <link rel="preload" href="/assets/images/map-pin-2.svg" as="image" type="image/svg+xml" />
         
         {/* DNS prefetch для внешних ресурсов */}
         <link rel="dns-prefetch" href="//www.googletagmanager.com" />
         <link rel="dns-prefetch" href="//fonts.googleapis.com" />
+        <link rel="dns-prefetch" href="//www.google.com" />
       </head>
       <body className={inter.className}>
         {/* Google Analytics */}

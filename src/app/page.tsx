@@ -5,27 +5,24 @@ import NewsLandingPreviewWrapper from '@/components/NewsLandingPreviewWrapper';
 import OGLabAgent from '@/components/OGLabAgent';
 import BehindTheScenes from '@/components/BehindTheScenes';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
-import { fetchTheme } from '@/lib/supabase-data';
+import DynamicOfferBanner from '@/components/DynamicOfferBanner';
+import LazyGoogleMap from '@/components/LazyGoogleMap';
+import { getThemeConfig } from '@/lib/theme-config';
 
-export const dynamic = 'force-dynamic';
-
-export default async function HomePage() {
-  const theme = await fetchTheme();
+export default function HomePage() {
+  // Get theme from environment variables - no database calls!
+  const theme = getThemeConfig();
   
-  // Use theme colors or fallback to defaults
-  const primaryColor = theme?.primary_color || '#536C4A';
-  const secondaryColor = theme?.secondary_color || '#B0BF93';
+  const primaryColor = theme.primary_color;
+  const secondaryColor = theme.secondary_color;
   const logoUrl = '/assets/images/oglab_logo_round.svg';
-  const eventText = theme?.event_text ?? "Next party is coming 26 September at 19:00! Stay tuned!";
-  const offerText = theme?.offer_text ?? "Next party is coming 26 September at 19:00! Stay tuned!";
-  const offerHidden = theme?.offer_hide ?? false;
   
-  // Animation settings with defaults
-  const enableParticles = theme?.offer_enable_particles ?? true;
-  const enableCosmicGlow = theme?.offer_enable_cosmic_glow ?? true;
-  const enableFloating = theme?.offer_enable_floating ?? true;
-  const enablePulse = theme?.offer_enable_pulse ?? true;
-  const enableInnerLight = theme?.offer_enable_inner_light ?? true;
+  // Animation settings (from .env)
+  const enableParticles = theme.offer_enable_particles;
+  const enableCosmicGlow = theme.offer_enable_cosmic_glow;
+  const enableFloating = theme.offer_enable_floating;
+  const enablePulse = theme.offer_enable_pulse;
+  const enableInnerLight = theme.offer_enable_inner_light;
   
   // Build animation string based on settings
   const animations = [
@@ -163,50 +160,16 @@ export default async function HomePage() {
           </div>
 
 
-          {/* Offer Pill (harmonized with badges) with Configurable Magic Effects */}
-          {!offerHidden && (  
-            <div className="flex justify-center mb-4">
-              <div className="relative inline-block">
-                {/* Магические частицы вокруг плашки - только если включены */}
-                {enableParticles && (
-                  <div className="absolute inset-0 pointer-events-none overflow-visible">
-                    {Array.from({ length: 6 }, (_, i) => (
-                      <div
-                        key={i}
-                        className="absolute w-2 h-2 rounded-full opacity-70 animate-css-particle"
-                        style={{
-                          background: `hsl(${(i * 60) % 360}, 70%, 60%)`,
-                          left: `${(i * 17 + 10) % 80}%`,
-                          top: `${(i * 23 + 15) % 70}%`,
-                          animationDelay: `${i * 0.5}s`,
-                        }}
-                      />
-                    ))}
-                  </div>
-                )}
-                
-                <div
-                  className="text-white px-5 py-2 rounded-full font-bold shadow-2xl text-sm text-center relative overflow-hidden"
-                  style={{ 
-                    background: `linear-gradient(135deg, ${primaryColor}, ${secondaryColor}, #FFD700, ${primaryColor})`,
-                    backgroundSize: '300% 300%',
-                    animation: animations || 'none',
-                  }}
-                >
-                  {/* Пульсирующий внутренний свет - только если включен */}
-                  {enableInnerLight && (
-                    <div 
-                      className="absolute inset-0 rounded-full opacity-20 animate-pulse"
-                      style={{
-                        background: 'radial-gradient(circle, rgba(255,215,0,0.8) 0%, transparent 70%)',
-                      }}
-                    />
-                  )}
-                  <span className="relative z-10 drop-shadow-lg">{offerText}</span>
-                </div>
-              </div>
-            </div>
-          )}
+          {/* Dynamic Offer Banner - loads text from database asynchronously */}
+          <div className="mb-4">
+            <DynamicOfferBanner
+              primaryColor={primaryColor}
+              secondaryColor={secondaryColor}
+              animations={animations}
+              enableParticles={enableParticles}
+              enableInnerLight={enableInnerLight}
+            />
+          </div>
 
           {/* Badges */}
           <div className="flex justify-center gap-3 mb-10 flex-wrap">
@@ -269,18 +232,12 @@ export default async function HomePage() {
                 </div>
               </div>
 
-              {/* Google Maps Embed */}
+              {/* Google Maps Embed - Lazy loaded on scroll */}
               <div className="relative rounded-2xl overflow-hidden shadow-2xl border-4 border-white/20 h-[300px] md:h-[350px]">
-                <iframe
+                <LazyGoogleMap
                   src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3935.40694564511!2d99.9582324!3d9.4732875!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3054f550ef9d22ab%3A0x78805fae6045029c!2sOG%20Lab%20-%20Cannabis%E2%80%8B%20Farm%20Dispensary%20Samui!5e0!3m2!1sru!2sth!4v1759484890949!5m2!1sru!2sth"
-                  width="100%"
-                  height="100%"
-                  style={{ border: 0 }}
-                  allowFullScreen
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
                   title="OG Lab - Cannabis Farm Dispensary Samui Location"
-                  className="absolute inset-0"
+                  height="100%"
                 />
               </div>
             </div>
@@ -293,7 +250,7 @@ export default async function HomePage() {
           {/* Final Section */}
           <Section>
             <p className="text-center font-semibold text-gray-800 mb-2">Let&apos;s work, learn and relax together!</p>
-            <p className="text-center text-gray-600">{eventText}</p>
+            <p className="text-center text-gray-600">Join us for an unforgettable experience!</p>
           </Section>
 
           {/* Promo Block - Moved to bottom */}

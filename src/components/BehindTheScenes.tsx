@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 
 type Item = {
   key: string
@@ -31,13 +32,15 @@ export default function BehindTheScenes() {
             href="/feed"
             key={it.key}
             className="group relative h-32 md:h-40 overflow-hidden rounded-2xl ring-1 ring-[#B0BF93]/20 shadow-md hover:shadow-xl transition-all duration-500"
-            style={{
-              backgroundImage: `url(${it.image})`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              backgroundColor: '#F7FBF3',
-            }}
           >
+            <Image 
+              src={it.image}
+              alt={it.title}
+              fill
+              loading="lazy"
+              className="object-cover"
+            />
+            
             {/* Blur effect that disappears on hover */}
             <div className="absolute inset-0 backdrop-blur-[2px] group-hover:backdrop-blur-none transition-all duration-500" />
             
