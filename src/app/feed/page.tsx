@@ -84,7 +84,7 @@ export default function NewsPage() {
                 Здесь мы публикуем всё, что не пропускают соцсети: новые сорта, backstage с фермы, обзоры девайсов и честные разговоры о каннабисе.
               </p>
             </div>
-            <div className="md:max-w-sm">
+            <div className="hidden md:block md:max-w-sm">
               <div className="grid grid-cols-3 gap-3">
                 {/* Large YouTube thumbnail */}
                 <a href="https://youtu.be/xoU9RksCdX0?si=cc39IO6ZNCmT9arr" target="_blank" rel="noreferrer" className="relative col-span-2 row-span-2 overflow-hidden rounded-2xl ring-1 ring-[#536C4A]/10">

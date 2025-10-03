@@ -14,6 +14,14 @@ const mock: AggregatedItem[] = [
   { id: 'agg-3', source: 'NORML', title: 'Policy update in Thailand', url: '#', date: '2025-08-25' },
 ]
 
+function formatDate(dateString: string) {
+  const date = new Date(dateString);
+  const day = date.getDate().toString().padStart(2, '0');
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const year = date.getFullYear();
+  return `${day}.${month}.${year}`;
+}
+
 export default function AggregatedNewsMock() {
   return (
     <section className="h-full rounded-3xl bg-white/75 p-6 shadow-xl ring-1 ring-[#B0BF93]/50 flex flex-col">
@@ -26,7 +34,7 @@ export default function AggregatedNewsMock() {
           <li key={n.id} className="flex items-center justify-between gap-4 py-3">
             <div className="min-w-0">
               <div className="truncate text-sm font-semibold text-[#2F3A24]">{n.title}</div>
-              <div className="text-xs text-[#2F3A24]/60">{n.source} • {new Date(n.date).toLocaleDateString()}</div>
+              <div className="text-xs text-[#2F3A24]/60">{n.source} • {formatDate(n.date)}</div>
             </div>
             <a href={n.url} className="shrink-0 rounded-full bg-[#536C4A] px-3 py-1 text-xs font-semibold text-white hover:opacity-90">Read</a>
           </li>

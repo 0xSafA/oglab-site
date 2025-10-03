@@ -209,7 +209,7 @@ export default async function HomePage() {
           )}
 
           {/* Badges */}
-          <div className="flex justify-center gap-3 mb-8 flex-wrap">
+          <div className="flex justify-center gap-3 mb-10 flex-wrap">
             <Badge text="Largest dispensary on Samui" primaryColor={primaryColor} secondaryColor={secondaryColor} />
             <Badge text="Must Visit Location" primaryColor={primaryColor} secondaryColor={secondaryColor} />
             <Badge text="Observe Live Cultivation" primaryColor={primaryColor} secondaryColor={secondaryColor} />

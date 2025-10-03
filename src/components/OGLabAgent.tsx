@@ -24,7 +24,7 @@ export default function OGLabAgent() {
   return (
     <section className="rounded-3xl bg-white/80 p-6 shadow-xl ring-1 ring-[#B0BF93]/50 overflow-hidden">
       <div className="mb-4 flex items-center justify-between gap-3">
-        <h2 className="text-2xl font-bold text-[#2F3A24]">OG Lab Agent</h2>
+        <h2 className="text-2xl font-bold text-[#2F3A24]">Agent</h2>
         <div className="flex items-center gap-2 text-sm">
           <label className="inline-flex items-center gap-2 rounded-full bg-[#F4F8F0] px-3 py-1 text-[#2F3A24] ring-1 ring-[#B0BF93]/60">
             <input
@@ -40,7 +40,7 @@ export default function OGLabAgent() {
       </div>
 
       <p className="mb-4 text-[#2F3A24]/70">
-        Uses OG Lab internal knowledge, product inventory, and cross‑checks trusted sources. Can assist with ordering or forward a message to senior staff.
+        OG Lab Agent uses internal knowledge, network, product inventory, and cross‑checks trusted sources. Can assist with ordering or forward a message to senior staff.
       </p>
 
       <form onSubmit={ask} className="w-full">
