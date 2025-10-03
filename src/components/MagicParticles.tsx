@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 
 interface MagicParticlesProps {
   children: React.ReactNode;
@@ -41,7 +41,7 @@ export default function MagicParticles({
     setIsClient(true);
   }, []);
 
-  const createParticle = (rect: DOMRect): Particle => {
+  const createParticle = useCallback((rect: DOMRect): Particle => {
     const angle = Math.random() * Math.PI * 2;
     const velocity = Math.random() * 0.5 + 0.2;
     
@@ -57,11 +57,11 @@ export default function MagicParticles({
       maxLife: Math.random() * 5000 + 3000, // 3-8 секунд
       trail: []
     };
-  };
+  }, [colors, speed]);
 
-  const drawParticle = (ctx: CanvasRenderingContext2D, particle: Particle) => {
+  const drawParticle = useCallback((ctx: CanvasRenderingContext2D, particle: Particle) => {
     // Рисуем след
-    particle.trail.forEach((point, index) => {
+    particle.trail.forEach((point) => {
       if (point.opacity > 0) {
         ctx.save();
         ctx.globalAlpha = point.opacity;
@@ -106,9 +106,9 @@ export default function MagicParticles({
     ctx.closePath();
     ctx.fill();
     ctx.restore();
-  };
+  }, []);
 
-  const updateParticle = (particle: Particle, deltaTime: number, rect: DOMRect) => {
+  const updateParticle = useCallback((particle: Particle, deltaTime: number, rect: DOMRect) => {
     particle.life += deltaTime;
     
     // Обновляем позицию
@@ -128,7 +128,7 @@ export default function MagicParticles({
     }
     
     // Обновляем opacity следа
-    particle.trail.forEach((point, index) => {
+    particle.trail.forEach((point) => {
       point.opacity *= 0.95;
     });
     
@@ -153,7 +153,7 @@ export default function MagicParticles({
     }
     
     return particle.life < particle.maxLife;
-  };
+  }, []);
 
   useEffect(() => {
     if (!isClient) return;
@@ -226,7 +226,7 @@ export default function MagicParticles({
       }
       window.removeEventListener('resize', resizeCanvas);
     };
-  }, [isClient, particleCount, colors, speed]);
+  }, [isClient, particleCount, colors, speed, createParticle, drawParticle, updateParticle]);
 
   return (
     <div ref={containerRef} className={`relative overflow-hidden ${className}`}>

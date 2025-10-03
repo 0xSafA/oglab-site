@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useMemo, useCallback } from 'react';
 
 interface MagicRippleProps {
   children: React.ReactNode;
@@ -20,6 +20,12 @@ interface Ripple {
   maxLife: number;
 }
 
+const SPEED_CONFIG = {
+  slow: { spawnRate: 2000, rippleSpeed: 0.5 },
+  normal: { spawnRate: 1500, rippleSpeed: 0.8 },
+  fast: { spawnRate: 1000, rippleSpeed: 1.2 }
+} as const;
+
 export default function MagicRipple({ 
   children, 
   className = '',
@@ -31,13 +37,6 @@ export default function MagicRipple({
   const ripplesRef = useRef<Ripple[]>([]);
   const animationRef = useRef<number>(0);
   const lastSpawnRef = useRef<number>(0);
-
-  // Настройки скорости
-  const speedConfig = {
-    slow: { spawnRate: 2000, rippleSpeed: 0.5 },
-    normal: { spawnRate: 1500, rippleSpeed: 0.8 },
-    fast: { spawnRate: 1000, rippleSpeed: 1.2 }
-  };
 
   const hexToHsl = (hex: string) => {
     const r = parseInt(hex.slice(1, 3), 16) / 255;
@@ -62,7 +61,7 @@ export default function MagicRipple({
     return { h: h * 360, s: s * 100, l: l * 100 };
   };
 
-  const createRipple = (rect: DOMRect): Ripple => {
+  const createRipple = useCallback((rect: DOMRect): Ripple => {
     const baseHsl = hexToHsl(color);
     return {
       x: Math.random() * rect.width,
@@ -74,7 +73,7 @@ export default function MagicRipple({
       life: 0,
       maxLife: Math.random() * 3000 + 2000 // 2-5 секунд
     };
-  };
+  }, [color]);
 
   const drawRipple = (ctx: CanvasRenderingContext2D, ripple: Ripple) => {
     const gradient = ctx.createRadialGradient(
@@ -97,7 +96,7 @@ export default function MagicRipple({
     ctx.restore();
   };
 
-  const updateRipple = (ripple: Ripple, deltaTime: number, config: typeof speedConfig.normal) => {
+  const updateRipple = useCallback((ripple: Ripple, deltaTime: number, config: { spawnRate: number; rippleSpeed: number }) => {
     ripple.life += deltaTime;
     ripple.radius += config.rippleSpeed * deltaTime * 0.05;
     
@@ -112,7 +111,9 @@ export default function MagicRipple({
     }
     
     return ripple.life < ripple.maxLife && ripple.radius < ripple.maxRadius;
-  };
+  }, []);
+
+  const config = useMemo(() => SPEED_CONFIG[speed], [speed]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -122,7 +123,6 @@ export default function MagicRipple({
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    const config = speedConfig[speed];
     let lastTime = 0;
 
     const resizeCanvas = () => {
@@ -175,7 +175,7 @@ export default function MagicRipple({
       }
       window.removeEventListener('resize', resizeCanvas);
     };
-  }, [color, speed]);
+  }, [config, createRipple, updateRipple]);
 
   return (
     <div ref={containerRef} className={`relative overflow-hidden ${className}`}>

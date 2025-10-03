@@ -31,6 +31,7 @@ export default function AdminNav({}: AdminNavProps) {
   }
 
   const navItems = [
+    { href: '/admin/blog', label: 'Blog' },
     { href: '/admin/menu', label: 'Items' },
     { href: '/admin/theme', label: 'Settings' },
   ]

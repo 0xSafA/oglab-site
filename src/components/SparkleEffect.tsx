@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
 
 interface SparkleEffectProps {
   children: React.ReactNode;
@@ -38,25 +38,25 @@ export default function SparkleEffect({
   const sparkleIdRef = useRef<number>(0);
 
   // Настройки интенсивности
-  const intensityConfig = {
+  const intensityConfig = useMemo(() => ({
     low: { maxSparkles: 8, spawnRate: 800 },
     medium: { maxSparkles: 15, spawnRate: 500 },
     high: { maxSparkles: 25, spawnRate: 300 }
-  };
+  }), []);
 
   // Цветовые схемы
-  const colorSchemes = {
+  const colorSchemes = useMemo(() => ({
     gold: ['#FFD700', '#FFA500', '#FFFF00', '#FFE55C'],
     white: ['#FFFFFF', '#F0F8FF', '#E6E6FA', '#FFFACD'],
     rainbow: ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7', '#DDA0DD']
-  };
+  }), []);
 
-  const getRandomColor = () => {
-    const colors = colorSchemes[color];
-    return colors[Math.floor(Math.random() * colors.length)];
-  };
+  const getRandomColor = useCallback(() => {
+    const palette = colorSchemes[color];
+    return palette[Math.floor(Math.random() * palette.length)];
+  }, [color, colorSchemes]);
 
-  const createSparkle = (rect: DOMRect): Sparkle => {
+  const createSparkle = useCallback((rect: DOMRect): Sparkle => {
     const margin = 20;
     return {
       id: sparkleIdRef.current++,
@@ -72,7 +72,7 @@ export default function SparkleEffect({
       rotationSpeed: (Math.random() - 0.5) * 2,
       color: getRandomColor()
     };
-  };
+  }, [getRandomColor]);
 
   const drawSparkle = (ctx: CanvasRenderingContext2D, sparkle: Sparkle) => {
     ctx.save();
@@ -108,7 +108,7 @@ export default function SparkleEffect({
     ctx.restore();
   };
 
-  const updateSparkle = (sparkle: Sparkle, deltaTime: number) => {
+  const updateSparkle = useCallback((sparkle: Sparkle, deltaTime: number) => {
     sparkle.life += deltaTime;
     sparkle.x += sparkle.vx * deltaTime;
     sparkle.y += sparkle.vy * deltaTime;
@@ -125,7 +125,7 @@ export default function SparkleEffect({
     }
     
     return sparkle.life < sparkle.maxLife;
-  };
+  }, []);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -189,7 +189,7 @@ export default function SparkleEffect({
       }
       window.removeEventListener('resize', resizeCanvas);
     };
-  }, [intensity, color]);
+  }, [intensity, intensityConfig, createSparkle, updateSparkle]);
 
   return (
     <div ref={containerRef} className={`relative ${className}`}>

@@ -4,6 +4,22 @@ const nextConfig: NextConfig = {
   // Minimal config for stable debugging
   reactStrictMode: false,
   
+  // Image configuration for external sources
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'i.ytimg.com',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'utfs.io',
+        pathname: '/**',
+      },
+    ],
+  },
+  
   // Оптимизация кэширования для ТВ и медленных устройств
   async headers() {
     return [

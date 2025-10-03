@@ -1,5 +1,8 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import Script from 'next/script';
+import NewsLandingPreviewWrapper from '@/components/NewsLandingPreviewWrapper';
+import LanguageSwitcher from '@/components/LanguageSwitcher';
 import { fetchTheme } from '@/lib/supabase-data';
 
 export const dynamic = 'force-dynamic';
@@ -29,7 +32,58 @@ export default async function HomePage() {
     enablePulse && 'magicPulse 4s ease-in-out infinite'
   ].filter(Boolean).join(', ');
 
+  // Schema.org LocalBusiness structured data
+  const structuredData = {
+    '@context': 'https://schema.org',
+    '@type': 'LocalBusiness',
+    '@id': 'https://oglab.com',
+    name: 'OG Lab',
+    description: 'The best cannabis dispensary and farm on Koh Samui with farm tours, scientific area, and premium cannabis products.',
+    url: 'https://oglab.com',
+    telephone: '+66982040757',
+    address: {
+      '@type': 'PostalAddress',
+      addressLocality: 'Koh Samui',
+      addressRegion: 'Surat Thani',
+      addressCountry: 'TH',
+    },
+    geo: {
+      '@type': 'GeoCoordinates',
+      latitude: 9.5356,
+      longitude: 100.0629,
+    },
+    image: 'https://oglab.com/assets/images/oglab_logo.png',
+    logo: 'https://oglab.com/assets/images/oglab_logo.png',
+    priceRange: '฿฿',
+    openingHoursSpecification: [
+      {
+        '@type': 'OpeningHoursSpecification',
+        dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+        opens: '10:00',
+        closes: '22:00',
+      },
+    ],
+    sameAs: [
+      'https://www.facebook.com/OGLabcom',
+      'https://www.instagram.com/oglab.co',
+      'https://www.youtube.com/@oglabco',
+      'https://t.me/oglab_co',
+      'https://www.tripadvisor.com/Attraction_Review-g293918-d32974728-Reviews-OG_Lab_Cannabis_Farm_Dispensary_Samui-Ko_Samui_Surat_Thani_Province.html',
+    ],
+    aggregateRating: {
+      '@type': 'AggregateRating',
+      ratingValue: '5.0',
+      reviewCount: '50',
+    },
+  };
+
   return (
+    <>
+      <Script
+        id="homepage-structured-data"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
     <div 
       className="min-h-screen bg-gradient-to-br flex items-start justify-center pt-7 pb-5 md:pt-6 md:pb-5"
       style={{ 
@@ -75,10 +129,11 @@ export default async function HomePage() {
             <SocialLink href="https://www.tripadvisor.com/Attraction_Review-g293918-d32974728-Reviews-OG_Lab_Cannabis_Farm_Dispensary_Samui-Ko_Samui_Surat_Thani_Province.html" icon="/assets/images/tripadvisor.svg" alt="TripAdvisor" size="large" />
           </div>
 
-          {/* Contact Info */}
-          <div className="flex justify-center gap-4 mb-8 flex-wrap">
+          {/* Contact Info with Language Switcher */}
+          <div className="flex justify-center gap-4 mb-8 flex-wrap items-center">
             <ContactLink href="tel:+66982040757" text="+66 98 204 0757" primaryColor={primaryColor} />
-            <ContactLink href="https://maps.app.goo.gl/5UtovCjQXCQixxJy7" text="Google Map" primaryColor={primaryColor} />
+            <ContactLink href="https://maps.app.goo.gl/774xQAAVHG5NY9i6A" text="Google Map" primaryColor={primaryColor} />
+            <LanguageSwitcher />
           </div>
 
           {/* Logo and Title */}
@@ -100,13 +155,13 @@ export default async function HomePage() {
                 backgroundImage: `linear-gradient(to right, ${primaryColor}, ${secondaryColor})` 
               }}
             >
-              OG Lab - Perfect Cannabis
+              OG Lab – Perfect Cannabis
             </h1>
-            <p className="text-lg font-medium" style={{ color: primaryColor }}>Growing Farm and Dispensary</p>
+            <p className="text-lg font-medium" style={{ color: primaryColor }}>The Best Cannabis Weed Dispensary and Farm on Koh Samui</p>
           </div>
 
           {/* Offer Pill (harmonized with badges) with Configurable Magic Effects */}
-          {!offerHidden && (
+          {!offerHidden && (  
             <div className="flex justify-center mb-4">
               <div className="relative inline-block">
                 {/* Магические частицы вокруг плашки - только если включены */}
@@ -157,6 +212,11 @@ export default async function HomePage() {
             <Badge text="Observe Live Cultivation" primaryColor={primaryColor} secondaryColor={secondaryColor} />
           </div>
 
+          {/* News Preview Section */}
+          <div className="mb-8">
+            <NewsLandingPreviewWrapper />
+          </div>
+
           {/* Why Choose Section */}
           <Section title="Why Choose OG Lab?">
             <p className="text-gray-700 leading-relaxed">
@@ -189,20 +249,41 @@ export default async function HomePage() {
           </div>
 
 
-          {/* Call to Action Section */}
-          <div className="relative overflow-hidden bg-gradient-to-br from-[#536C4A] to-[#B0BF93] rounded-3xl p-8 mb-6 text-center text-white">
+          {/* Call to Action Section with Map */}
+          <div className="relative overflow-hidden bg-gradient-to-br from-[#536C4A] to-[#B0BF93] rounded-3xl p-8 mb-6 text-white">
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent animate-shimmer"></div>
-            <h3 className="text-xl md:text-2xl font-bold mb-4  tracking-wide">
-              Discover Hidden Gem of Thailand
-            </h3>
-            <p className="text-lg md:text-xl leading-relaxed mb-4">
-              We invite you to discover the best-kept secret of Thailand and enjoy products crafted with passion and precision!
-            </p>
-            <p className="text-lg font-semibold mb-6">
-              More than a dispensary – a destination for true enthusiasts.
-            </p>
-            <div className="flex justify-center gap-4 flex-wrap">
-              <CTAButton href="https://maps.app.goo.gl/5UtovCjQXCQixxJy7" text="Visit Our Farm" external />
+            
+            <div className="relative z-10 grid gap-6 md:grid-cols-2 md:items-center">
+              {/* Text Content */}
+              <div className="text-center md:text-left">
+                <h3 className="text-xl md:text-2xl font-bold mb-4 tracking-wide">
+                  Discover Hidden Gem of Thailand
+                </h3>
+                <p className="text-lg md:text-xl leading-relaxed mb-4">
+                  We invite you to discover the best-kept secret of Thailand and enjoy products crafted with passion and precision!
+                </p>
+                <p className="text-lg font-semibold mb-6">
+                  More than a dispensary – a destination for true enthusiasts.
+                </p>
+                <div className="flex justify-center md:justify-start gap-4 flex-wrap">
+                  <CTAButton href="https://maps.app.goo.gl/774xQAAVHG5NY9i6A" text="Visit Our Farm" external />
+                </div>
+              </div>
+
+              {/* Google Maps Embed */}
+              <div className="relative rounded-2xl overflow-hidden shadow-2xl border-4 border-white/20 h-[300px] md:h-[350px]">
+                <iframe
+                  src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3935.40694564511!2d99.9582324!3d9.4732875!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3054f550ef9d22ab%3A0x78805fae6045029c!2sOG%20Lab%20-%20Cannabis%E2%80%8B%20Farm%20Dispensary%20Samui!5e0!3m2!1sru!2sth!4v1759484890949!5m2!1sru!2sth"
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0 }}
+                  allowFullScreen
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  title="OG Lab - Cannabis Farm Dispensary Samui Location"
+                  className="absolute inset-0"
+                />
+              </div>
             </div>
               
           </div>
@@ -234,6 +315,7 @@ export default async function HomePage() {
         </div>
       </div>
     </div>
+    </>
   );
 }
 

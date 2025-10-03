@@ -24,7 +24,7 @@ export async function GET() {
     const sqlStatements: string[] = []
     
     // Add menu items
-    rows.forEach((row, index) => {
+    rows.forEach((row) => {
       if (!row.Name || !row.Category) return
       
       const values = [

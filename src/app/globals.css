@@ -485,6 +485,140 @@ html, body {
   }
 }
 
+@keyframes newsNeonPulse {
+  0%, 100% {
+    opacity: 0.35;
+    filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.25));
+  }
+  50% {
+    opacity: 0.65;
+    filter: drop-shadow(0 0 25px rgba(255, 107, 107, 0.45));
+  }
+}
+
+@keyframes newsNeonSweep {
+  0% {
+    transform: rotate(0deg);
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.7;
+  }
+  100% {
+    transform: rotate(360deg);
+    opacity: 0.4;
+  }
+}
+
+@keyframes newsButtonSweep {
+  0% {
+    transform: translateX(0);
+    opacity: 0;
+  }
+  40% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(220%);
+    opacity: 0;
+  }
+}
+
+@keyframes rosinHover {
+  0%, 100% {
+    transform: perspective(800px) translateY(0) rotateX(0deg);
+  }
+  50% {
+    transform: perspective(800px) translateY(-2px) rotateX(5deg);
+  }
+}
+
+@keyframes rosinGlow {
+  0%, 100% {
+    opacity: 0.6;
+    filter: blur(8px);
+  }
+  50% {
+    opacity: 0.9;
+    filter: blur(12px);
+  }
+}
+
+@keyframes rosinStream {
+  0% {
+    transform: scaleY(0.2);
+    opacity: 0;
+  }
+  30% {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(20px) scaleY(0.2);
+    opacity: 0;
+  }
+}
+
+@keyframes rosinDrop {
+  0% {
+    transform: translateY(-12px) scale(0.55);
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.9;
+  }
+  65% {
+    transform: translateY(52px) scale(1.05);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(76px) scale(0.85);
+    opacity: 0;
+  }
+}
+
+/* One-time animations for rosin effect */
+@keyframes rosinStreamOnce {
+  0% {
+    transform: scaleY(0.2);
+    opacity: 0;
+  }
+  30% {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+  70% {
+    transform: translateY(20px) scaleY(0.8);
+    opacity: 0.85;
+  }
+  100% {
+    transform: translateY(24px) scaleY(0.6);
+    opacity: 0;
+  }
+}
+
+@keyframes rosinDropOnce {
+  0% {
+    transform: translateY(-12px) scale(0.55);
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.9;
+  }
+  65% {
+    transform: translateY(52px) scale(1.05);
+    opacity: 1;
+  }
+  85% {
+    transform: translateY(76px) scale(0.85);
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateY(82px) scale(0.7);
+    opacity: 0;
+  }
+}
+
 /* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
@@ -946,8 +1080,13 @@ body[data-breathing-type="indica"] .dot-indica {
   animation: bounce-gentle 3s ease-in-out infinite;
 }
 
-/* Contact link hover effects */
+/* Contact link and language button hover effects */
 .contact-link:hover {
+  background-color: var(--primary-color) !important;
+  color: white !important;
+}
+
+button[style*="--primary-color"]:hover {
   background-color: var(--primary-color) !important;
   color: white !important;
 }
