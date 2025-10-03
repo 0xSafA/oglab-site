@@ -2,6 +2,7 @@
 
 import { useState, type CSSProperties } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { getFeaturedNews } from '@/lib/news-data';
 
 const STREAM_GRADIENT = 'bg-[linear-gradient(180deg,rgba(253,236,168,0)_0%,rgba(226,165,63,0.65)_45%,rgba(184,109,28,0.95)_100%)]';
@@ -43,20 +44,29 @@ export default function NewsLandingPreview() {
     <section className="relative overflow-hidden rounded-3xl border border-[#B0BF93]/40 bg-gradient-to-br from-white/95 via-white to-[#F4F8F0] p-6 shadow-2xl">
       <div className="pointer-events-none absolute -inset-[2px] rounded-[28px] bg-[conic-gradient(from_0deg_at_50%_50%,#FFD166_0deg,#FF6B6B_120deg,#7CFFCB_240deg,#FFD166_360deg)] opacity-50 blur-xl animate-[newsNeonSweep_15s_linear_infinite]" />
       <div className="pointer-events-none absolute inset-0 rounded-[28px] bg-[radial-gradient(circle_at_top_left,rgba(255,247,189,0.35),transparent_50%),radial-gradient(circle_at_bottom_right,rgba(124,255,203,0.25),transparent_55%)] animate-[newsNeonPulse_5s_ease-in-out_infinite]" />
-      <div className="relative z-10 flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
-        <div className="space-y-4 md:max-w-2xl">
+      <div className="relative z-10 flex flex-col gap-6 md:flex-row md:items-center">
+        <div className="space-y-4 md:flex-[0.45]">
           <span className="inline-flex items-center rounded-full bg-[#B0BF93]/30 px-4 py-2 text-xs font-semibold uppercase tracking-wide text-[#2F3A24]">
             What&apos;s New
           </span>
-          <h2 className="text-2xl font-bold text-[#2F3A24] md:text-3xl">OG Lab Stories — Our Uncensored Blog</h2>
+          <h2 className="text-2xl font-bold text-[#2F3A24] md:text-3xl">OG Lab Stories: Uncensored Blog</h2>
           <p className="text-base text-[#2F3A24]/70">
             We&apos;re launching a news feed right on our website. Aftermovie videos, farm photo galleries, and educational cannabis articles — all in one place, without blocks or restrictions.
           </p>
         </div>
 
-        <div className="flex flex-col gap-3 rounded-3xl bg-[#536C4A] p-6 text-white shadow-xl">
+        <div className="flex flex-col gap-3 rounded-3xl bg-[#536C4A] p-6 text-white shadow-xl md:flex-[0.55]">
           <p className="text-xs font-semibold uppercase tracking-widest text-white/70">Latest Drop</p>
           <h3 className="text-xl font-bold">{featured.title}</h3>
+          <div className="-mx-2 overflow-hidden rounded-2xl">
+            <Image 
+              src="/assets/bts/events.png" 
+              alt="OG Lab Secret Garden Party" 
+              width={400} 
+              height={200} 
+              className="h-48 md:h-56 w-full object-cover"
+            />
+          </div>
           <p className="text-sm text-white/80">{featured.excerpt}</p>
           <Link
             href="/news"

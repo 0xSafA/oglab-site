@@ -146,7 +146,7 @@ export default async function HumanizedHomePage() {
                 OG Lab – Perfect Cannabis
               </h1>
               <p className="text-xl md:text-2xl font-medium text-white/95 drop-shadow-lg">
-                The Best Cannabis Weed Dispensary and Farm on Koh Samui
+                Cannabis Dispensary and Farm on Koh Samui
               </p>
             </div>
 

@@ -4,6 +4,7 @@ import Script from 'next/script';
 import NewsLandingPreviewWrapper from '@/components/NewsLandingPreviewWrapper';
 import OGLabAgent from '@/components/OGLabAgent';
 import BehindTheScenes from '@/components/BehindTheScenes';
+import HeroVideo from '@/components/HeroVideo';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 import { fetchTheme } from '@/lib/supabase-data';
 
@@ -26,6 +27,11 @@ export default async function HomePage() {
   const enableFloating = theme?.offer_enable_floating ?? true;
   const enablePulse = theme?.offer_enable_pulse ?? true;
   const enableInnerLight = theme?.offer_enable_inner_light ?? true;
+  
+  // Homepage hero video (now used in Latest Drop card)
+  const heroVideoUrl = (theme as any)?.homepage_video_url || 'https://youtu.be/zsi0FT5zljo?si=qLbVvakUFMDsaDlb';
+  const heroVideoTitle = 'OG Lab — Secret Garden Aftermovie';
+  const heroVideoSubtitle = 'Lights, neon, vaporizers — welcome back to our secret garden.';
   
   // Build animation string based on settings
   const animations = [
@@ -93,13 +99,13 @@ export default async function HomePage() {
       }}
     >
       {/* Background Effects */}
-      <div className="fixed inset-0 opacity-10 z-0">
+      <div className="fixed inset-0 opacity-20 z-0">
         <div className="absolute inset-0 bg-gradient-to-br from-[#536C4A] via-[#B0BF93] to-[#536C4A]"></div>
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(176,191,147,0.3)_0%,transparent_50%),radial-gradient(circle_at_80%_80%,rgba(83,108,74,0.3)_0%,transparent_50%),radial-gradient(circle_at_40%_60%,rgba(176,191,147,0.2)_0%,transparent_50%)]"></div>
       </div>
 
       <div className="relative z-10 w-full max-w-4xl mx-auto">
-        <div className="bg-white/95 rounded-3xl shadow-2xl border-[3px] md:border-2 border-[#B0BF93]/45 md:border-[#B0BF93]/40 p-8 animate-fade-in-up">
+        <div className="bg-white/90 rounded-3xl shadow-xl border-2 border-[#B0BF93]/35 p-8 animate-fade-in-up">
           
           {/* Social Icons */}
           <div className="flex items-center justify-center gap-4 mb-6">
@@ -159,8 +165,10 @@ export default async function HomePage() {
             >
               OG Lab – Perfect Cannabis
             </h1>
-            <p className="text-lg font-medium" style={{ color: primaryColor }}>The Best Cannabis Weed Dispensary and Farm on Koh Samui</p>
+            <p className="text-lg font-medium" style={{ color: primaryColor }}>Cannabis Dispensary and Farm on Koh Samui</p>
           </div>
+
+          {/* Hero Video removed from here (moved to Latest Drop card) */}
 
           {/* Offer Pill (harmonized with badges) with Configurable Magic Effects */}
           {!offerHidden && (  

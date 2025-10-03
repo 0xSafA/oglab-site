@@ -141,16 +141,8 @@ export default function NewsPage() {
           </div>
         </header>
 
-        {/* Video hero */}
+        {/* Video grid with first article */}
         <section className="grid grid-cols-1 gap-4 md:grid-cols-3">
-          <div className="md:col-span-3">
-            <VideoTile
-              url="https://youtu.be/xoU9RksCdX0?si=cc39IO6ZNCmT9arr"
-              title="OG Lab — party aftermovie"
-              duration="4:12"
-              large
-            />
-          </div>
           <VideoTile
             url="https://youtu.be/CGT-Dnvyl9I?si=nHdbcPFr60CWA3nx"
             title="OG Lab — farm vibes"
@@ -159,12 +151,28 @@ export default function NewsPage() {
             url="https://youtu.be/Uxk00Y6UeMk?si=HVP9VoYNmKOZccty"
             title="OG Lab — lifestyle teaser"
           />
+          <VideoTile
+            url="https://youtu.be/KAATrEtpai4?si=njD1boS47BC9M_Lf"
+            title="OG Lab — party highlights"
+          />
+          <VideoTile
+            url="https://youtu.be/jSbWDBR4SHQ?si=09SJy2864rMl9L72"
+            title="OG Lab — chill session teaser"
+          />
+          <VideoTile
+            url="https://youtu.be/ERj25Bqet94?si=ZSOTR7AOoYS55X0j"
+            title="OG Lab — behind the scenes flash"
+          />
+          
+          {/* First article (CBD vs THC) placed in free slot after videos */}
+          <div className="md:col-span-1">
+            <NewsCard item={recent.find(item => item.id === 'cbd-education') || recent[1]} />
+          </div>
         </section>
 
         <section className="grid grid-cols-1 gap-6 md:grid-cols-2">
-          <NewsCard item={featured} highlight />
           {recent
-            .filter((item) => item.id !== featured.id)
+            .filter((item) => item.id !== 'cbd-education')
             .map((item) => (
               <NewsCard key={item.id} item={item} />
             ))}
