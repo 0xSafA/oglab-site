@@ -2,6 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import Script from 'next/script';
 import NewsLandingPreviewWrapper from '@/components/NewsLandingPreviewWrapper';
+import OGLabAgent from '@/components/OGLabAgent';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 import { fetchTheme } from '@/lib/supabase-data';
 
@@ -85,7 +86,7 @@ export default async function HomePage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
     <div 
-      className="min-h-screen bg-gradient-to-br flex items-start justify-center pt-7 pb-5 md:pt-6 md:pb-5"
+      className="min-h-screen bg-gradient-to-br flex items-start justify-center pt-7 pb-5 md:pt-6 md:pb-5 px-4 overflow-x-hidden"
       style={{ 
         background: `linear-gradient(to bottom right, ${primaryColor}, ${secondaryColor})` 
       }}
@@ -96,7 +97,7 @@ export default async function HomePage() {
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(176,191,147,0.3)_0%,transparent_50%),radial-gradient(circle_at_80%_80%,rgba(83,108,74,0.3)_0%,transparent_50%),radial-gradient(circle_at_40%_60%,rgba(176,191,147,0.2)_0%,transparent_50%)]"></div>
       </div>
 
-      <div className="relative z-10 w-full max-w-4xl mx-4">
+      <div className="relative z-10 w-full max-w-4xl mx-auto">
         <div className="bg-white/95 rounded-3xl shadow-2xl border-[3px] md:border-2 border-[#B0BF93]/45 md:border-[#B0BF93]/40 p-8 animate-fade-in-up">
           
           {/* Social Icons */}
@@ -260,13 +261,13 @@ export default async function HomePage() {
                   Discover Hidden Gem of Thailand
                 </h3>
                 <p className="text-lg md:text-xl leading-relaxed mb-4">
-                  We invite you to discover the best-kept secret of Thailand and enjoy products crafted with passion and precision!
+                  We invite you to discover the best-kept secret of Thailand and enjoy the warmth of our team and the quality of our products.
                 </p>
                 <p className="text-lg font-semibold mb-6">
                   More than a dispensary – a destination for true enthusiasts.
                 </p>
                 <div className="flex justify-center md:justify-start gap-4 flex-wrap">
-                  <CTAButton href="https://maps.app.goo.gl/774xQAAVHG5NY9i6A" text="Visit Our Farm" external />
+                  <CTAButton href="https://maps.app.goo.gl/774xQAAVHG5NY9i6A" text="Visit Us Today" external />
                 </div>
               </div>
 
@@ -286,6 +287,11 @@ export default async function HomePage() {
               </div>
             </div>
               
+          </div>
+
+          {/* OG Lab Agent - placed above final section */}
+          <div className="mb-6">
+            <OGLabAgent />
           </div>
 
           {/* Final Section */}

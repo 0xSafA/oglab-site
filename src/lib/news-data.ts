@@ -19,7 +19,7 @@ export const sampleNewsItems: NewsItem[] = [
     id: 'first-party-recap',
     title: 'Aftermovie OG Lab Secret Garden Party',
     excerpt:
-      'How we celebrated another OG Lab community gathering. Lights, neon, and vaporizers – welcome back to our secret garden.',
+      'How we celebrated our OG Lab community gathering. Lights, neon, and vaporizers – welcome back to our secret garden.',
     type: 'video',
     date: '2024-09-18',
     tags: ['party', 'community', 'video'],

@@ -2,7 +2,9 @@ import Link from 'next/link';
 import Image from 'next/image';
 import Script from 'next/script';
 import VideoTile from '@/components/VideoTile';
-import LanguageSwitcher from '@/components/LanguageSwitcher';
+import OGLabAgent from '@/components/OGLabAgent';
+import AggregatedNewsMock from '@/components/AggregatedNewsMock';
+import SubscribeRSS from '@/components/SubscribeRSS';
 import { getFeaturedNews, getRecentNews } from '@/lib/news-data';
 import { NewsCard } from '@/components/NewsCard';
 
@@ -75,34 +77,51 @@ export default function NewsPage() {
             </div>
             <div className="md:max-w-sm">
               <div className="grid grid-cols-3 gap-3">
-                <div className="col-span-2 row-span-2 overflow-hidden rounded-2xl ring-1 ring-[#536C4A]/10">
+                {/* Large YouTube thumbnail */}
+                <a href="https://youtu.be/xoU9RksCdX0?si=cc39IO6ZNCmT9arr" target="_blank" rel="noreferrer" className="relative col-span-2 row-span-2 overflow-hidden rounded-2xl ring-1 ring-[#536C4A]/10">
                   <Image
-                    src="/assets/images/oglab_logo.jpg"
-                    alt="OG Lab visual"
+                    src={`https://i.ytimg.com/vi/xoU9RksCdX0/maxresdefault.jpg`}
+                    alt="OG Lab aftermovie"
                     width={640}
                     height={480}
                     className="h-full w-full object-cover bg-[#F4F8F0]"
                     priority
+                    unoptimized
                   />
-                </div>
-                <div className="overflow-hidden rounded-2xl ring-1 ring-[#536C4A]/10">
+                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-tr from-[#000]/40 via-transparent to-[#000]/10" />
+                  <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+                    <span className="inline-flex h-14 w-14 items-center justify-center rounded-full bg-white/90 text-[#2F3A24] shadow-xl">▶</span>
+                  </div>
+                </a>
+                {/* Small thumbnails */}
+                <a href="https://youtu.be/CGT-Dnvyl9I?si=nHdbcPFr60CWA3nx" target="_blank" rel="noreferrer" className="relative overflow-hidden rounded-2xl ring-1 ring-[#536C4A]/10">
                   <Image
-                    src="/globe.svg"
-                    alt="Globe illustration"
+                    src={`https://i.ytimg.com/vi/CGT-Dnvyl9I/hqdefault.jpg`}
+                    alt="Farm vibes"
                     width={320}
                     height={240}
                     className="h-full w-full object-cover bg-[#F4F8F0]"
+                    unoptimized
                   />
-                </div>
-                <div className="overflow-hidden rounded-2xl ring-1 ring-[#536C4A]/10">
+                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-[#000]/30 to-transparent" />
+                  <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+                    <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/90 text-[#2F3A24] shadow">▶</span>
+                  </div>
+                </a>
+                <a href="https://youtu.be/Uxk00Y6UeMk?si=HVP9VoYNmKOZccty" target="_blank" rel="noreferrer" className="relative overflow-hidden rounded-2xl ring-1 ring-[#536C4A]/10">
                   <Image
-                    src="/window.svg"
-                    alt="Window illustration"
+                    src={`https://i.ytimg.com/vi/Uxk00Y6UeMk/hqdefault.jpg`}
+                    alt="Lifestyle teaser"
                     width={320}
                     height={240}
                     className="h-full w-full object-cover bg-[#F4F8F0]"
+                    unoptimized
                   />
-                </div>
+                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#000]/25 via-transparent to-transparent" />
+                  <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+                    <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/90 text-[#2F3A24] shadow">▶</span>
+                  </div>
+                </a>
               </div>
               <div className="mt-4 rounded-2xl bg-[#536C4A] p-4 text-white shadow-xl">
                 <p className="text-sm font-semibold uppercase tracking-wide text-white/80">
@@ -117,9 +136,6 @@ export default function NewsPage() {
                 >
                   На главную
                 </Link>
-                <div className="mt-3 flex justify-end">
-                  <LanguageSwitcher />
-                </div>
               </div>
             </div>
           </div>
@@ -153,6 +169,19 @@ export default function NewsPage() {
               <NewsCard key={item.id} item={item} />
             ))}
         </section>
+
+        {/* OG Lab Agent */}
+        <OGLabAgent />
+
+        {/* Aggregated news + Subscribe side-by-side on desktop */}
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+          <div className="md:col-span-2">
+            <AggregatedNewsMock />
+          </div>
+          <div className="md:col-span-1">
+            <SubscribeRSS />
+          </div>
+        </div>
 
         <section className="rounded-3xl border border-white/30 bg-white/70 p-8 shadow-inner">
           <div className="grid gap-6 md:grid-cols-2">
