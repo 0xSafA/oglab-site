@@ -1,0 +1,104 @@
+import { NextIntlClientProvider } from 'next-intl';
+import { getMessages } from 'next-intl/server';
+import { notFound } from 'next/navigation';
+import { Inter } from "next/font/google";
+import Script from "next/script";
+import "../globals.css";
+
+const inter = Inter({ subsets: ["latin"] });
+
+export function generateStaticParams() {
+  return [
+    { locale: 'en' },
+    { locale: 'ru' },
+    { locale: 'th' },
+    { locale: 'fr' },
+    { locale: 'de' },
+    { locale: 'he' },
+    { locale: 'it' }
+  ];
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
+  
+  const titles = {
+    en: "OG Lab – Best Cannabis Dispensary and Farm on Koh Samui, Thailand",
+    ru: "OG Lab – Лучшая Диспенсария и Ферма Каннабиса на Самуи, Таиланд",
+    th: "OG Lab – ดิสเพนซารีและฟาร์มกัญชาที่ดีที่สุดในเกาะสมุย ประเทศไทย",
+  };
+  
+  const descriptions = {
+    en: "OG Lab is the best cannabis dispensary Samui with farm tours, scientific area, and premium cannabis products. Largest dispensary on Koh Samui with the best prices directly from our farm.",
+    ru: "OG Lab - лучшая диспенсария каннабиса на Самуи с турами на ферму, научной зоной и премиум продуктами. Крупнейшая диспенсария на Самуи с лучшими ценами прямо с фермы.",
+    th: "OG Lab เป็นดิสเพนซารีกัญชาที่ดีที่สุดในสมุยพร้อมทัวร์ฟาร์ม พื้นที่วิทยาศาสตร์ และผลิตภัณฑ์กัญชาพรีเมียม",
+  };
+
+  return {
+    title: titles[locale as keyof typeof titles] || titles.en,
+    description: descriptions[locale as keyof typeof descriptions] || descriptions.en,
+    alternates: {
+      languages: {
+        'en': '/en',
+        'ru': '/ru',
+        'th': '/th',
+        'fr': '/fr',
+        'de': '/de',
+        'he': '/he',
+        'it': '/it',
+        'x-default': '/en',
+      },
+    },
+  };
+}
+
+export default async function LocaleLayout({
+  children,
+  params
+}: {
+  children: React.ReactNode;
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  
+  // Validate locale
+  const validLocales = ['en', 'ru', 'th', 'fr', 'de', 'he', 'it'];
+  if (!validLocales.includes(locale)) {
+    notFound();
+  }
+  
+  const messages = await getMessages();
+
+  return (
+    <html lang={locale} dir={locale === 'he' ? 'rtl' : 'ltr'}>
+      <head>
+        {/* Preload только критических ресурсов для главной страницы */}
+        <link rel="preload" href="/assets/images/oglab_logo_round.svg" as="image" type="image/svg+xml" />
+        
+        {/* DNS prefetch для внешних ресурсов */}
+        <link rel="dns-prefetch" href="//www.googletagmanager.com" />
+        <link rel="dns-prefetch" href="//fonts.googleapis.com" />
+        <link rel="dns-prefetch" href="//www.google.com" />
+      </head>
+      <body className={inter.className}>
+        {/* Google Analytics */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-SF3PJN87G9"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-SF3PJN87G9');
+          `}
+        </Script>
+        <NextIntlClientProvider messages={messages}>
+          {children}
+        </NextIntlClientProvider>
+      </body>
+    </html>
+  );
+}
+

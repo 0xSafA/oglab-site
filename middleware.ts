@@ -1,7 +1,19 @@
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
+import createIntlMiddleware from 'next-intl/middleware';
+import {routing} from './src/navigation';
+
+// Create the i18n middleware
+const intlMiddleware = createIntlMiddleware(routing);
 
 export async function middleware(request: NextRequest) {
+  // First, handle i18n routing
+  const intlResponse = intlMiddleware(request);
+  
+  // If i18n redirects, return that response
+  if (intlResponse.status === 307 || intlResponse.status === 308) {
+    return intlResponse;
+  }
   let response = NextResponse.next({
     request: {
       headers: request.headers,
@@ -84,6 +96,9 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
+    // Match all paths except API routes, static files, and Next.js internals
+    '/((?!api|_next|_vercel|.*\\..*).*)',
+    // Always run for admin and auth paths
     '/admin/:path*',
     '/auth/login'
   ],
