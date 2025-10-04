@@ -8,6 +8,11 @@ module.exports = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['var(--font-inter)', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+        thai: ['var(--font-noto-thai)', 'Noto Sans Thai', 'Sarabun', 'Leelawadee UI', 'Thonburi', 'sans-serif'],
+        hebrew: ['var(--font-rubik)', 'Rubik', 'Arial Hebrew', 'Noto Sans Hebrew', 'David Libre', 'sans-serif'],
+      },
       colors: {
         primary: {
           DEFAULT: '#536C4A',

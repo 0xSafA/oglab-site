@@ -11,6 +11,26 @@
   --menu-card-bg: #ffffff;
 }
 
+/* Font configuration for different languages */
+@layer base {
+  /* Default font for Latin and Cyrillic scripts */
+  .font-sans {
+    font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+  
+  /* Thai font with proper fallback chain */
+  .font-thai {
+    font-family: var(--font-noto-thai), 'Noto Sans Thai', 'Sarabun', 'Leelawadee UI', 'Thonburi', sans-serif;
+  }
+  
+  /* Hebrew font with proper fallback chain and RTL support */
+  .font-hebrew {
+    font-family: var(--font-rubik), 'Rubik', 'Arial Hebrew', 'Noto Sans Hebrew', 'David Libre', sans-serif;
+    direction: rtl;
+    text-align: right;
+  }
+}
+
 /* Prevent horizontal overscroll revealing white gutters */
 html, body {
   overflow-x: hidden;
