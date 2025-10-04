@@ -84,36 +84,15 @@ export default function HomePage() {
         <div className="bg-gradient-to-br from-[#FFFEF9] via-[#FFFCF0] to-[#FFF9E6] rounded-3xl shadow-xl border-2 border-[#B0BF93]/35 p-8 animate-fade-in-up">
           
           {/* Social Icons */}
-          <div className="flex items-center justify-center gap-4 mb-6">
-            <a
-              href="https://www.youtube.com/@oglabco"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="YouTube"
-              className="transition-transform hover:scale-125"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width={40}
-                height={40}
-                viewBox="0 0 24 24"
-                fill="none"
-                className="lucide lucide-youtube-icon lucide-youtube youtube-icon"
-              >
-                <g className="youtube-stroke" fill="none" stroke="#536C4A" strokeLinecap="round" strokeLinejoin="round">
-                  <path vectorEffect="non-scaling-stroke" d="M2.5 17a24.1 24.1 0 0 1 0-10a2 2 0 0 1 1.4-1.4a49.6 49.6 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.1 24.1 0 0 1 0 10a2 2 0 0 1-1.4 1.4a49.6 49.6 0 0 1-16.2 0A2 2 0 0 1 2.5 17" />
-                  <path vectorEffect="non-scaling-stroke" d="m10 15l5-3l-5-3z" />
-                </g>
-              </svg>
-            </a>
+          <div className="flex items-center justify-center gap-3 sm:gap-4 mb-6">
             <a
               href="https://www.instagram.com/oglab.co/"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Instagram"
-              className="transition-transform hover:scale-125"
+              className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center transition-transform hover:scale-125"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#536C4A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#536C4A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-full h-full">
                 <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
                 <path d="m16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
                 <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
@@ -124,9 +103,9 @@ export default function HomePage() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Telegram"
-              className="transition-transform hover:scale-125"
+              className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center transition-transform hover:scale-125"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#536C4A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#536C4A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-full h-full">
                 <path d="m22 2-7 20-4-9-9-4z"/>
                 <path d="M22 2 11 13"/>
               </svg>
@@ -136,9 +115,9 @@ export default function HomePage() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="WhatsApp"
-              className="transition-transform hover:scale-125"
+              className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center transition-transform hover:scale-125"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#536C4A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#536C4A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-full h-full">
                 <path d="M3 21l1.65-3.8a9 9 0 1 1 3.4 2.9z"/>
                 <path d="M9 10a3 3 0 0 0 6 0c0-1-1-1-1-1s-1 0-1 1a1 1 0 0 1-2 0c0-1-1-1-1-1s-1 0-1 1z"/>
               </svg>
@@ -148,9 +127,9 @@ export default function HomePage() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Facebook"
-              className="transition-transform hover:scale-125"
+              className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center transition-transform hover:scale-125"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#536C4A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#536C4A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-full h-full">
                 <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
               </svg>
             </a>
@@ -159,14 +138,33 @@ export default function HomePage() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="TripAdvisor"
-              className="transition-transform hover:scale-125"
+              className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center transition-transform hover:scale-125"
             >
-              <svg width="45" height="45" viewBox="0 -96 512.2 512.2" xmlns="http://www.w3.org/2000/svg">
+              <svg viewBox="0 -96 512.2 512.2" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
                 <path fill="#536C4A" d="M128.2 127.9C92.7 127.9 64 156.6 64 192c0 35.4 28.7 64.1 64.1 64.1 35.4 0 64.1-28.7 64.1-64.1.1-35.4-28.6-64.1-64-64.1zm0 110c-25.3 0-45.9-20.5-45.9-45.9s20.5-45.9 45.9-45.9S174 166.7 174 192s-20.5 45.9-45.8 45.9z"/>
                 <circle fill="#536C4A" cx="128.4" cy="191.9" r="31.9"/>
                 <path fill="#536C4A" d="M384.2 127.9c-35.4 0-64.1 28.7-64.1 64.1 0 35.4 28.7 64.1 64.1 64.1 35.4 0 64.1-28.7 64.1-64.1 0-35.4-28.7-64.1-64.1-64.1zm0 110c-25.3 0-45.9-20.5-45.9-45.9s20.5-45.9 45.9-45.9S430 166.7 430 192s-20.5 45.9-45.8 45.9z"/>
                 <circle fill="#536C4A" cx="384.4" cy="191.9" r="31.9"/>
                 <path fill="#536C4A" d="M474.4 101.2l37.7-37.4h-76.4C392.9 29 321.8 0 255.9 0c-66 0-136.5 29-179.3 63.8H0l37.7 37.4C14.4 124.4 0 156.5 0 192c0 70.8 57.4 128.2 128.2 128.2 32.5 0 62.2-12.1 84.8-32.1l43.4 31.9 42.9-31.2-.5-1.2c22.7 20.2 52.5 32.5 85.3 32.5 70.8 0 128.2-57.4 128.2-128.2-.1-35.4-14.6-67.5-37.9-90.7zM368 64.8c-60.7 7.6-108.3 57.6-111.9 119.5-3.7-62-51.4-112.1-112.3-119.5 30.6-22 69.6-32.8 112.1-32.8S337.4 42.8 368 64.8zM128.2 288.2C75 288.2 32 245.1 32 192s43.1-96.2 96.2-96.2 96.2 43.1 96.2 96.2c-.1 53.1-43.1 96.2-96.2 96.2zm256 0c-53.1 0-96.2-43.1-96.2-96.2s43.1-96.2 96.2-96.2 96.2 43.1 96.2 96.2c-.1 53.1-43.1 96.2-96.2 96.2z"/>
+              </svg>
+            </a>
+            <a
+              href="https://www.youtube.com/@oglabco"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="YouTube"
+              className="w-10 h-10 sm:w-11 sm:h-11 flex items-center justify-center transition-transform hover:scale-125"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                className="w-full h-full"
+              >
+                <g fill="none" stroke="#536C4A" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M2.5 17a24.1 24.1 0 0 1 0-10a2 2 0 0 1 1.4-1.4a49.6 49.6 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.1 24.1 0 0 1 0 10a2 2 0 0 1-1.4 1.4a49.6 49.6 0 0 1-16.2 0A2 2 0 0 1 2.5 17" />
+                  <path d="m10 15l5-3l-5-3z" />
+                </g>
               </svg>
             </a>
           </div>
