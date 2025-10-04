@@ -123,17 +123,6 @@ export default function HomePage() {
               </svg>
             </a>
             <a
-              href="https://www.facebook.com/OGLabcom"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Facebook"
-              className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center transition-transform hover:scale-125"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#536C4A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-full h-full">
-                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
-              </svg>
-            </a>
-            <a
               href="https://www.tripadvisor.com/Attraction_Review-g293918-d32974728-Reviews-OG_Lab_Cannabis_Farm_Dispensary_Samui-Ko_Samui_Surat_Thani_Province.html"
               target="_blank"
               rel="noopener noreferrer"
@@ -149,11 +138,22 @@ export default function HomePage() {
               </svg>
             </a>
             <a
+              href="https://www.facebook.com/OGLabcom"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Facebook"
+              className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center transition-transform hover:scale-125"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#536C4A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-full h-full">
+                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+              </svg>
+            </a>
+            <a
               href="https://www.youtube.com/@oglabco"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="YouTube"
-              className="w-10 h-10 sm:w-11 sm:h-11 flex items-center justify-center transition-transform hover:scale-125"
+              className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center transition-transform hover:scale-125"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -161,7 +161,7 @@ export default function HomePage() {
                 fill="none"
                 className="w-full h-full"
               >
-                <g fill="none" stroke="#536C4A" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+                <g fill="none" stroke="#536C4A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M2.5 17a24.1 24.1 0 0 1 0-10a2 2 0 0 1 1.4-1.4a49.6 49.6 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.1 24.1 0 0 1 0 10a2 2 0 0 1-1.4 1.4a49.6 49.6 0 0 1-16.2 0A2 2 0 0 1 2.5 17" />
                   <path d="m10 15l5-3l-5-3z" />
                 </g>

@@ -51,7 +51,7 @@ export default function NewsLandingPreview() {
           </span>
           <h2 className="text-2xl font-bold text-[#2F3A24] md:text-3xl">OG Lab Stories: Uncensored Blog</h2>
           <p className="text-base text-[#2F3A24]/70">
-            We&apos;re launching a news feed right on our website. Aftermovie videos, farm photo galleries, and educational cannabis articles — all in one place, without blocks or restrictions.
+            We&apos;re launching a news feed right on our website. Aftermovie videos, farm photo galleries, and educational cannabis articles — all in one place, without blocks or restrictions. Ganja, cannabis, Marihuana, weed - ha-ha-ha, we'll show you everything here!
           </p>
         </div>
 
