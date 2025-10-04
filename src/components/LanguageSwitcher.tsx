@@ -1,7 +1,9 @@
 'use client'
 
-import { usePathname, useRouter } from 'next/navigation'
+import { usePathname } from '@/navigation'
 import { useState, useEffect, useRef } from 'react'
+import { useLocale } from 'next-intl'
+import { useRouter as useNextRouter } from 'next/navigation'
 
 const locales = [
   { code: 'en', label: 'English', flag: '🇬🇧' },
@@ -14,21 +16,15 @@ const locales = [
 ]
 
 export default function LanguageSwitcher() {
-  const pathname = usePathname()
-  const router = useRouter()
+  const pathname = usePathname() // This gives us pathname WITHOUT locale prefix
+  const nextRouter = useNextRouter()
+  const locale = useLocale()
   const primaryColor = '#536C4A'
   const [isOpen, setIsOpen] = useState(false)
-  const [currentLocale, setCurrentLocale] = useState('en')
   const dropdownRef = useRef<HTMLDivElement>(null)
 
-  // Detect current locale from pathname
-  useEffect(() => {
-    const parts = pathname.split('/').filter(Boolean)
-    const detectedLocale = locales.find(l => l.code === parts[0])
-    if (detectedLocale) {
-      setCurrentLocale(detectedLocale.code)
-    }
-  }, [pathname])
+  // Use the locale from next-intl
+  const currentLocale = locale
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -41,17 +37,16 @@ export default function LanguageSwitcher() {
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
 
-  const changeLocale = (code: string) => {
-    const parts = pathname.split('/').filter(Boolean)
-    if (parts.length && locales.some(l => l.code === parts[0])) {
-      parts[0] = code
-    } else {
-      parts.unshift(code)
-    }
-    router.push('/' + parts.join('/'))
-    router.refresh()
+  const changeLocale = (newLocale: string) => {
     setIsOpen(false)
-    setCurrentLocale(code)
+    
+    // Build the new URL with locale prefix
+    // pathname from usePathname() is already without locale, so we just add new locale
+    const newPath = `/${newLocale}${pathname === '/' ? '' : pathname}`
+    
+    // Use Next.js router to navigate
+    nextRouter.push(newPath)
+    nextRouter.refresh()
   }
 
   const current = locales.find(l => l.code === currentLocale) || locales[0]

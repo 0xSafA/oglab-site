@@ -2,8 +2,10 @@
 
 import { useState, useEffect } from 'react'
 import { fetchDynamicSettingsClient } from '@/lib/dynamic-settings'
+import { useTranslations } from 'next-intl'
 
 export default function DynamicEventText() {
+  const t = useTranslations('HomePage')
   const [eventText, setEventText] = useState('Join us for an unforgettable experience!')
   const [isLoading, setIsLoading] = useState(true)
 
@@ -20,7 +22,7 @@ export default function DynamicEventText() {
   if (isLoading) {
     return (
       <p className="text-center text-gray-600 animate-pulse">
-        Loading...
+        {t('loading')}
       </p>
     )
   }

@@ -2,28 +2,31 @@
 
 import { Link } from '@/navigation'
 import Image from 'next/image'
+import { useTranslations } from 'next-intl'
 
 type Item = {
   key: string
-  title: string
+  titleKey: string
   image: string
 }
 
 const items: Item[] = [
-  { key: 'watering', title: 'Growing', image: '/assets/bts/watering.png' },
-  { key: 'trimming', title: 'Trimming', image: '/assets/bts/trimming.png' },
-  { key: 'testing', title: 'Testing', image: '/assets/bts/testing.png' },
-  { key: 'dispensary', title: 'Dispensary', image: '/assets/bts/dispensary.png' },
-  { key: 'events', title: 'Events', image: '/assets/bts/events.png' },
-  { key: 'community', title: 'Community', image: '/assets/bts/events.png' },
+  { key: 'watering', titleKey: 'btsGrowing', image: '/assets/bts/watering.png' },
+  { key: 'trimming', titleKey: 'btsTrimming', image: '/assets/bts/trimming.png' },
+  { key: 'testing', titleKey: 'btsTesting', image: '/assets/bts/testing.png' },
+  { key: 'dispensary', titleKey: 'btsDispensary', image: '/assets/bts/dispensary.png' },
+  { key: 'events', titleKey: 'btsEvents', image: '/assets/bts/events.png' },
+  { key: 'community', titleKey: 'btsCommunity', image: '/assets/bts/events.png' },
 ]
 
 export default function BehindTheScenes() {
+  const t = useTranslations('HomePage')
+  
   return (
     <section className="mt-8 mb-6">
       <div className="mb-8 text-center">
-        <h3 className="text-2xl md:text-3xl font-semibold text-[#536C4A]/80 bg-gradient-to-r from-[#536C4A] to-[#B0BF93] bg-clip-text text-transparent">Behind The Scenes</h3>
-        <p className="mt-2 text-[#536C4A]/60">From seed to harvest — witness our dedication to quality at every step</p>
+        <h3 className="text-2xl md:text-3xl font-semibold text-[#536C4A]/80 bg-gradient-to-r from-[#536C4A] to-[#B0BF93] bg-clip-text text-transparent">{t('btsTitle')}</h3>
+        <p className="mt-2 text-[#536C4A]/60">{t('btsDescription')}</p>
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
@@ -35,7 +38,7 @@ export default function BehindTheScenes() {
           >
             <Image 
               src={it.image}
-              alt={it.title}
+              alt={t(it.titleKey)}
               fill
               loading="lazy"
               className="object-cover"
@@ -56,7 +59,7 @@ export default function BehindTheScenes() {
             
             <div className="absolute bottom-2 left-2 right-2 flex items-center justify-between">
               <div>
-                <div className="text-white text-xs md:text-sm font-semibold drop-shadow-lg bg-[#536C4A]/70 px-2 py-1 rounded-lg backdrop-blur-sm">{it.title}</div>
+                <div className="text-white text-xs md:text-sm font-semibold drop-shadow-lg bg-[#536C4A]/70 px-2 py-1 rounded-lg backdrop-blur-sm">{t(it.titleKey)}</div>
               </div>
               <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-white/90 group-hover:bg-white text-[#536C4A] shadow-md group-hover:scale-110 transition-all duration-300 text-sm">→</span>
             </div>

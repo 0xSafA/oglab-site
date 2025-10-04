@@ -1,8 +1,10 @@
 'use client'
 
 import { useState } from 'react'
+import { useTranslations } from 'next-intl'
 
 export default function OGLabAgent() {
+  const t = useTranslations('HomePage')
   const [question, setQuestion] = useState('')
   const [loading, setLoading] = useState(false)
   const [answer, setAnswer] = useState<string | null>(null)
@@ -24,7 +26,7 @@ export default function OGLabAgent() {
   return (
     <section className="rounded-3xl bg-white/80 p-6 shadow-xl ring-1 ring-[#B0BF93]/50 overflow-hidden">
       <div className="mb-4 flex items-center justify-between gap-3">
-        <h2 className="text-2xl font-bold text-[#2F3A24]">Agent</h2>
+        <h2 className="text-2xl font-bold text-[#2F3A24]">{t('agentTitle')}</h2>
         <div className="flex items-center gap-2 text-sm">
           <label className="inline-flex items-center gap-2 rounded-full bg-[#F4F8F0] px-3 py-1 text-[#2F3A24] ring-1 ring-[#B0BF93]/60">
             <input
@@ -33,14 +35,14 @@ export default function OGLabAgent() {
               onChange={(e) => setUseStock(e.target.checked)}
               className="h-4 w-4 accent-[#536C4A]"
             />
-            <span>Suggest from stock</span>
+            <span>{t('agentSuggestFromStock')}</span>
           </label>
-          <span className="rounded-full bg-[#536C4A]/10 px-2 py-1 text-xs font-semibold text-[#536C4A]">beta</span>
+          <span className="rounded-full bg-[#536C4A]/10 px-2 py-1 text-xs font-semibold text-[#536C4A]">{t('agentBeta')}</span>
         </div>
       </div>
 
       <p className="mb-4 text-[#2F3A24]/70">
-        OG Lab Agent uses internal knowledge, network, product inventory, and cross‑checks trusted sources. Can assist with ordering or forward a message to senior staff.
+        {t('agentDescription')}
       </p>
 
       <form onSubmit={ask} className="w-full">
@@ -48,12 +50,12 @@ export default function OGLabAgent() {
           <input
             value={question}
             onChange={(e) => setQuestion(e.target.value)}
-            placeholder="Ask anything: mood, format, potency, flavor…"
+            placeholder={t('agentPlaceholder')}
             className="min-w-0 flex-1 bg-transparent px-2 py-2 text-[#2F3A24] outline-none placeholder:text-[#2F3A24]/40"
           />
           <button
             type="button"
-            aria-label="Voice input"
+            aria-label={t('agentVoiceInput')}
             className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-white text-[#2F3A24] ring-1 ring-[#B0BF93]/60 shadow-sm transition-colors hover:bg-[#F4F8F0]"
           >
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -64,7 +66,7 @@ export default function OGLabAgent() {
           </button>
           <button
             type="submit"
-            aria-label="Send"
+            aria-label={t('agentSend')}
             disabled={loading}
             className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-gradient-to-r from-[#536C4A] to-[#B0BF93] text-white shadow-lg transition-transform hover:scale-105 disabled:opacity-50"
           >
@@ -79,10 +81,10 @@ export default function OGLabAgent() {
       {answer && (
         <div className="mt-4 space-y-3">
           <div className="rounded-2xl bg-[#F4F8F0] p-4 text-[#2F3A24] ring-1 ring-[#B0BF93]/50">
-            <div className="text-xs font-semibold uppercase tracking-wide text-[#536C4A]">Agent</div>
+            <div className="text-xs font-semibold uppercase tracking-wide text-[#536C4A]">{t('agentAnswerLabel')}</div>
             <p className="mt-1">{answer}</p>
           </div>
-          <div className="text-xs text-[#2F3A24]/60">Preview dialogue. In production, responses are grounded on company KB + live stock + sources; actions: reserve item, place order, escalate.</div>
+          <div className="text-xs text-[#2F3A24]/60">{t('agentPreviewNote')}</div>
         </div>
       )}
     </section>

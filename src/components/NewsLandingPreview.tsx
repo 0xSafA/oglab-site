@@ -4,6 +4,7 @@ import { useState, type CSSProperties } from 'react';
 import { Link } from '@/navigation';
 import Image from 'next/image';
 import { getFeaturedNews } from '@/lib/news-data';
+import { useTranslations } from 'next-intl';
 
 const STREAM_GRADIENT = 'bg-[linear-gradient(180deg,rgba(253,236,168,0)_0%,rgba(226,165,63,0.65)_45%,rgba(184,109,28,0.95)_100%)]';
 
@@ -25,6 +26,7 @@ const buildDropStyle = (active: boolean, delay: string): CSSProperties | undefin
     : undefined;
 
 export default function NewsLandingPreview() {
+  const t = useTranslations('HomePage');
   const featured = getFeaturedNews();
   const [waterfall, setWaterfall] = useState(false);
   const [animationKey, setAnimationKey] = useState(0);
@@ -47,16 +49,16 @@ export default function NewsLandingPreview() {
       <div className="relative z-10 flex flex-col gap-6 md:flex-row md:items-center">
         <div className="space-y-4 md:flex-[0.45]">
           <span className="inline-flex items-center rounded-full bg-[#B0BF93]/30 px-4 py-2 text-xs font-semibold uppercase tracking-wide text-[#2F3A24]">
-            What&apos;s New
+            {t('newsWhatsNew')}
           </span>
-          <h2 className="text-2xl font-bold text-[#2F3A24] md:text-3xl">OG Lab Stories: Uncensored Blog</h2>
+          <h2 className="text-2xl font-bold text-[#2F3A24] md:text-3xl">{t('newsTitle')}</h2>
           <p className="text-base text-[#2F3A24]/70">
-            We&apos;re launching a news feed right on our website. Aftermovie videos, farm photo galleries, and educational cannabis articles — all in one place, without blocks or restrictions. Ganja, cannabis, Marihuana, weed - ha-ha-ha, we&apos;ll show you everything here!
+            {t('newsDescription')}
           </p>
         </div>
 
         <div className="flex flex-col gap-3 rounded-3xl bg-[#536C4A] p-6 text-white shadow-xl md:flex-[0.55]">
-          <p className="text-xs font-semibold uppercase tracking-widest text-white/70">Latest Drop</p>
+          <p className="text-xs font-semibold uppercase tracking-widest text-white/70">{t('newsLatestDrop')}</p>
           <h3 className="text-xl font-bold">{featured.title}</h3>
           <div className="-mx-2 overflow-hidden rounded-2xl">
             <Image 
@@ -134,7 +136,7 @@ export default function NewsLandingPreview() {
             </span>
 
             <span className="relative z-10 flex items-center gap-2 px-1 py-[1px] text-white drop-shadow-sm transition-all duration-300 group-hover:scale-105">
-              <span>Open OG Lab</span>
+              <span>{t('newsCtaButton')}</span>
               <span aria-hidden className="text-lg transition-transform duration-300 group-hover:translate-x-1">→</span>
             </span>
           </Link>

@@ -67,7 +67,8 @@ export default async function LocaleLayout({
     notFound();
   }
   
-  const messages = await getMessages();
+  // Get messages for this locale explicitly
+  const messages = await getMessages({ locale });
 
   return (
     <html lang={locale} dir={locale === 'he' ? 'rtl' : 'ltr'}>

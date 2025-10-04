@@ -11,8 +11,12 @@ import DynamicEventText from '@/components/DynamicEventText';
 import LazyGoogleMap from '@/components/LazyGoogleMap';
 import { getThemeConfig } from '@/lib/theme-config';
 
-export default async function HomePage() {
-  const t = await getTranslations('HomePage');
+export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
+  
+  // Pass locale explicitly to getTranslations
+  const t = await getTranslations({ locale, namespace: 'HomePage' });
+  
   // Get theme from environment variables - no database calls!
   const theme = getThemeConfig();
   
