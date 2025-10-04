@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import Link from 'next/link';
+import { Link } from '@/navigation';
 import { NewsItem } from '@/lib/news-data';
 
 const badgeColors: Record<NewsItem['type'], { bg: string; text: string }> = {

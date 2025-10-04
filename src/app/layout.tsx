@@ -1,5 +1,5 @@
-// Root layout just wraps the locale layout
-// The actual layout is in [locale]/layout.tsx
+// Root layout - minimal wrapper
+// Real layout is in [locale]/layout.tsx
 export default function RootLayout({
   children,
 }: {
@@ -7,3 +7,4 @@ export default function RootLayout({
 }) {
   return children;
 }
+

@@ -94,7 +94,7 @@ export default async function LocaleLayout({
             gtag('config', 'G-SF3PJN87G9');
           `}
         </Script>
-        <NextIntlClientProvider messages={messages}>
+        <NextIntlClientProvider locale={locale} messages={messages}>
           {children}
         </NextIntlClientProvider>
       </body>

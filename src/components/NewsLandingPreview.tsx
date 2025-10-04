@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, type CSSProperties } from 'react';
-import Link from 'next/link';
+import { Link } from '@/navigation';
 import Image from 'next/image';
 import { getFeaturedNews } from '@/lib/news-data';
 

@@ -2,6 +2,10 @@ import { createServerComponentClient } from '@/lib/supabase-server'
 import { redirect } from 'next/navigation'
 import AdminNav from '@/components/AdminNav'
 import { debugLog } from '@/lib/debug-logger'
+import { Inter } from 'next/font/google'
+import '@/app/globals.css'
+
+const inter = Inter({ subsets: ['latin', 'cyrillic'] })
 
 export default async function AdminLayout({
   children,
@@ -36,11 +40,15 @@ export default async function AdminLayout({
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <AdminNav user={user} />
-      <main className="container mx-auto px-4 py-8">
-        {children}
-      </main>
-    </div>
+    <html lang="en">
+      <body className={inter.className}>
+        <div className="min-h-screen bg-gray-50">
+          <AdminNav user={user} />
+          <main className="container mx-auto px-4 py-8">
+            {children}
+          </main>
+        </div>
+      </body>
+    </html>
   )
 }

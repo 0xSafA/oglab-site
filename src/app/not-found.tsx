@@ -1,21 +1,37 @@
-import Link from 'next/link';
+import Link from 'next/link'
 
 export default function NotFound() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#536C4A] to-[#B0BF93] flex items-center justify-center px-4">
-      <div className="text-center">
-        <h1 className="text-6xl font-bold text-white mb-4">404</h1>
-        <h2 className="text-2xl font-semibold text-white/90 mb-6">Page Not Found</h2>
-        <p className="text-white/80 mb-8 max-w-md">
-          Sorry, we couldn&apos;t find the page you&apos;re looking for.
-        </p>
-        <Link 
-          href="/"
-          className="inline-block bg-white text-[#536C4A] px-6 py-3 rounded-full font-semibold hover:bg-white/90 transition-colors"
-        >
-          ← Back to Home
-        </Link>
-      </div>
-    </div>
-  );
+    <html lang="en">
+      <body>
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          minHeight: '100vh',
+          padding: '20px',
+          fontFamily: 'system-ui, sans-serif'
+        }}>
+          <h1 style={{ fontSize: '4rem', margin: 0 }}>404</h1>
+          <h2 style={{ fontSize: '1.5rem', marginBottom: '1rem' }}>Page Not Found</h2>
+          <p style={{ marginBottom: '2rem', color: '#666' }}>
+            Sorry, we couldn&apos;t find the page you&apos;re looking for.
+          </p>
+          <Link 
+            href="/en"
+            style={{
+              padding: '10px 20px',
+              backgroundColor: '#536C4A',
+              color: 'white',
+              textDecoration: 'none',
+              borderRadius: '5px'
+            }}
+          >
+            ← Back to Home
+          </Link>
+        </div>
+      </body>
+    </html>
+  )
 }
