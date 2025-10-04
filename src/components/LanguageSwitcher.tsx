@@ -21,6 +21,7 @@ export default function LanguageSwitcher() {
   const locale = useLocale()
   const primaryColor = '#536C4A'
   const [isOpen, setIsOpen] = useState(false)
+  const [isChanging, setIsChanging] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
 
   // Use the locale from next-intl
@@ -39,14 +40,17 @@ export default function LanguageSwitcher() {
 
   const changeLocale = (newLocale: string) => {
     setIsOpen(false)
+    setIsChanging(true)
     
     // Build the new URL with locale prefix
     // pathname from usePathname() is already without locale, so we just add new locale
     const newPath = `/${newLocale}${pathname === '/' ? '' : pathname}`
     
-    // Use Next.js router to navigate
-    nextRouter.push(newPath)
-    nextRouter.refresh()
+    // Use Next.js router to navigate - no refresh needed, Next.js handles it
+    nextRouter.push(newPath, { scroll: false })
+    
+    // Reset loading state after a short delay (optimistic UI)
+    setTimeout(() => setIsChanging(false), 300)
   }
 
   const current = locales.find(l => l.code === currentLocale) || locales[0]
@@ -55,7 +59,8 @@ export default function LanguageSwitcher() {
     <div className="relative inline-block" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="px-4 py-2 rounded-full font-semibold transition-all duration-300 hover:-translate-y-1 flex items-center gap-2"
+        disabled={isChanging}
+        className="px-4 py-2 rounded-full font-semibold transition-all duration-300 hover:-translate-y-1 flex items-center gap-2 disabled:opacity-50 disabled:cursor-wait"
         style={{ 
           backgroundColor: `${primaryColor}10`,
           color: primaryColor,
@@ -64,20 +69,37 @@ export default function LanguageSwitcher() {
       >
         <span className="text-lg">{current.flag}</span>
         <span>{current.label}</span>
-        <svg 
-          xmlns="http://www.w3.org/2000/svg" 
-          width="16" 
-          height="16" 
-          viewBox="0 0 24 24" 
-          fill="none" 
-          stroke="currentColor" 
-          strokeWidth="2" 
-          strokeLinecap="round" 
-          strokeLinejoin="round"
-          className={`transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}
-        >
-          <polyline points="6 9 12 15 18 9"></polyline>
-        </svg>
+        {isChanging ? (
+          <svg 
+            xmlns="http://www.w3.org/2000/svg" 
+            width="16" 
+            height="16" 
+            viewBox="0 0 24 24" 
+            fill="none" 
+            stroke="currentColor" 
+            strokeWidth="2" 
+            strokeLinecap="round" 
+            strokeLinejoin="round"
+            className="animate-spin"
+          >
+            <path d="M21 12a9 9 0 1 1-6.219-8.56" />
+          </svg>
+        ) : (
+          <svg 
+            xmlns="http://www.w3.org/2000/svg" 
+            width="16" 
+            height="16" 
+            viewBox="0 0 24 24" 
+            fill="none" 
+            stroke="currentColor" 
+            strokeWidth="2" 
+            strokeLinecap="round" 
+            strokeLinejoin="round"
+            className={`transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}
+          >
+            <polyline points="6 9 12 15 18 9"></polyline>
+          </svg>
+        )}
       </button>
 
       {isOpen && (

@@ -37,6 +37,16 @@ const nextConfig: NextConfig = {
         ]
       },
       {
+        // Кэширование локализованных страниц (для быстрого переключения языков)
+        source: '/:locale(en|ru|th|fr|de|he|it)/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, s-maxage=3600, stale-while-revalidate=86400'
+          }
+        ]
+      },
+      {
         // Кэширование статических изображений
         source: '/assets/images/:path*',
         headers: [
