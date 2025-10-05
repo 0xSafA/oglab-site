@@ -28,6 +28,7 @@ interface ChatRequest {
   userContext?: string; // сжатый контекст пользователя
   isReturningUser?: boolean; // флаг возвращающегося пользователя
   language?: string; // язык пользователя
+  userId?: string; // ID пользователя для аналитики
 }
 
 interface ProductCard {
@@ -49,6 +50,7 @@ interface ChatResponse {
   suggestedProducts: string[];
   productCards?: ProductCard[]; // детальная информация о продуктах
   greeting?: string; // персонализированное приветствие
+  notificationSent?: boolean; // флаг отправки уведомления в Telegram
   error?: string;
 }
 
@@ -165,6 +167,40 @@ export async function POST(request: NextRequest) {
 
     const reply = completion.choices[0]?.message?.content || 'Извини, не смог сформулировать ответ. Попробуй переформулировать вопрос?';
 
+    // Определяем намерение пользователя для Telegram уведомлений
+    const userIntent = detectUserIntent(message, reply);
+    let notificationSent = false;
+
+    // Отправляем уведомление в Telegram если нужно
+    if (userIntent.shouldNotify && process.env.TELEGRAM_BOT_TOKEN) {
+      try {
+        const notificationResponse = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'}/api/telegram/notify`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            type: userIntent.type,
+            message: message,
+            userId: body.userId || 'anonymous',
+            userContext: body.userContext ? JSON.parse(body.userContext) : undefined,
+            products: userIntent.products,
+            metadata: {
+              language,
+              timestamp: new Date().toISOString(),
+            },
+          }),
+        });
+
+        if (notificationResponse.ok) {
+          notificationSent = true;
+          console.log(`📤 TELEGRAM: Notification sent (${userIntent.type})`);
+        } else {
+          console.error('⚠️ TELEGRAM: Failed to send notification');
+        }
+      } catch (error) {
+        console.error('⚠️ TELEGRAM: Error sending notification:', error);
+      }
+    }
+
     // Извлекаем упомянутые продукты из кэшированных данных (ИЗБЕГАЕМ повторного запроса к БД!)
     let suggestedProducts: string[] = [];
     let productCards: ProductCard[] = [];
@@ -218,6 +254,7 @@ export async function POST(request: NextRequest) {
       reply,
       suggestedProducts,
       productCards,
+      notificationSent,
     };
 
     return NextResponse.json(response, { status: 200 });
@@ -287,4 +324,103 @@ export async function HEAD() {
     console.error('Error prefetching menu:', error);
     return new NextResponse(null, { status: 500 });
   }
+}
+
+/**
+ * Определяет намерение пользователя для отправки уведомления в Telegram
+ */
+interface UserIntent {
+  shouldNotify: boolean;
+  type: 'order' | 'wish' | 'feedback' | 'staff_question' | 'general';
+  products?: string[];
+  confidence: number;
+}
+
+function detectUserIntent(userMessage: string, agentReply: string): UserIntent {
+  const lowerMessage = userMessage.toLowerCase();
+  const lowerReply = agentReply.toLowerCase();
+  
+  // Ключевые слова для разных типов намерений
+  const orderKeywords = [
+    'заказ', 'купить', 'заброн', 'закажу', 'хочу взять', 'доставка',
+    'order', 'buy', 'purchase', 'book', 'reserve', 'delivery',
+    'สั่ง', 'ซื้อ', 'จอง' // тайский
+  ];
+  
+  const wishKeywords = [
+    'посовет', 'рекоменд', 'хотел бы', 'нужен совет', 'что посовет',
+    'suggest', 'recommend', 'advice', 'what should',
+    'แนะนำ', 'อยาก' // тайский
+  ];
+  
+  const feedbackKeywords = [
+    'спасибо', 'отлично', 'классно', 'супер', 'отзыв', 'благодар',
+    'thank', 'great', 'awesome', 'feedback', 'review',
+    'ขอบคุณ', 'ดี' // тайский
+  ];
+  
+  const staffQuestionKeywords = [
+    'когда открыт', 'где находит', 'как добраться', 'можно прийти',
+    'адрес', 'часы работы', 'контакт', 'телефон',
+    'when open', 'where located', 'how to get', 'address', 'hours',
+    'เปิด', 'ที่อยู่', 'เบอร์' // тайский
+  ];
+
+  // Проверяем на ORDER (заказ)
+  if (orderKeywords.some(kw => lowerMessage.includes(kw))) {
+    // Извлекаем упомянутые продукты (они в жирном шрифте)
+    const productMatches = agentReply.match(/\*\*(.*?)\*\*/g);
+    const products = productMatches ? productMatches.map(m => m.replace(/\*\*/g, '')) : [];
+    
+    return {
+      shouldNotify: true,
+      type: 'order',
+      products: products.length > 0 ? products : undefined,
+      confidence: 0.85,
+    };
+  }
+
+  // Проверяем на WISH (пожелание)
+  if (wishKeywords.some(kw => lowerMessage.includes(kw))) {
+    const productMatches = agentReply.match(/\*\*(.*?)\*\*/g);
+    const products = productMatches ? productMatches.map(m => m.replace(/\*\*/g, '')) : [];
+    
+    return {
+      shouldNotify: true,
+      type: 'wish',
+      products: products.length > 0 ? products : undefined,
+      confidence: 0.75,
+    };
+  }
+
+  // Проверяем на FEEDBACK (обратная связь)
+  if (feedbackKeywords.some(kw => lowerMessage.includes(kw))) {
+    return {
+      shouldNotify: true,
+      type: 'feedback',
+      confidence: 0.70,
+    };
+  }
+
+  // Проверяем на STAFF_QUESTION (вопрос персоналу)
+  if (staffQuestionKeywords.some(kw => lowerMessage.includes(kw))) {
+    // Проверяем, смог ли агент ответить или передал персоналу
+    const needsHuman = lowerReply.includes('персонал') || 
+                       lowerReply.includes('бадтендер') ||
+                       lowerReply.includes('связаться') ||
+                       lowerReply.includes('позвонить');
+    
+    return {
+      shouldNotify: needsHuman,
+      type: 'staff_question',
+      confidence: needsHuman ? 0.90 : 0.40,
+    };
+  }
+
+  // По умолчанию не отправляем уведомление
+  return {
+    shouldNotify: false,
+    type: 'general',
+    confidence: 0,
+  };
 }

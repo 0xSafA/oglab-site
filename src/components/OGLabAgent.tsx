@@ -449,6 +449,7 @@ export default function OGLabAgent({ compact = false }: OGLabAgentProps) {
   return (
     <section 
       ref={agentContainerRef}
+      data-agent-active="true"
       className={`rounded-3xl bg-white/80 shadow-xl ring-1 ring-[#B0BF93]/50 overflow-hidden ${
         compact ? 'p-2.5 lg:p-3' : 'p-4 lg:p-6'
       }`}
@@ -793,6 +794,7 @@ export default function OGLabAgent({ compact = false }: OGLabAgentProps) {
             }}
             placeholder={t('agentPlaceholder')}
             disabled={loading}
+            data-agent-input="true"
             className={`min-w-0 flex-1 bg-transparent text-[#2F3A24] outline-none placeholder:text-[#2F3A24]/40 disabled:opacity-50 ${
               compact ? 'px-1 py-1 text-base' : 'px-2 py-2 text-base lg:text-base'
             }`}

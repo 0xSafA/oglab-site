@@ -10,12 +10,39 @@ export default function AutoRefresh() {
     const lastReloadKey = 'lastReloadTime';
     const minReloadInterval = 5000; // Минимум 5 секунд между перезагрузками
     
+    // Проверяем, активен ли агент (не перезагружаем во время диалога)
+    const isAgentActive = () => {
+      if (typeof document === 'undefined') return false;
+      
+      // Проверяем, открыт ли агент по различным признакам
+      const agentContainer = document.querySelector('[data-agent-active="true"]');
+      const agentInput = document.querySelector('[data-agent-input]');
+      const hasActiveInput = document.activeElement?.getAttribute('data-agent-input') === 'true';
+      
+      return !!(agentContainer || agentInput || hasActiveInput);
+    };
+    
     const safeReload = (source: string) => {
       const now = Date.now();
       const lastReload = parseInt(localStorage.getItem(lastReloadKey) || '0');
       
+      // Проверка 1: Слишком частые перезагрузки
       if (now - lastReload < minReloadInterval) {
         console.warn(`🚫 RELOAD BLOCKED: Too frequent reload attempt from ${source}. Last reload was ${now - lastReload}ms ago`);
+        return;
+      }
+      
+      // Проверка 2: Агент активен - отложить перезагрузку
+      if (isAgentActive()) {
+        console.warn(`🚫 RELOAD DELAYED: Agent is active, postponing reload from ${source}`);
+        // Попробуем позже (через 30 секунд)
+        setTimeout(() => {
+          if (!isAgentActive()) {
+            safeReload(source + ' (delayed)');
+          } else {
+            console.log(`🚫 RELOAD STILL BLOCKED: Agent still active`);
+          }
+        }, 30000);
         return;
       }
       
@@ -194,6 +221,12 @@ export default function AutoRefresh() {
         return;
       }
 
+      // КРИТИЧНО: Если агент активен - не проверяем зависания (ввод текста может тормозить поток)
+      if (isAgentActive()) {
+        consecutiveStalls = 0;
+        return;
+      }
+
       // Дополнительные проверки для предотвращения ложных срабатываний
       const now = typeof performance !== 'undefined' ? performance.now() : Date.now();
       const lag = now - lastRafBeat;
@@ -204,8 +237,15 @@ export default function AutoRefresh() {
       // Проверяем активность пользователя (если есть анимации, то все работает)
       const hasActiveAnimations = typeof document !== 'undefined' && 
         document.getAnimations && document.getAnimations().length > 0;
+      
+      // Проверяем, есть ли активный фокус на input/textarea (пользователь печатает)
+      const hasActiveInput = typeof document !== 'undefined' && 
+        document.activeElement && 
+        (document.activeElement.tagName === 'INPUT' || 
+         document.activeElement.tagName === 'TEXTAREA' ||
+         document.activeElement.getAttribute('contenteditable') === 'true');
 
-      if (lag > HEARTBEAT_TIMEOUT_MS && !isLoading && !hasActiveAnimations) {
+      if (lag > HEARTBEAT_TIMEOUT_MS && !isLoading && !hasActiveAnimations && !hasActiveInput) {
         consecutiveStalls += 1;
         console.warn(`⚠️ Watchdog: main thread stall detected: ~${Math.round(lag)}ms (x${consecutiveStalls}) [TV: ${isTV}]`);
         
@@ -219,8 +259,8 @@ export default function AutoRefresh() {
         }
       } else {
         // Сброс счетчика если все нормально или есть активные анимации
-        if (consecutiveStalls > 0 && (lag <= HEARTBEAT_TIMEOUT_MS || hasActiveAnimations)) {
-          console.log(`✅ Watchdog: lag recovered or animations active, resetting stall counter`);
+        if (consecutiveStalls > 0 && (lag <= HEARTBEAT_TIMEOUT_MS || hasActiveAnimations || hasActiveInput)) {
+          console.log(`✅ Watchdog: lag recovered, resetting stall counter (lag: ${Math.round(lag)}ms, hasAnimations: ${hasActiveAnimations}, hasInput: ${hasActiveInput})`);
         }
         consecutiveStalls = 0;
       }

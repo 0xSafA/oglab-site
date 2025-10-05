@@ -6,7 +6,8 @@
     "dev": "NODE_OPTIONS='--no-deprecation' next dev -p 3001",
     "build": "NODE_OPTIONS='--no-deprecation' next build",
     "start": "NODE_OPTIONS='--no-deprecation' next start -p 3001",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test:telegram": "node scripts/test-telegram.mjs"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
