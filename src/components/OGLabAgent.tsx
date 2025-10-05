@@ -319,8 +319,12 @@ export default function OGLabAgent({ compact = false }: OGLabAgentProps) {
       setRecordingState('processing')
       setError(null) // Очищаем предыдущие ошибки
       
-      // Отправляем на транскрипцию
-      const transcribedText = await transcribeAudio(audioBlob)
+      // Определяем язык на основе локали или профиля
+      const userLanguage = userProfile?.preferences.language || locale || 'en'
+      console.log(`🎤 Transcribing with language: ${userLanguage}`)
+      
+      // Отправляем на транскрипцию с указанием языка
+      const transcribedText = await transcribeAudio(audioBlob, userLanguage)
       
       // Заполняем поле ввода
       setQuestion(transcribedText)
@@ -337,7 +341,7 @@ export default function OGLabAgent({ compact = false }: OGLabAgentProps) {
       setRecordingState('idle')
       setRecordingDuration(0)
     }
-  }, [recordingState])
+  }, [recordingState, userProfile, locale])
 
   // Устанавливаем callback для автоматической остановки (после объявления stopRecording)
   useEffect(() => {
@@ -673,7 +677,7 @@ export default function OGLabAgent({ compact = false }: OGLabAgentProps) {
             placeholder={t('agentPlaceholder')}
             disabled={loading}
             className={`min-w-0 flex-1 bg-transparent text-[#2F3A24] outline-none placeholder:text-[#2F3A24]/40 disabled:opacity-50 ${
-              compact ? 'px-1 py-1 text-xs' : 'px-2 py-2 text-sm lg:text-base'
+              compact ? 'px-1 py-1 text-base' : 'px-2 py-2 text-base lg:text-base'
             }`}
           />
           {isRecordingSupported && (

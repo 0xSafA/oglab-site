@@ -72,6 +72,14 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   };
 }
 
+// Viewport configuration для предотвращения автозума на iOS
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  minimumScale: 1,
+  userScalable: true, // оставляем возможность зума для доступности
+}
+
 export default async function LocaleLayout({
   children,
   params

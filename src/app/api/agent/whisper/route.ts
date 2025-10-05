@@ -18,6 +18,7 @@ export async function POST(request: NextRequest) {
     // Получаем FormData с аудиофайлом
     const formData = await request.formData();
     const audioFile = formData.get('audio') as File;
+    const language = (formData.get('language') as string) || 'en'; // Получаем язык из запроса
 
     if (!audioFile) {
       return NextResponse.json(
@@ -45,7 +46,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    console.log(`🎤 Transcribing audio: ${audioFile.name}, size: ${(audioFile.size / 1024).toFixed(2)} KB, type: ${audioFile.type}`);
+    console.log(`🎤 Transcribing audio: ${audioFile.name}, size: ${(audioFile.size / 1024).toFixed(2)} KB, type: ${audioFile.type}, language: ${language}`);
 
     // Вызываем Whisper API
     const startTime = Date.now();
@@ -53,7 +54,7 @@ export async function POST(request: NextRequest) {
     const transcription = await openai.audio.transcriptions.create({
       file: audioFile,
       model: 'whisper-1',
-      language: 'ru', // можно оставить undefined для авто-определения
+      language, // Используем язык пользователя для лучшей точности
       response_format: 'verbose_json', // получаем больше информации
     });
 

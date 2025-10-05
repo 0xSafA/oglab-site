@@ -174,8 +174,10 @@ export class AudioRecorder {
 
 /**
  * Отправляет аудио на сервер для транскрипции
+ * @param audioBlob - аудио blob
+ * @param language - язык аудио (ISO-639-1 код: ru, en, th, fr, de, he, it)
  */
-export async function transcribeAudio(audioBlob: Blob): Promise<string> {
+export async function transcribeAudio(audioBlob: Blob, language = 'en'): Promise<string> {
   // Валидация размера
   if (audioBlob.size === 0) {
     throw new Error('Запись слишком короткая. Попробуйте говорить дольше.');
@@ -199,8 +201,9 @@ export async function transcribeAudio(audioBlob: Blob): Promise<string> {
     : 'wav';
   
   formData.append('audio', audioBlob, `recording.${extension}`);
+  formData.append('language', language); // Передаём язык для лучшей точности транскрипции
 
-  console.log(`🎤 Sending audio for transcription: ${(audioBlob.size / 1024).toFixed(2)} KB`);
+  console.log(`🎤 Sending audio for transcription: ${(audioBlob.size / 1024).toFixed(2)} KB, language: ${language}`);
 
   const response = await fetch('/api/agent/whisper', {
     method: 'POST',
