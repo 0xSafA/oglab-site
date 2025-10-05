@@ -58,6 +58,9 @@ export default function OGLabAgent({ compact = false }: OGLabAgentProps) {
   const [recordingDuration, setRecordingDuration] = useState(0) // в секундах
   const recorderRef = useRef<AudioRecorder | null>(null)
   const durationTimerRef = useRef<NodeJS.Timeout | null>(null)
+  
+  // Ref для автоскролла к последнему сообщению
+  const messagesEndRef = useRef<HTMLDivElement | null>(null)
 
   // Инициализация при монтировании
   useEffect(() => {
@@ -166,6 +169,13 @@ export default function OGLabAgent({ compact = false }: OGLabAgentProps) {
       window.removeEventListener('beforeunload', handleBeforeUnload)
     }
   }, [])
+
+  // Автоматический скролл к последнему сообщению
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' })
+    }
+  }, [currentConversation?.messages.length, loading])
 
   const ask = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -497,8 +507,8 @@ export default function OGLabAgent({ compact = false }: OGLabAgentProps) {
           key={currentConversation.id}
           className={`overflow-y-auto pr-2 ${
             compact 
-              ? 'mb-2 max-h-32 space-y-1.5' 
-              : 'mb-3 lg:mb-4 max-h-48 lg:max-h-64 space-y-2 lg:space-y-3'
+              ? 'mb-2 max-h-40 space-y-1.5' 
+              : 'mb-3 lg:mb-4 max-h-60 lg:max-h-64 space-y-2 lg:space-y-3'
           }`}
         >
           {currentConversation.messages.map((msg, idx) => (
@@ -642,6 +652,9 @@ export default function OGLabAgent({ compact = false }: OGLabAgentProps) {
               </div>
             </div>
           )}
+          
+          {/* Маркер для автоскролла к последнему сообщению */}
+          <div ref={messagesEndRef} />
         </div>
       )}
 
