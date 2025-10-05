@@ -157,26 +157,28 @@ export async function POST(request: NextRequest) {
         suggestedProducts = extractProductMentions(reply, rows);
         
         // Собираем детальную информацию о продуктах с эффектами и вкусами
-        const cards = suggestedProducts.map(productName => {
-          const product = rows.find(r => r.Name === productName);
-          if (!product) return null;
-          
-          return {
-            name: product.Name || productName,
-            category: product.Category || '',
-            type: product.Type,
-            thc: product.THC,
-            cbg: product.CBG,
-            price_1g: product.Price_1g,
-            price_5g: product.Price_5g,
-            price_20g: product.Price_20g,
-            isOur: product.Our,
-            effects: getStrainEffects(product.Type),
-            flavors: getStrainFlavors(product.Type),
-          };
-        }).filter((p): p is ProductCard => p !== null);
-        
-        productCards = cards;
+        productCards = suggestedProducts
+          .map(productName => {
+            const product = rows.find(r => r.Name === productName);
+            if (!product) return null;
+            
+            const card: ProductCard = {
+              name: product.Name || productName,
+              category: product.Category || '',
+              type: product.Type ?? undefined,
+              thc: product.THC ? String(product.THC) : undefined,
+              cbg: product.CBG ? String(product.CBG) : undefined,
+              price_1g: product.Price_1g ?? undefined,
+              price_5g: product.Price_5g ?? undefined,
+              price_20g: product.Price_20g ?? undefined,
+              isOur: product.Our ?? undefined,
+              effects: getStrainEffects(product.Type),
+              flavors: getStrainFlavors(product.Type),
+            };
+            
+            return card;
+          })
+          .filter((card): card is ProductCard => card !== null);
       } catch (error) {
         console.error('Error extracting products:', error);
       }
