@@ -364,7 +364,7 @@ export default function OGLabAgent({ compact = false }: OGLabAgentProps) {
     }`}>
       <div className={`flex items-center justify-between gap-2 ${compact ? 'mb-2' : 'mb-3 lg:mb-4'}`}>
         <div className="flex items-center gap-2 lg:gap-3">
-          <h2 className={`font-bold text-[#2F3A24] ${compact ? 'text-base lg:text-lg' : 'text-xl lg:text-2xl'}`}>{t('agentTitle')}</h2>
+          <h2 className={`font-bold text-[#3D4D37] ${compact ? 'text-base lg:text-lg' : 'text-xl lg:text-2xl'}`}>{t('agentTitle')}</h2>
           {!compact && userProfile && userProfile.totalConversations > 0 && (
             <button
               onClick={() => setShowStats(!showStats)}
