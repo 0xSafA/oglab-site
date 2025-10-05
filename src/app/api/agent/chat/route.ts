@@ -157,7 +157,7 @@ export async function POST(request: NextRequest) {
         suggestedProducts = extractProductMentions(reply, rows);
         
         // Собираем детальную информацию о продуктах с эффектами и вкусами
-        productCards = suggestedProducts.map(productName => {
+        const cards = suggestedProducts.map(productName => {
           const product = rows.find(r => r.Name === productName);
           if (!product) return null;
           
@@ -175,6 +175,8 @@ export async function POST(request: NextRequest) {
             flavors: getStrainFlavors(product.Type),
           };
         }).filter((p): p is ProductCard => p !== null);
+        
+        productCards = cards;
       } catch (error) {
         console.error('Error extracting products:', error);
       }

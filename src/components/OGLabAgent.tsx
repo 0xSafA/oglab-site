@@ -71,7 +71,6 @@ export default function OGLabAgent({ compact = false }: OGLabAgentProps) {
         clearInterval(durationTimerRef.current)
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locale])
 
   useEffect(() => {
