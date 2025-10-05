@@ -269,5 +269,8 @@ const headerLabel = (k: string, labels: Record<string, string>) => {
   return map[k] || fallback[k] || k
 }
 
+// Force dynamic rendering due to cookies() usage in fetchMenuWithOptions
+export const dynamic = 'force-dynamic';
+
 // Enable ISR (Incremental Static Regeneration)
 export const revalidate = 900; // Revalidate every 15 minutes
