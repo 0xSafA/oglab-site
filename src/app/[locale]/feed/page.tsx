@@ -192,9 +192,6 @@ export default function NewsPage() {
           )}
         </section>
 
-        {/* OG Lab Agent */}
-        <OGLabAgent />
-
         {/* Aggregated news + Subscribe side-by-side on desktop */}
         <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
           <div className="md:col-span-2">
@@ -205,22 +202,31 @@ export default function NewsPage() {
           </div>
         </div>
 
-        <section className="rounded-3xl border border-white/30 bg-white/70 p-8 shadow-inner">
-          <div className="grid gap-6 md:grid-cols-2">
-            <div className="space-y-3">
-              <h2 className="text-2xl font-bold text-[#2F3A24]">О чём будем рассказывать</h2>
-              <p className="text-[#2F3A24]/70">
-                OG Lab Stories — не очередной копипаст из Instagram. Мы делимся знаниями, показываем настоящую ферму и говорим о каннабисе без цензуры.
-              </p>
-            </div>
-            <ul className="space-y-2 text-sm font-semibold text-[#536C4A]">
-              <li>• Эксклюзивные афтемуви вечеринок OG Lab</li>
-              <li>• Гайды по испарителям и культуре употребления</li>
-              <li>• Закулисье теплицы и новые генетики</li>
-              <li>• Образовательные материалы для новичков и гурманов</li>
-            </ul>
+        {/* OG Lab Agent + О чём будем рассказывать side-by-side на десктопах */}
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-5">
+          {/* OG Lab Agent - 60% (3 колонки из 5) на десктопах и планшетах */}
+          <div className="lg:col-span-3">
+            <OGLabAgent />
           </div>
-        </section>
+
+          {/* Карточка "О чём будем рассказывать" - 40% (2 колонки из 5) */}
+          <section className="lg:col-span-2 rounded-3xl border border-white/30 bg-white/70 p-8 shadow-inner">
+            <div className="space-y-6">
+              <div className="space-y-3">
+                <h2 className="text-2xl font-bold text-[#2F3A24]">О чём будем рассказывать</h2>
+                <p className="text-[#2F3A24]/70">
+                  OG Lab Stories — не очередной копипаст из Instagram. Мы делимся знаниями, показываем настоящую ферму и говорим о каннабисе без цензуры.
+                </p>
+              </div>
+              <ul className="space-y-2 text-sm font-semibold text-[#536C4A]">
+                <li>• Эксклюзивные афтемуви вечеринок OG Lab</li>
+                <li>• Гайды по испарителям и культуре употребления</li>
+                <li>• Закулисье теплицы и новые генетики</li>
+                <li>• Образовательные материалы для новичков и гурманов</li>
+              </ul>
+            </div>
+          </section>
+        </div>
       </div>
     </div>
     </>

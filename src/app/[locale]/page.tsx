@@ -244,6 +244,11 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
             <Badge text={t('badgeLiveCultivation')} primaryColor={primaryColor} secondaryColor={secondaryColor} />
           </div>
 
+          {/* OG Lab Agent */}
+          <div className="mb-8">
+            <OGLabAgent />
+          </div>
+
           {/* News Preview Section */}
           <div className="mb-8">
             <NewsLandingPreviewWrapper />
@@ -264,11 +269,6 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
             <FeatureCard title={t('featureBestPricesTitle')} description={t('featureBestPricesDescription')} />
             <FeatureCard title={t('featureScientificTitle')} description={t('featureScientificDescription')} />
             <FeatureCard title={t('featureMustVisitTitle')} description={t('featureMustVisitDescription')} />
-          </div>
-
-          {/* OG Lab Agent */}
-          <div className="mb-8">
-            <OGLabAgent />
           </div>
 
           {/* CTA Buttons */}

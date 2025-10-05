@@ -11,6 +11,8 @@ import AutoRefresh from '@/components/AutoRefresh';
 import BreathingController from '@/components/BreathingController';
 import PotController from '@/components/PotController';
 import PotManager from '@/components/PotManager';
+import OGLabAgent from '@/components/OGLabAgent';
+import DesktopOnlyAgent from '@/components/DesktopOnlyAgent';
 
 
 // Type colors mapping
@@ -125,6 +127,11 @@ export default async function MenuPage() {
                   </div>
                 </div>
               </footer>
+
+              {/* AI Agent - только для мобильных */}
+              <div className="lg:hidden mt-4">
+                <OGLabAgent compact />
+              </div>
             </div>
 
             {/* Column 2 */}
@@ -132,6 +139,11 @@ export default async function MenuPage() {
               {layout.column2.filter((c) => !hiddenSet.has(c)).map((category) => (
                 <CategoryBlock key={category} name={category} rows={grouped[category] ?? []} primaryColor={primaryColor} tierLabels={tierLabels} itemTextColor={itemTextColor} categoryTextColor={categoryTextColor} cardBgColor={cardBgColor} typeColors={colors} featureColor={featureColor} />
               ))}
+              
+              {/* AI Agent - только для десктопов (не TV, не мобильные) */}
+              <div className="hidden lg:block">
+                <DesktopOnlyAgent />
+              </div>
             </div>
 
             {/* Column 3 */}
