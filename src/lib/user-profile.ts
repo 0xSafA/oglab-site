@@ -70,6 +70,30 @@ function generateUserId(): string {
 }
 
 /**
+ * Интерфейс для сериализованного профиля (с датами в виде строк)
+ */
+interface StoredUserProfile {
+  userId: string;
+  firstVisit: string;
+  lastVisit: string;
+  totalConversations: number;
+  totalMessages: number;
+  preferences: UserProfile['preferences'];
+  conversations: Array<{
+    id: string;
+    messages: Array<{
+      role: 'user' | 'assistant';
+      content: string;
+      timestamp: string;
+      suggestedProducts?: string[];
+      productCards?: ProductCard[];
+    }>;
+    startedAt: string;
+    lastUpdated: string;
+  }>;
+}
+
+/**
  * Загружает профиль пользователя из localStorage
  */
 export function loadUserProfile(): UserProfile | null {
@@ -77,20 +101,23 @@ export function loadUserProfile(): UserProfile | null {
     const stored = localStorage.getItem(STORAGE_KEY);
     if (!stored) return null;
 
-    const profile = JSON.parse(stored);
+    const parsed = JSON.parse(stored) as StoredUserProfile;
     
     // Преобразуем даты из строк обратно в Date объекты
-    profile.firstVisit = new Date(profile.firstVisit);
-    profile.lastVisit = new Date(profile.lastVisit);
-    profile.conversations = profile.conversations.map((conv: any) => ({
-      ...conv,
-      startedAt: new Date(conv.startedAt),
-      lastUpdated: new Date(conv.lastUpdated),
-      messages: conv.messages.map((msg: any) => ({
-        ...msg,
-        timestamp: new Date(msg.timestamp),
+    const profile: UserProfile = {
+      ...parsed,
+      firstVisit: new Date(parsed.firstVisit),
+      lastVisit: new Date(parsed.lastVisit),
+      conversations: parsed.conversations.map((conv) => ({
+        ...conv,
+        startedAt: new Date(conv.startedAt),
+        lastUpdated: new Date(conv.lastUpdated),
+        messages: conv.messages.map((msg) => ({
+          ...msg,
+          timestamp: new Date(msg.timestamp),
+        })),
       })),
-    }));
+    };
 
     return profile;
   } catch (error) {
@@ -151,7 +178,7 @@ export function getOrCreateUserProfile(): UserProfile {
 /**
  * Начинает новый диалог
  */
-export function startConversation(profile: UserProfile): Conversation {
+export function startConversation(): Conversation {
   const now = new Date();
   
   const conversation: Conversation = {

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { useTranslations, useLocale } from 'next-intl'
 import { AudioRecorder, transcribeAudio, type RecordingState, MAX_RECORDING_DURATION_SEC } from '@/lib/audio-recorder'
 import {
@@ -15,8 +15,6 @@ import {
   saveUserProfile,
   type UserProfile,
   type Conversation,
-  type Message,
-  type ProductCard,
 } from '@/lib/user-profile'
 
 // Поддерживаемые языки агента
@@ -74,11 +72,11 @@ export default function OGLabAgent({ compact = false }: OGLabAgentProps) {
     })
     
     // Загружаем или создаём профиль пользователя
-    let profile = getOrCreateUserProfile()
+    const profile = getOrCreateUserProfile()
     
     // Определяем язык на основе локали браузера
-    const detectedLanguage: 'ru' | 'en' | 'th' | 'fr' | 'de' | 'he' | 'it' = SUPPORTED_LANGUAGES.includes(locale as any) 
-      ? locale as any
+    const detectedLanguage: 'ru' | 'en' | 'th' | 'fr' | 'de' | 'he' | 'it' = SUPPORTED_LANGUAGES.includes(locale as typeof SUPPORTED_LANGUAGES[number]) 
+      ? locale as typeof SUPPORTED_LANGUAGES[number]
       : 'en'
     
     // Сохраняем язык в профиле если его нет
@@ -120,7 +118,7 @@ export default function OGLabAgent({ compact = false }: OGLabAgentProps) {
       console.log('📝 Continuing last conversation:', conversation.id.substring(0, 20) + '... with', conversation.messages.length, 'messages')
     } else {
       // Начинаем новый диалог
-      conversation = startConversation(profile)
+      conversation = startConversation()
       console.log('✨ Starting new conversation:', conversation.id.substring(0, 20) + '...')
     }
     setCurrentConversation(conversation)
@@ -260,8 +258,8 @@ export default function OGLabAgent({ compact = false }: OGLabAgentProps) {
       console.log('💾 Saved conversation:', currentConversation.id, 'with', currentConversation.messages.length, 'messages')
     }
     
-    // Начинаем новый диалог с обновлённым профилем
-    const newConversation = startConversation(profileToUse)
+    // Начинаем новый диалог
+    const newConversation = startConversation()
     setCurrentConversation(newConversation)
     
     // Очищаем состояние UI
@@ -310,7 +308,7 @@ export default function OGLabAgent({ compact = false }: OGLabAgentProps) {
   }
 
   // Голосовой ввод - остановка записи и транскрипция
-  const stopRecording = async () => {
+  const stopRecording = useCallback(async () => {
     if (!recorderRef.current || recordingState !== 'recording') return
 
     // Останавливаем таймер длительности
@@ -345,7 +343,7 @@ export default function OGLabAgent({ compact = false }: OGLabAgentProps) {
       setRecordingState('idle')
       setRecordingDuration(0)
     }
-  }
+  }, [recordingState])
 
   // Toggle для голосового ввода (клик для начала/остановки)
   const handleVoiceButtonClick = () => {
