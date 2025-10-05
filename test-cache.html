@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Agent Cache</title>
+    <style>
+        body { 
+            font-family: monospace; 
+            padding: 20px; 
+            background: #1e1e1e; 
+            color: #d4d4d4;
+        }
+        button { 
+            padding: 10px 20px; 
+            margin: 10px 5px; 
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 20px;
+            background: #252526;
+            border-radius: 8px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+        .success { color: #4ec9b0; }
+        .error { color: #f48771; }
+        .info { color: #569cd6; }
+    </style>
+</head>
+<body>
+    <h1>🧪 Agent Cache Test</h1>
+    <p>Проверка кэширования данных меню</p>
+    
+    <button onclick="testPrefetch()">1️⃣ Prefetch (HEAD)</button>
+    <button onclick="testGetStatus()">2️⃣ Get Status (GET)</button>
+    <button onclick="testFullChat()">3️⃣ Full Chat (POST)</button>
+    <button onclick="clearResult()">🗑️ Clear</button>
+    
+    <div id="result" class="result"></div>
+
+    <script>
+        const API_URL = window.location.origin + '/api/agent/chat';
+        const resultDiv = document.getElementById('result');
+
+        function log(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const color = type === 'success' ? 'success' : type === 'error' ? 'error' : 'info';
+            resultDiv.innerHTML += `<span class="${color}">[${timestamp}] ${message}</span>\n`;
+        }
+
+        function clearResult() {
+            resultDiv.innerHTML = '';
+        }
+
+        async function testPrefetch() {
+            log('🔥 Testing prefetch (HEAD request)...', 'info');
+            try {
+                const start = performance.now();
+                const response = await fetch(API_URL, { method: 'HEAD' });
+                const elapsed = (performance.now() - start).toFixed(2);
+                
+                const cacheStatus = response.headers.get('X-Cache-Status');
+                const itemsCount = response.headers.get('X-Items-Count');
+                const cacheAge = response.headers.get('X-Cache-Age');
+                
+                log(`✅ Prefetch complete (${elapsed}ms)`, 'success');
+                log(`   Cache Status: ${cacheStatus}`, 'info');
+                log(`   Items Count: ${itemsCount}`, 'info');
+                log(`   Cache Age: ${cacheAge}s`, 'info');
+                log('', 'info');
+            } catch (error) {
+                log(`❌ Error: ${error.message}`, 'error');
+            }
+        }
+
+        async function testGetStatus() {
+            log('📊 Getting cache status (GET request)...', 'info');
+            try {
+                const start = performance.now();
+                const response = await fetch(API_URL, { method: 'GET' });
+                const elapsed = (performance.now() - start).toFixed(2);
+                const data = await response.json();
+                
+                log(`✅ Status retrieved (${elapsed}ms)`, 'success');
+                log(JSON.stringify(data, null, 2), 'info');
+                log('', 'info');
+            } catch (error) {
+                log(`❌ Error: ${error.message}`, 'error');
+            }
+        }
+
+        async function testFullChat() {
+            log('💬 Testing full chat flow (POST request)...', 'info');
+            try {
+                const start = performance.now();
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        message: 'Что у вас есть в наличии?',
+                        conversationHistory: [],
+                        useStock: true,
+                        language: 'ru'
+                    })
+                });
+                const elapsed = (performance.now() - start).toFixed(2);
+                const data = await response.json();
+                
+                log(`✅ Chat complete (${elapsed}ms)`, 'success');
+                log(`   Reply: ${data.reply?.substring(0, 100)}...`, 'info');
+                log(`   Suggested products: ${data.suggestedProducts?.length || 0}`, 'info');
+                log(`   Product cards: ${data.productCards?.length || 0}`, 'info');
+                
+                if (data.productCards && data.productCards.length > 0) {
+                    log('', 'info');
+                    log('📦 First product card:', 'info');
+                    log(JSON.stringify(data.productCards[0], null, 2), 'info');
+                }
+                log('', 'info');
+            } catch (error) {
+                log(`❌ Error: ${error.message}`, 'error');
+            }
+        }
+
+        // Auto-run on load
+        window.onload = () => {
+            log('🚀 Cache test tool loaded', 'success');
+            log('Click buttons to test caching behavior', 'info');
+            log('', 'info');
+        };
+    </script>
+</body>
+</html>

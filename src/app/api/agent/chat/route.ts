@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import OpenAI from 'openai';
-import { fetchMenuWithOptions } from '@/lib/supabase-data';
+import { fetchMenuWithOptions, type MenuRow } from '@/lib/supabase-data';
 import { 
   buildMenuContext, 
   buildSystemPrompt, 
@@ -52,39 +52,53 @@ interface ChatResponse {
   error?: string;
 }
 
-// Кэш меню (обновляется раз в 15 минут)
+// Кэш меню (обновляется раз в 30 минут)
+// Кэшируем и текстовый контекст, и сырые данные для избежания повторных запросов к БД
 let menuCache: {
-  data: string;
+  contextText: string;
+  rows: MenuRow[];
   timestamp: number;
 } | null = null;
 
-const MENU_CACHE_TTL = 15 * 60 * 1000; // 15 минут
+const MENU_CACHE_TTL = 30 * 60 * 1000; // 30 минут
 
-async function getMenuContext(): Promise<string> {
+/**
+ * Получает данные меню из кэша или БД
+ * Возвращает и текстовый контекст, и сырые данные
+ */
+async function getMenuData(): Promise<{ contextText: string; rows: MenuRow[] }> {
   const now = Date.now();
   
   // Проверяем кэш
   if (menuCache && (now - menuCache.timestamp) < MENU_CACHE_TTL) {
-    console.log('📦 Using cached menu context');
-    return menuCache.data;
+    console.log('📦 Using cached menu (age:', Math.floor((now - menuCache.timestamp) / 1000), 'sec)');
+    return {
+      contextText: menuCache.contextText,
+      rows: menuCache.rows,
+    };
   }
   
   // Загружаем свежее меню
-  console.log('🔄 Fetching fresh menu context');
+  console.log('🔄 Fetching fresh menu from database');
   try {
     const { rows } = await fetchMenuWithOptions();
-    const context = buildMenuContext(rows);
+    const contextText = buildMenuContext(rows);
     
-    // Сохраняем в кэш
+    // Сохраняем в кэш (и контекст, и rows)
     menuCache = {
-      data: context,
+      contextText,
+      rows,
       timestamp: now,
     };
     
-    return context;
+    console.log('✅ Menu cached:', rows.length, 'items');
+    return { contextText, rows };
   } catch (error) {
-    console.error('Error fetching menu:', error);
-    return 'Ассортимент временно недоступен.';
+    console.error('❌ Error fetching menu:', error);
+    return {
+      contextText: 'Ассортимент временно недоступен.',
+      rows: [],
+    };
   }
 }
 
@@ -112,12 +126,15 @@ export async function POST(request: NextRequest) {
     const language = userLanguage || detectLanguage(message);
     console.log(`🗣️ Language: ${language}, Returning user: ${isReturningUser}`);
 
-    // Получаем контекст меню (если нужен)
-    const menuContext = useStock ? await getMenuContext() : undefined;
+    // Получаем данные меню из кэша (если нужно)
+    let menuData: { contextText: string; rows: MenuRow[] } | null = null;
+    if (useStock) {
+      menuData = await getMenuData();
+    }
 
     // Строим system prompt
     const systemPrompt = buildSystemPrompt({
-      menuContext,
+      menuContext: menuData?.contextText,
       userContext,
       useStock,
       language,
@@ -148,12 +165,13 @@ export async function POST(request: NextRequest) {
 
     const reply = completion.choices[0]?.message?.content || 'Извини, не смог сформулировать ответ. Попробуй переформулировать вопрос?';
 
-    // Извлекаем упомянутые продукты (если использовали ассортимент)
+    // Извлекаем упомянутые продукты из кэшированных данных (ИЗБЕГАЕМ повторного запроса к БД!)
     let suggestedProducts: string[] = [];
     let productCards: ProductCard[] = [];
-    if (useStock && menuContext) {
+    if (useStock && menuData && menuData.rows.length > 0) {
       try {
-        const { rows } = await fetchMenuWithOptions();
+        // Используем rows из кэша вместо нового запроса к БД
+        const rows = menuData.rows;
         suggestedProducts = extractProductMentions(reply, rows);
         
         // Собираем детальную информацию о продуктах с эффектами и вкусами
@@ -231,12 +249,42 @@ export async function POST(request: NextRequest) {
   }
 }
 
-// Опционально: GET endpoint для проверки статуса
+// GET endpoint для проверки статуса и информации о кэше
 export async function GET() {
+  const cacheAge = menuCache ? Math.floor((Date.now() - menuCache.timestamp) / 1000) : null;
+  const cacheExpired = menuCache ? (Date.now() - menuCache.timestamp) >= MENU_CACHE_TTL : true;
+  
   return NextResponse.json({
     status: 'ok',
     service: 'OG Lab Agent',
     model: 'gpt-4-turbo-preview',
-    cacheAge: menuCache ? Date.now() - menuCache.timestamp : null,
+    cache: {
+      exists: !!menuCache,
+      age_seconds: cacheAge,
+      ttl_seconds: MENU_CACHE_TTL / 1000,
+      expired: cacheExpired,
+      items_count: menuCache?.rows.length || 0,
+    },
   });
+}
+
+// HEAD endpoint для prefetch кэша (прогрев)
+// Вызывается когда пользователь начинает вводить сообщение
+export async function HEAD() {
+  try {
+    // Просто получаем данные меню - если кэш пустой, он будет заполнен
+    const menuData = await getMenuData();
+    
+    return new NextResponse(null, {
+      status: 200,
+      headers: {
+        'X-Cache-Status': menuCache ? 'hit' : 'miss',
+        'X-Items-Count': String(menuData.rows.length),
+        'X-Cache-Age': String(menuCache ? Math.floor((Date.now() - menuCache.timestamp) / 1000) : 0),
+      },
+    });
+  } catch (error) {
+    console.error('Error prefetching menu:', error);
+    return new NextResponse(null, { status: 500 });
+  }
 }

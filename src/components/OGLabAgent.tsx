@@ -45,16 +45,19 @@ export default function OGLabAgent({ compact = false }: OGLabAgentProps) {
   const [loading, setLoading] = useState(false)
   const [useStock, setUseStock] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [cachePrefetched, setCachePrefetched] = useState(false)
   
   // User Profile & Conversation
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null)
   const [currentConversation, setCurrentConversation] = useState<Conversation | null>(null)
   const [greeting, setGreeting] = useState<string>('')
   const [showStats, setShowStats] = useState(false)
+  const [isInitialLoad, setIsInitialLoad] = useState(true) // Флаг для первой загрузки
   
   // Voice recording state
   const [recordingState, setRecordingState] = useState<RecordingState>('idle')
   const [isRecordingSupported, setIsRecordingSupported] = useState(false)
+  const [microphonePermission, setMicrophonePermission] = useState<'granted' | 'denied' | 'prompt'>('prompt')
   const [recordingDuration, setRecordingDuration] = useState(0) // в секундах
   const recorderRef = useRef<AudioRecorder | null>(null)
   const durationTimerRef = useRef<NodeJS.Timeout | null>(null)
@@ -65,13 +68,29 @@ export default function OGLabAgent({ compact = false }: OGLabAgentProps) {
   // Инициализация при монтировании
   useEffect(() => {
     // Проверяем поддержку записи аудио
-    setIsRecordingSupported(AudioRecorder.isSupported())
+    const isSupported = AudioRecorder.isSupported()
+    setIsRecordingSupported(isSupported)
     recorderRef.current = new AudioRecorder()
+    
+    // Проверяем статус разрешения микрофона
+    if (isSupported) {
+      AudioRecorder.checkMicrophonePermission().then(permission => {
+        setMicrophonePermission(permission)
+        if (permission === 'granted') {
+          console.log('✅ Microphone permission already granted')
+        }
+      })
+    }
     
     return () => {
       // Очищаем таймер записи при размонтировании
       if (durationTimerRef.current) {
         clearInterval(durationTimerRef.current)
+      }
+      
+      // Полностью освобождаем ресурсы микрофона при размонтировании
+      if (recorderRef.current) {
+        recorderRef.current.destroy()
       }
     }
   }, [locale])
@@ -129,6 +148,9 @@ export default function OGLabAgent({ compact = false }: OGLabAgentProps) {
     }
     setCurrentConversation(conversation)
     
+    // Отключаем флаг первой загрузки после установки начального состояния
+    setIsInitialLoad(false)
+    
     console.log('👤 User profile loaded:', {
       userId: profile.userId,
       visits: profile.totalConversations,
@@ -171,11 +193,30 @@ export default function OGLabAgent({ compact = false }: OGLabAgentProps) {
   }, [])
 
   // Автоматический скролл к последнему сообщению
+  // block: 'start' - показывает начало сообщения (важно для длинных ответов на мобильном)
+  // НЕ скроллим при первой загрузке (восстановление истории), только при новых сообщениях
   useEffect(() => {
-    if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' })
+    if (!isInitialLoad && messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
     }
-  }, [currentConversation?.messages.length, loading])
+  }, [currentConversation?.messages.length, loading, isInitialLoad])
+
+  // Prefetch кэша меню при первом вводе (прогрев кэша)
+  const prefetchMenuCache = useCallback(async () => {
+    if (cachePrefetched) return; // Уже прогрели
+    
+    try {
+      console.log('🔥 Prefetching menu cache...');
+      const response = await fetch('/api/agent/chat', { method: 'HEAD' });
+      const cacheStatus = response.headers.get('X-Cache-Status');
+      const itemsCount = response.headers.get('X-Items-Count');
+      console.log('✅ Menu cache prefetched:', cacheStatus, `(${itemsCount} items)`);
+      setCachePrefetched(true);
+    } catch (err) {
+      console.error('⚠️ Failed to prefetch cache:', err);
+      // Не критично, просто не будет prefetch
+    }
+  }, [cachePrefetched])
 
   // Функция для отправки сообщения (используется и для текста, и для голоса)
   const sendMessage = useCallback(async (messageText: string) => {
@@ -300,6 +341,14 @@ export default function OGLabAgent({ compact = false }: OGLabAgentProps) {
       setRecordingState('recording')
       setRecordingDuration(0)
       
+      // Обновляем статус разрешения после успешного получения доступа
+      setMicrophonePermission('granted')
+      
+      // Прогреваем кэш пока пользователь говорит
+      if (!cachePrefetched) {
+        prefetchMenuCache()
+      }
+      
       // Запускаем таймер для отображения длительности
       durationTimerRef.current = setInterval(() => {
         setRecordingDuration(prev => prev + 1)
@@ -307,7 +356,14 @@ export default function OGLabAgent({ compact = false }: OGLabAgentProps) {
       
     } catch (err) {
       console.error('Recording error:', err)
-      setError(err instanceof Error ? err.message : 'Не удалось начать запись')
+      const errorMessage = err instanceof Error ? err.message : 'Не удалось начать запись'
+      
+      // Проверяем, был ли отказ в доступе
+      if (errorMessage.includes('запрещён') || errorMessage.includes('Доступ')) {
+        setMicrophonePermission('denied')
+      }
+      
+      setError(errorMessage)
       setRecordingState('idle')
       setRecordingDuration(0)
       
@@ -694,7 +750,13 @@ export default function OGLabAgent({ compact = false }: OGLabAgentProps) {
         }`}>
           <input
             value={question}
-            onChange={(e) => setQuestion(e.target.value)}
+            onChange={(e) => {
+              setQuestion(e.target.value)
+              // Прогреваем кэш при первом вводе символа
+              if (!cachePrefetched && e.target.value.length === 1) {
+                prefetchMenuCache()
+              }
+            }}
             placeholder={t('agentPlaceholder')}
             disabled={loading}
             className={`min-w-0 flex-1 bg-transparent text-[#2F3A24] outline-none placeholder:text-[#2F3A24]/40 disabled:opacity-50 ${
@@ -726,17 +788,17 @@ export default function OGLabAgent({ compact = false }: OGLabAgentProps) {
                 : ''
               }
             >
-              {recordingState === 'processing' ? (
-                <svg className="animate-spin" width={compact ? '14' : '20'} height={compact ? '14' : '20'} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M21 12a9 9 0 1 1-6.219-8.56" />
-                </svg>
-              ) : (
-            <svg width={compact ? '14' : '20'} height={compact ? '14' : '20'} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M12 1a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" />
-              <path d="M19 10a7 7 0 0 1-14 0" />
-              <path d="M12 19v4" />
-            </svg>
-              )}
+            {recordingState === 'processing' ? (
+              <svg className="animate-spin" width={compact ? '14' : '20'} height={compact ? '14' : '20'} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21 12a9 9 0 1 1-6.219-8.56" />
+              </svg>
+            ) : (
+          <svg width={compact ? '14' : '20'} height={compact ? '14' : '20'} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M12 1a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" />
+            <path d="M19 10a7 7 0 0 1-14 0" />
+            <path d="M12 19v4" />
+          </svg>
+            )}
           </button>
           )}
           <button

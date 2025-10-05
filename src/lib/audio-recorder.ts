@@ -15,12 +15,31 @@ export class AudioRecorder {
   private stream: MediaStream | null = null;
   private maxDurationTimer: NodeJS.Timeout | null = null;
   private onMaxDurationReached?: () => void;
+  private keepStreamAlive: boolean = true; // Сохраняем stream между записями
 
   /**
    * Проверяет, поддерживает ли браузер запись аудио
    */
   static isSupported(): boolean {
     return !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
+  }
+
+  /**
+   * Проверяет статус разрешения на использование микрофона
+   */
+  static async checkMicrophonePermission(): Promise<'granted' | 'denied' | 'prompt'> {
+    if (!navigator.permissions || !navigator.permissions.query) {
+      // Permissions API не поддерживается (Safari iOS)
+      return 'prompt';
+    }
+
+    try {
+      const result = await navigator.permissions.query({ name: 'microphone' as PermissionName });
+      return result.state;
+    } catch (error) {
+      console.warn('Unable to check microphone permission:', error);
+      return 'prompt';
+    }
   }
 
   /**
@@ -39,14 +58,23 @@ export class AudioRecorder {
     }
 
     try {
-      // Запрашиваем доступ к микрофону
-      this.stream = await navigator.mediaDevices.getUserMedia({ 
-        audio: {
-          echoCancellation: true,
-          noiseSuppression: true,
-          autoGainControl: true,
-        } 
-      });
+      // Проверяем, есть ли уже активный stream (переиспользуем для избежания повторного запроса)
+      if (!this.stream || !this.stream.active) {
+        console.log('🎤 Requesting microphone access...');
+        
+        // Запрашиваем доступ к микрофону
+        this.stream = await navigator.mediaDevices.getUserMedia({ 
+          audio: {
+            echoCancellation: true,
+            noiseSuppression: true,
+            autoGainControl: true,
+          } 
+        });
+        
+        console.log('✅ Microphone access granted');
+      } else {
+        console.log('📦 Reusing existing microphone stream');
+      }
 
       // Определяем поддерживаемый MIME-тип
       const mimeType = this.getSupportedMimeType();
@@ -157,10 +185,33 @@ export class AudioRecorder {
       this.maxDurationTimer = null;
     }
     
-    if (this.stream) {
+    // Закрываем stream только если keepStreamAlive = false
+    // Иначе сохраняем stream для следующей записи (избегаем повторных запросов разрешения)
+    if (!this.keepStreamAlive && this.stream) {
+      console.log('🔇 Closing microphone stream');
       this.stream.getTracks().forEach(track => track.stop());
       this.stream = null;
     }
+    
+    this.mediaRecorder = null;
+  }
+
+  /**
+   * Полностью освобождает все ресурсы включая stream
+   * Вызывается при размонтировании компонента
+   */
+  destroy(): void {
+    if (this.maxDurationTimer) {
+      clearTimeout(this.maxDurationTimer);
+      this.maxDurationTimer = null;
+    }
+    
+    if (this.stream) {
+      console.log('🔇 Destroying microphone stream');
+      this.stream.getTracks().forEach(track => track.stop());
+      this.stream = null;
+    }
+    
     this.mediaRecorder = null;
   }
 
