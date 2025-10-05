@@ -65,12 +65,16 @@ export default function OGLabAgent({ compact = false }: OGLabAgentProps) {
     setIsRecordingSupported(AudioRecorder.isSupported())
     recorderRef.current = new AudioRecorder()
     
-    // Устанавливаем callback для автоматической остановки при достижении лимита (30 сек)
-    recorderRef.current.setOnMaxDurationReached(() => {
-      console.log('⏱️ Max duration reached, stopping recording...')
-      stopRecording()
-    })
-    
+    return () => {
+      // Очищаем таймер записи при размонтировании
+      if (durationTimerRef.current) {
+        clearInterval(durationTimerRef.current)
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [locale])
+
+  useEffect(() => {
     // Загружаем или создаём профиль пользователя
     const profile = getOrCreateUserProfile()
     
@@ -132,13 +136,6 @@ export default function OGLabAgent({ compact = false }: OGLabAgentProps) {
       detectedLocale: locale,
       hasConversations: profile.conversations.length > 0,
     })
-    
-    return () => {
-      // Очищаем таймер записи при размонтировании
-      if (durationTimerRef.current) {
-        clearInterval(durationTimerRef.current)
-      }
-    }
   }, [locale])
 
   // Сохранение при закрытии/перезагрузке страницы (используем ref для актуальных значений)
@@ -250,11 +247,9 @@ export default function OGLabAgent({ compact = false }: OGLabAgentProps) {
     if (!userProfile) return
     
     // Сохраняем текущий диалог в профиль
-    let profileToUse = userProfile
     if (currentConversation && currentConversation.messages.length > 0) {
       const updatedProfile = finishConversation(userProfile, currentConversation)
       setUserProfile(updatedProfile)
-      profileToUse = updatedProfile // Используем обновлённый профиль!
       console.log('💾 Saved conversation:', currentConversation.id, 'with', currentConversation.messages.length, 'messages')
     }
     
@@ -344,6 +339,16 @@ export default function OGLabAgent({ compact = false }: OGLabAgentProps) {
       setRecordingDuration(0)
     }
   }, [recordingState])
+
+  // Устанавливаем callback для автоматической остановки (после объявления stopRecording)
+  useEffect(() => {
+    if (recorderRef.current) {
+      recorderRef.current.setOnMaxDurationReached(() => {
+        console.log('⏱️ Max duration reached, stopping recording...')
+        stopRecording()
+      })
+    }
+  }, [stopRecording])
 
   // Toggle для голосового ввода (клик для начала/остановки)
   const handleVoiceButtonClick = () => {
