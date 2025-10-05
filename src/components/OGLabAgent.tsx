@@ -53,6 +53,7 @@ export default function OGLabAgent({ compact = false }: OGLabAgentProps) {
   const [greeting, setGreeting] = useState<string>('')
   const [showStats, setShowStats] = useState(false)
   const [isInitialLoad, setIsInitialLoad] = useState(true) // Флаг для первой загрузки
+  const [showHistory, setShowHistory] = useState(false) // Показывать ли историю
   
   // Voice recording state
   const [recordingState, setRecordingState] = useState<RecordingState>('idle')
@@ -62,8 +63,10 @@ export default function OGLabAgent({ compact = false }: OGLabAgentProps) {
   const recorderRef = useRef<AudioRecorder | null>(null)
   const durationTimerRef = useRef<NodeJS.Timeout | null>(null)
   
-  // Ref для автоскролла к последнему сообщению
-  const messagesEndRef = useRef<HTMLDivElement | null>(null)
+  // Ref для скролла к контейнеру агента (при отправке сообщения)
+  const agentContainerRef = useRef<HTMLElement | null>(null)
+  // Ref для скролла к последнему сообщению
+  const lastMessageRef = useRef<HTMLDivElement | null>(null)
 
   // Инициализация при монтировании
   useEffect(() => {
@@ -148,8 +151,11 @@ export default function OGLabAgent({ compact = false }: OGLabAgentProps) {
     }
     setCurrentConversation(conversation)
     
-    // Отключаем флаг первой загрузки после установки начального состояния
-    setIsInitialLoad(false)
+    // Отключаем флаг первой загрузки асинхронно, в следующем тике event loop
+    // Это позволяет браузеру завершить первый рендер без скролла
+    setTimeout(() => {
+      setIsInitialLoad(false)
+    }, 0)
     
     console.log('👤 User profile loaded:', {
       userId: profile.userId,
@@ -192,14 +198,20 @@ export default function OGLabAgent({ compact = false }: OGLabAgentProps) {
     }
   }, [])
 
-  // Автоматический скролл к последнему сообщению
-  // block: 'start' - показывает начало сообщения (важно для длинных ответов на мобильном)
-  // НЕ скроллим при первой загрузке (восстановление истории), только при новых сообщениях
+  // Автоматический скролл с минимальными прыжками
   useEffect(() => {
-    if (!isInitialLoad && messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    if (showHistory && !isInitialLoad && lastMessageRef.current && currentConversation?.messages.length) {
+      const lastMessage = currentConversation.messages[currentConversation.messages.length - 1];
+      
+      if (lastMessage.role === 'user') {
+        // Своё сообщение → 'nearest' = минимальный скролл (только если не видно)
+        lastMessageRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+      } else {
+        // Ответ агента → скролл к началу (чтобы видеть начало ответа)
+        lastMessageRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      }
     }
-  }, [currentConversation?.messages.length, loading, isInitialLoad])
+  }, [currentConversation?.messages.length, isInitialLoad, showHistory, currentConversation?.messages])
 
   // Prefetch кэша меню при первом вводе (прогрев кэша)
   const prefetchMenuCache = useCallback(async () => {
@@ -225,6 +237,7 @@ export default function OGLabAgent({ compact = false }: OGLabAgentProps) {
     setLoading(true)
     setError(null)
     setGreeting('') // скрываем приветствие после первого сообщения
+    setShowHistory(true) // показываем историю при отправке сообщения
     
     // Добавляем вопрос пользователя в диалог
     const userMessage = { role: 'user' as const, content: messageText }
@@ -304,12 +317,8 @@ export default function OGLabAgent({ compact = false }: OGLabAgentProps) {
   const clearHistory = () => {
     if (!userProfile) return
     
-    // Сохраняем текущий диалог в профиль
-    if (currentConversation && currentConversation.messages.length > 0) {
-      const updatedProfile = finishConversation(userProfile, currentConversation)
-      setUserProfile(updatedProfile)
-      console.log('💾 Saved conversation:', currentConversation.id, 'with', currentConversation.messages.length, 'messages')
-    }
+    // НЕ сохраняем текущий диалог - просто удаляем его
+    console.log('🗑️ Discarding current conversation:', currentConversation?.id, 'with', currentConversation?.messages.length, 'messages')
     
     // Начинаем новый диалог
     const newConversation = startConversation()
@@ -320,6 +329,7 @@ export default function OGLabAgent({ compact = false }: OGLabAgentProps) {
     setError(null) // Очищаем ошибки
     setQuestion('') // Очищаем поле ввода
     setLoading(false) // Сбрасываем состояние загрузки
+    setShowHistory(false) // Скрываем историю
     
     console.log('🆕 New conversation started:', newConversation.id)
   }
@@ -437,9 +447,12 @@ export default function OGLabAgent({ compact = false }: OGLabAgentProps) {
   }
 
   return (
-    <section className={`rounded-3xl bg-white/80 shadow-xl ring-1 ring-[#B0BF93]/50 overflow-hidden ${
-      compact ? 'p-2.5 lg:p-3' : 'p-4 lg:p-6'
-    }`}>
+    <section 
+      ref={agentContainerRef}
+      className={`rounded-3xl bg-white/80 shadow-xl ring-1 ring-[#B0BF93]/50 overflow-hidden ${
+        compact ? 'p-2.5 lg:p-3' : 'p-4 lg:p-6'
+      }`}
+    >
       <div className={`flex items-center justify-between gap-2 ${compact ? 'mb-2' : 'mb-3 lg:mb-4'}`}>
         <div className="flex items-center gap-2 lg:gap-3">
           <h2 className={`font-bold text-[#3D4D37] ${compact ? 'text-base lg:text-lg' : 'text-xl lg:text-2xl'}`}>{t('agentTitle')}</h2>
@@ -565,8 +578,28 @@ export default function OGLabAgent({ compact = false }: OGLabAgentProps) {
       </p>
       )}
 
+      {/* Кнопка показа скрытой истории */}
+      {!showHistory && currentConversation && currentConversation.messages.length > 0 && (
+        <div className={compact ? 'mb-2' : 'mb-3 lg:mb-4'}>
+          <button
+            onClick={() => setShowHistory(true)}
+            className="w-full rounded-xl bg-[#536C4A]/10 px-4 py-2.5 text-sm font-medium text-[#536C4A] hover:bg-[#536C4A]/20 transition-colors flex items-center justify-center gap-2"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M3 12h18M3 6h18M3 18h18"/>
+            </svg>
+            {t('agentShowHistory')} ({currentConversation.messages.length} {
+              currentConversation.messages.length === 1 ? t('agentMessage') :
+              currentConversation.messages.length < 5 ? t('agentMessages2') :
+              t('agentMessages5')
+            })
+          </button>
+        </div>
+      )}
+
       {/* История сообщений */}
-      {currentConversation && currentConversation.messages.length > 0 && (
+      {/* Показываем историю только после отправки первого сообщения или по клику */}
+      {showHistory && currentConversation && currentConversation.messages.length > 0 && (
         <div 
           key={currentConversation.id}
           className={`overflow-y-auto pr-2 ${
@@ -575,9 +608,12 @@ export default function OGLabAgent({ compact = false }: OGLabAgentProps) {
               : 'mb-3 lg:mb-4 max-h-60 lg:max-h-64 space-y-2 lg:space-y-3'
           }`}
         >
-          {currentConversation.messages.map((msg, idx) => (
+          {currentConversation.messages.map((msg, idx) => {
+            const isLastMessage = idx === currentConversation.messages.length - 1;
+            return (
             <div
               key={idx}
+              ref={isLastMessage ? lastMessageRef : null}
               className={`rounded-2xl ${
                 compact ? 'p-2' : 'p-3 lg:p-4'
               } ${
@@ -701,7 +737,8 @@ export default function OGLabAgent({ compact = false }: OGLabAgentProps) {
                 </div>
               )}
             </div>
-          ))}
+            );
+          })}
           
           {/* Индикатор загрузки */}
           {loading && (
@@ -716,9 +753,6 @@ export default function OGLabAgent({ compact = false }: OGLabAgentProps) {
               </div>
             </div>
           )}
-          
-          {/* Маркер для автоскролла к последнему сообщению */}
-          <div ref={messagesEndRef} />
         </div>
       )}
 
