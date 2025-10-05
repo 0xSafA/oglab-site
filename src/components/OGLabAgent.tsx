@@ -177,23 +177,18 @@ export default function OGLabAgent({ compact = false }: OGLabAgentProps) {
     }
   }, [currentConversation?.messages.length, loading])
 
-  const ask = async (e: React.FormEvent) => {
-    e.preventDefault()
-    
-    if (!question.trim() || !currentConversation || !userProfile) return
+  // Функция для отправки сообщения (используется и для текста, и для голоса)
+  const sendMessage = useCallback(async (messageText: string) => {
+    if (!messageText.trim() || !currentConversation || !userProfile) return
     
     setLoading(true)
     setError(null)
     setGreeting('') // скрываем приветствие после первого сообщения
     
     // Добавляем вопрос пользователя в диалог
-    const userMessage = { role: 'user' as const, content: question }
+    const userMessage = { role: 'user' as const, content: messageText }
     let updatedConversation = addMessageToConversation(currentConversation, userMessage)
     setCurrentConversation(updatedConversation)
-    
-    // Очищаем поле ввода
-    const currentQuestion = question
-    setQuestion('')
     
     try {
       // Строим user context
@@ -203,7 +198,7 @@ export default function OGLabAgent({ compact = false }: OGLabAgentProps) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          message: currentQuestion,
+          message: messageText,
           conversationHistory: updatedConversation.messages.slice(-12).map(m => ({
             role: m.role,
             content: m.content,
@@ -250,6 +245,19 @@ export default function OGLabAgent({ compact = false }: OGLabAgentProps) {
     } finally {
       setLoading(false)
     }
+  }, [currentConversation, userProfile, useStock])
+
+  const ask = async (e: React.FormEvent) => {
+    e.preventDefault()
+    
+    if (!question.trim()) return
+    
+    // Сохраняем текст и очищаем поле ввода
+    const messageText = question
+    setQuestion('')
+    
+    // Отправляем сообщение
+    await sendMessage(messageText)
   }
 
   const clearHistory = () => {
@@ -336,13 +344,13 @@ export default function OGLabAgent({ compact = false }: OGLabAgentProps) {
       // Отправляем на транскрипцию с указанием языка
       const transcribedText = await transcribeAudio(audioBlob, userLanguage)
       
-      // Заполняем поле ввода
-      setQuestion(transcribedText)
+      // Сбрасываем состояние записи
       setRecordingState('idle')
       setRecordingDuration(0)
       
-      // Можно автоматически отправить сообщение
-      // setQuestion('') и вызвать ask() с transcribedText
+      // Автоматически отправляем транскрибированное сообщение
+      console.log('🎤 Auto-sending voice message:', transcribedText)
+      await sendMessage(transcribedText)
       
     } catch (err) {
       console.error('Transcription error:', err)
@@ -351,7 +359,7 @@ export default function OGLabAgent({ compact = false }: OGLabAgentProps) {
       setRecordingState('idle')
       setRecordingDuration(0)
     }
-  }, [recordingState, userProfile, locale])
+  }, [recordingState, userProfile, locale, sendMessage])
 
   // Устанавливаем callback для автоматической остановки (после объявления stopRecording)
   useEffect(() => {
