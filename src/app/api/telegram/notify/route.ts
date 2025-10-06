@@ -20,6 +20,15 @@ interface TelegramNotificationRequest {
     language?: string;
   };
   products?: string[];
+  quantity?: string;
+  totalAmount?: number;
+  breakdown?: string;
+  contactInfo?: {
+    name?: string;
+    phone?: string;
+    address?: string;
+    paymentMethod?: string;
+  };
   metadata?: Record<string, unknown>;
 }
 
@@ -71,7 +80,7 @@ async function sendTelegramMessage(
  * Форматирует сообщение в зависимости от типа уведомления
  */
 function formatMessage(data: TelegramNotificationRequest): string {
-  const { type, message, userId, userContext, products } = data;
+  const { type, message, userId, userContext, products, quantity, totalAmount, breakdown, contactInfo } = data;
   
   const emoji = {
     order: '🛒',
@@ -118,14 +127,60 @@ function formatMessage(data: TelegramNotificationRequest): string {
     }
   }
   
-  formatted += `\n📝 <b>Сообщение:</b>\n${escapeHtml(message)}\n`;
-  
-  // Упомянутые продукты
-  if (products && products.length > 0) {
-    formatted += `\n🌿 <b>Продукты:</b>\n`;
+  // Для заказов показываем структурированную информацию
+  if (type === 'order' && products && products.length > 0) {
+    formatted += `\n━━━━━━━━━━━━━━━━━━━\n`;
+    formatted += `<b>📋 ДЕТАЛИ ЗАКАЗА:</b>\n\n`;
+    
+    // Продукты
+    formatted += `🌿 <b>Продукт:</b>\n`;
     products.forEach(product => {
-      formatted += `  • ${escapeHtml(product)}\n`;
+      formatted += `   ${escapeHtml(product)}\n`;
     });
+    
+    // Количество
+    if (quantity) {
+      formatted += `\n📦 <b>Количество:</b> ${escapeHtml(quantity)}\n`;
+    }
+    
+    // Сумма заказа
+    if (totalAmount && breakdown) {
+      formatted += `\n💰 <b>СУММА:</b>\n`;
+      formatted += `   ${escapeHtml(breakdown)}\n`;
+      formatted += `   <b>Итого: ${totalAmount.toLocaleString('en-US')}฿</b>\n`;
+    }
+    
+    // Контактная информация
+    if (contactInfo) {
+      formatted += `\n👤 <b>КОНТАКТЫ:</b>\n`;
+      if (contactInfo.name) {
+        formatted += `   Имя: ${escapeHtml(contactInfo.name)}\n`;
+      }
+      if (contactInfo.phone) {
+        formatted += `   📱 Телефон: ${escapeHtml(contactInfo.phone)}\n`;
+      }
+      if (contactInfo.address) {
+        formatted += `   📍 Адрес: ${escapeHtml(contactInfo.address)}\n`;
+      }
+      if (contactInfo.paymentMethod) {
+        formatted += `   💳 Оплата: ${escapeHtml(contactInfo.paymentMethod)}\n`;
+      }
+    }
+    
+    formatted += `\n━━━━━━━━━━━━━━━━━━━\n`;
+    formatted += `\n📝 <b>Исходное сообщение:</b>\n${escapeHtml(message)}\n`;
+    
+  } else {
+    // Для остальных типов уведомлений
+    formatted += `\n📝 <b>Сообщение:</b>\n${escapeHtml(message)}\n`;
+    
+    // Упомянутые продукты (если есть)
+    if (products && products.length > 0) {
+      formatted += `\n🌿 <b>Продукты:</b>\n`;
+      products.forEach(product => {
+        formatted += `  • ${escapeHtml(product)}\n`;
+      });
+    }
   }
   
   // Предыдущие предпочтения

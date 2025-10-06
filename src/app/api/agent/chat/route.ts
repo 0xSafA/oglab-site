@@ -7,7 +7,9 @@ import {
   extractProductMentions,
   detectLanguage,
   getStrainEffects,
-  getStrainFlavors
+  getStrainFlavors,
+  extractOrderInfo,
+  calculateOrderTotal
 } from '@/lib/agent-helpers';
 
 // Инициализация OpenAI клиента
@@ -168,7 +170,7 @@ export async function POST(request: NextRequest) {
     const reply = completion.choices[0]?.message?.content || 'Извини, не смог сформулировать ответ. Попробуй переформулировать вопрос?';
 
     // Определяем намерение пользователя для Telegram уведомлений
-    const userIntent = detectUserIntent(message, reply);
+    const userIntent = detectUserIntent(message, reply, conversationHistory, menuData?.rows || []);
     let notificationSent = false;
 
     // Отправляем уведомление в Telegram если нужно
@@ -183,6 +185,10 @@ export async function POST(request: NextRequest) {
             userId: body.userId || 'anonymous',
             userContext: body.userContext ? JSON.parse(body.userContext) : undefined,
             products: userIntent.products,
+            quantity: userIntent.quantity,
+            totalAmount: userIntent.totalAmount,
+            breakdown: userIntent.breakdown,
+            contactInfo: userIntent.contactInfo,
             metadata: {
               language,
               timestamp: new Date().toISOString(),
@@ -333,54 +339,138 @@ interface UserIntent {
   shouldNotify: boolean;
   type: 'order' | 'wish' | 'feedback' | 'staff_question' | 'general';
   products?: string[];
+  quantity?: string;
+  totalAmount?: number;
+  breakdown?: string;
+  contactInfo?: {
+    name?: string;
+    phone?: string;
+    address?: string;
+    paymentMethod?: string;
+  };
   confidence: number;
 }
 
-function detectUserIntent(userMessage: string, agentReply: string): UserIntent {
+function detectUserIntent(
+  userMessage: string, 
+  agentReply: string, 
+  conversationHistory: ChatMessage[],
+  menuItems: MenuRow[]
+): UserIntent {
   const lowerMessage = userMessage.toLowerCase();
   const lowerReply = agentReply.toLowerCase();
   
   // Ключевые слова для разных типов намерений
   const orderKeywords = [
-    'заказ', 'купить', 'заброн', 'закажу', 'хочу взять', 'доставка',
-    'order', 'buy', 'purchase', 'book', 'reserve', 'delivery',
-    'สั่ง', 'ซื้อ', 'จอง' // тайский
+    'заказ', 'купить', 'заброн', 'закажу', 'хочу взять', 'доставка', 'привез', 'довез',
+    'оформ', 'беру', 'возьму', 'куплю', 'нужно', 'привезите', 'доставьте',
+    'давай его', 'давай их', 'имя мое', 'вотсапп', 'ватсап', 'телефон', 'отель', 'hotel',
+    'room', 'номер комнаты', 'оплата', 'наличными', 'наличка', 'payment', 'cash',
+    'order', 'buy', 'purchase', 'book', 'reserve', 'delivery', 'deliver', 'bring',
+    'want to order', 'place order', 'need delivery', 'my name', 'whatsapp',
+    'สั่ง', 'ซื้อ', 'จอง', 'ส่ง' // тайский
+  ];
+  
+  const deliveryHints = [
+    'далеко', 'устал', 'не могу приехать', 'плохая погода', 'дождь',
+    'можно привезти', 'есть доставка', 'доставляете',
+    'far', 'tired', 'can\'t come', 'weather', 'rain', 'do you deliver',
+    'ไกล', 'เหนื่อย', 'ส่งได้ไหม' // тайский
   ];
   
   const wishKeywords = [
     'посовет', 'рекоменд', 'хотел бы', 'нужен совет', 'что посовет',
-    'suggest', 'recommend', 'advice', 'what should',
-    'แนะนำ', 'อยาก' // тайский
+    'подскаж', 'помог', 'что выбрать', 'что лучше',
+    'suggest', 'recommend', 'advice', 'what should', 'help me choose',
+    'แนะนำ', 'อยาก', 'ช่วย' // тайский
   ];
   
   const feedbackKeywords = [
     'спасибо', 'отлично', 'классно', 'супер', 'отзыв', 'благодар',
-    'thank', 'great', 'awesome', 'feedback', 'review',
-    'ขอบคุณ', 'ดี' // тайский
+    'круто', 'кайф', 'понрав', 'хорош',
+    'thank', 'great', 'awesome', 'feedback', 'review', 'love', 'perfect',
+    'ขอบคุณ', 'ดี', 'เยี่ยม' // тайский
   ];
   
   const staffQuestionKeywords = [
     'когда открыт', 'где находит', 'как добраться', 'можно прийти',
-    'адрес', 'часы работы', 'контакт', 'телефон',
+    'адрес', 'часы работы', 'контакт', 'телефон', 'связаться',
+    'передайте', 'скажите', 'передай', 'сообщи',
     'when open', 'where located', 'how to get', 'address', 'hours',
-    'เปิด', 'ที่อยู่', 'เบอร์' // тайский
+    'tell them', 'let them know', 'pass message',
+    'เปิด', 'ที่อยู่', 'เบอร์', 'ติดต่อ' // тайский
   ];
 
-  // Проверяем на ORDER (заказ)
-  if (orderKeywords.some(kw => lowerMessage.includes(kw))) {
-    // Извлекаем упомянутые продукты (они в жирном шрифте)
-    const productMatches = agentReply.match(/\*\*(.*?)\*\*/g);
-    const products = productMatches ? productMatches.map(m => m.replace(/\*\*/g, '')) : [];
+  // Проверяем на ORDER (заказ) - приоритет 1
+  const hasOrderIntent = orderKeywords.some(kw => lowerMessage.includes(kw));
+  const hasDeliveryHint = deliveryHints.some(kw => lowerMessage.includes(kw));
+  
+  // Проверяем наличие контактной информации в сообщении
+  const hasPhoneNumber = /\d{8,15}/.test(userMessage); // телефон (8-15 цифр)
+  const hasContactInfo = hasPhoneNumber || 
+                         lowerMessage.includes('имя') || 
+                         lowerMessage.includes('name') ||
+                         lowerMessage.includes('hotel') ||
+                         lowerMessage.includes('отель');
+  
+  // Если есть контактная информация И в истории упоминались продукты - это заказ!
+  const lastFiveMessages = conversationHistory.slice(-5);
+  const hasRecentProductMention = lastFiveMessages.some(msg => {
+    return menuItems.some(item => 
+      item.Name && msg.content.toLowerCase().includes(item.Name.toLowerCase())
+    );
+  });
+  
+  const isLikelyOrder = (hasOrderIntent || hasDeliveryHint || hasContactInfo) && 
+                        (hasRecentProductMention || hasOrderIntent);
+  
+  if (isLikelyOrder) {
+    // Используем умное извлечение информации о заказе из истории разговора
+    const orderInfo = extractOrderInfo(conversationHistory, menuItems);
+    
+    // Рассчитываем сумму заказа если есть продукт и количество
+    let totalAmount: number | undefined;
+    let breakdown: string | undefined;
+    
+    if (orderInfo.products.length > 0 && orderInfo.quantityNumber) {
+      const orderTotal = calculateOrderTotal(
+        orderInfo.products[0], // берем первый продукт
+        orderInfo.quantityNumber,
+        menuItems
+      );
+      
+      if (orderTotal) {
+        totalAmount = orderTotal.amount;
+        breakdown = orderTotal.breakdown;
+      }
+    }
+    
+    console.log('🛍️ Order detected:', {
+      products: orderInfo.products,
+      quantity: orderInfo.quantity,
+      quantityNumber: orderInfo.quantityNumber,
+      totalAmount,
+      breakdown,
+      contactInfo: orderInfo.contactInfo,
+      confidence: orderInfo.confidence,
+      hasContactInfo,
+      hasOrderIntent,
+      hasRecentProductMention
+    });
     
     return {
       shouldNotify: true,
       type: 'order',
-      products: products.length > 0 ? products : undefined,
-      confidence: 0.85,
+      products: orderInfo.products.length > 0 ? orderInfo.products : undefined,
+      quantity: orderInfo.quantity,
+      totalAmount,
+      breakdown,
+      contactInfo: orderInfo.contactInfo,
+      confidence: (hasOrderIntent && hasContactInfo) ? 0.95 : (hasOrderIntent ? 0.90 : 0.75),
     };
   }
 
-  // Проверяем на WISH (пожелание)
+  // Проверяем на WISH (пожелание) - приоритет 2
   if (wishKeywords.some(kw => lowerMessage.includes(kw))) {
     const productMatches = agentReply.match(/\*\*(.*?)\*\*/g);
     const products = productMatches ? productMatches.map(m => m.replace(/\*\*/g, '')) : [];
@@ -393,27 +483,29 @@ function detectUserIntent(userMessage: string, agentReply: string): UserIntent {
     };
   }
 
-  // Проверяем на FEEDBACK (обратная связь)
-  if (feedbackKeywords.some(kw => lowerMessage.includes(kw))) {
-    return {
-      shouldNotify: true,
-      type: 'feedback',
-      confidence: 0.70,
-    };
-  }
-
-  // Проверяем на STAFF_QUESTION (вопрос персоналу)
+  // Проверяем на STAFF_QUESTION (вопрос персоналу) - приоритет 3
   if (staffQuestionKeywords.some(kw => lowerMessage.includes(kw))) {
     // Проверяем, смог ли агент ответить или передал персоналу
     const needsHuman = lowerReply.includes('персонал') || 
                        lowerReply.includes('бадтендер') ||
                        lowerReply.includes('связаться') ||
-                       lowerReply.includes('позвонить');
+                       lowerReply.includes('позвонить') ||
+                       lowerReply.includes('передам') ||
+                       lowerReply.includes('менеджер');
     
     return {
       shouldNotify: needsHuman,
       type: 'staff_question',
       confidence: needsHuman ? 0.90 : 0.40,
+    };
+  }
+
+  // Проверяем на FEEDBACK (обратная связь) - приоритет 4
+  if (feedbackKeywords.some(kw => lowerMessage.includes(kw))) {
+    return {
+      shouldNotify: true,
+      type: 'feedback',
+      confidence: 0.70,
     };
   }
 

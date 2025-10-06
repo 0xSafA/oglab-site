@@ -278,6 +278,32 @@ export function finishConversation(
 }
 
 /**
+ * Удаляет текущий диалог из профиля, но сохраняет извлечённые preferences
+ * Возвращает обновлённый профиль БЕЗ текущего диалога
+ */
+export function discardCurrentConversation(
+  profile: UserProfile,
+  conversation: Conversation
+): UserProfile {
+  // Извлекаем полезные данные из диалога перед удалением
+  updatePreferencesFromConversation(profile, conversation);
+  
+  // Удаляем диалог из истории
+  const updatedConversations = profile.conversations.filter(c => c.id !== conversation.id);
+  
+  const updatedProfile = {
+    ...profile,
+    conversations: updatedConversations,
+    lastVisit: new Date(),
+  };
+  
+  saveUserProfile(updatedProfile);
+  console.log('🗑️ Conversation discarded:', conversation.id, '| Remaining:', updatedConversations.length);
+  
+  return updatedProfile;
+}
+
+/**
  * Извлекает preferences из диалога и обновляет профиль
  */
 function updatePreferencesFromConversation(

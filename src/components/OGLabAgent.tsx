@@ -7,12 +7,12 @@ import {
   getOrCreateUserProfile,
   startConversation,
   addMessageToConversation,
-  finishConversation,
   updateCurrentConversation,
   buildUserContext,
   getPersonalizedGreeting,
   clearUserProfile,
   saveUserProfile,
+  discardCurrentConversation,
   type UserProfile,
   type Conversation,
 } from '@/lib/user-profile'
@@ -58,7 +58,6 @@ export default function OGLabAgent({ compact = false }: OGLabAgentProps) {
   // Voice recording state
   const [recordingState, setRecordingState] = useState<RecordingState>('idle')
   const [isRecordingSupported, setIsRecordingSupported] = useState(false)
-  const [microphonePermission, setMicrophonePermission] = useState<'granted' | 'denied' | 'prompt'>('prompt')
   const [recordingDuration, setRecordingDuration] = useState(0) // в секундах
   const recorderRef = useRef<AudioRecorder | null>(null)
   const durationTimerRef = useRef<NodeJS.Timeout | null>(null)
@@ -78,7 +77,6 @@ export default function OGLabAgent({ compact = false }: OGLabAgentProps) {
     // Проверяем статус разрешения микрофона
     if (isSupported) {
       AudioRecorder.checkMicrophonePermission().then(permission => {
-        setMicrophonePermission(permission)
         if (permission === 'granted') {
           console.log('✅ Microphone permission already granted')
         }
@@ -315,12 +313,14 @@ export default function OGLabAgent({ compact = false }: OGLabAgentProps) {
   }
 
   const clearHistory = () => {
-    if (!userProfile) return
+    if (!userProfile || !currentConversation) return
     
-    // НЕ сохраняем текущий диалог - просто удаляем его
-    console.log('🗑️ Discarding current conversation:', currentConversation?.id, 'with', currentConversation?.messages.length, 'messages')
+    // Удаляем текущий диалог из профиля (но сохраняем preferences)
+    console.log('🗑️ Discarding current conversation:', currentConversation.id, 'with', currentConversation.messages.length, 'messages')
+    const updatedProfile = discardCurrentConversation(userProfile, currentConversation)
+    setUserProfile(updatedProfile)
     
-    // Начинаем новый диалог
+    // Начинаем новый чистый диалог
     const newConversation = startConversation()
     setCurrentConversation(newConversation)
     
@@ -331,7 +331,8 @@ export default function OGLabAgent({ compact = false }: OGLabAgentProps) {
     setLoading(false) // Сбрасываем состояние загрузки
     setShowHistory(false) // Скрываем историю
     
-    console.log('🆕 New conversation started:', newConversation.id)
+    console.log('🆕 New clean conversation started:', newConversation.id)
+    console.log('📚 Remaining conversations in profile:', updatedProfile.conversations.length)
   }
   
   const resetProfile = () => {
@@ -351,9 +352,6 @@ export default function OGLabAgent({ compact = false }: OGLabAgentProps) {
       setRecordingState('recording')
       setRecordingDuration(0)
       
-      // Обновляем статус разрешения после успешного получения доступа
-      setMicrophonePermission('granted')
-      
       // Прогреваем кэш пока пользователь говорит
       if (!cachePrefetched) {
         prefetchMenuCache()
@@ -367,11 +365,6 @@ export default function OGLabAgent({ compact = false }: OGLabAgentProps) {
     } catch (err) {
       console.error('Recording error:', err)
       const errorMessage = err instanceof Error ? err.message : 'Не удалось начать запись'
-      
-      // Проверяем, был ли отказ в доступе
-      if (errorMessage.includes('запрещён') || errorMessage.includes('Доступ')) {
-        setMicrophonePermission('denied')
-      }
       
       setError(errorMessage)
       setRecordingState('idle')
