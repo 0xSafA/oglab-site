@@ -62,8 +62,8 @@ export default function NewsLandingPreview() {
           <h3 className="text-xl font-bold">{featured.title}</h3>
           <div className="-mx-2 overflow-hidden rounded-2xl">
             <Image 
-              src="/assets/bts/events.png" 
-              alt="OG Lab Secret Garden Party" 
+              src={featured.coverImage || '/assets/bts/events.png'} 
+              alt={featured.title} 
               width={400} 
               height={200} 
               className="h-48 md:h-56 w-full object-cover"

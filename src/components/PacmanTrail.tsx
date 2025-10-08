@@ -28,9 +28,6 @@ export default function PacmanTrail() {
   // Оптимизированные event handlers с useCallback
   const handlePotSpawned = useCallback((event: CustomEvent) => {
     const newPot = event.detail as PotPosition;
-    if (process.env.NODE_ENV === 'development') {
-      console.log(`🎯 Pacman noticed new pot ${newPot.id} at (${newPot.x}, ${newPot.y})`);
-    }
     
     // Сразу начинаем охоту
     setIsHunting(true);
@@ -41,9 +38,6 @@ export default function PacmanTrail() {
 
   const handlePotEaten = useCallback((event: CustomEvent) => {
     const { potId } = event.detail;
-    if (process.env.NODE_ENV === 'development') {
-      console.log(`🍽️ Pacman finished eating pot ${potId}, returning to normal path`);
-    }
     
     // Возвращаемся к обычному поведению
     setIsHunting(false);
@@ -246,10 +240,6 @@ export default function PacmanTrail() {
         // Проверяем столкновение
         if (checkPotCollision(x, y, targetPotRef.current)) {
           // Съели горшочек!
-          if (process.env.NODE_ENV === 'development') {
-            console.log(`🍽️ Pacman ate pot ${targetPotRef.current.id}!`);
-          }
-          
           window.dispatchEvent(new CustomEvent('potEaten', { 
             detail: { potId: targetPotRef.current.id } 
           }));
@@ -337,8 +327,6 @@ export default function PacmanTrail() {
     // Обработчик мягкого сброса: очищаем след и переинициализируем параметры
     const handleSoftRefresh = () => {
       try {
-        console.log('🔄 PACMAN RESET: Soft refresh received - resetting Pacman to start position');
-        console.trace('🔍 PACMAN RESET STACK TRACE:');
         trailRef.current = [];
         frameCountRef.current = 0;
         lastDrawTimeRef.current = 0;
@@ -352,7 +340,6 @@ export default function PacmanTrail() {
         if (pacmanGroupRef.current) {
           pacmanGroupRef.current.setAttribute('transform', `rotate(0, 50, 50)`);
         }
-        console.log('🟡 PacmanTrail: soft refresh completed - Pacman reset to start');
       } catch {}
     };
     window.addEventListener('softRefresh', handleSoftRefresh as EventListener);

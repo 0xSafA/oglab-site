@@ -47,10 +47,6 @@ export default function PotController() {
       
       return updatedPots;
     });
-    
-    if (process.env.NODE_ENV === 'development') {
-      console.log(`🍽️ Pot ${potId} removed`);
-    }
   }, []);
 
   // Функция создания нового горшочка
@@ -78,10 +74,6 @@ export default function PotController() {
     };
 
     setActivePots(prev => [...prev, newPot]);
-    
-    if (process.env.NODE_ENV === 'development') {
-      console.log(`🌱 New pot spawned at (${newPot.x}, ${newPot.y})`);
-    }
 
     // Устанавливаем глобальное состояние для пакмана
     if (typeof document !== 'undefined') {
@@ -96,29 +88,11 @@ export default function PotController() {
     }, POT_CONFIG.lifeDuration);
   }, [activePots, removePot]);
 
-  // Функция удаления горшочка — объявлена выше
-
-  // Функция для "поедания" горшочка пакманом
-  const eatPot = useCallback((potId: string) => {
-    if (process.env.NODE_ENV === 'development') {
-      console.log(`🎮 Pacman ate pot ${potId}!`);
-    }
-    removePot(potId);
-    
-    // Диспатчим событие что горшочек съеден
-    if (typeof document !== 'undefined') {
-      window.dispatchEvent(new CustomEvent('potEaten', { detail: { potId } }));
-    }
-  }, [removePot]);
-
   // Принудительная очистка старых горшочков
   const forceCleanup = useCallback(() => {
     const now = Date.now();
     setActivePots(prev => {
       const cleaned = prev.filter(pot => now - pot.createdAt < POT_CONFIG.lifeDuration + 5000);
-      if (cleaned.length !== prev.length) {
-        console.log(`🧹 Force cleanup: removed ${prev.length - cleaned.length} old pots`);
-      }
       return cleaned;
     });
   }, []);
@@ -126,7 +100,6 @@ export default function PotController() {
   // Экстренная очистка для медленных устройств
   const emergencyCleanup = useCallback(() => {
     if (activePots.length > POT_CONFIG.maxActivePots) {
-      console.log(`🚨 Emergency cleanup: too many pots (${activePots.length}), removing all`);
       setActivePots([]);
       if (typeof document !== 'undefined') {
         document.body.dataset.activePot = '';
@@ -166,16 +139,6 @@ export default function PotController() {
     // Экстренная очистка каждые 10 секунд для медленных устройств
     const emergencyInterval = setInterval(emergencyCleanup, 10000);
 
-    // Слушаем события от пакмана
-    const handlePotEaten = (event: CustomEvent) => {
-      const { potId } = event.detail;
-      eatPot(potId);
-    };
-
-    if (typeof window !== 'undefined') {
-      window.addEventListener('potEaten', handlePotEaten as EventListener);
-    }
-
     // Мягкий сброс: очищаем все горшочки и сбрасываем глобальное состояние
     const handleSoftRefresh = () => {
       try {
@@ -183,7 +146,6 @@ export default function PotController() {
         if (typeof document !== 'undefined') {
           document.body.dataset.activePot = '';
         }
-        console.log('🟡 PotController: soft refresh performed');
       } catch {}
     };
     window.addEventListener('softRefresh', handleSoftRefresh as EventListener);
@@ -198,14 +160,13 @@ export default function PotController() {
         document.removeEventListener('visibilitychange', handleVisibility);
       }
       if (typeof window !== 'undefined') {
-        window.removeEventListener('potEaten', handlePotEaten as EventListener);
         window.removeEventListener('softRefresh', handleSoftRefresh as EventListener);
       }
       if (typeof document !== 'undefined') {
         document.body.dataset.activePot = '';
       }
     };
-  }, [spawnPot, forceCleanup, emergencyCleanup, eatPot]);
+  }, [spawnPot, forceCleanup, emergencyCleanup]);
 
   // Обновляем глобальное состояние при изменении активных горшочков
   useEffect(() => {

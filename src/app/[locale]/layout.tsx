@@ -101,9 +101,6 @@ export default async function LocaleLayout({
   return (
     <html lang={locale} dir={locale === 'he' ? 'rtl' : 'ltr'}>
       <head>
-        {/* Preload только критических ресурсов для главной страницы */}
-        <link rel="preload" href="/assets/images/oglab_logo_round.svg" as="image" type="image/svg+xml" />
-        
         {/* DNS prefetch для внешних ресурсов */}
         <link rel="dns-prefetch" href="//www.googletagmanager.com" />
         <link rel="dns-prefetch" href="//fonts.googleapis.com" />

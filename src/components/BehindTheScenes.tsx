@@ -11,12 +11,12 @@ type Item = {
 }
 
 const items: Item[] = [
-  { key: 'watering', titleKey: 'btsGrowing', image: '/assets/bts/watering.png' },
+  { key: 'growing', titleKey: 'btsGrowing', image: '/assets/bts/growing.PNG' },
   { key: 'trimming', titleKey: 'btsTrimming', image: '/assets/bts/trimming.png' },
-  { key: 'testing', titleKey: 'btsTesting', image: '/assets/bts/testing.png' },
+  { key: 'testing', titleKey: 'btsTesting', image: '/assets/bts/testing.JPG' },
   { key: 'dispensary', titleKey: 'btsDispensary', image: '/assets/bts/dispensary.png' },
-  { key: 'events', titleKey: 'btsEvents', image: '/assets/bts/events.png' },
-  { key: 'community', titleKey: 'btsCommunity', image: '/assets/bts/events.png' },
+  { key: 'events', titleKey: 'btsEvents', image: '/assets/bts/events.PNG' },
+  { key: 'community', titleKey: 'btsCommunity', image: '/assets/bts/community.jpg' },
 ]
 
 export default function BehindTheScenes() {

@@ -138,8 +138,8 @@ export default function OGLabAgent({ compact = false }: OGLabAgentProps) {
     }
     
     let conversation: Conversation
-    if (profile.conversations.length > 0 && profile.conversations[0].messages.length > 0) {
-      // Продолжаем последний (самый свежий) диалог
+    if (profile.conversations.length > 0) {
+      // Продолжаем последний (самый свежий) диалог, даже если он пустой
       conversation = profile.conversations[0]
       console.log('📝 Continuing last conversation:', conversation.id.substring(0, 20) + '... with', conversation.messages.length, 'messages')
     } else {
@@ -318,10 +318,13 @@ export default function OGLabAgent({ compact = false }: OGLabAgentProps) {
     // Удаляем текущий диалог из профиля (но сохраняем preferences)
     console.log('🗑️ Discarding current conversation:', currentConversation.id, 'with', currentConversation.messages.length, 'messages')
     const updatedProfile = discardCurrentConversation(userProfile, currentConversation)
-    setUserProfile(updatedProfile)
     
     // Начинаем новый чистый диалог
     const newConversation = startConversation()
+    
+    // Сохраняем новый пустой диалог в профиль, чтобы он отобразился при следующем входе
+    const profileWithNewConv = updateCurrentConversation(updatedProfile, newConversation)
+    setUserProfile(profileWithNewConv)
     setCurrentConversation(newConversation)
     
     // Очищаем состояние UI
@@ -332,7 +335,7 @@ export default function OGLabAgent({ compact = false }: OGLabAgentProps) {
     setShowHistory(false) // Скрываем историю
     
     console.log('🆕 New clean conversation started:', newConversation.id)
-    console.log('📚 Remaining conversations in profile:', updatedProfile.conversations.length)
+    console.log('📚 Remaining conversations in profile:', profileWithNewConv.conversations.length)
   }
   
   const resetProfile = () => {

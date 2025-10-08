@@ -445,7 +445,23 @@ function detectUserIntent(
       }
     }
     
-    console.log('🛍️ Order detected:', {
+    // СТРОГАЯ ПРОВЕРКА: отправляем ТОЛЬКО если есть ВСЕ обязательные данные
+    const hasProduct = orderInfo.products.length > 0;
+    const hasQuantity = orderInfo.quantityNumber && orderInfo.quantityNumber > 0;
+    const hasPhone = orderInfo.contactInfo?.phone && orderInfo.contactInfo.phone.length >= 8;
+    const hasAddress = orderInfo.contactInfo?.address && orderInfo.contactInfo.address.length > 3;
+    
+    // Проверяем минимальное количество для доставки
+    const hashCategories = ['FRESH FROZEN HASH', 'LIVE HASH ROSIN', 'DRY SIFT HASH', 'ICE BUBBLE HASH'];
+    const firstProduct = menuItems.find(item => item.Name === orderInfo.products[0]);
+    const isHash = firstProduct && hashCategories.includes(firstProduct.Category || '');
+    const minQuantity = isHash ? 10 : 20; // 10г для гашиша, 20г для травы
+    const meetsMinimum = orderInfo.quantityNumber ? orderInfo.quantityNumber >= minQuantity : false;
+    
+    // Все обязательные данные собраны?
+    const allDataCollected = hasProduct && hasQuantity && hasPhone && hasAddress && meetsMinimum;
+    
+    console.log('🛍️ Order validation:', {
       products: orderInfo.products,
       quantity: orderInfo.quantity,
       quantityNumber: orderInfo.quantityNumber,
@@ -453,20 +469,29 @@ function detectUserIntent(
       breakdown,
       contactInfo: orderInfo.contactInfo,
       confidence: orderInfo.confidence,
+      validation: {
+        hasProduct,
+        hasQuantity,
+        hasPhone,
+        hasAddress,
+        meetsMinimum,
+        allDataCollected
+      },
       hasContactInfo,
       hasOrderIntent,
       hasRecentProductMention
     });
     
+    // Отправляем уведомление ТОЛЬКО если все данные собраны
     return {
-      shouldNotify: true,
+      shouldNotify: allDataCollected, // ← ИЗМЕНЕНО: только если ВСЕ данные есть
       type: 'order',
       products: orderInfo.products.length > 0 ? orderInfo.products : undefined,
       quantity: orderInfo.quantity,
       totalAmount,
       breakdown,
       contactInfo: orderInfo.contactInfo,
-      confidence: (hasOrderIntent && hasContactInfo) ? 0.95 : (hasOrderIntent ? 0.90 : 0.75),
+      confidence: allDataCollected ? 0.95 : 0.5, // высокая уверенность только если все данные есть
     };
   }
 

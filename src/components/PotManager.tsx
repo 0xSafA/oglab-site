@@ -12,13 +12,11 @@ export default function PotManager() {
     const handlePotSpawned = (event: CustomEvent) => {
       const newPot = event.detail as PotPosition;
       setActivePots(prev => [...prev, newPot]);
-      console.log(`🌱 Pot manager: Added pot ${newPot.id}`);
     };
 
     const handlePotEaten = (event: CustomEvent) => {
       const { potId } = event.detail;
       setActivePots(prev => prev.filter(pot => pot.id !== potId));
-      console.log(`🍽️ Pot manager: Removed pot ${potId}`);
     };
 
     if (typeof window !== 'undefined') {
