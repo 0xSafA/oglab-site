@@ -37,7 +37,8 @@ export default function PacmanTrail() {
   }, []);
 
   const handlePotEaten = useCallback((event: CustomEvent) => {
-    const { potId } = event.detail;
+    // event.detail contains potId, but we don't need it here
+    void event.detail;
     
     // Возвращаемся к обычному поведению
     setIsHunting(false);
