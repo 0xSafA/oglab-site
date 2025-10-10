@@ -24,7 +24,7 @@ export const sampleNewsItems: NewsItem[] = [
     date: '2024-09-18',
     tags: ['party', 'community', 'video'],
     duration: '4:12',
-    coverImage: '/assets/bts/aftermovie.JPG',
+    coverImage: '/assets/bts/aftermovie.jpg',
     featured: true,
   },
   {

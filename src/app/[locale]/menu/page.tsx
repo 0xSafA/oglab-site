@@ -12,7 +12,6 @@ import BreathingController from '@/components/BreathingController';
 import PotController from '@/components/PotController';
 import PotManager from '@/components/PotManager';
 import OGLabAgent from '@/components/OGLabAgent';
-import DesktopOnlyAgent from '@/components/DesktopOnlyAgent';
 
 
 // Type colors mapping
@@ -140,9 +139,9 @@ export default async function MenuPage() {
                 <CategoryBlock key={category} name={category} rows={grouped[category] ?? []} primaryColor={primaryColor} tierLabels={tierLabels} itemTextColor={itemTextColor} categoryTextColor={categoryTextColor} cardBgColor={cardBgColor} typeColors={colors} featureColor={featureColor} />
               ))}
               
-              {/* AI Agent - только для десктопов (не TV, не мобильные) */}
+              {/* AI Agent - для всех больших экранов (десктопы, планшеты, TV) */}
               <div className="hidden lg:block">
-                <DesktopOnlyAgent />
+                <OGLabAgent compact />
               </div>
             </div>
 
