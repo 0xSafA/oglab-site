@@ -73,6 +73,37 @@ export function formatProductForContext(item: MenuRow): string {
 }
 
 /**
+ * Форматирует ценовые уровни товара (компактно)
+ */
+function formatPriceTiers(item: MenuRow): string {
+  const tiers: string[] = [];
+  const fmt = (n: number | null | undefined) =>
+    typeof n === 'number' && !isNaN(n) ? `${n.toLocaleString('en-US')}฿` : '';
+
+  // Для pre-rolls показываем за штуку
+  if (item.Price_1pc) {
+    const p = fmt(item.Price_1pc);
+    if (p) tiers.push(`1pc ${p}`);
+  }
+
+  // Базовые ценовые уровни
+  if (item.Price_1g) {
+    const p = fmt(item.Price_1g);
+    if (p) tiers.push(`1G ${p}`);
+  }
+  if (item.Price_5g) {
+    const p = fmt(item.Price_5g);
+    if (p) tiers.push(`5G+ ${p}`);
+  }
+  if (item.Price_20g) {
+    const p = fmt(item.Price_20g);
+    if (p) tiers.push(`20G+ ${p}`);
+  }
+
+  return tiers.join('; ');
+}
+
+/**
  * Строит полный контекст меню для промпта (ОПТИМИЗИРОВАНО)
  * Теперь возвращает только цветы по умолчанию, концентраты добавляются при необходимости
  */
@@ -92,35 +123,55 @@ export function buildMenuContext(menuItems: MenuRow[], includeConcentrates: bool
     categories.get(category)!.push(item);
   });
 
-  // Форматируем для промпта (компактно)
-  const lines: string[] = ['CURRENT STOCK:', ''];
-  
-  // Сначала показываем траву (основной продукт)
-  const flowerCategories = ['INDICA', 'SATIVA', 'HYBRID', 'HYBRIDE', 'CBD/CBG FLOWERS'];
-  flowerCategories.forEach(catName => {
+  // Форматируем для промпта (компактно) с ценами
+  const lines: string[] = ['CURRENT STOCK (with price tiers):', ''];
+
+  const concentrateCategories = ['FRESH FROZEN HASH', 'LIVE HASH ROSIN', 'DRY SIFT HASH', 'ICE BUBBLE HASH'];
+  const excludeWhenNoConcentrates = new Set<string>([...concentrateCategories, 'PRE ROLLS']);
+
+  // Предпочтительный порядок категорий для цветов
+  const preferredOrder = ['TOP SHELF', 'MID SHELF', 'PREMIUM', 'SMALLS', 'CBG', 'CBD/CBG FLOWERS'];
+  const allCategoryNames = Array.from(categories.keys());
+
+  const orderedCategoryNames = [
+    ...preferredOrder.filter((n) => categories.has(n)),
+    ...allCategoryNames.filter((n) => !preferredOrder.includes(n)),
+  ].filter((name) => includeConcentrates || !excludeWhenNoConcentrates.has(name));
+
+  orderedCategoryNames.forEach((catName) => {
     const items = categories.get(catName);
     if (items && items.length > 0) {
       lines.push(`${catName}:`);
-      items.forEach(item => {
+      items.forEach((item) => {
+        const prices = formatPriceTiers(item);
         lines.push(`  • ${formatProductForContext(item)}`);
+        if (prices) {
+          lines.push(`    - Prices: ${prices}`);
+        }
       });
+      lines.push('');
     }
   });
-  
-  // Концентраты добавляем только если запрошены
+
+  // Концентраты (если нужны) — в конце
   if (includeConcentrates) {
-    lines.push('');
-    lines.push('CONCENTRATES (suggest ONLY if asked):');
-    const concentrateCategories = ['FRESH FROZEN HASH', 'LIVE HASH ROSIN', 'DRY SIFT HASH', 'ICE BUBBLE HASH'];
-    concentrateCategories.forEach(catName => {
-      const items = categories.get(catName);
-      if (items && items.length > 0) {
-        lines.push(`${catName}:`);
-        items.forEach(item => {
-          lines.push(`  • ${formatProductForContext(item)}`);
-        });
-      }
-    });
+    const concToShow = concentrateCategories.filter((n) => categories.has(n));
+    if (concToShow.length > 0) {
+      lines.push('CONCENTRATES:');
+      concToShow.forEach((catName) => {
+        const items = categories.get(catName);
+        if (items && items.length > 0) {
+          lines.push(`${catName}:`);
+          items.forEach((item) => {
+            const prices = formatPriceTiers(item);
+            lines.push(`  • ${formatProductForContext(item)}`);
+            if (prices) {
+              lines.push(`    - Prices: ${prices}`);
+            }
+          });
+        }
+      });
+    }
   }
 
   return lines.join('\n');
@@ -166,7 +217,9 @@ export function buildSystemPrompt(params: {
 
 💬 ORDER CONFIRMATION:
 - ONLY when all 5 data points collected
-- CALCULATE total: check stock price (Price_1g for <5g, Price_5g for 5-20g, Price_20g for 20g+)
+- PRICING: You DO have access to current prices in the stock context. NEVER say you don't have prices.
+- CALCULATE total using price tiers: flower → Price_5g for 5–19g, Price_20g for 20g+; concentrates → Price_1g or Price_5g
+- Show calculation explicitly, e.g. "20g × 79฿ = 1,580฿"
 - Say: "Perfect! Order details: [list all + total]. Correct? If yes, FORWARDING to team"
 - After confirmation: "Forwarded! They'll WhatsApp you within an hour"
 
@@ -224,6 +277,7 @@ NEVER say: "pass this yourself", "contact directly". YOU handle everything.
 - Use FULL names from inventory
 - Explain effects FACTUALLY: THC/CBD%, type, body/mind impact
 - NO poetry/metaphors/long descriptions - FACTS only
+- Prices in the STOCK section are authoritative. Never claim lack of access to prices.
 - Consider tolerance/experience
 - Can discuss anything (philosophy, music, travel) but BRIEFLY
 - NO emojis in responses
@@ -399,7 +453,8 @@ export interface OrderTotal {
 export function calculateOrderTotal(
   productName: string,
   quantity: number,
-  menuItems: MenuRow[]
+  menuItems: MenuRow[],
+  language: 'ru' | 'en' | 'th' | 'fr' | 'de' | 'he' | 'it' = 'en'
 ): OrderTotal | null {
   const product = menuItems.find(item => item.Name === productName);
   
@@ -437,15 +492,47 @@ export function calculateOrderTotal(
   }
   
   const totalAmount = pricePerUnit * quantity;
-  const formattedPrice = pricePerUnit.toLocaleString('en-US');
-  const formattedTotal = totalAmount.toLocaleString('en-US');
+  const formattedPrice = formatNumberByLanguage(pricePerUnit, language);
+  const formattedTotal = formatNumberByLanguage(totalAmount, language);
+  const unit = language === 'ru' ? 'г' : 'g';
   
   return {
     amount: totalAmount,
     currency: '฿',
     pricePerUnit,
-    breakdown: `${quantity}г × ${formattedPrice}฿ = ${formattedTotal}฿`,
+    breakdown: `${quantity}${unit} × ${formattedPrice}฿ = ${formattedTotal}฿`,
   };
+}
+
+/**
+ * Возвращает locale для Intl.NumberFormat по коду языка диалога
+ */
+function getLocaleForLanguage(language: 'ru' | 'en' | 'th' | 'fr' | 'de' | 'he' | 'it'): string {
+  switch (language) {
+    case 'ru':
+      return 'ru-RU';
+    case 'th':
+      return 'th-TH';
+    case 'fr':
+      return 'fr-FR';
+    case 'de':
+      return 'de-DE';
+    case 'he':
+      return 'he-IL';
+    case 'it':
+      return 'it-IT';
+    case 'en':
+    default:
+      return 'en-US';
+  }
+}
+
+/**
+ * Форматирует число согласно языку диалога
+ */
+function formatNumberByLanguage(value: number, language: 'ru' | 'en' | 'th' | 'fr' | 'de' | 'he' | 'it'): string {
+  const locale = getLocaleForLanguage(language);
+  return new Intl.NumberFormat(locale, { maximumFractionDigits: 0 }).format(value);
 }
 
 export function extractOrderInfo(

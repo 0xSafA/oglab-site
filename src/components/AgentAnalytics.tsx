@@ -80,19 +80,24 @@ export default async function AgentAnalytics() {
           🏆 Top Products (7 days)
         </h2>
         <div className="space-y-3">
-          {data.topProducts?.slice(0, 5).map((product: Record<string, unknown>, index: number) => (
+          {data.topProducts?.slice(0, 5).map((product: {
+            product_name: string;
+            order_count: number;
+            total_quantity: number;
+            total_revenue: number;
+          }, index: number) => (
             <div key={index} className="flex items-center justify-between py-2 border-b border-gray-100 last:border-0">
               <div className="flex items-center gap-3">
                 <span className="text-lg font-bold text-gray-400">#{index + 1}</span>
                 <div>
-                  <p className="font-medium text-gray-900">{product.product_name}</p>
+                  <p className="font-medium text-gray-900">{String(product.product_name)}</p>
                   <p className="text-sm text-gray-500">
-                    {product.order_count} orders · {product.total_quantity}g
+                    {Number(product.order_count)} orders · {Number(product.total_quantity)}g
                   </p>
                 </div>
               </div>
               <span className="font-semibold text-[#536C4A]">
-                ฿{product.total_revenue}
+                ฿{Number(product.total_revenue)}
               </span>
             </div>
           ))}

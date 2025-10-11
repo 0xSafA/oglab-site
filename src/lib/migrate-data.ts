@@ -1,6 +1,20 @@
 import { createServiceRoleClient } from './supabase-client'
 import { fetchMenuWithOptions } from './google'
-import type { MenuItem } from './supabase-client'
+type MenuItem = {
+  id: string
+  category: string
+  name: string
+  type: string | null
+  thc: number | null
+  cbg: number | null
+  price_1pc: number | null
+  price_1g: number | null
+  price_5g: number | null
+  price_20g: number | null
+  our: boolean | null
+  created_at?: string | null
+  updated_at?: string | null
+}
 
 /**
  * Migrates data from Google Sheets to Supabase
@@ -53,6 +67,9 @@ export async function migrateFromGoogleSheets() {
     }
     
     // Update menu layout
+    // Ensure we have a layout row id (create if missing)
+    const existingLayout = await supabase.from('menu_layout').select('id').single();
+    const layoutId = existingLayout.data?.id || '00000000-0000-0000-0000-000000000000';
     const { error: layoutError } = await supabase
       .from('menu_layout')
       .update({
@@ -60,7 +77,7 @@ export async function migrateFromGoogleSheets() {
         column2: layout.column2,
         column3: layout.column3,
       })
-      .eq('id', (await supabase.from('menu_layout').select('id').single()).data?.id)
+      .eq('id', String(layoutId))
     
     if (layoutError) {
       console.error('Error updating menu layout:', layoutError)

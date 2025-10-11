@@ -84,6 +84,7 @@
 |----------|-----------|
 | [Operations Runbook](./OPERATIONS_RUNBOOK.md) | Чеклисты инцидентов, команды кэша, SLO, откаты. |
 | [Security & RLS](./SECURITY_RLS.md) | Роли, RLS-политики на уровне концепции, матрица env, PII. |
+| [Agent Spec](./agent-spec.md) | Архитектура агента, промпты, intent, ссылки на код. |
 
 ---
 

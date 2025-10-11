@@ -2,6 +2,8 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { createClientComponentClient } from '@/lib/supabase-client'
+import type { Database } from '@/lib/supabase-client'
+import type { SupabaseClient } from '@supabase/supabase-js'
 // Local type for menu_items rows
 interface MenuItem {
   id: string
@@ -59,7 +61,7 @@ export default function MenuAdminPage() {
   const [column3, setColumn3] = useState<string[]>([])
   const [hiddenCats, setHiddenCats] = useState<string[]>([])
 
-  const supabase = createClientComponentClient()
+  const supabase = createClientComponentClient() as unknown as SupabaseClient<Database>
 
   // Load menu items
   const loadMenuItems = useCallback(async () => {
@@ -83,19 +85,20 @@ export default function MenuAdminPage() {
   const loadThemeLabels = useCallback(async () => {
     try {
       const { data, error } = await supabase
-        .from('theme')
-        .select('*')
+        .from('dynamic_settings')
+        .select('tier0_label,tier1_label,tier2_label,tier3_label')
         .order('updated_at', { ascending: false })
         .limit(1)
-        .single()
+        .maybeSingle()
 
-      if (error && error.code !== 'PGRST116') throw error
+      if (error) throw error
       if (data) {
+        const row = data as { tier0_label?: string; tier1_label?: string; tier2_label?: string; tier3_label?: string }
         setTierLabels({
-          tier0: data.tier0_label || '1PC',
-          tier1: data.tier1_label || '1G',
-          tier2: data.tier2_label || '5G+',
-          tier3: data.tier3_label || '20G+',
+          tier0: row.tier0_label || '1PC',
+          tier1: row.tier1_label || '1G',
+          tier2: row.tier2_label || '5G+',
+          tier3: row.tier3_label || '20G+',
         })
       }
     } catch {
@@ -117,15 +120,16 @@ export default function MenuAdminPage() {
       const uniqueCats = [...new Set(items.map(i => i.category))]
 
       if (data) {
-        setLayoutId((data as { id?: string }).id || null)
+        const layoutRow = data as { id?: string; column1?: string[]; column2?: string[]; column3?: string[]; hidden?: string[] }
+        setLayoutId(layoutRow.id || null)
         // Use layout, but ensure only categories that exist in items unless user added custom
-        setColumn1((data.column1 || []).filter(Boolean))
-        setColumn2((data.column2 || []).filter(Boolean))
-        setColumn3((data.column3 || []).filter(Boolean))
-        setHiddenCats((data.hidden || []).filter(Boolean))
+        setColumn1((layoutRow.column1 || []).filter(Boolean))
+        setColumn2((layoutRow.column2 || []).filter(Boolean))
+        setColumn3((layoutRow.column3 || []).filter(Boolean))
+        setHiddenCats((layoutRow.hidden || []).filter(Boolean))
 
         // Append any missing categories into column1 by default (not hidden)
-        const inLayout = new Set<string>([...data.column1, ...data.column2, ...data.column3, ...(data.hidden || [])])
+        const inLayout = new Set<string>([...(layoutRow.column1 || []), ...(layoutRow.column2 || []), ...(layoutRow.column3 || []), ...(layoutRow.hidden || [])])
         const missing = uniqueCats.filter(c => !inLayout.has(c))
         if (missing.length) setColumn1(prev => [...prev, ...missing])
       } else {
@@ -195,7 +199,7 @@ export default function MenuAdminPage() {
       setSaving(true)
       const { error } = await supabase
         .from('menu_items')
-        .update({
+        .update<import('@/lib/supabase-client').Database['public']['Tables']['menu_items']['Update']>({
           category: item.category,
           name: item.name,
           type: item.type,
@@ -271,7 +275,7 @@ export default function MenuAdminPage() {
       setSaving(true)
       const { data, error } = await supabase
         .from('menu_items')
-        .insert({
+        .insert<import('@/lib/supabase-client').Database['public']['Tables']['menu_items']['Insert']>({
           category: categoryFilter || '',
           name: '',
           type: 'hybrid',

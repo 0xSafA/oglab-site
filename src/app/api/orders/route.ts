@@ -24,10 +24,12 @@ export async function GET(request: NextRequest) {
     
     // Get single order by ID
     if (orderId) {
-      const { data, error } = await supabase
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const sb = supabase as unknown as import('@supabase/supabase-js').SupabaseClient<any>;
+      const { data, error } = await sb
         .from('orders')
         .select('*')
-        .eq('id', orderId)
+        .eq('id', orderId as string)
         .single();
       
       if (error) {
@@ -40,10 +42,12 @@ export async function GET(request: NextRequest) {
     
     // Get single order by number
     if (orderNumber) {
-      const { data, error } = await supabase
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const sb = supabase as unknown as import('@supabase/supabase-js').SupabaseClient<any>;
+      const { data, error } = await sb
         .from('orders')
         .select('*')
-        .eq('order_number', orderNumber)
+        .eq('order_number', orderNumber as string)
         .single();
       
       if (error) {
@@ -56,10 +60,12 @@ export async function GET(request: NextRequest) {
     
     // Get all orders for a user
     if (userProfileId) {
-      const { data, error } = await supabase
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const sb = supabase as unknown as import('@supabase/supabase-js').SupabaseClient<any>;
+      const { data, error } = await sb
         .from('orders')
         .select('*')
-        .eq('user_profile_id', userProfileId)
+        .eq('user_profile_id', userProfileId as string)
         .order('created_at', { ascending: false });
       
       if (error) {
@@ -179,8 +185,11 @@ export async function PATCH(request: NextRequest) {
     }
     
     // Update status history
+    const prevHistory = (
+      currentOrder as { status_history?: Array<Record<string, unknown>> } | null
+    )?.status_history || []
     const statusHistory = [
-      ...(currentOrder.status_history || []),
+      ...prevHistory,
       {
         status,
         timestamp: new Date().toISOString(),
@@ -188,7 +197,7 @@ export async function PATCH(request: NextRequest) {
       },
     ];
     
-    const updates: Record<string, unknown> = {
+    const updates: import('@/lib/supabase-client').Database['public']['Tables']['orders']['Update'] = {
       status,
       status_history: statusHistory,
     };
@@ -203,10 +212,13 @@ export async function PATCH(request: NextRequest) {
       updates.cancelled_at = new Date().toISOString();
     }
     
-    const { data, error } = await supabase
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const sb2 = supabase as unknown as import('@supabase/supabase-js').SupabaseClient<any>;
+    const { data, error } = await sb2
       .from('orders')
-      .update(updates)
-      .eq('id', orderId)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      .update(updates as any)
+      .eq('id', orderId as string)
       .select()
       .single();
     

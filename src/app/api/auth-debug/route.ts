@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createServiceRoleClient } from '@/lib/supabase-client'
+import type { SupabaseClient } from '@supabase/supabase-js'
+import type { Database } from '@/lib/supabase-client'
 
 // Debug endpoint for auth issues - development only
 export async function GET() {
@@ -8,7 +10,7 @@ export async function GET() {
   }
 
   try {
-    const supabase = createServiceRoleClient()
+    const supabase = createServiceRoleClient() as unknown as SupabaseClient<Database, 'public'>
     
     // Check if admin user exists
     const { data: users, error: usersError } = await supabase.auth.admin.listUsers()
@@ -89,9 +91,9 @@ export async function POST(request: NextRequest) {
       role: 'admin'
     } as unknown as import('@/lib/supabase-client').Database['public']['Tables']['profiles']['Insert']
 
-    const { data: profile, error: profileError } = await supabase
+    const { data: profile, error: profileError } = await (supabase as unknown as SupabaseClient<Database>)
       .from('profiles')
-      .insert([payload])
+      .insert([payload] as Database['public']['Tables']['profiles']['Insert'][])
       .select()
       .single()
 

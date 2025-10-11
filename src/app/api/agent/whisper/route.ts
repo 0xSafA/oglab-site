@@ -20,7 +20,7 @@ export async function POST(request: NextRequest) {
     // Получаем FormData с аудиофайлом
     const formData = await request.formData();
     const audioFile = formData.get('audio') as File;
-    const language = (formData.get('language') as string) || 'en';
+    const language = (formData.get('language') as string) || '';
 
     if (!audioFile) {
       return Response.json(
@@ -48,19 +48,23 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    console.log(`🎤 Transcribing: ${audioFile.name}, ${(audioFile.size / 1024).toFixed(2)} KB, lang: ${language}`);
+    console.log(`🎤 Transcribing: ${audioFile.name}, ${(audioFile.size / 1024).toFixed(2)} KB, ` +
+      `mime=${audioFile.type || 'unknown'}, langHint=${language || 'auto'}`);
 
     // Вызываем Whisper API
+    // Allow Whisper to auto-detect language by omitting the language hint if not explicitly set
     const transcription = await openai.audio.transcriptions.create({
       file: audioFile,
       model: 'whisper-1',
-      language, // Язык пользователя для точности
+      // language: language || undefined, // omit to auto-detect
+      translate: false, // do not force translation to English
       response_format: 'verbose_json',
     });
 
     const duration = Date.now() - startTime;
 
-    console.log(`✅ Transcribed in ${duration}ms:`, transcription.text.substring(0, 100));
+    console.log(`✅ Transcribed in ${duration}ms: langDetected=${transcription.language || 'unknown'} -> ` +
+      `${transcription.text.substring(0, 100)}`);
 
     // Возвращаем результат
     const response: TranscriptionResponse = {

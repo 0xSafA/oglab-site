@@ -49,15 +49,7 @@ export interface ContactInfo {
 /**
  * Generate unique order number
  */
-function generateOrderNumber(): string {
-  const date = new Date();
-  const year = date.getFullYear().toString().slice(-2);
-  const month = (date.getMonth() + 1).toString().padStart(2, '0');
-  const day = date.getDate().toString().padStart(2, '0');
-  const random = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
-  
-  return `OG${year}${month}${day}-${random}`;
-}
+// order_number is generated in the database
 
 /**
  * Create new order
@@ -89,34 +81,29 @@ export async function createOrder(params: {
   const subtotal = items.reduce((sum, item) => sum + item.total_price, 0);
   const total = subtotal + deliveryFee - discount;
   
-  const orderNumber = generateOrderNumber();
-  
+  const insertPayload: import('./supabase-client').Database['public']['Tables']['orders']['Insert'] = {
+    user_profile_id: userProfileId,
+    conversation_id: conversationId || null,
+    status: 'pending',
+    status_history: [{ status: 'pending', timestamp: new Date().toISOString(), note: 'Order created' }],
+    items: items as unknown as Array<Record<string, unknown>>, // shape validated at boundary
+    subtotal,
+    delivery_fee: deliveryFee,
+    discount,
+    total_amount: total,
+    currency: '฿',
+    contact_info: contactInfo as unknown as Record<string, unknown>,
+    delivery_address: deliveryAddress,
+    delivery_notes: deliveryNotes || null,
+    payment_method: paymentMethod,
+    payment_status: 'pending',
+    order_source: 'web',
+    metadata: {},
+  };
+
   const { data, error } = await supabaseBrowser
     .from('orders')
-    .insert({
-      order_number: orderNumber,
-      user_profile_id: userProfileId,
-      conversation_id: conversationId || null,
-      status: 'pending',
-      status_history: [{
-        status: 'pending',
-        timestamp: new Date().toISOString(),
-        note: 'Order created',
-      }],
-      items,
-      subtotal,
-      delivery_fee: deliveryFee,
-      discount,
-      total_amount: total,
-      currency: '฿',
-      contact_info: contactInfo,
-      delivery_address: deliveryAddress,
-      delivery_notes: deliveryNotes || null,
-      payment_method: paymentMethod,
-      payment_status: 'pending',
-      order_source: 'web',
-      metadata: {},
-    })
+    .insert(insertPayload)
     .select()
     .single();
   
@@ -451,34 +438,31 @@ export async function createOrderServer(params: {
   
   const subtotal = items.reduce((sum, item) => sum + item.total_price, 0);
   const total = subtotal + deliveryFee - discount;
-  const orderNumber = generateOrderNumber();
+  // Note: order_number is generated in DB
   
+  const serverInsertPayload: import('./supabase-client').Database['public']['Tables']['orders']['Insert'] = {
+    user_profile_id: userProfileId,
+    conversation_id: conversationId || null,
+    status: 'pending',
+    status_history: [{ status: 'pending', timestamp: new Date().toISOString(), note: 'Order created' }],
+    items: items as unknown as Array<Record<string, unknown>>, // shape validated upstream
+    subtotal,
+    delivery_fee: deliveryFee,
+    discount,
+    total_amount: total,
+    currency: '฿',
+    contact_info: contactInfo as unknown as Record<string, unknown>,
+    delivery_address: deliveryAddress,
+    delivery_notes: deliveryNotes || null,
+    payment_method: paymentMethod,
+    payment_status: 'pending',
+    order_source: orderSource,
+    metadata: {},
+  };
+
   const { data, error } = await supabase
     .from('orders')
-    .insert({
-      order_number: orderNumber,
-      user_profile_id: userProfileId,
-      conversation_id: conversationId || null,
-      status: 'pending',
-      status_history: [{
-        status: 'pending',
-        timestamp: new Date().toISOString(),
-        note: 'Order created',
-      }],
-      items,
-      subtotal,
-      delivery_fee: deliveryFee,
-      discount,
-      total_amount: total,
-      currency: '฿',
-      contact_info: contactInfo,
-      delivery_address: deliveryAddress,
-      delivery_notes: deliveryNotes || null,
-      payment_method: paymentMethod,
-      payment_status: 'pending',
-      order_source: orderSource,
-      metadata: {},
-    })
+    .insert(serverInsertPayload)
     .select()
     .single();
   

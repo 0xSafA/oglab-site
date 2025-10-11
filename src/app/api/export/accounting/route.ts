@@ -30,21 +30,20 @@ export async function GET(request: NextRequest) {
       );
     }
     
-    const supabase = getSupabaseServer();
     let data: Record<string, unknown>;
     
     switch (type) {
       case 'orders':
-        data = await exportOrders(supabase, startDate, endDate);
+        data = await exportOrders(startDate, endDate);
         break;
       case 'revenue':
-        data = await exportRevenue(supabase, startDate, endDate);
+        data = await exportRevenue(startDate, endDate);
         break;
       case 'expenses':
-        data = await exportExpenses(supabase, startDate, endDate);
+        data = await exportExpenses(startDate, endDate);
         break;
       case 'inventory':
-        data = await exportInventory(supabase);
+        data = await exportInventory();
         break;
       default:
         return Response.json(
@@ -92,7 +91,8 @@ export async function GET(request: NextRequest) {
 /**
  * Export orders
  */
-async function exportOrders(supabase: ReturnType<typeof getSupabaseServer>, startDate: string, endDate: string) {
+async function exportOrders(startDate: string, endDate: string) {
+  const supabase = getSupabaseServer();
   const { data: orders } = await supabase
     .from('orders')
     .select('*')
@@ -105,18 +105,33 @@ async function exportOrders(supabase: ReturnType<typeof getSupabaseServer>, star
     period: { start: startDate, end: endDate },
     type: 'orders',
     count: orders?.length || 0,
-    data: orders?.map((order: Record<string, unknown>) => ({
+    data: (orders as Array<{
+      id: string;
+      order_number: string;
+      created_at: string;
+      contact_info: { name?: string; phone?: string } | null;
+      status: string;
+      items: unknown;
+      subtotal: number;
+      delivery_fee: number;
+      discount: number;
+      total_amount: number;
+      currency: string;
+      payment_method: string;
+      payment_status: string;
+      delivery_address: string | null;
+    }> | null)?.map((order) => ({
       order_id: order.id,
       order_number: order.order_number,
       date: order.created_at,
-      customer_name: order.contact_info.name,
-      customer_phone: order.contact_info.phone,
+      customer_name: order.contact_info?.name || '',
+      customer_phone: order.contact_info?.phone || '',
       status: order.status,
       items: order.items,
-      subtotal: parseFloat(order.subtotal),
-      delivery_fee: parseFloat(order.delivery_fee),
-      discount: parseFloat(order.discount),
-      total_amount: parseFloat(order.total_amount),
+      subtotal: Number(order.subtotal),
+      delivery_fee: Number(order.delivery_fee),
+      discount: Number(order.discount),
+      total_amount: Number(order.total_amount),
       currency: order.currency,
       payment_method: order.payment_method,
       payment_status: order.payment_status,
@@ -128,36 +143,37 @@ async function exportOrders(supabase: ReturnType<typeof getSupabaseServer>, star
 /**
  * Export revenue summary
  */
-async function exportRevenue(supabase: ReturnType<typeof getSupabaseServer>, startDate: string, endDate: string) {
+async function exportRevenue(startDate: string, endDate: string) {
+  const supabase = getSupabaseServer();
   const { data: orders } = await supabase
     .from('orders')
     .select('created_at, total_amount, status, payment_method')
     .gte('created_at', startDate)
     .lte('created_at', endDate)
-    .in('status', ['completed', 'delivering'])
+    .or('status.eq.completed,status.eq.delivering')
     .order('created_at', { ascending: true });
   
-  const totalRevenue = orders?.reduce((sum: number, order: Record<string, unknown>) => 
-    sum + parseFloat(String(order.total_amount)), 0) || 0;
+  const totalRevenue = orders?.reduce((sum, order) => 
+    sum + Number((order as { total_amount: number }).total_amount), 0) || 0;
   
   // Group by day
-  const revenueByDay = orders?.reduce((acc: Record<string, { date: string; revenue: number; orders: number }>, order: Record<string, unknown>) => {
-    const date = String(order.created_at).split('T')[0];
+  const revenueByDay = orders?.reduce((acc: Record<string, { date: string; revenue: number; orders: number }>, order) => {
+    const date = String((order as { created_at: string }).created_at).split('T')[0];
     if (!acc[date]) {
       acc[date] = { date, revenue: 0, orders: 0 };
     }
-    acc[date].revenue += parseFloat(String(order.total_amount));
+    acc[date].revenue += Number((order as { total_amount: number }).total_amount);
     acc[date].orders += 1;
     return acc;
   }, {});
   
   // Group by payment method
-  const revenueByPayment = orders?.reduce((acc: Record<string, { method: string; revenue: number; orders: number }>, order: Record<string, unknown>) => {
-    const method = String(order.payment_method);
+  const revenueByPayment = orders?.reduce((acc: Record<string, { method: string; revenue: number; orders: number }>, order) => {
+    const method = String((order as { payment_method: string }).payment_method);
     if (!acc[method]) {
       acc[method] = { method, revenue: 0, orders: 0 };
     }
-    acc[method].revenue += parseFloat(String(order.total_amount));
+    acc[method].revenue += Number((order as { total_amount: number }).total_amount);
     acc[method].orders += 1;
     return acc;
   }, {});
@@ -179,7 +195,8 @@ async function exportRevenue(supabase: ReturnType<typeof getSupabaseServer>, sta
 /**
  * Export expenses (placeholder)
  */
-async function exportExpenses(supabase: ReturnType<typeof getSupabaseServer>, startDate: string, endDate: string) {
+async function exportExpenses(startDate: string, endDate: string) {
+  const supabase = getSupabaseServer();
   // TODO: Implement expenses tracking
   // For now, return delivery costs as expenses
   
@@ -190,8 +207,8 @@ async function exportExpenses(supabase: ReturnType<typeof getSupabaseServer>, st
     .lte('created_at', endDate)
     .order('created_at', { ascending: true });
   
-  const totalExpenses = orders?.reduce((sum: number, order: Record<string, unknown>) => 
-    sum + parseFloat(String(order.delivery_fee || 0)) + parseFloat(String(order.discount || 0)), 0) || 0;
+  const totalExpenses = orders?.reduce((sum, order) => 
+    sum + Number((order as { delivery_fee?: number | null }).delivery_fee || 0) + Number((order as { discount?: number | null }).discount || 0), 0) || 0;
   
   return {
     export_date: new Date().toISOString(),
@@ -199,8 +216,8 @@ async function exportExpenses(supabase: ReturnType<typeof getSupabaseServer>, st
     type: 'expenses',
     summary: {
       total_expenses: totalExpenses,
-      delivery_costs: orders?.reduce((sum: number, o: Record<string, unknown>) => sum + parseFloat(String(o.delivery_fee || 0)), 0) || 0,
-      discounts_given: orders?.reduce((sum: number, o: Record<string, unknown>) => sum + parseFloat(String(o.discount || 0)), 0) || 0,
+      delivery_costs: orders?.reduce((sum, o) => sum + Number((o as { delivery_fee?: number | null }).delivery_fee || 0), 0) || 0,
+      discounts_given: orders?.reduce((sum, o) => sum + Number((o as { discount?: number | null }).discount || 0), 0) || 0,
     },
     note: 'Expenses tracking will be enhanced in future updates',
   };
@@ -209,7 +226,8 @@ async function exportExpenses(supabase: ReturnType<typeof getSupabaseServer>, st
 /**
  * Export inventory (from menu items)
  */
-async function exportInventory(supabase: ReturnType<typeof getSupabaseServer>) {
+async function exportInventory() {
+  const supabase = getSupabaseServer();
   const { data: menuItems } = await supabase
     .from('menu_items')
     .select('*')
@@ -219,26 +237,44 @@ async function exportInventory(supabase: ReturnType<typeof getSupabaseServer>) {
     export_date: new Date().toISOString(),
     type: 'inventory',
     count: menuItems?.length || 0,
-    data: menuItems?.map((item: Record<string, unknown>) => ({
-      id: item.id,
-      name: item.Name,
-      category: item.Category,
-      type: item.Type,
-      thc: item.THC,
-      cbg: item.CBG,
-      price_1g: item.Price_1g,
-      price_5g: item.Price_5g,
-      price_20g: item.Price_20g,
-      our_production: item.Our,
-      in_stock: true, // TODO: Implement actual stock tracking
-    })) || [],
+    data:
+      (menuItems as unknown as Array<{
+        id: string;
+        Name?: string;
+        Category?: string;
+        Type?: string;
+        THC?: number;
+        CBG?: number;
+        Price_1g?: number;
+        Price_5g?: number;
+        Price_20g?: number;
+        Our?: boolean;
+      }> | null)?.map((item) => ({
+        id: item.id,
+        name: item.Name,
+        category: item.Category,
+        type: item.Type,
+        thc: item.THC,
+        cbg: item.CBG,
+        price_1g: item.Price_1g,
+        price_5g: item.Price_5g,
+        price_20g: item.Price_20g,
+        our_production: item.Our,
+        in_stock: true, // TODO: Implement actual stock tracking
+      })) || [],
   };
 }
 
 /**
  * Convert data to CSV
  */
-function convertToCSV(data: Record<string, unknown>): string {
+function convertToCSV(data: {
+  export_date?: string;
+  period?: { start: string; end: string };
+  type?: string;
+  summary?: Record<string, unknown>;
+  data?: Array<Record<string, unknown>>;
+}): string {
   if (!data.data || !Array.isArray(data.data) || data.data.length === 0) {
     return 'No data available';
   }
@@ -266,7 +302,13 @@ function convertToCSV(data: Record<string, unknown>): string {
 /**
  * Convert data to XML
  */
-function convertToXML(data: Record<string, unknown>, type: string): string {
+function convertToXML(data: {
+  export_date?: string;
+  period?: { start: string; end: string };
+  type?: string;
+  summary?: Record<string, unknown>;
+  data?: Array<Record<string, unknown>>;
+}, type: string): string {
   let xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
   xml += `<export type="${type}" date="${data.export_date}">\n`;
   

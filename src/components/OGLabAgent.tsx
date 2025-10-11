@@ -68,6 +68,7 @@ export default function OGLabAgent({ compact = false }: OGLabAgentProps) {
   const agentContainerRef = useRef<HTMLElement | null>(null)
   // Ref для скролла к последнему сообщению
   const lastMessageRef = useRef<HTMLDivElement | null>(null)
+  const streamingContainerRef = useRef<HTMLDivElement | null>(null)
 
   // Инициализация при монтировании
   useEffect(() => {
@@ -200,18 +201,28 @@ export default function OGLabAgent({ compact = false }: OGLabAgentProps) {
 
   // Автоматический скролл с минимальными прыжками
   useEffect(() => {
-    if (showHistory && !isInitialLoad && lastMessageRef.current && currentConversation?.messages.length) {
-      const lastMessage = currentConversation.messages[currentConversation.messages.length - 1];
-      
-      if (lastMessage.role === 'user') {
-        // Своё сообщение → 'nearest' = минимальный скролл (только если не видно)
-        lastMessageRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
-      } else {
-        // Ответ агента → скролл к началу (чтобы видеть начало ответа)
-        lastMessageRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
-      }
+    if (!showHistory || isInitialLoad) return
+    if (!currentConversation?.messages.length) return
+
+    const lastMessage = currentConversation.messages[currentConversation.messages.length - 1]
+
+    if (lastMessage.role === 'user') {
+      // Своё сообщение → минимальный скролл, чтобы поле ввода не прыгало
+      lastMessageRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+    } else {
+      // Ответ агента (не стриминг) → скролл к началу, чтобы видеть начало ответа
+      lastMessageRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
     }
   }, [currentConversation?.messages.length, isInitialLoad, showHistory, currentConversation?.messages])
+
+  // Автопрокрутка в процессе стриминга: держим видимой верхнюю часть нового сообщения
+  useEffect(() => {
+    if (!isStreaming || !showHistory) return
+    if (!streamingContainerRef.current) return
+
+    // Скроллим к началу стримингового контейнера без рывков
+    streamingContainerRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }, [isStreaming, streamingReply, showHistory])
 
   // Prefetch кэша меню при первом вводе (прогрев кэша)
   const prefetchMenuCache = useCallback(async () => {
@@ -276,7 +287,7 @@ export default function OGLabAgent({ compact = false }: OGLabAgentProps) {
         const decoder = new TextDecoder()
         let fullReply = ''
         let suggestedProducts: string[] = []
-        let productCards: Array<Record<string, unknown>> = []
+        let productCards: import('@/lib/user-profile').ProductCard[] = []
         
         if (reader) {
           while (true) {
@@ -300,7 +311,19 @@ export default function OGLabAgent({ compact = false }: OGLabAgentProps) {
                 if (data.done) {
                   // Stream завершён - получаем метаданные
                   suggestedProducts = data.suggestedProducts || []
-                  productCards = data.productCards || []
+                  productCards = (data.productCards || []).map((p: Record<string, unknown>) => ({
+                    name: String(p.name || ''),
+                    category: String(p.category || ''),
+                    type: p.type ? String(p.type) : undefined,
+                    thc: p.thc ? String(p.thc) : undefined,
+                    cbg: p.cbg ? String(p.cbg) : undefined,
+                    price_1g: typeof p.price_1g === 'number' ? p.price_1g : undefined,
+                    price_5g: typeof p.price_5g === 'number' ? p.price_5g : undefined,
+                    price_20g: typeof p.price_20g === 'number' ? p.price_20g : undefined,
+                    isOur: typeof p.isOur === 'boolean' ? p.isOur : undefined,
+                    effects: p.effects ? String(p.effects) : undefined,
+                    flavors: p.flavors ? String(p.flavors) : undefined,
+                  }))
                   
                   console.log('✅ Stream completed:', data.timing)
                 }
@@ -332,8 +355,20 @@ export default function OGLabAgent({ compact = false }: OGLabAgentProps) {
         const assistantMessage = {
           role: 'assistant' as const,
           content: data.reply,
-          suggestedProducts: data.suggestedProducts || [],
-          productCards: data.productCards || [],
+          suggestedProducts: (data.suggestedProducts || []) as string[],
+          productCards: ((data.productCards || []) as Array<Record<string, unknown>>).map((p) => ({
+            name: String(p.name || ''),
+            category: String(p.category || ''),
+            type: p.type ? String(p.type) : undefined,
+            thc: p.thc ? String(p.thc) : undefined,
+            cbg: p.cbg ? String(p.cbg) : undefined,
+            price_1g: typeof p.price_1g === 'number' ? p.price_1g : undefined,
+            price_5g: typeof p.price_5g === 'number' ? p.price_5g : undefined,
+            price_20g: typeof p.price_20g === 'number' ? p.price_20g : undefined,
+            isOur: typeof p.isOur === 'boolean' ? p.isOur : undefined,
+            effects: p.effects ? String(p.effects) : undefined,
+            flavors: p.flavors ? String(p.flavors) : undefined,
+          })),
         }
         
         updatedConversation = addMessageToConversation(updatedConversation, assistantMessage)
@@ -816,7 +851,7 @@ export default function OGLabAgent({ compact = false }: OGLabAgentProps) {
           
           {/* STREAMING REPLY (показываем в реальном времени) */}
           {isStreaming && streamingReply && (
-            <div className={`rounded-2xl bg-[#F4F8F0] ring-1 ring-[#B0BF93]/50 mr-4 lg:mr-8 ${
+            <div ref={streamingContainerRef} className={`rounded-2xl bg-[#F4F8F0] ring-1 ring-[#B0BF93]/50 mr-4 lg:mr-8 ${
               compact ? 'p-2' : 'p-3 lg:p-4'
             }`}>
               <div className={`font-semibold uppercase tracking-wide text-[#536C4A] ${

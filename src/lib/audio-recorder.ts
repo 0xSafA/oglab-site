@@ -16,6 +16,7 @@ export class AudioRecorder {
   private maxDurationTimer: NodeJS.Timeout | null = null;
   private onMaxDurationReached?: () => void;
   private keepStreamAlive: boolean = true; // Сохраняем stream между записями
+  private audioContext: AudioContext | null = null;
 
   /**
    * Проверяет, поддерживает ли браузер запись аудио
@@ -176,6 +177,19 @@ export class AudioRecorder {
   }
 
   /**
+   * Конвертация Blob в WAV 16kHz mono
+   */
+  private async ensureAudioContext(): Promise<AudioContext> {
+    if (!this.audioContext) {
+      const SampleRate = 16000;
+      // Safari использует webkitAudioContext
+      const Ctx: typeof AudioContext = (window as any).AudioContext || (window as any).webkitAudioContext;
+      this.audioContext = new Ctx({ sampleRate: SampleRate });
+    }
+    return this.audioContext;
+  }
+
+  /**
    * Очищает ресурсы
    */
   private cleanup(): void {
@@ -213,6 +227,11 @@ export class AudioRecorder {
     }
     
     this.mediaRecorder = null;
+
+    if (this.audioContext) {
+      try { this.audioContext.close(); } catch {}
+      this.audioContext = null;
+    }
   }
 
   /**
@@ -225,10 +244,10 @@ export class AudioRecorder {
 
 /**
  * Отправляет аудио на сервер для транскрипции
+ * Whisper теперь авто-определяет язык, подсказка языка не отправляется.
  * @param audioBlob - аудио blob
- * @param language - язык аудио (ISO-639-1 код: ru, en, th, fr, de, he, it)
  */
-export async function transcribeAudio(audioBlob: Blob, language = 'en'): Promise<string> {
+export async function transcribeAudio(audioBlob: Blob): Promise<string> {
   // Валидация размера
   if (audioBlob.size === 0) {
     throw new Error('Запись слишком короткая. Попробуйте говорить дольше.');
@@ -243,18 +262,28 @@ export async function transcribeAudio(audioBlob: Blob, language = 'en'): Promise
     throw new Error('Запись слишком длинная (макс 25 МБ).');
   }
   
-  const formData = new FormData();
-  
-  // Определяем расширение файла на основе MIME-типа
-  const extension = audioBlob.type.includes('webm') ? 'webm' 
-    : audioBlob.type.includes('mp4') ? 'mp4'
-    : audioBlob.type.includes('ogg') ? 'ogg'
-    : 'wav';
-  
-  formData.append('audio', audioBlob, `recording.${extension}`);
-  formData.append('language', language); // Передаём язык для лучшей точности транскрипции
+  console.log(`🎤 Source audio: ${(audioBlob.size / 1024).toFixed(2)} KB, type=${audioBlob.type || 'unknown'}`);
 
-  console.log(`🎤 Sending audio for transcription: ${(audioBlob.size / 1024).toFixed(2)} KB, language: ${language}`);
+  // Преобразуем в WAV 16kHz mono для лучшей совместимости
+  let uploadBlob: Blob = audioBlob;
+  try {
+    uploadBlob = await convertToWav16kMono(audioBlob);
+    console.log(
+      `🎧 Converted to WAV16k mono: ${(uploadBlob.size / 1024).toFixed(2)} KB, type=${uploadBlob.type}`
+    );
+  } catch (e) {
+    console.warn('⚠️ WAV conversion failed, sending original blob:', e);
+  }
+
+  const formData = new FormData();
+  const extension = uploadBlob.type.includes('wav') ? 'wav'
+    : uploadBlob.type.includes('webm') ? 'webm'
+    : uploadBlob.type.includes('mp4') ? 'mp4'
+    : uploadBlob.type.includes('ogg') ? 'ogg'
+    : 'wav';
+  formData.append('audio', uploadBlob, `recording.${extension}`);
+
+  console.log(`📤 Sending audio for transcription: ${(uploadBlob.size / 1024).toFixed(2)} KB, ext=.${extension}`);
 
   const response = await fetch('/api/agent/whisper', {
     method: 'POST',
@@ -275,4 +304,93 @@ export async function transcribeAudio(audioBlob: Blob, language = 'en'): Promise
   console.log(`✅ Transcription received: "${data.text.substring(0, 50)}..."`);
   
   return data.text;
+}
+
+// -------- Helpers: WAV encoding --------
+async function convertToWav16kMono(input: Blob): Promise<Blob> {
+  // Decode using an AudioContext, resample to 16k mono, and encode WAV
+  const arrayBuffer = await input.arrayBuffer();
+  const OfflineCtx = (window as any).OfflineAudioContext || (window as any).webkitOfflineAudioContext;
+
+  // First decode at native sample rate
+  const tmpCtx = new (window as any).AudioContext();
+  const decoded = await tmpCtx.decodeAudioData(arrayBuffer.slice(0));
+  try { tmpCtx.close(); } catch {}
+
+  // Prepare resampling to 16k mono
+  const targetSampleRate = 16000;
+  const numChannels = 1;
+  const lengthSeconds = decoded.duration;
+  const frameCount = Math.ceil(lengthSeconds * targetSampleRate);
+  const offlineCtx = new OfflineCtx(targetSampleRate, frameCount, targetSampleRate);
+
+  // Downmix to mono
+  const source = offlineCtx.createBufferSource();
+  const monoBuffer = offlineCtx.createBuffer(numChannels, decoded.length, decoded.sampleRate);
+  // Mix all channels into channel 0
+  const tmp = new Float32Array(decoded.length);
+  for (let ch = 0; ch < decoded.numberOfChannels; ch++) {
+    const data = decoded.getChannelData(ch);
+    for (let i = 0; i < data.length; i++) {
+      tmp[i] += data[i] / decoded.numberOfChannels;
+    }
+  }
+  monoBuffer.copyToChannel(tmp, 0, 0);
+  source.buffer = monoBuffer;
+
+  const dest = offlineCtx.createDestination();
+  source.connect(dest);
+  source.start(0);
+  const rendered = await offlineCtx.startRendering();
+
+  // Get mono data
+  const mono = rendered.getChannelData(0);
+  const wavBuffer = encodeWav(mono, targetSampleRate);
+  return new Blob([wavBuffer], { type: 'audio/wav' });
+}
+
+function encodeWav(samples: Float32Array, sampleRate: number): ArrayBuffer {
+  const bytesPerSample = 2; // 16-bit PCM
+  const blockAlign = 1 * bytesPerSample;
+  const byteRate = sampleRate * blockAlign;
+  const dataSize = samples.length * bytesPerSample;
+  const buffer = new ArrayBuffer(44 + dataSize);
+  const view = new DataView(buffer);
+
+  // RIFF header
+  writeString(view, 0, 'RIFF');
+  view.setUint32(4, 36 + dataSize, true);
+  writeString(view, 8, 'WAVE');
+
+  // fmt chunk
+  writeString(view, 12, 'fmt ');
+  view.setUint32(16, 16, true); // PCM
+  view.setUint16(20, 1, true); // PCM format
+  view.setUint16(22, 1, true); // mono
+  view.setUint32(24, sampleRate, true);
+  view.setUint32(28, byteRate, true);
+  view.setUint16(32, blockAlign, true);
+  view.setUint16(34, 16, true); // bits per sample
+
+  // data chunk
+  writeString(view, 36, 'data');
+  view.setUint32(40, dataSize, true);
+
+  // PCM samples
+  floatTo16BitPCM(view, 44, samples);
+  return buffer;
+}
+
+function writeString(view: DataView, offset: number, str: string) {
+  for (let i = 0; i < str.length; i++) {
+    view.setUint8(offset + i, str.charCodeAt(i));
+  }
+}
+
+function floatTo16BitPCM(view: DataView, offset: number, input: Float32Array) {
+  for (let i = 0; i < input.length; i++, offset += 2) {
+    let s = Math.max(-1, Math.min(1, input[i]));
+    s = s < 0 ? s * 0x8000 : s * 0x7fff;
+    view.setInt16(offset, s, true);
+  }
 }

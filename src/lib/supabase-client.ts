@@ -37,6 +37,7 @@ export type Database = {
         };
         Insert: Omit<Database['public']['Tables']['user_profiles']['Row'], 'id' | 'created_at'>;
         Update: Partial<Database['public']['Tables']['user_profiles']['Insert']>;
+        Relationships: [];
       };
       profiles: {
         Row: {
@@ -51,6 +52,103 @@ export type Database = {
           role?: string | null;
         };
         Update: Partial<Database['public']['Tables']['profiles']['Insert']>;
+        Relationships: [];
+      };
+      // Menu items used in admin and menu pages
+      menu_items: {
+        Row: {
+          id: string;
+          category: string;
+          name: string;
+          type: string | null;
+          thc: number | null;
+          cbg: number | null;
+          price_1pc: number | null;
+          price_1g: number | null;
+          price_5g: number | null;
+          price_20g: number | null;
+          our: boolean | null;
+          created_at?: string | null;
+          updated_at?: string | null;
+        };
+        Insert: Partial<Database['public']['Tables']['menu_items']['Row']>;
+        Update: Partial<Database['public']['Tables']['menu_items']['Insert']>;
+        Relationships: [];
+      };
+      // Theme configuration for colors and logo
+      theme: {
+        Row: {
+          id: string;
+          primary_color: string;
+          secondary_color: string;
+          logo_url: string | null;
+          created_at?: string | null;
+          updated_at?: string | null;
+        };
+        Insert: Partial<Database['public']['Tables']['theme']['Row']>;
+        Update: Partial<Database['public']['Tables']['theme']['Insert']>;
+        Relationships: [];
+      };
+      // Persisted layout for menu categories
+      menu_layout: {
+        Row: {
+          id: string;
+          column1: string[];
+          column2: string[];
+          column3: string[];
+          hidden: string[] | null;
+          updated_at?: string | null;
+          created_at?: string | null;
+        };
+        Insert: Partial<Database['public']['Tables']['menu_layout']['Row']>;
+        Update: Partial<Database['public']['Tables']['menu_layout']['Insert']>;
+        Relationships: [];
+      };
+      // Centralized dynamic settings used across the app
+      dynamic_settings: {
+        Row: {
+          id: string;
+          created_at: string;
+          updated_at: string;
+          event_text: string;
+          offer_text: string;
+          offer_hide: boolean;
+          offer_enable_particles: boolean;
+          offer_enable_cosmic_glow: boolean;
+          offer_enable_floating: boolean;
+          offer_enable_pulse: boolean;
+          offer_enable_inner_light: boolean;
+          tier0_label: string;
+          tier1_label: string;
+          tier2_label: string;
+          tier3_label: string;
+          legend_hybrid: string;
+          legend_sativa: string;
+          legend_indica: string;
+          feature_label: string;
+          tip_label: string;
+        };
+        Insert: Partial<Database['public']['Tables']['dynamic_settings']['Row']>;
+        Update: Partial<Database['public']['Tables']['dynamic_settings']['Insert']>;
+        Relationships: [];
+      };
+      semantic_cache: {
+        Row: {
+          id: string;
+          query_text: string;
+          query_embedding: string;
+          response_text: string;
+          response_type: string;
+          language: string | null;
+          hit_count: number;
+          is_active: boolean;
+          created_at: string;
+          updated_at: string | null;
+          metadata: Record<string, unknown> | null;
+        };
+        Insert: Partial<Database['public']['Tables']['semantic_cache']['Row']>;
+        Update: Partial<Database['public']['Tables']['semantic_cache']['Insert']>;
+        Relationships: [];
       };
       conversations: {
         Row: {
@@ -70,8 +168,21 @@ export type Database = {
           order_id: string | null;
           metadata: Record<string, unknown>;
         };
-        Insert: Omit<Database['public']['Tables']['conversations']['Row'], 'id' | 'started_at' | 'last_message_at'>;
+        Insert: {
+          user_profile_id: string;
+          channel: string;
+          language: string;
+          messages?: Array<Record<string, unknown>>;
+          summary?: string | null;
+          message_count?: number;
+          user_satisfaction?: number | null;
+          feedback?: string | null;
+          resulted_in_order?: boolean;
+          order_id?: string | null;
+          metadata?: Record<string, unknown>;
+        };
         Update: Partial<Database['public']['Tables']['conversations']['Insert']>;
+        Relationships: [];
       };
       orders: {
         Row: {
@@ -106,8 +217,37 @@ export type Database = {
           review: string | null;
           metadata: Record<string, unknown>;
         };
-        Insert: Omit<Database['public']['Tables']['orders']['Row'], 'id' | 'order_number' | 'created_at'>;
+        Insert: {
+          user_profile_id?: string | null;
+          conversation_id?: string | null;
+          assigned_to?: string | null;
+          status?: string;
+          status_history?: Array<Record<string, unknown>>;
+          items?: Array<Record<string, unknown>>;
+          subtotal?: number;
+          delivery_fee?: number;
+          discount?: number;
+          total_amount?: number;
+          currency?: string;
+          contact_info?: Record<string, unknown>;
+          delivery_address?: string | null;
+          delivery_notes?: string | null;
+          payment_method?: string;
+          payment_status?: string;
+          confirmed_at?: string | null;
+          estimated_delivery?: string | null;
+          actual_delivery?: string | null;
+          completed_at?: string | null;
+          cancelled_at?: string | null;
+          order_source?: string;
+          staff_notes?: string | null;
+          cancellation_reason?: string | null;
+          rating?: number | null;
+          review?: string | null;
+          metadata?: Record<string, unknown>;
+        };
         Update: Partial<Database['public']['Tables']['orders']['Insert']>;
+        Relationships: [];
       };
       agent_events: {
         Row: {
@@ -124,8 +264,10 @@ export type Database = {
         };
         Insert: Omit<Database['public']['Tables']['agent_events']['Row'], 'id' | 'created_at'>;
         Update: Partial<Database['public']['Tables']['agent_events']['Insert']>;
+        Relationships: [];
       };
     };
+    Views: Record<string, never>;
     Functions: {
       get_today_metrics: {
         Args: Record<string, never>;
@@ -138,6 +280,18 @@ export type Database = {
           new_users: number;
           returning_users: number;
         }[];
+      };
+      find_similar_cached_queries: {
+        Args: {
+          query_embedding: string;
+          similarity_threshold?: number;
+          match_limit?: number;
+        };
+        Returns: Array<{ id: string; response_text: string; similarity: number }>;
+      };
+      increment_cache_hit: {
+        Args: { cache_id: string };
+        Returns: unknown;
       };
       get_top_products: {
         Args: {
@@ -152,6 +306,8 @@ export type Database = {
         }[];
       };
     };
+    Enums: Record<string, never>;
+    CompositeTypes: Record<string, never>;
   };
 };
 
@@ -233,9 +389,7 @@ export type AgentEvent = Database['public']['Tables']['agent_events']['Row'];
 export type AgentEventInsert = Database['public']['Tables']['agent_events']['Insert'];
 
 // Back-compat server client alias for service role usage in API routes
-export function createServiceRoleClient() {
-  return getSupabaseServer();
-}
+export function createServiceRoleClient() { return getSupabaseServer(); }
 
 /**
  * Helper: Handle Supabase errors

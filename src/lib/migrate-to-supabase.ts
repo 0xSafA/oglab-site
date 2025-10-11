@@ -91,11 +91,25 @@ export async function migrateToSupabase(): Promise<{
         .from('user_profiles')
         .insert({
           user_id: localProfile.userId,
+          session_id: null,
+          telegram_user_id: null,
+          telegram_username: null,
           first_visit: new Date(localProfile.firstVisit).toISOString(),
           last_visit: new Date(localProfile.lastVisit).toISOString(),
           total_conversations: localProfile.totalConversations,
           total_messages: localProfile.totalMessages,
-          preferences: localProfile.preferences || {},
+          total_orders: 0,
+          total_spent: 0,
+          preferences: (localProfile.preferences as unknown as Record<string, unknown>) || {},
+          loyalty_points: 0,
+          referral_code: null,
+          referred_by: null,
+          notes: null,
+          tags: [],
+          is_active: true,
+          is_blocked: false,
+          blocked_reason: null,
+          metadata: {},
         })
         .select('id')
         .single();
@@ -146,7 +160,7 @@ export async function migrateToSupabase(): Promise<{
             user_profile_id: profileId,
             channel: 'web',
             language: localConversation.language || 'ru',
-            messages: localConversation.messages || [],
+            messages: (localConversation.messages as unknown as Record<string, unknown>[]) || [],
             message_count: localConversation.messages?.length || 0,
             summary: localConversation.summary || null,
             resulted_in_order: false,

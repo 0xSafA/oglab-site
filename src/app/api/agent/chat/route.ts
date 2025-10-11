@@ -57,6 +57,27 @@ interface ChatRequest {
   telegramUserId?: number; // ID пользователя Telegram (если есть)
 }
 
+// Localized label for order totals
+function getTotalLabelByLanguage(language: 'ru' | 'en' | 'th' | 'fr' | 'de' | 'he' | 'it'): string {
+  switch (language) {
+    case 'ru':
+      return 'Итого';
+    case 'th':
+      return 'ยอดรวม';
+    case 'fr':
+      return 'Total';
+    case 'de':
+      return 'Gesamt';
+    case 'he':
+      return 'סה״כ';
+    case 'it':
+      return 'Totale';
+    case 'en':
+    default:
+      return 'Total';
+  }
+}
+
 interface ProductCard {
   name: string;
   category: string;
@@ -215,8 +236,8 @@ export async function POST(request: NextRequest) {
       
       await addMessageToConversationServer(currentConversationId, userMessage);
       
-      // Трекаем событие
-      await trackEventServer({
+      // Трекаем событие (не блокируем ответ)
+      void trackEventServer({
         userProfileId: userProfile.id,
         conversationId: currentConversationId,
         eventType: 'chat_message',
@@ -275,27 +296,29 @@ export async function POST(request: NextRequest) {
     const tokensEstimate = JSON.stringify(messages).length / 4;
     console.log(`💬 OpenAI request: ${messages.length} msgs, ~${Math.round(tokensEstimate)} tokens`);
 
-    // 0) Semantic cache lookup (fast path)
-    const semantic = await findSimilarCachedQuery(message, language);
-    if (!stream && semantic && semantic.found && semantic.similarity && semantic.similarity >= 0.95 && semantic.response) {
-      // Save minimal assistant message for history
-      if (currentConversationId) {
-        try {
-          const assistantMessage: ConversationMessage = {
-            role: 'assistant',
-            content: semantic.response,
-            timestamp: Date.now(),
-          };
-          await addMessageToConversationServer(currentConversationId, assistantMessage);
-        } catch {}
+    // 0) Semantic cache lookup (fast path) — only for non-streaming responses
+    if (!stream) {
+      const semantic = await findSimilarCachedQuery(message, language);
+      if (semantic && semantic.found && semantic.similarity && semantic.similarity >= 0.95 && semantic.response) {
+        // Save minimal assistant message for history
+        if (currentConversationId) {
+          try {
+            const assistantMessage: ConversationMessage = {
+              role: 'assistant',
+              content: semantic.response,
+              timestamp: Date.now(),
+            };
+            await addMessageToConversationServer(currentConversationId, assistantMessage);
+          } catch {}
+        }
+        return Response.json({
+          reply: semantic.response,
+          productCards: [],
+          cached: true,
+          conversationId: currentConversationId,
+          userId: userProfile?.user_id,
+        });
       }
-      return Response.json({
-        reply: semantic.response,
-        productCards: [],
-        cached: true,
-        conversationId: currentConversationId,
-        userId: userProfile?.user_id,
-      });
     }
 
     // STREAMING RESPONSE (мгновенный ответ пользователю)
@@ -366,7 +389,15 @@ export async function POST(request: NextRequest) {
             }
             
             // Определяем намерение для Telegram уведомлений
-            const userIntent = detectUserIntent(message, fullReply, conversationHistory, menuData?.rows || []);
+            const userIntent = detectUserIntent(message, fullReply, conversationHistory, menuData?.rows || [], language);
+
+            // Если это оформленный заказ и у нас есть расчёт суммы — добавим его явно в ответ
+            if (userIntent.type === 'order' && userIntent.breakdown) {
+              const totalLabel = getTotalLabelByLanguage(language);
+              if (!fullReply.includes(userIntent.breakdown)) {
+                fullReply += `\n\n${totalLabel}: ${userIntent.breakdown}`;
+              }
+            }
             let notificationSent = false;
 
             // Отправляем уведомление в Telegram если нужно (асинхронно, не блокируем stream)
@@ -480,10 +511,18 @@ export async function POST(request: NextRequest) {
       frequency_penalty: 0.3,
     });
 
-    const reply = completion.choices[0]?.message?.content || 'Sorry, could not generate response. Try rephrasing?';
+    let reply = completion.choices[0]?.message?.content || 'Sorry, could not generate response. Try rephrasing?';
 
     // Определяем намерение для Telegram
-    const userIntent = detectUserIntent(message, reply, conversationHistory, menuData?.rows || []);
+    const userIntent = detectUserIntent(message, reply, conversationHistory, menuData?.rows || [], language);
+
+    // Если это оформленный заказ и у нас есть расчёт суммы — добавим его явно в ответ
+    if (userIntent.type === 'order' && userIntent.breakdown) {
+      const totalLabel = getTotalLabelByLanguage(language);
+      if (!reply.includes(userIntent.breakdown)) {
+        reply = `${reply}\n\n${totalLabel}: ${userIntent.breakdown}`;
+      }
+    }
     let notificationSent = false;
 
     if (userIntent.shouldNotify && process.env.TELEGRAM_BOT_TOKEN) {
@@ -678,7 +717,8 @@ function detectUserIntent(
   userMessage: string, 
   agentReply: string, 
   conversationHistory: ChatMessage[],
-  menuItems: MenuRow[]
+  menuItems: MenuRow[],
+  language: 'ru' | 'en' | 'th' | 'fr' | 'de' | 'he' | 'it' = 'en'
 ): UserIntent {
   const lowerMessage = userMessage.toLowerCase();
   const lowerReply = agentReply.toLowerCase();
@@ -754,7 +794,8 @@ function detectUserIntent(
       const orderTotal = calculateOrderTotal(
         orderInfo.products[0],
         orderInfo.quantityNumber,
-        menuItems
+        menuItems,
+        language
       );
       
       if (orderTotal) {

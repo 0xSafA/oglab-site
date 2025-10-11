@@ -123,7 +123,7 @@ export default function AgentOrders() {
   );
 }
 
-function OrderCard({ order }: { order: Record<string, unknown> }) {
+function OrderCard({ order }: { order: OrderRow }) {
   const statusColors = {
     pending: 'bg-yellow-100 text-yellow-800',
     confirmed: 'bg-blue-100 text-blue-800',
@@ -133,16 +133,16 @@ function OrderCard({ order }: { order: Record<string, unknown> }) {
     cancelled: 'bg-red-100 text-red-800',
   };
 
-  const contactInfo = order.contact_info as Record<string, unknown>;
-  const firstItem = (order.items as unknown[])?.[0] as Record<string, unknown>;
+  const contactInfo = order.contact_info as { name?: string; phone?: string } | null | undefined;
+  const firstItem = (order.items as Array<Record<string, unknown>>)?.[0] as { product_name?: string } | undefined;
 
   return (
     <div className="border border-gray-200 rounded-lg p-4 hover:shadow-sm transition-shadow">
       <div className="flex items-start justify-between mb-2">
         <div>
-          <p className="font-medium text-gray-900">{order.order_number}</p>
+          <p className="font-medium text-gray-900">{String(order.order_number)}</p>
           <p className="text-sm text-gray-500">
-            {contactInfo?.name || 'Unknown'} · {contactInfo?.phone}
+            {contactInfo?.name || 'Unknown'} · {contactInfo?.phone || ''}
           </p>
         </div>
         <span className={`px-2 py-1 text-xs font-medium rounded-full ${
@@ -153,7 +153,7 @@ function OrderCard({ order }: { order: Record<string, unknown> }) {
       </div>
       
       <div className="text-sm text-gray-600 mb-2">
-        {firstItem?.product_name} {order.items?.length > 1 && `+${order.items.length - 1} more`}
+        {String(firstItem?.product_name || '')} {order.items?.length > 1 && `+${order.items.length - 1} more`}
       </div>
       
       <div className="flex items-center justify-between text-sm">
@@ -164,7 +164,7 @@ function OrderCard({ order }: { order: Record<string, unknown> }) {
           })}
         </span>
         <span className="font-semibold text-[#536C4A]">
-          ฿{order.total_amount}
+          ฿{Number(order.total_amount)}
         </span>
       </div>
     </div>

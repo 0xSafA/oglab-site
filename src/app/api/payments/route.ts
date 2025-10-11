@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
     const { data: order } = await supabase
       .from('orders')
       .select('*')
-      .eq('id', orderId)
+      .eq('id', String(orderId))
       .single();
     
     if (!order) {
@@ -70,7 +70,7 @@ export async function POST(request: NextRequest) {
           payment_intent: paymentIntent,
         },
       })
-      .eq('id', orderId);
+      .eq('id', String(orderId));
     
     return Response.json(paymentIntent);
     
@@ -213,7 +213,7 @@ export async function GET(request: NextRequest) {
     const { data: order } = await supabase
       .from('orders')
       .select('*')
-      .eq('id', orderId)
+      .eq('id', String(orderId))
       .single();
     
     if (!order) {
@@ -262,7 +262,7 @@ export async function PATCH(request: NextRequest) {
         payment_status: paymentStatus,
         metadata: transactionId ? { transaction_id: transactionId } : undefined,
       })
-      .eq('id', orderId)
+      .eq('id', String(orderId))
       .select()
       .single();
     

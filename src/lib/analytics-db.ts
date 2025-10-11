@@ -125,19 +125,19 @@ export async function trackEventServer(params: {
  */
 export async function getTodayMetrics(): Promise<{
   total_orders: number;
-  total_revenue: string;
+  total_revenue: number;
   total_conversations: number;
-  conversion_rate: string;
-  avg_order_value: string;
+  conversion_rate: number;
+  avg_order_value: number;
   new_users: number;
   returning_users: number;
 }> {
   const defaultMetrics = {
     total_orders: 0,
-    total_revenue: '0',
+    total_revenue: 0,
     total_conversations: 0,
-    conversion_rate: '0',
-    avg_order_value: '0',
+    conversion_rate: 0,
+    avg_order_value: 0,
     new_users: 0,
     returning_users: 0,
   };
@@ -172,7 +172,7 @@ export async function getTopProducts(params?: {
   product_name: string;
   order_count: number;
   total_quantity: number;
-  total_revenue: string;
+  total_revenue: number;
 }[]> {
   const daysBack = params?.daysBack || 7;
   
@@ -400,8 +400,9 @@ export async function getAIPerformanceMetrics(): Promise<{
   
   if (messageEvents) {
     messageEvents.forEach(event => {
-      if (event.event_data?.responseTime) {
-        totalResponseTime += event.event_data.responseTime;
+      const rt = (event as { event_data?: { responseTime?: unknown } }).event_data?.responseTime;
+      if (typeof rt === 'number' && isFinite(rt)) {
+        totalResponseTime += rt;
         responseTimeCount++;
       }
     });

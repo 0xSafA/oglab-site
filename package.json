@@ -8,7 +8,8 @@
     "start": "NODE_OPTIONS='--no-deprecation' next start -p 3001",
     "lint": "eslint",
     "test:telegram": "node scripts/test-telegram.mjs",
-    "warmup-cache": "node scripts/warmup-cache.mjs"
+    "warmup-cache": "node scripts/warmup-cache.mjs",
+    "schema:dump": "supabase db dump --db-url \"$SUPABASE_DB_URL\" --schema public --data-only=false --exclude-extension '*' --file docs/DB_SCHEMA.sql"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",

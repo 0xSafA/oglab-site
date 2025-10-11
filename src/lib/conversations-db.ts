@@ -73,7 +73,10 @@ export async function addMessageToConversation(
   
   if (fetchError) handleSupabaseError(fetchError);
   
-  const messages = [...(current!.messages || []), message];
+  const messages: Record<string, unknown>[] = [
+    ...(((current!.messages as unknown) as Record<string, unknown>[]) || []),
+    (message as unknown) as Record<string, unknown>,
+  ];
   
   // Update conversation
   const { data, error } = await supabaseBrowser
@@ -343,7 +346,10 @@ export async function addMessageToConversationServer(
   
   if (fetchError) handleSupabaseError(fetchError);
   
-  const messages = [...(current!.messages || []), message];
+  const messages: Record<string, unknown>[] = [
+    ...(((current!.messages as unknown) as Record<string, unknown>[]) || []),
+    (message as unknown) as Record<string, unknown>,
+  ];
   
   // Update conversation
   const { data, error } = await supabase

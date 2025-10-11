@@ -89,9 +89,10 @@ export async function POST(request: NextRequest) {
  * Handle callback query (inline button click)
  */
 async function handleCallbackQuery(callbackQuery: Record<string, unknown>) {
-  const chatId = callbackQuery.message.chat.id;
-  const data = callbackQuery.data;
-  const telegramUserId = callbackQuery.from.id;
+  const msg = (callbackQuery as { message?: unknown }).message as { chat?: { id?: number } } | undefined;
+  const chatId = Number(msg?.chat?.id);
+  const data = String((callbackQuery as { data?: unknown }).data || '');
+  const telegramUserId = Number((callbackQuery as { from?: { id?: number } }).from?.id);
   
   console.log('🔘 Callback query:', data);
   
@@ -193,13 +194,15 @@ async function handleOrderAction(
  * Handle regular text message
  */
 async function handleMessage(message: Record<string, unknown>) {
-  const userMessage = message.text;
+  const userMessage = (message as { text?: string }).text;
   if (!userMessage) return Response.json({ ok: true });
   
-  const telegramUserId = message.from.id;
-  const telegramUsername = message.from.username;
-  const chatId = message.chat.id;
-  const languageCode = message.from.language_code || 'en';
+  const from = (message as { from?: { id?: number; username?: string; language_code?: string } }).from;
+  const chat = (message as { chat?: { id?: number } }).chat;
+  const telegramUserId = Number(from?.id);
+  const telegramUsername = from?.username || '';
+  const chatId = Number(chat?.id);
+  const languageCode = from?.language_code || 'en';
   
   const isStaff = isStaffMember(telegramUserId);
   
@@ -323,12 +326,12 @@ async function handleMessage(message: Record<string, unknown>) {
   
   // Call OpenAI
   const messages = [
-    { role: 'system' as const, content: systemPrompt },
+    { role: 'system' as const, content: String(systemPrompt) },
     ...recentMessages.map(m => ({
       role: m.role as 'user' | 'assistant',
-      content: m.content,
+      content: String(m.content),
     })),
-    { role: 'user' as const, content: userMessage },
+    { role: 'user' as const, content: String(userMessage) },
   ];
   
   const completion = await openai.chat.completions.create({
@@ -387,7 +390,7 @@ async function handleCommand(
     default:
       // Staff commands
       if (isStaff) {
-        const response = await processStaffCommand(cmd, args, chatId);
+        const response = await processStaffCommand(cmd, args);
         await sendTelegramMessage({ chatId, text: response, parseMode: 'Markdown' });
       } else {
         await sendTelegramMessage({

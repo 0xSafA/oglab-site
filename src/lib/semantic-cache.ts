@@ -245,7 +245,8 @@ export async function getSemanticCacheStats(): Promise<{
     
     const byLanguage: Record<string, number> = {};
     byLanguageData?.forEach((row) => {
-      byLanguage[row.language] = (byLanguage[row.language] || 0) + 1;
+      const key = (row as { language: string | null }).language ?? 'unknown';
+      byLanguage[key] = (byLanguage[key] || 0) + 1;
     });
     
     // Get by type
