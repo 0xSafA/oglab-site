@@ -1147,6 +1147,29 @@ const cleared = await CacheStats.clearByPrefix('user:profile:');
 // Returns: количество очищенных ключей
 ```
 
+### Admin Cache Panel (UI)
+
+**Назначение**: Просмотр метрик кэша и ручное управление из админки.
+
+**Где**: `Admin → Agent → Cache`
+
+**Метрики**:
+- **Hit/Miss**: количество попаданий/промахов и **hit rate %**
+- **Keys**: текущее число ключей (по основным префиксам)
+- **Availability**: доступность Redis
+
+**Действия** (кнопки):
+- `Warmup` — прогреть критичные кэши (см. `warmupCriticalCaches`)
+- `Warmup Menu` — прогреть только меню
+- `Clear by Prefix` — очистить по префиксу (например, `user:profile:`)
+- `Clear All` — полная очистка кэша (осторожно)
+
+**API**:
+- `GET /api/cache` — статистика (hit/miss, доступность)
+- `POST /api/cache` — операции (`warmup`, `warmup-menu`, `clear`, `clear-prefix`)
+
+Интерфейс использует данные и операции из разделов: [Cache Statistics & Monitoring](#cache-statistics--monitoring) и [/api/cache](#apicache--новый---phase-15).
+
 ### Cache Invalidation
 
 **Автоматическая** (встроена в функции):
@@ -1581,13 +1604,10 @@ When adding new features, update:
 - [Telegram Notify API](./TELEGRAM_NOTIFY_API.md)
 
 ### Redis Caching (Phase 1.5 & 2) ⚡⚡ 🆕
-- [Redis Caching Guide](./REDIS_CACHING_GUIDE.md) - Полная документация (Phase 1)
-- [Redis Quick Start (RU)](./REDIS_QUICK_START_RU.md) - Быстрый старт за 5 минут
-- [Redis Implementation Summary](./REDIS_IMPLEMENTATION_SUMMARY.md) - Итоговая сводка (Phase 1)
-- [Redis Phase 2 Optimizations](./REDIS_PHASE_2_OPTIMIZATIONS.md) - Phase 2 Full Report 🆕
+- [Redis (каноническое руководство)](./redis.md)
 
 ### Integration Guides
-- [Telegram Integration Guide](./TELEGRAM_INTEGRATION_GUIDE.md)
+- [Telegram (канон)](./telegram.md)
 - [Vercel Migration Guide](./VERCEL_MIGRATION_GUIDE.md)
 
 ---

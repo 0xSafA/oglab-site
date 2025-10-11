@@ -91,7 +91,7 @@ export async function POST(request: NextRequest) {
 
     const { data: profile, error: profileError } = await supabase
       .from('profiles')
-      .insert(payload)
+      .insert([payload])
       .select()
       .single()
 
