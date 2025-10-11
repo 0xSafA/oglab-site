@@ -7,22 +7,27 @@
     "build": "NODE_OPTIONS='--no-deprecation' next build",
     "start": "NODE_OPTIONS='--no-deprecation' next start -p 3001",
     "lint": "eslint",
-    "test:telegram": "node scripts/test-telegram.mjs"
+    "test:telegram": "node scripts/test-telegram.mjs",
+    "warmup-cache": "node scripts/warmup-cache.mjs"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
     "@dnd-kit/sortable": "^10.0.0",
     "@dnd-kit/utilities": "^3.2.2",
+    "@supabase/auth-helpers-nextjs": "^0.10.0",
     "@supabase/ssr": "^0.7.0",
     "@supabase/supabase-js": "^2.57.4",
+    "@tanstack/react-query": "^5.90.2",
     "@uploadthing/react": "^7.3.3",
+    "@upstash/redis": "^1.35.5",
     "googleapis": "^159.0.0",
     "next": "15.5.3",
     "next-intl": "^4.3.9",
     "openai": "^6.1.0",
     "react": "19.1.0",
     "react-dom": "19.1.0",
-    "uploadthing": "^7.7.4"
+    "uploadthing": "^7.7.4",
+    "zustand": "^5.0.8"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

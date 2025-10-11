@@ -83,13 +83,15 @@ export async function POST(request: NextRequest) {
     }
 
     // Create profile with admin role
+    const payload = {
+      id: authUser.user.id as string,
+      email: String(email),
+      role: 'admin'
+    } as unknown as import('@/lib/supabase-client').Database['public']['Tables']['profiles']['Insert']
+
     const { data: profile, error: profileError } = await supabase
       .from('profiles')
-      .insert({
-        id: authUser.user.id,
-        email: email,
-        role: 'admin'
-      })
+      .insert(payload)
       .select()
       .single()
 

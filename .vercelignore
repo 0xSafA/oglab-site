@@ -1,0 +1,43 @@
+# Dependencies
+node_modules
+
+# Local env files
+.env
+.env.local
+.env*.local
+
+# Logs
+logs
+*.log
+npm-debug.log*
+debug.log
+
+# VPS specific files
+nginx.conf
+ecosystem.config.js
+
+# Development
+.next
+.vercel
+
+# Documentation (не нужна в production)
+docs
+
+# Scripts (не нужны в production)
+scripts
+
+# Supabase migrations (уже применены)
+supabase
+
+# Test files
+test-cache.html
+check-supabase-config.js
+add-offer-hide-flag.sql
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+
+

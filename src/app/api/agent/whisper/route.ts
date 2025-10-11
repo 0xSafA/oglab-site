@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
 import OpenAI from 'openai';
 
 // Инициализация OpenAI клиента
@@ -14,14 +14,16 @@ interface TranscriptionResponse {
 }
 
 export async function POST(request: NextRequest) {
+  const startTime = Date.now();
+  
   try {
     // Получаем FormData с аудиофайлом
     const formData = await request.formData();
     const audioFile = formData.get('audio') as File;
-    const language = (formData.get('language') as string) || 'en'; // Получаем язык из запроса
+    const language = (formData.get('language') as string) || 'en';
 
     if (!audioFile) {
-      return NextResponse.json(
+      return Response.json(
         { error: 'Audio file is required' },
         { status: 400 }
       );
@@ -32,39 +34,33 @@ export async function POST(request: NextRequest) {
     const maxSize = 25 * 1024 * 1024; // 25 MB максимум
     
     if (audioFile.size < minSize) {
-      console.warn(`⚠️ Audio file too small: ${(audioFile.size / 1024).toFixed(2)} KB`);
-      return NextResponse.json(
-        { error: 'Запись слишком короткая. Говорите дольше (минимум 1 секунда).' },
+      console.warn(`⚠️ Audio too small: ${(audioFile.size / 1024).toFixed(2)} KB`);
+      return Response.json(
+        { error: 'Recording too short. Speak longer (min 1 second).' },
         { status: 400 }
       );
     }
     
     if (audioFile.size > maxSize) {
-      return NextResponse.json(
-        { error: 'Audio file is too large (max 25 MB)' },
+      return Response.json(
+        { error: 'Audio file too large (max 25 MB)' },
         { status: 400 }
       );
     }
 
-    console.log(`🎤 Transcribing audio: ${audioFile.name}, size: ${(audioFile.size / 1024).toFixed(2)} KB, type: ${audioFile.type}, language: ${language}`);
+    console.log(`🎤 Transcribing: ${audioFile.name}, ${(audioFile.size / 1024).toFixed(2)} KB, lang: ${language}`);
 
     // Вызываем Whisper API
-    const startTime = Date.now();
-    
     const transcription = await openai.audio.transcriptions.create({
       file: audioFile,
       model: 'whisper-1',
-      language, // Используем язык пользователя для лучшей точности
-      response_format: 'verbose_json', // получаем больше информации
+      language, // Язык пользователя для точности
+      response_format: 'verbose_json',
     });
 
     const duration = Date.now() - startTime;
 
-    console.log('✅ Transcription completed:', {
-      text: transcription.text.substring(0, 100),
-      language: transcription.language,
-      duration: `${duration}ms`,
-    });
+    console.log(`✅ Transcribed in ${duration}ms:`, transcription.text.substring(0, 100));
 
     // Возвращаем результат
     const response: TranscriptionResponse = {
@@ -73,18 +69,24 @@ export async function POST(request: NextRequest) {
       duration,
     };
 
-    return NextResponse.json(response, { status: 200 });
+    return Response.json(response, { 
+      status: 200,
+      headers: {
+        'X-Response-Time': `${duration}ms`,
+      }
+    });
 
   } catch (error) {
-    console.error('❌ Error in /api/agent/whisper:', error);
+    const duration = Date.now() - startTime;
+    console.error(`❌ Whisper error after ${duration}ms:`, error);
 
     // Обработка ошибок OpenAI
     if (error instanceof OpenAI.APIError) {
       const errorMessage = error.message.includes('API key')
-        ? 'OpenAI API key not configured. Please contact support.'
+        ? 'OpenAI API key not configured. Contact support.'
         : error.message.includes('quota')
-        ? 'API quota exceeded. Please try again later.'
-        : 'Transcription service error. Please try again.';
+        ? 'API quota exceeded. Try again later.'
+        : 'Transcription service error. Try again.';
       
       console.error('OpenAI API Error:', {
         status: error.status,
@@ -92,7 +94,7 @@ export async function POST(request: NextRequest) {
         type: error.type,
       });
       
-      return NextResponse.json(
+      return Response.json(
         { 
           error: errorMessage,
           text: '',
@@ -102,9 +104,9 @@ export async function POST(request: NextRequest) {
     }
 
     // Общая ошибка
-    return NextResponse.json(
+    return Response.json(
       { 
-        error: 'Не удалось распознать речь. Попробуйте ещё раз.',
+        error: 'Failed to recognize speech. Try again.',
         text: '',
       },
       { status: 500 }
@@ -114,9 +116,9 @@ export async function POST(request: NextRequest) {
 
 // GET endpoint для проверки статуса
 export async function GET() {
-  return NextResponse.json({
+  return Response.json({
     status: 'ok',
-    service: 'OG Lab Agent - Whisper',
+    service: 'OG Lab Agent - Whisper (Optimized)',
     model: 'whisper-1',
     maxFileSize: '25 MB',
     supportedFormats: ['mp3', 'mp4', 'mpeg', 'mpga', 'm4a', 'wav', 'webm'],

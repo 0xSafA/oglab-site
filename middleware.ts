@@ -49,7 +49,7 @@ export async function middleware(request: NextRequest) {
     )
 
     // Refresh session if expired - required for Server Components
-    const { data: { user }, error } = await supabase.auth.getUser()
+    const { data: { user } } = await supabase.auth.getUser()
 
     // Debug logging
     process.stderr.write(`🔐 Middleware - Path: ${request.nextUrl.pathname}\n`)

@@ -54,6 +54,8 @@ export default function OGLabAgent({ compact = false }: OGLabAgentProps) {
   const [showStats, setShowStats] = useState(false)
   const [isInitialLoad, setIsInitialLoad] = useState(true) // Флаг для первой загрузки
   const [showHistory, setShowHistory] = useState(false) // Показывать ли историю
+  const [streamingReply, setStreamingReply] = useState<string>('') // Для streaming ответов
+  const [isStreaming, setIsStreaming] = useState(false) // Флаг streaming
   
   // Voice recording state
   const [recordingState, setRecordingState] = useState<RecordingState>('idle')
@@ -228,7 +230,7 @@ export default function OGLabAgent({ compact = false }: OGLabAgentProps) {
     }
   }, [cachePrefetched])
 
-  // Функция для отправки сообщения (используется и для текста, и для голоса)
+  // Функция для отправки сообщения с STREAMING SUPPORT (OPTIMIZED)
   const sendMessage = useCallback(async (messageText: string) => {
     if (!messageText.trim() || !currentConversation || !userProfile) return
     
@@ -236,6 +238,8 @@ export default function OGLabAgent({ compact = false }: OGLabAgentProps) {
     setError(null)
     setGreeting('') // скрываем приветствие после первого сообщения
     setShowHistory(true) // показываем историю при отправке сообщения
+    setStreamingReply('') // очищаем предыдущий streaming ответ
+    setIsStreaming(true) // начинаем streaming
     
     // Добавляем вопрос пользователя в диалог
     const userMessage = { role: 'user' as const, content: messageText }
@@ -259,27 +263,84 @@ export default function OGLabAgent({ compact = false }: OGLabAgentProps) {
           userContext,
           isReturningUser: userProfile.totalConversations > 0,
           language: userProfile.preferences.language || 'ru',
+          stream: true, // ВКЛЮЧАЕМ STREAMING
         }),
       })
 
-      const data = await response.json()
+      // Проверяем тип ответа - streaming или обычный JSON
+      const contentType = response.headers.get('content-type')
+      
+      if (contentType?.includes('text/event-stream')) {
+        // STREAMING RESPONSE
+        const reader = response.body?.getReader()
+        const decoder = new TextDecoder()
+        let fullReply = ''
+        let suggestedProducts: string[] = []
+        let productCards: Array<Record<string, unknown>> = []
+        
+        if (reader) {
+          while (true) {
+            const { done, value } = await reader.read()
+            
+            if (done) break
+            
+            const chunk = decoder.decode(value, { stream: true })
+            const lines = chunk.split('\n')
+            
+            for (const line of lines) {
+              if (line.startsWith('data: ')) {
+                const data = JSON.parse(line.slice(6))
+                
+                if (data.content) {
+                  // Добавляем новый контент
+                  fullReply += data.content
+                  setStreamingReply(fullReply)
+                }
+                
+                if (data.done) {
+                  // Stream завершён - получаем метаданные
+                  suggestedProducts = data.suggestedProducts || []
+                  productCards = data.productCards || []
+                  
+                  console.log('✅ Stream completed:', data.timing)
+                }
+              }
+            }
+          }
+        }
+        
+        // Добавляем финальный ответ в conversation
+        const assistantMessage = {
+          role: 'assistant' as const,
+          content: fullReply,
+          suggestedProducts,
+          productCards,
+        }
+        
+        updatedConversation = addMessageToConversation(updatedConversation, assistantMessage)
+        setCurrentConversation(updatedConversation)
+        
+      } else {
+        // FALLBACK: обычный JSON ответ
+        const data = await response.json()
 
-      if (!response.ok) {
-        throw new Error(data.error || 'Failed to get response')
-      }
+        if (!response.ok) {
+          throw new Error(data.error || 'Failed to get response')
+        }
 
-      // Добавляем ответ ассистента
-      const assistantMessage = {
-        role: 'assistant' as const,
-        content: data.reply,
-        suggestedProducts: data.suggestedProducts || [],
-        productCards: data.productCards || [],
+        // Добавляем ответ ассистента
+        const assistantMessage = {
+          role: 'assistant' as const,
+          content: data.reply,
+          suggestedProducts: data.suggestedProducts || [],
+          productCards: data.productCards || [],
+        }
+        
+        updatedConversation = addMessageToConversation(updatedConversation, assistantMessage)
+        setCurrentConversation(updatedConversation)
       }
       
-      updatedConversation = addMessageToConversation(updatedConversation, assistantMessage)
-      setCurrentConversation(updatedConversation)
-      
-      // Сохраняем обновлённый диалог в профиль после каждого сообщения (без увеличения счётчиков)
+      // Сохраняем обновлённый диалог в профиль
       const updatedProfile = updateCurrentConversation(userProfile, updatedConversation)
       setUserProfile(updatedProfile)
       
@@ -296,6 +357,8 @@ export default function OGLabAgent({ compact = false }: OGLabAgentProps) {
       setCurrentConversation(updatedConversation)
     } finally {
       setLoading(false)
+      setIsStreaming(false)
+      setStreamingReply('') // очищаем streaming reply
     }
   }, [currentConversation, userProfile, useStock])
 
@@ -737,8 +800,8 @@ export default function OGLabAgent({ compact = false }: OGLabAgentProps) {
             );
           })}
           
-          {/* Индикатор загрузки */}
-          {loading && (
+          {/* Индикатор загрузки / Streaming ответ */}
+          {loading && !isStreaming && (
             <div className={`rounded-2xl bg-[#F4F8F0] ring-1 ring-[#B0BF93]/50 mr-4 lg:mr-8 ${
               compact ? 'p-2' : 'p-3 lg:p-4'
             }`}>
@@ -747,6 +810,25 @@ export default function OGLabAgent({ compact = false }: OGLabAgentProps) {
                   compact ? 'w-4 h-4' : 'w-5 h-5 lg:w-6 lg:h-6'
                 }`}></div>
                 <span className={compact ? 'text-xs' : 'text-sm'}>Думаю...</span>
+              </div>
+            </div>
+          )}
+          
+          {/* STREAMING REPLY (показываем в реальном времени) */}
+          {isStreaming && streamingReply && (
+            <div className={`rounded-2xl bg-[#F4F8F0] ring-1 ring-[#B0BF93]/50 mr-4 lg:mr-8 ${
+              compact ? 'p-2' : 'p-3 lg:p-4'
+            }`}>
+              <div className={`font-semibold uppercase tracking-wide text-[#536C4A] ${
+                compact ? 'text-[10px] mb-0.5' : 'text-xs mb-1 lg:mb-1.5'
+              }`}>
+                OG Lab Agent
+              </div>
+              <div className={`text-[#2F3A24] whitespace-pre-wrap leading-relaxed ${
+                compact ? 'text-xs' : 'text-sm'
+              }`}>
+                {renderMarkdown(streamingReply)}
+                <span className="inline-block w-2 h-4 ml-1 bg-[#536C4A] animate-pulse"></span>
               </div>
             </div>
           )}

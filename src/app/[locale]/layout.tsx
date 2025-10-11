@@ -3,6 +3,7 @@ import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { Inter, Noto_Sans_Thai, Rubik } from "next/font/google";
 import Script from "next/script";
+import { ReactQueryProvider } from '@/lib/react-query-provider';
 import "../globals.css";
 
 const inter = Inter({ 
@@ -121,7 +122,9 @@ export default async function LocaleLayout({
           `}
         </Script>
         <NextIntlClientProvider locale={locale} messages={messages}>
-          {children}
+          <ReactQueryProvider>
+            {children}
+          </ReactQueryProvider>
         </NextIntlClientProvider>
       </body>
     </html>

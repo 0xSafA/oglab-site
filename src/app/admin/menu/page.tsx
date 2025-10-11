@@ -2,7 +2,20 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { createClientComponentClient } from '@/lib/supabase-client'
-import type { MenuItem } from '@/lib/supabase-client'
+// Local type for menu_items rows
+interface MenuItem {
+  id: string
+  category: string
+  name: string
+  type: 'indica' | 'sativa' | 'hybrid' | string | null
+  thc: number | null
+  cbg: number | null
+  price_1pc?: number | null
+  price_1g?: number | null
+  price_5g?: number | null
+  price_20g?: number | null
+  our?: boolean | null
+}
 import { formatCurrencyTHB } from '@/lib/currency'
 import {
   DndContext,

@@ -33,6 +33,7 @@ export default function AdminNav({}: AdminNavProps) {
   const navItems = [
     { href: '/admin/feed', label: 'Feed' },
     { href: '/admin/menu', label: 'Items' },
+    { href: '/admin/agent', label: 'Agent' },
     { href: '/admin/settings', label: 'Settings' },
   ]
 
