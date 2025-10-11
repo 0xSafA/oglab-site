@@ -1665,13 +1665,7 @@ When adding new features, update:
 - Документация (3 файла)
 
 ### Phase 1 (October 2025) - Supabase Migration ✅
-- ✅ Полная миграция на Supabase PostgreSQL
-- ✅ 4 основные таблицы (user_profiles, conversations, orders, agent_events)
-- ✅ RLS policies для безопасности
-- ✅ Telegram bot интеграция
-- ✅ Streaming responses (SSE)
-- ✅ Product cards и recommendations
-- ✅ Analytics и метрики
+- Основные итоги перенесены в разделы выше (БД, API, кэширование, интеграции)
 
 ---
 
